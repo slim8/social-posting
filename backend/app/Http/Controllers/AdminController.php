@@ -8,10 +8,10 @@ class AdminController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->hasRole('admin')) {
-            return 'Has Permission , Is Admin';
-        } else {
-            return 'No Permissions';
-        }
+        // if (Auth::user()->hasRole('admin')) {
+        //     return 'Has Permission , Is Admin';
+        // } else {
+        //     return 'No Permissions';
+        // }
     }
 }
