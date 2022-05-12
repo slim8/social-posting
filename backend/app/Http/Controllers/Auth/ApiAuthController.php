@@ -83,7 +83,6 @@ class ApiAuthController extends Controller
 
                 return response()->json(array(
                         "message" => "Successful login.",
-                        "jwt" => $jwt,
                         "token" => $jwt,
                         "expireAt" => $expire_claim,
                         'success' => true

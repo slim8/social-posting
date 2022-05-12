@@ -1,14 +1,10 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\testController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use \Illuminate\Http\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,10 +16,8 @@ use \Illuminate\Http\Request;
 |
 */
 
-
-$redirect = new RedirectIfAuthenticated;
-$request = new Request;
-
+$redirect = new RedirectIfAuthenticated();
+$request = new Request();
 
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
@@ -31,9 +25,12 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 });
 
-
-Route::group(['middleware' => ['checkroles','role:user']], function () {
-   
-   Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+Route::group(['middleware' => ['checkroles', 'role:user']], function () {
+    Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
     Route::post('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+});
+
+ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
+     Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
+     Route::post('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
  });
