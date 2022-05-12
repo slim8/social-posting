@@ -2,14 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
+use App\Models\User;
 use Closure;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class RedirectIfAuthenticated
 {
@@ -22,24 +21,12 @@ class RedirectIfAuthenticated
      *
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-
     public function checkIfUserLoginSuccessByJWT(string $token)
     {
         try {
             $decoded = JWT::decode($token, new Key(env('JWT_SECRET_KEY'), env('JWT_HASH_ALGORITHME')));
 
-            $idUser = $decoded->data->id;
-
             return $decoded->data->id;
-
-            // Auth::login();
-            // return $decoded->data->id;
-
-            // if ($idUser) {
-            //     return DB::table('personal_access_tokens')->where('id', $token['id'])->first('token')
-            // }
-
-            return $idUser;
         } catch (Exception $e) {
             var_dump('exceptipon');
 
@@ -47,34 +34,62 @@ class RedirectIfAuthenticated
         }
     }
 
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, ...$guards)
     {
         $header = $request->header('Authorization');
         if (!empty($header)) {
             $token = str_replace('Bearer ', '', $header);
-
             $connectedUser = $this->checkIfUserLoginSuccessByJWT($token);
-            //var_dump($connectedUser);
-            // if (!empty($user)) {
-            //     return 'Not Connected';
-            //     exit;
+            if ($connectedUser) {
+                $user = User::where('id', $connectedUser)->first();
+                Auth::login($user);
+                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                var_dump("is tokened");
+            }
+
+            // var_dump('yes');
+            // if (Auth::user()->hasRole('user')) {
+            //     var_dump('Has Permission');
+            // } else {
+            //     var_dump('No Permission');
+            // }
+
+            // if (!$user->accesible) {
+            //     var_dump('could not be reaxched');
             // }
         }
 
-        var_dump($next);
         return $next($request);
     }
 
-    // public function handle(Request $request, Closure $next, ...$guards)
-    // {
-    //     // $guards = empty($guards) ? [null] : $guards;
 
-    //     // foreach ($guards as $guard) {
-    //     //     if (Auth::guard($guard)->check()) {
-    //     //         return redirect(RouteServiceProvider::HOME);
-    //     //     }
-    //     // }
+    public function handler($request)
+    {
+        $req = new Request;
+        $header = $req->header('Authorization');
 
-    //     // return $next($request);
-    // }
+        var_dump($header);
+        if (!empty($header)) {
+            $token = str_replace('Bearer ', '', $header);
+            $connectedUser = $this->checkIfUserLoginSuccessByJWT($token);
+            if ($connectedUser) {
+                $user = User::where('id', $connectedUser)->first();
+                Auth::login($user);
+                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                var_dump("is tokened");
+            }
+
+            // var_dump('yes');
+            // if (Auth::user()->hasRole('user')) {
+            //     var_dump('Has Permission');
+            // } else {
+            //     var_dump('No Permission');
+            // }
+
+            // if (!$user->accesible) {
+            //     var_dump('could not be reaxched');
+            // }
+        }
+
+    }
 }

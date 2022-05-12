@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Auth\ApiAuthController;
-use App\Http\Controllers\DashboardController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\testController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use \Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,12 +23,15 @@ use Illuminate\Support\Facades\Route;
 
 
 
+$redirect = new RedirectIfAuthenticated;
+$request = new Request;
+
+
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 });
-
 
 // Route::group(['middleware' => ['cors', 'json.response']], function () {
 //     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
@@ -34,13 +39,17 @@ Route::group(['middleware' => ['cors']], function () {
 //     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 // });
 
-Route::post('loginjwt', 'App\Http\Controllers\Functions\RoutersController@index');
-Route::get('loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
-Route::group(['middleware' => ['auth']], function () {
+// Route::post('loginjwt', 'App\Http\Controllers\Functions\RoutersController@index');
+// Route::get('loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+
+//  var_dump(Auth::id());
+//     var_dump(User::find(Auth::id()));
+Route::group(['middleware' => ['checkroles','role:admin']], function () {
+   
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
     Route::get('user', 'App\Http\Controllers\UserController@index')->name('dashboard');
-    // Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
-    // Route::post('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+    Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+    Route::post('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
     Route::get('/testconnectedjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 
     Route::get('/test', 'App\Http\Controllers\testController@index')->name('dashboard');
