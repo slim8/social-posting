@@ -8,7 +8,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "start:build" : "composer install && cd resources/frontend && npm i && npm run build:local"
+        "start:build" : "composer install && php artisan config:clear && php artisan cache:clear && cd resources/frontend && npm i && npm run build:local"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.4.0",
