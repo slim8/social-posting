@@ -1,0 +1,21 @@
+<p>facebook-social works!</p>
+
+<button (click)="loginWithFacebook()">Login</button>
+
+<button (click)="getCurrentFBPages()">Get Current FB Pages</button>
+
+<button (click)="postTextToPages()">Post Text</button>
+
+<button (click)="postImageToPages()">Post Public Image Using URL</button>
+
+<br />
+
+<input
+  type="file"
+  (change)="fileChange($event)"
+  placeholder="Upload file"
+  accept=".png,.jpg,.webp"
+  multiple
+/>
+
+<button (click)="postSourceImageToPages()">Post Source Image</button>
