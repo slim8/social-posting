@@ -14,19 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::group(['middleware' => ['role:user']], function () {
-    Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
-    Route::get('/user', 'App\Http\Controllers\UserController@index')->name('dashboard');
-    Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
-    Route::get('/testconnectedjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
-});
+// Route::group(['middleware' => ['role:user']], function () {
+//     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
+//     Route::get('/user', 'App\Http\Controllers\UserController@index')->name('dashboard');
+//     Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+//     Route::get('/testconnectedjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+// });
 
-Route::group(['middleware' => ['role:admin']], function () {
-    Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
-});
+// Route::group(['middleware' => ['role:admin']], function () {
+//     Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
+// });
 
 require __DIR__.'/auth.php';

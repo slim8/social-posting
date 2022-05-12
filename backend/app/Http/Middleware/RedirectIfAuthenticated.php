@@ -44,52 +44,9 @@ class RedirectIfAuthenticated
                 $user = User::where('id', $connectedUser)->first();
                 Auth::login($user);
                 $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                var_dump("is tokened");
             }
-
-            // var_dump('yes');
-            // if (Auth::user()->hasRole('user')) {
-            //     var_dump('Has Permission');
-            // } else {
-            //     var_dump('No Permission');
-            // }
-
-            // if (!$user->accesible) {
-            //     var_dump('could not be reaxched');
-            // }
         }
 
         return $next($request);
-    }
-
-
-    public function handler($request)
-    {
-        $req = new Request;
-        $header = $req->header('Authorization');
-
-        var_dump($header);
-        if (!empty($header)) {
-            $token = str_replace('Bearer ', '', $header);
-            $connectedUser = $this->checkIfUserLoginSuccessByJWT($token);
-            if ($connectedUser) {
-                $user = User::where('id', $connectedUser)->first();
-                Auth::login($user);
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                var_dump("is tokened");
-            }
-
-            // var_dump('yes');
-            // if (Auth::user()->hasRole('user')) {
-            //     var_dump('Has Permission');
-            // } else {
-            //     var_dump('No Permission');
-            // }
-
-            // if (!$user->accesible) {
-            //     var_dump('could not be reaxched');
-            // }
-        }
-
     }
 }

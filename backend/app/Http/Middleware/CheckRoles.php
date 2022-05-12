@@ -43,18 +43,6 @@ class CheckRoles
                 $user = User::where('id', $connectedUser)->first();
                 Auth::login($user);
                 $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                var_dump('is tokened');
-            }
-
-            var_dump('yes');
-            if (Auth::user()->hasRole('user')) {
-                var_dump('Has Permission');
-            } else {
-                var_dump('No Permission');
-            }
-
-            if (!$user->accesible) {
-                var_dump('could not be reaxched');
             }
         }
 
