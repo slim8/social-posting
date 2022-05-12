@@ -26,8 +26,8 @@ Route::group(['middleware' => ['cors']], function () {
 });
 
 Route::group(['middleware' => ['checkroles', 'role:user']], function () {
-    Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
-    Route::post('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+    Route::get('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+    Route::post('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 });
 
  Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
