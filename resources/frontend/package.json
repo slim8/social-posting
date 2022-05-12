@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build:prod": "ng build --prod && copy ../../public/assets/angular/index.html ../views/angular.blade.php",
-    "build:local": "ng build --prod && copy ../../public/assets/angular/index.html ../views/angular.blade.php"
+    "build:local": "ng build --prod && node ./build.js"
   },
   "private": true,
   "dependencies": {
