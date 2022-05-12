@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\functions\RoutersController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AngularController;
+use App\Http\Controllers\functions\RoutersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
+Route::any('/{any}', [AngularController::class, 'index'])->where('any', '^(?!api).*$');
+
 
 // Route::group(['middleware' => ['role:user']], function () {
 //     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');

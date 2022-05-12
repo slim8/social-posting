@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "8fab9c5d-d8df-42fd-9678-778857dd970d"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -37,6 +40,8 @@
           },
           "configurations": {
             "production": {
+                "outputPath": "../../public/assets/angular",
+                "deployUrl": "/assets/angular/",
               "budgets": [
                 {
                   "type": "initial",
@@ -58,6 +63,8 @@
               "outputHashing": "all"
             },
             "development": {
+                "outputPath": "../../public/assets/angular",
+                "deployUrl": "/assets/angular/",
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
