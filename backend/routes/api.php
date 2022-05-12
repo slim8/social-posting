@@ -21,18 +21,26 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::group(['middleware' => ['cors', 'json.response']], function () {
+Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 });
 
 
+// Route::group(['middleware' => ['cors', 'json.response']], function () {
+//     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
+//     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
+//     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
+// });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::post('loginjwt', 'App\Http\Controllers\Functions\RoutersController@index');
+Route::get('loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
     Route::get('user', 'App\Http\Controllers\UserController@index')->name('dashboard');
-    Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+    // Route::get('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+    // Route::post('/loginjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
     Route::get('/testconnectedjwt', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 
     Route::get('/test', 'App\Http\Controllers\testController@index')->name('dashboard');
