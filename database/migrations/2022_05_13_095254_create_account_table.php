@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('scoope');
             $table->string('authorities');
             $table->string('link');
-            $table->string('company_id')->references('id')->on('companies');
+            $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');;
             $table->timestamps();
         });
     }

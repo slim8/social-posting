@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('lastName');
             $table->string('status');
             $table->boolean('isSubscriber');
-            $table->foreignId('company_id')->references('id')->on('companies');
+            $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');;
         });
     }
 
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->dropColumn('lastName');
             $table->dropColumn('status');
             $table->dropColumn('isSubscriber');
-            $table->dropColumn('company_id');
+            $table->dropForeign(['company_id']);
         });
     }
 };
