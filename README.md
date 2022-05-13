@@ -1,5 +1,5 @@
 # Media posting Project
-## _The Last Markdown Editor, Ever_
+## Laravel + Angular
 
 Requirements
 
@@ -19,6 +19,12 @@ npm run start:build
 ```
 npm run start:build (pull from git + clear Laravel cache + composer install + npm install [Laravel + Angular])
 
+## Angular FrontEnd Path Source files
+
+```sh
+resources/frontend
+```
+
 ## ENV
 
 Add file .env
@@ -35,6 +41,7 @@ JWT_HASH_ALGORITHME={hash_algorithme (eg. HS512)}
 ## Migrate Database
 
 (Update on databse structure OR upload database) [This can delete your data] => TO BE FIXED
+
 To setup JWT: 
 
 ```sh
