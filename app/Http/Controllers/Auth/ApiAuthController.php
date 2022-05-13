@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Models\Company;
+// use App\Models\User as ModelsUser;
 use App\Models\User;
 use Firebase\JWT\JWT;
-// use App\Models\User as ModelsUser;
-use App\Models\Company;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ApiAuthController extends Controller
 {
@@ -19,7 +19,7 @@ class ApiAuthController extends Controller
     {
         $token = $request->user()->token();
         $token->revoke();
-        $response = ['message' => 'You have been successfully logged out!'];
+        $response = ['message' => trans('message.logout')];
 
         return response($response, 200);
     }
@@ -64,9 +64,8 @@ class ApiAuthController extends Controller
 
         return response()->json(['success' => true,
         'password' => $password,
-        'message' => 'the company and the user has been registred succesfuly ... admin account send to you via '.$request->email, ], 201);
+        'message' => trans('message.company_created_sucess').$request->email, ], 201);
     }
-
 
     public function registerUser(Request $request)
     {
@@ -87,7 +86,7 @@ class ApiAuthController extends Controller
         $user = User::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
-            'name' => $request->firstName." ".$request->lastName,
+            'name' => $request->firstName.' '.$request->lastName,
             'email' => $request->email,
             'status' => 1,
             'isSubscriber' => $request->isSubscriber,
@@ -98,7 +97,7 @@ class ApiAuthController extends Controller
         $user->attachRole('user');
 
         return response()->json(['success' => true,
-        'message' => 'The user has been registred succesfuly ... user account send to you via '.$request->email, ], 201);
+        'message' => trans('message.user_created_suceess').$request->email, ], 201);
     }
 
     public function login(Request $request)
@@ -138,22 +137,24 @@ class ApiAuthController extends Controller
                     $jwt = JWT::encode($token, $secret_key, env('JWT_HASH_ALGORITHME'));
 
                     return response()->json([
-                            'message' => 'Successful login.',
+                            'message' => trans('message.sucess_login'),
                             'token' => $jwt,
                             'expireAt' => $expire_claim,
                             'success' => true,
                         ], 200);
                 } else {
-                    $response = ['message' => 'Password mismatch', 'status' => false];
+                    $response = ['message' => trans('message.password_mismatch'), 'status' => false];
 
                     return response($response, 422);
                 }
             } else {
-                $response = ['message' => 'Your account is not activated', 'status' => false];
+                $response = ['message' => trans('message.account_not_activated'), 'status' => false];
 
                 return response($response, 422);
             }
         } else {
+            trans('messages.failed');
+
             $response = ['message' => 'User does not exist', 'status' => false];
 
             return response($response, 422);
