@@ -13,3 +13,4 @@ yarn-error.log
 /.vscode
 public/assets/angular
 resources/views/angular.blade.php
+/docs
