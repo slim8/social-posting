@@ -9,6 +9,6 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   public login(credentials:any) {
-      return this.http.post('https://reqres.in/api/login', credentials );
+      return this.http.post('http://posting.local/api/login', credentials );
   }
 }
