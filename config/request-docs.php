@@ -4,7 +4,7 @@ return [
      // change it to true will make lrd to throw exception if rules in request class need to be changed
      // keep it false
     'debug'  => false,
-    'document_name'  => 'LRD',
+    'document_name'  => 'Media Posting API Documentation',
 
     /*
     * Route where request docs will be served from
@@ -32,6 +32,9 @@ return [
         "#^telescope#",
         "#^docs#",
         "#^request-docs#",
+        "#^{any}#",
+        "#^sanctum#",
+        "#^_ignition#"
     ],
 
     "open_api" => [
@@ -42,7 +45,7 @@ return [
         // license that you want to display
         "license" => "Apache 2.0",
         "license_url" => "https://www.apache.org/licenses/LICENSE-2.0.html",
-        "server_url" => env('APP_URL', 'http://localhost'),
+        "server_url" => "test",
 
         // for now putting default responses for all. This can be changed later based on specific needs
         "responses" => [
