@@ -31,6 +31,5 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
 });
 
  Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
-     Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
-     Route::post('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
+     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
  });
