@@ -1,0 +1,13 @@
+.mod-login {
+  > .m-wrapper {
+    i {
+      cursor: pointer;
+    }
+
+    > .m-form {
+      > .m-button {
+        text-align: center;
+      }
+    }
+  }
+}

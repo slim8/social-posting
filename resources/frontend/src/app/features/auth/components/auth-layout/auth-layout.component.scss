@@ -1,0 +1,31 @@
+.mod-auth {
+  display: flex;
+  flex-wrap: wrap;
+
+  .m-wrapper {
+    max-width: 800px;
+    min-height: 780px;
+    display: flex;
+
+    > .m-column {
+      min-width: 350px;
+      max-width: 400px;
+      height: 100%;
+      width: 100%;
+      background-color: aliceblue;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.has-background {
+        background: #ff416c;
+        background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
+        background: linear-gradient(to right, #ff4b2b, #ff416c);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #ffffff;
+      }
+    }
+  }
+}

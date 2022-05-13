@@ -1,1 +1,10 @@
-<p>navbar works!</p>
+<nz-header>
+  <div class="app-header">
+    <span class="header-trigger"
+          (click)="collapse()">
+      <i class="trigger"
+         nz-icon
+         [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+    </span>
+  </div>
+</nz-header>
