@@ -22,23 +22,38 @@ class ApiAuthController extends Controller
         return response($response, 200);
     }
 
-
     public function register (Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+
+        $data = $request->json()->all();
+
+        $companyName = data_get($data , "companyName");
+        $firstName = data_get($data , "firstName");
+        $lastName = data_get($data , "lastName");
+        $phoneNumber = data_get($data , "phoneNumber");
+        $email = data_get($data , "email");
+        $adress = data_get($data , "adress");
+        $website = data_get($data , "website");
+
+        $validator = Validator::make($request->json()->all(), [
+            'companyName' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'adress' => 'string|max:255',
+            'website' => 'string|max:255',
+            'email' => 'required|string|email|max:255|unique:users|unique:companies',
+            'phoneNumber' => 'required|string|max:255|unique:companies',
+            'isSubscriber' => ''
         ]);
         if ($validator->fails())
         {
             return response(['errors'=>$validator->errors()->all()], 422);
         }
-        $request['password']=Hash::make($request['password']);
-        $request['remember_token'] = Str::random(10);
-        $user = User::create($request->toArray());
-        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-        // $response = ['token' => $token];
-        return response()->json(DB::table('personal_access_tokens')->where('id', $token['id'])->first('token'), 200);
+        // $request['password']=Hash::make($request['password']);
+        // $request['remember_token'] = Str::random(10);
+        // $user = User::create($request->toArray());
+        // $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        // // $response = ['token' => $token];
+        // return response()->json(DB::table('personal_access_tokens')->where('id', $token['id'])->first('token'), 200);
 
     }
 
