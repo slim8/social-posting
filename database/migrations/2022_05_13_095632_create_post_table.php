@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('status');
             $table->dateTime('publishedAt');
             $table->dateTime('deleted');
-            $table->string('account_id')->constrained();
+            $table->foreignId('account_id')->constrained();
             $table->timestamps();
         });
     }
