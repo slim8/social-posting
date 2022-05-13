@@ -1,0 +1,67 @@
+<div class="mod-login">
+
+  <div class="m-wrapper">
+
+    <div class="m-title">
+      <h2>Sign In</h2>
+    </div>
+
+    <div class="m-subtitle">
+      Please enter your credantials
+    </div>
+
+
+    <div class="m-form">
+
+      <nz-input-group [nzSuffix]="suffixTemplateInfo"
+                      [nzPrefix]="prefixTemplateUser">
+        <input type="text"
+               nz-input
+               placeholder="Enter your username"
+               [(ngModel)]="credentials.email" />
+      </nz-input-group>
+      <ng-template #prefixTemplateUser><i nz-icon
+           nzType="user"></i>
+      </ng-template>
+
+      <ng-template #suffixTemplateInfo>
+        <i nz-icon
+           nz-tooltip
+           nzTooltipTitle="Extra information"
+           nzType="info-circle"></i>
+      </ng-template>
+      <br />
+      <br />
+
+      <nz-input-group [nzSuffix]="suffixTemplateVisible"
+                      [nzPrefix]="prefixTemplateLock">
+        <input [type]="passwordVisible ? 'text' : 'password'"
+               nz-input
+               [(ngModel)]="credentials.password"
+               placeholder="input password" />
+      </nz-input-group>
+
+      <ng-template #prefixTemplateLock><i nz-icon
+           nzType="lock"></i>
+      </ng-template>
+      <ng-template #suffixTemplateVisible>
+        <i nz-icon
+           [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+           (click)="passwordVisible = !passwordVisible"></i>
+      </ng-template>
+
+      <br />
+      <br />
+
+      <div class="m-button">
+        <button nz-button
+                (click)="login()"
+                nzType="primary">Sign In</button>
+      </div>
+
+
+
+    </div>
+  </div>
+
+</div>
