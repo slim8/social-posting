@@ -28,7 +28,9 @@ resources/frontend
 ## ENV
 
 Add file .env
-Update database connexion on env file 
+
+Update database connexion on env file
+
 To setup JWT: 
 ```sh
 JWT_SECRET_KEY={secret_key}
@@ -42,7 +44,6 @@ JWT_HASH_ALGORITHME={hash_algorithme (eg. HS512)}
 
 (Update on databse structure OR upload database) [This can delete your data] => TO BE FIXED
 
-To setup JWT: 
 
 ```sh
 npm run start:migrate
