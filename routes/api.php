@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,10 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
     Route::post('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 });
 
- Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
+Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
+    Route::post('/get-facebook-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
+});
+
+ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
      Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
  });

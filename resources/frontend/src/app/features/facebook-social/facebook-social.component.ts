@@ -10,9 +10,8 @@ import { FacebookSocialService } from './services/facebook-social.service';
 export class FacebookSocialComponent implements OnInit {
   private formData: FormData = new FormData();
   private user = {
-    accessToken:
-      'EAAH6ob18mfkBAEmWL1pfuT2OSYzhWw1xoYadrccVyAJNzF9GBGPTfywP6YL4bkrTdnAWxensGym4LyocKy9CH2TfncZB9LRYxH3BmQpausNmZAsNv9vs8dcgo43oBN16XfdEuI2wVHk7CzrrISU7lLJaulRJ2N0OhP0zBuU6S0teIap5tTDd6Jg5Fw5HNupvjZBDgUZAvGTqBQDk5ZCH3H7cexxCODxvuZACpr0eNqZBAZDZD',
-    id: '4832284733517871',
+    accessToken: 'EAAHVOmc7RxYBAMS9WZBPFtsRSW0jTjeGTOMGLi9qgSsBZC8XnUnjlEElDZClFh4iaIJJNRD555OpMUcQpWLCSFGWOhanJPrbRQrLhklrZBZAJc9isvGcWKFY0wg2bQRSr4BUIoKbzcgaohIx0yE15QzeZCaN2Hljz5jZB0MZA2cabvayLRbCoZCo9ZCvHpsk98LCvWOtwjloJkhwZDZD',
+    id: '557047552449017',
     pages: [],
   };
   constructor(private service: FacebookSocialService) {}
