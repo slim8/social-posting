@@ -18,6 +18,9 @@ class Account extends Model
         'authorities',
         'link',
         'company_id',
+        'uid',
+        'profilePicture',
+        'category',
     ];
 
     public function company()
