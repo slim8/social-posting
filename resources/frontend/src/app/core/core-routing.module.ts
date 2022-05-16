@@ -10,12 +10,12 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       { path: 'welcome', component: WelcomeComponent },
+      { path: 'facebook', loadChildren: () => import('../features/facebook-social/facebook-social.module').then(m => m.FacebookSocialModule) },
       { path:'companies',component:CompanyComponent}
     ],
   },
 
   // { path: '', component: MainComponent },
-  // { path: 'facebook', loadChildren: () => import('./features/facebook.module').then(m => m.WelcomeModule) }
 ];
 
 @NgModule({
