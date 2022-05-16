@@ -36,9 +36,7 @@ export class FacebookSocialService {
     window.location.href = `https://www.facebook.com/v13.0/dialog/oauth?client_id=${this.APP_ID}&redirect_uri=${this.REDIRECT_URL}`;
   }
 
-  getCurrentUser() {
-
-  }
+  getCurrentUser() {}
   /**
    * Login with additional permissions/options
    * @returns connected user id and access token
@@ -66,7 +64,8 @@ export class FacebookSocialService {
    * the specific permissions you have on each Page, and the Page access token
    */
   getCurrentFBPages(user: any) {
-    const url = `https://graph.facebook.com/${user.id}/accounts?access_token=${user.accessToken}`;
+    const url = `https://graph.facebook.com/1703848376633794/accounts?access_token=EAAH6ob18mfkBADyEMJLVDZBnCCbcQs838U4Fo9FeqcXgMcOq8ZAWZANTphTZCiNE2y7qkPiAfUFGHrg1DjTC5Ntbj4PclMsu7VMJYJNBNe90fxBLdKhANVIafFK8jbaE6jSdMiEErbM2d7qdxYbUIFdtu0dVDKegFfBc6aScZAebZCssHAiNZCY0E8AkFqvOpbroy4ZCohcgV2MKYgUSwtpdbfPPlV5eK9kZD`;
+
     return this.http.get(url);
   }
 

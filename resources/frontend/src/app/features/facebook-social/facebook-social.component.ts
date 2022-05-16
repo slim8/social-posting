@@ -10,7 +10,7 @@ import { FacebookSocialService } from './services/facebook-social.service';
 export class FacebookSocialComponent implements OnInit {
   private formData: FormData = new FormData();
   private user = {
-    accessToken: '',
+    accessToken: 'EAAHVOmc7RxYBAMS9WZBPFtsRSW0jTjeGTOMGLi9qgSsBZC8XnUnjlEElDZClFh4iaIJJNRD555OpMUcQpWLCSFGWOhanJPrbRQrLhklrZBZAJc9isvGcWKFY0wg2bQRSr4BUIoKbzcgaohIx0yE15QzeZCaN2Hljz5jZB0MZA2cabvayLRbCoZCo9ZCvHpsk98LCvWOtwjloJkhwZDZD',
     id: '557047552449017',
     pages: [],
   };
