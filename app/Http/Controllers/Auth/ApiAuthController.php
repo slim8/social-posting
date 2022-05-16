@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\MailTrait;
 use App\Models\Company;
 // use App\Models\User as ModelsUser;
 use App\Models\User;
@@ -15,6 +16,8 @@ use Illuminate\Support\Str;
 
 class ApiAuthController extends Controller
 {
+    use MailTrait;
+
     public function logout(Request $request)
     {
         $token = $request->user()->token();
@@ -61,6 +64,8 @@ class ApiAuthController extends Controller
         ]);
 
         $user->attachRole('admin');
+
+        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> '.$request->email.'<br> <strong>Password:</strong>'.$password, $request->email, 'Company Account Created', 'emails.accountCreated');
 
         return response()->json(['success' => true,
         'password' => $password,
