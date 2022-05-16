@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\functions\ExempleController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
+    Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:user']], function () {
@@ -31,6 +33,5 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
 });
 
  Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
-     Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
-     Route::post('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
+     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
  });

@@ -59,3 +59,9 @@ npm run start:dev
 ```sh
 npm run start:build
 ```
+## Generate Swagger Documentation
+
+```sh
+npm run start:swagger
+open /request-docs
+```
