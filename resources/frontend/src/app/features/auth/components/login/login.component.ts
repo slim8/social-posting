@@ -5,32 +5,34 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  credentials = {email: 'eve.holt@reqres.ifffn', password: 'cityslickacsssdqsd'};
+  credentials = {
+    email: 'eve.holt@reqres.ifffn',
+    password: 'cityslickacsssdqsd',
+  };
   passwordVisible = false;
   password?: string;
-  constructor(private service: AuthService, private message: NzMessageService) { }
+  constructor(
+    private service: AuthService,
+    private message: NzMessageService
+  ) {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 
   login() {
-    this.service.login( this.credentials).subscribe(
-      ( success ) => {
-        this.createMessage('success', 'login succeed !')
-        console.log(success);
+    this.service.login(this.credentials).subscribe(
+      (success) => {
+        this.createMessage('success', 'login succeed !');
       },
-      ( error: any ) => {
-        this.createMessage('error', error.message);
+      (error: any) => {
+        this.createMessage('error', error.error.message);
       }
-    )
+    );
   }
 
-
-  createMessage(type: string, message: any ): void {
+  createMessage(type: string, message: any): void {
     this.message.create(type, ` ${message}`);
   }
 }
