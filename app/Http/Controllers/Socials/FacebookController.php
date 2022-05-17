@@ -32,7 +32,7 @@ class FacebookController extends Controller
         $response = Http::get('https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
 
         return response()->json(['success' => true,
-        'access_token' => $response->json('long_life_access_token'), ], 201);
+        'long_life_access_token' => $response->json('access_token'), ], 201);
     }
 
     /**
