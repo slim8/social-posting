@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class FacebookController extends Controller
 {
-    public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
+    public function getPagesByCompanyId($companyId)
     {
         $AllPages = [];
 
@@ -24,6 +24,20 @@ class FacebookController extends Controller
             $name = $account->name;
             $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageFacebookPageLink, 'category' => $category,  'pageName' => $name];
         }
+
+        return $AllPages;
+    }
+
+    public function getAllPagesByCompanyId(Request $request)
+    {
+        $actualCompanyId = Auth::user()->company_id;
+
+        return $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId, 1);
+    }
+
+    public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
+    {
+        $AllPages = $this->getPagesByCompanyId($companyId);
 
         if ($returnJson) {
             if ($AllPages) {

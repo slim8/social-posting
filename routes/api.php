@@ -41,3 +41,8 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
 
 });
+
+Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
+    Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
+    Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
+});
