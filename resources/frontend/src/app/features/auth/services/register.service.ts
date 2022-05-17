@@ -6,7 +6,7 @@ import {CompanyModel} from "../../../models/Company.model";
 @Injectable({
   providedIn: 'root'
 })
-export class CompanyService {
+export class RegisterService {
 
   constructor(private httpClient :HttpClient) { }
 
