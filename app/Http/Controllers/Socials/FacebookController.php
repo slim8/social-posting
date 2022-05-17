@@ -16,6 +16,9 @@ class FacebookController extends Controller
 {
     use UserTrait;
 
+    /**
+     * Request Long Life Facebook Token.
+    */
     public function getLongLifeToken(Request $request)
     {
         $validator = Validator::make($request->all(), [
