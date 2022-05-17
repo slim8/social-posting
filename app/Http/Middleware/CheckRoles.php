@@ -19,8 +19,6 @@ class CheckRoles
 
             return $decoded->data->id;
         } catch (Exception $e) {
-            var_dump('exceptipon');
-
             return false;
         }
     }
