@@ -12,13 +12,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconsProviderModule } from './shared/icons-provider.module';
 import { DemoNgZorroAntdModule } from './shared/ng-zorro-antd.module';
-import { CompanyComponent } from './features/company/company.component';
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
-    CompanyComponent,
   ],
   imports: [
     BrowserModule,

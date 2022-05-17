@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { FormGroup, FormControl, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -11,18 +11,19 @@ import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
-  declarations: [
-    AuthLayoutComponent,
-    AuthLayoutComponent,
-    LoginComponent,
-    RegisterComponent,
-    ResetPasswordComponent
-  ],
-  imports: [
-    CommonModule,
-    AuthRoutingModule,
-    DemoNgZorroAntdModule,
-    FormsModule
-  ]
+    declarations: [
+        AuthLayoutComponent,
+        AuthLayoutComponent,
+        LoginComponent,
+        RegisterComponent,
+        ResetPasswordComponent
+    ],
+    imports: [
+        CommonModule,
+        AuthRoutingModule,
+        DemoNgZorroAntdModule,
+        FormsModule,
+        ReactiveFormsModule
+    ]
 })
 export class AuthModule { }
