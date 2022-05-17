@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('accounts', function (Blueprint $table) {
             $table->string('uid');
-            $table->string('profilePicture');
+            $table->text('profilePicture');
             $table->string('category');
         });
     }
