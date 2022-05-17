@@ -39,6 +39,7 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
     Route::post('/save-facebook-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
+    Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
