@@ -16,6 +16,25 @@ class FacebookController extends Controller
 {
     use UserTrait;
 
+    public function getLongLifeToken(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'accessToken' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+
+        $tokenKey = $request->accessToken;
+        $facebookAppKey = env('FACEBOOK_APP_ID');
+        $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
+        $response = Http::get('https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
+
+        return response()->json(['success' => true,
+        'long_life_access_token' => $response->json('access_token'), ], 201);
+    }
+
     /**
      * Return UID account from ID.
      */
@@ -92,7 +111,6 @@ class FacebookController extends Controller
             'form_params' => $obj,
         ]);
         }
-
     }
 
     /**
