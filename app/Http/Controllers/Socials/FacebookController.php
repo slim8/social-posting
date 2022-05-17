@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +14,90 @@ use Illuminate\Support\Facades\Validator;
 
 class FacebookController extends Controller
 {
+    use UserTrait;
+
+    /**
+     * Return UID account from ID.
+     */
+    public function getProviderTokenByid($id)
+    {
+        return $this->getAccountObjectById($id)->accessToken;
+    }
+
+    /**
+     * Return Account Object By ID.
+     */
+    public function getAccountObjectById($id)
+    {
+        $account = Account::where('id', $id)->where('company_id', UserTrait::getCompanyId())->first();
+
+        if (!$account) {
+            return false;
+        }
+
+        return $account;
+    }
+
+    /**
+     * Return UID account from ID.
+     */
+    public function getUidAccountById($id)
+    {
+        return $this->getAccountObjectById($id)->uid;
+    }
+
+    public function postPicture($pageId, $token, $url)
+    {
+        // code...
+        $response = Http::post('https://graph.facebook.com/'.$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
+
+        // return $response->json('data')['url'];
+        return $response->json('id');
+    }
+
+    /**
+     * post to facebook from Route.
+     */
+    public function postToFacebook(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'accountIds' => 'required',
+            'message' => 'string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+
+        foreach ($request->accountIds as $singleAccountId) {
+            $account = $this->getAccountObjectById($singleAccountId);
+            $accessToken = $account->accessToken;
+            $pageId = $account->uid;
+
+            $obj['access_token'] = $accessToken;
+
+            $images = [];
+            if ($request->message) {
+                $obj['message'] = $request->message;
+            }
+
+            if ($request->images) {
+                foreach ($request->images as $image) {
+                    $images[] = ['media_fbid' => $this->postPicture($pageId, $accessToken, $image)];
+                }
+                $obj['attached_media'] = json_encode($images);
+            }
+
+            $client = new Client();
+            $res = $client->request('POST', 'https://graph.facebook.com/'.$pageId.'/feed', [
+            'form_params' => $obj,
+        ]);
+        }
+
+    }
+
+    /**
+     * Return All facebook pages by Company ID.
+     */
     public function getPagesByCompanyId($companyId)
     {
         $AllPages = [];
@@ -28,7 +114,10 @@ class FacebookController extends Controller
         return $AllPages;
     }
 
-    public function getAllPagesByCompanyId(Request $request)
+    /**
+     * Return All facebook pages for current user for ROUTES.
+     */
+    public function getAllPagesByCompanyId()
     {
         $actualCompanyId = Auth::user()->company_id;
 
@@ -52,6 +141,9 @@ class FacebookController extends Controller
         }
     }
 
+    /**
+     * Get facebook page picture from Facebook ID.
+     */
     public function getPagePicture($pageId)
     {
         $response = Http::get('https://graph.facebook.com/'.$pageId.'/picture?redirect=0');
@@ -59,6 +151,9 @@ class FacebookController extends Controller
         return $response->json('data')['url'];
     }
 
+    /**
+     * Save Facebook List of pages after autorization.
+     */
     public function savePagesList(Request $request)
     {
         $jsonPageList = $request->json('pages');
@@ -108,6 +203,9 @@ class FacebookController extends Controller
         }
     }
 
+    /**
+     * Get Facebook pages list from Facebook endpoint for current connected User (Facebook Login).
+     */
     public function getPagesList(Request $request)
     {
         $validator = Validator::make($request->all(), [

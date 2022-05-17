@@ -39,10 +39,11 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
     Route::post('/save-facebook-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
-
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
     Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
+    Route::post('/facebook/send-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
+    Route::post('/send-facebook-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
 });
