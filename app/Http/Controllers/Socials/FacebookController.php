@@ -93,7 +93,6 @@ class FacebookController extends Controller
         ]);
         }
 
-        // return $response->json('data')['url'];
     }
 
     /**
