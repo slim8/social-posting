@@ -18,6 +18,17 @@ class ApiAuthController extends Controller
 {
     use MailTrait;
 
+    public function getCurrentRoles($user)
+    {
+        $roles = [];
+
+        foreach ($user->roles->toArray() as $role) {
+            $roles[] = $role['name'];
+        }
+
+        return $roles;
+    }
+
     public function logout(Request $request)
     {
         $token = $request->user()->token();
@@ -146,6 +157,7 @@ class ApiAuthController extends Controller
                             'token' => $jwt,
                             'expireAt' => $expire_claim,
                             'success' => true,
+                            'roles' => $this->getCurrentRoles($user),
                         ], 200);
                 } else {
                     $response = ['message' => trans('message.password_mismatch'), 'status' => false];
