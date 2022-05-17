@@ -21,7 +21,8 @@ class Account extends Model
         'uid',
         'profilePicture',
         'category',
-        'providerType'
+        'providerType',
+        'accessToken',
     ];
 
     public function company()

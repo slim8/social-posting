@@ -33,10 +33,16 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
     Route::post('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 });
 
-Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
+Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::post('/get-facebook-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
+    Route::post('/facebook/get-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
+    Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
+    Route::post('/save-facebook-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
+    Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
+
 });
 
- Route::group(['middleware' => ['checkroles', 'role:user']], function () {
-     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
- });
+Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
+    Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
+    Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
+});
