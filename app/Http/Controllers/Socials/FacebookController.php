@@ -18,7 +18,7 @@ class FacebookController extends Controller
 
     /**
      * Request Long Life Facebook Token.
-    */
+     */
     public function getLongLifeToken(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -71,7 +71,7 @@ class FacebookController extends Controller
     public function postPicture($pageId, $token, $url)
     {
         // code...
-        $response = Http::post('https://graph.facebook.com/'.$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
         // return $response->json('data')['url'];
         return $response->json('id');
@@ -110,7 +110,7 @@ class FacebookController extends Controller
             }
 
             $client = new Client();
-            $res = $client->request('POST', 'https://graph.facebook.com/'.$pageId.'/feed', [
+            $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $obj,
         ]);
         }
@@ -167,7 +167,7 @@ class FacebookController extends Controller
      */
     public function getPagePicture($pageId)
     {
-        $response = Http::get('https://graph.facebook.com/'.$pageId.'/picture?redirect=0');
+        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
 
         return $response->json('data')['url'];
     }
@@ -243,7 +243,7 @@ class FacebookController extends Controller
 
         $AllPages = [];
 
-        $facebookUri = 'https://graph.facebook.com/'.$facebookUserId.'/accounts?access_token='.$tokenKey;
+        $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
         $response = Http::get($facebookUri);
 
