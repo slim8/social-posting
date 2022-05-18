@@ -1,0 +1,30 @@
+<div class="mod-facebook-pages">
+    <div class="m-page" *ngFor="let page of pages">
+        <div class="m-page-container" [attr.data-pageId]="page.pageId" [attr.data-id]="page.id" >
+            <div class="m-img-container">
+                <img class="m-picture" src="{{page.pagePictureUrl}}" alt="">
+            </div>
+            <div class="m-category">{{page.category}}</div>
+            <div class="m-page-name">{{page.pageName}}</div>
+            <div class="m-account">
+                <div>
+                    <div class="m-title">
+                        <i nz-icon nzType="unordered-list" nzTheme="outline"></i>
+                        facebook</div>
+                    <button class="m-button">
+                    <div class="icon">
+                            <i nz-icon nzType="delete" nzTheme="outline"></i>
+                        </div>
+                        Delete
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="m-page">
+        <div class="m-page-container">
+            <i class="m-icon" nz-icon nzType="plus" nzTheme="outline"></i>
+        </div>
+    </div>
+</div>
