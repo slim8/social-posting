@@ -36,4 +36,18 @@ trait UserTrait
 
         return $account->id;
     }
+
+    /**
+     * Get Current Provider Object
+     */
+    public static function getCurrentProviderObject()
+    {
+        $account = ProviderToken::where('created_by', UserTrait::getCurrentAdminId())->first();
+
+        if (!$account) {
+            return false;
+        }
+
+        return $account;
+    }
 }
