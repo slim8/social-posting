@@ -61,6 +61,7 @@ class ApiAuthController extends Controller
             'phoneNumber' => $request->phoneNumber,
             'adress' => $request->adress,
             'website' => $request->website,
+            'plan_id' => '1',
         ]);
         $password = str::random(10);
         $user = User::create([
@@ -72,6 +73,7 @@ class ApiAuthController extends Controller
             'isSubscriber' => $request->isSubscriber,
             'company_id' => $company->id,
             'password' => hash::make($password),
+            'autoRefresh' => 1,
         ]);
 
         $user->attachRole('admin');
