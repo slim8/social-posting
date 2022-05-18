@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FacebookSocialService } from '../services/facebook-social.service';
+import { FacebookSocialService } from '../../services/facebook-social.service';
 
 interface Page {
     id: Number;

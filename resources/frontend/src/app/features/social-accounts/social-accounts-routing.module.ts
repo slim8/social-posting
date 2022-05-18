@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SocialAccountsComponent } from './social-accounts.component';
-import { AccountPagesComponent } from '../social-accounts/account-pages/account-pages.component';
+import { AccountPagesComponent } from './components/account-pages/account-pages.component';
 
 const routes: Routes = [
     { path: '', component: SocialAccountsComponent },

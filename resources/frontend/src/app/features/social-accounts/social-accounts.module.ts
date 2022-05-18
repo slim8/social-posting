@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { SocialAccountsRoutingModule } from './social-accounts-routing.module';
 import { SocialAccountsComponent } from './social-accounts.component';
-import { AccountPagesComponent } from './account-pages/account-pages.component';
+import { AccountPagesComponent } from './components/account-pages/account-pages.component';
 
 
 @NgModule({
