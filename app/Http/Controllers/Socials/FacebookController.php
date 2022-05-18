@@ -17,9 +17,9 @@ class FacebookController extends Controller
     use UserTrait;
 
     /**
-     * Update or Add a new Provider Token
+     * Update or Add a new Provider Token.
      */
-    public function updateOrReturnProviderIdUser($adminId, $longLifeToken)
+    public function updateOrReturnProviderIdUser($adminId, $longLifeToken, $accountUserId)
     {
         $account = UserTrait::getCurrentProviderId();
 
@@ -33,6 +33,7 @@ class FacebookController extends Controller
                     'expiryDate' => date('Y-m-d', strtotime('+60 days')),
                     'longLifeToken' => $longLifeToken,
                     'created_by' => $adminId,
+                    'accountUserId' => $accountUserId,
                 ]);
 
             return $provider->id;
@@ -40,15 +41,15 @@ class FacebookController extends Controller
     }
 
     /**
-     * Generate Long Life Token
+     * Generate Long Life Token.
      */
-    public function generateLongLifeToken($tokenKey)
+    public function generateLongLifeToken($tokenKey, string $facebookUserId = '')
     {
         $facebookAppKey = env('FACEBOOK_APP_ID');
         $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
         $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
 
-        $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'));
+        $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'), $facebookUserId);
 
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
@@ -264,25 +265,8 @@ class FacebookController extends Controller
         }
     }
 
-    /**
-     * Get Facebook pages list from Facebook endpoint for current connected User (Facebook Login).
-     */
-    public function getPagesList(Request $request)
+    public function getAccountPagesAccount($facebookUserId, $tokenKey)
     {
-        $validator = Validator::make($request->all(), [
-            'accessToken' => 'required|string',
-            'id' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response(['errors' => $validator->errors()->all()], 422);
-        }
-
-        $tokenKey = $this->generateLongLifeToken($request->accessToken)->token;
-        $facebookUserId = $request->id;
-
-        $AllPages = [];
-
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
         $response = Http::get($facebookUri);
@@ -300,7 +284,37 @@ class FacebookController extends Controller
                 $name = $facebookPage['name'];
                 $AllPages[] = ['pageId' => $id, 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
             }
+        }
 
+        return $AllPages;
+    }
+
+    public function getPagesAccountInterne()
+    {
+        $providerObject = UserTrait::getCurrentProviderObject();
+
+        return $this->getAccountPagesAccount($providerObject->accountUserId, $providerObject->longLifeToken);
+    }
+
+    /**
+     * Get Facebook pages list from Facebook endpoint for current connected User (Facebook Login).
+     */
+    public function getPagesList(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'accessToken' => 'required|string',
+            'id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+        $facebookUserId = $request->id;
+        $tokenKey = $this->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
+
+        $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
+
+        if ($AllPages) {
             return response()->json(['success' => true,
         'pages' => $AllPages, ], 201);
         } else {

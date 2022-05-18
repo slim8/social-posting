@@ -22,7 +22,8 @@ class InstagramController extends Controller
 
         $url = 'https://graph.facebook.com/'.$businessId.'?fields=name,username,profile_picture_url,biography&access_token='.$accessToken;
         $response = Http::get($url);
-        dd($response->json());
+
+        return $response->json();
     }
 
     /**
@@ -43,29 +44,27 @@ class InstagramController extends Controller
     {
         $facebookController = new FacebookController();
 
-        $companyId = UserTrait::getCompanyId();
+        $facebookPages = $facebookController->getPagesAccountInterne();
 
-        $facebookPages = $facebookController->getPagesByCompanyId($companyId);
+        $businessAccounts = [];
 
-        // dd($facebookPages);
+        if ($facebookPages) {
+            foreach ($facebookPages as $facebookPage) {
+                $pageId = $facebookPage['pageId'];
+                $accessToken = $facebookPage['pageToken'];
+                $businessAccountId = $this->getBusinessAccountId($pageId, $accessToken);
+                if ($businessAccountId !== false) {
+                    $instagramAccount = $this->getInstagramInformationFromBID($businessAccountId, $accessToken);
 
-        // 79
+                    $businessAccounts[] = ['id' => $businessAccountId, 'relatedAccountId' => $pageId, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                }
+            }
 
-        $pageId = '';
-        $accessToken = '';
-
-        // $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'?fields=instagram_business_account&access_token='.$accessToken);
-
-        // {"id":"105256542125745"}
-
-        // $pageId = '';
-        // $accessToken = '';
-
-        $BusinessId = $this->getBusinessAccountId($pageId, $accessToken);
-
-        if ($BusinessId) {
-            dd($this->getInstagramInformationFromBID($BusinessId, $accessToken));
+            return response()->json(['success' => true,
+            'pages' => $businessAccounts, ], 201);
+        } else {
+            return response()->json(['success' => false,
+            'pages' => $businessAccounts, ], 201);
         }
-        dd($BusinessId);
     }
 }

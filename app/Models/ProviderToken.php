@@ -13,6 +13,7 @@ class ProviderToken extends Model
         'expiryDate',
         'longLifeToken',
         'created_by',
+        'accountUserId'
     ];
 
     public function creator()
