@@ -25,6 +25,7 @@ class Account extends Model
         'providerType',
         'accessToken',
         'related_account_id',
+        'provider_token_id'
     ];
 
     public function company()

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Socials;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -16,13 +16,45 @@ class FacebookController extends Controller
 {
     use UserTrait;
 
+    /**
+     * Update or Add a new Provider Token
+     */
+    public function updateOrReturnProviderIdUser($adminId, $longLifeToken)
+    {
+        $account = UserTrait::getCurrentProviderId();
+
+        if ($account) {
+            ProviderToken::whereId($account)->update(['longLifeToken' => $longLifeToken]);
+
+            return $account;
+        } else {
+            $provider = ProviderToken::create(
+                [
+                    'expiryDate' => date('Y-m-d', strtotime('+60 days')),
+                    'longLifeToken' => $longLifeToken,
+                    'created_by' => $adminId,
+                ]);
+
+            return $provider->id;
+        }
+    }
+
+    /**
+     * Generate Long Life Token
+     */
     public function generateLongLifeToken($tokenKey)
     {
         $facebookAppKey = env('FACEBOOK_APP_ID');
         $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
         $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
 
-        return $response->json('access_token');
+        $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'));
+
+        $providerObject = new \stdClass();
+        $providerObject->id = $providerId;
+        $providerObject->token = $response->json('access_token');
+
+        return $providerObject;
     }
 
     /**
@@ -39,7 +71,7 @@ class FacebookController extends Controller
         }
 
         $tokenKey = $request->accessToken;
-        $longLife = $this->generateLongLifeToken($tokenKey);
+        $longLife = $this->generateLongLifeToken($tokenKey)->token;
 
         return response()->json(['success' => true,
         'long_life_access_token' => $longLife, ], 201);
@@ -217,6 +249,7 @@ class FacebookController extends Controller
                         'category' => $category,
                         'providerType' => 'page',
                         'accessToken' => $pageToken,
+                        'provider_token_id' => UserTrait::getCurrentProviderId(),
                     ]);
                 }
             }
@@ -245,7 +278,7 @@ class FacebookController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
-        $tokenKey = $this->generateLongLifeToken($request->accessToken);
+        $tokenKey = $this->generateLongLifeToken($request->accessToken)->token;
         $facebookUserId = $request->id;
 
         $AllPages = [];
