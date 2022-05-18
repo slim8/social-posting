@@ -23,7 +23,14 @@ return new class extends Migration
             $table->string('scoope');
             $table->string('authorities');
             $table->string('link');
-            $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');;
+            $table->string('uid');
+            $table->text('profilePicture');
+            $table->string('category');
+            $table->enum('providerType', ['page', 'groupe']);
+            $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreignId('provider_token_id')->references('id')->on('provider_tokens')->onDelete('cascade');
+            $table->foreignId('related_account_id')->nullable()->references('id')->on('accounts');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

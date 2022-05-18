@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phoneNumber');
             $table->string('email');
             $table->string('website');
+            $table->foreignId('plan_id')->constrained();
             $table->timestamps();
         });
     }

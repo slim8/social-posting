@@ -13,8 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('accounts', function (Blueprint $table) {
-            $table->enum('providerType', ['page', 'groupe']);
+        Schema::create('provider_tokens', function (Blueprint $table) {
+            $table->id();
+            $table->datetime('expiryDate');
+            $table->text('longLifeToken');
+            $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('accounts', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('provider_tokens');
     }
 };

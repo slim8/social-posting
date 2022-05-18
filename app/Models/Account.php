@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -23,6 +24,7 @@ class Account extends Model
         'category',
         'providerType',
         'accessToken',
+        'related_account_id',
     ];
 
     public function company()
@@ -33,5 +35,9 @@ class Account extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function related_account(){
+        return $this->belongsTo(Account::class, 'related_account_id');
     }
 }

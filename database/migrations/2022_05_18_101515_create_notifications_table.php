@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
+            $table->enum('type',['SESSION_EXPIRE_SOON','SESSION_EXPIRED','POST_SUCCEED','POST_FAILED','POST_WATING']);
+            $table->enum('priority',['high','medium','low','urgent']);
+            $table->boolean('seen');
             $table->string('url');
-            $table->string('status');
-            $table->boolean('isScheduled');
-            $table->dateTime('publishedAt')->nullable();
-            $table->foreignId('account_id')->constrained();
-            $table->softDeletes();
+            $table->dateTime('seenDate');
+            $table->foreignId('targetUser')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('notifications');
     }
 };

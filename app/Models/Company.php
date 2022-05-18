@@ -21,7 +21,8 @@ class Company extends Model
         'adress',
         'phoneNumber',
         'email',
-        'website'
+        'website',
+        'plan_id'
     ];
 
     public function users()
@@ -32,6 +33,11 @@ class Company extends Model
     public function accounts()
     {
         return $this->hasMany(Account::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 
 
