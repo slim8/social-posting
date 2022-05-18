@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('plan_providers', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
-            $table->string('url');
-            $table->string('status');
-            $table->boolean('isScheduled');
-            $table->dateTime('publishedAt')->nullable();
-            $table->foreignId('account_id')->constrained();
-            $table->softDeletes();
+            $table->string('limit');
+            $table->string('remaining');
+            $table->enum('provider', ['facebook', 'instagram', 'tiktok' , 'twitter']);
+            $table->foreignId('plan_id')->constrained();
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('plan_providers');
     }
 };

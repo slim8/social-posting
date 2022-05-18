@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('post_media', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
-            $table->string('url');
-            $table->string('status');
-            $table->boolean('isScheduled');
-            $table->dateTime('publishedAt')->nullable();
-            $table->foreignId('account_id')->constrained();
-            $table->softDeletes();
+            $table->text('url');
+            $table->string('type');
+            $table->foreignId('post_id')->constrained();
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('post_media');
     }
 };

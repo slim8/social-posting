@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('lastName');
             $table->string('status');
             $table->boolean('isSubscriber');
+            $table->boolean('autoRefresh');
             $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');;
         });
     }

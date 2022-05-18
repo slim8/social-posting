@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'message',
         'url',
-        'images',
-        'videos',
         'status',
         'publishedAt',
         'deleted',
@@ -23,5 +22,15 @@ class Post extends Model
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function PostMedia()
+    {
+        return $this->hasMany(PostMedia::class);
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class)->using(PostTag::class);
     }
 }
