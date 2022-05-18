@@ -4,9 +4,9 @@
     flex-wrap: wrap;
 
     > .m-page {
-        margin: 20px;
-        width: 283px;
-        height: 277px;
+        margin: 34px;
+        width: 217px;
+        height: 301px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -24,15 +24,17 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
 
             > .m-picture {
-                width: 155px;
+                width: 120px;
                 margin-bottom: 30px;
             }
 
             > .m-page-name {
+                text-align: center;
                 font-weight: 700;
-                font-size: 32px;
+                font-size: 23px;
             }
         }
     }
