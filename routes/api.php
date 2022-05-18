@@ -37,6 +37,7 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::post('/get-instagram-accounts', [InstagramController::class, 'getAccountsList'])->name('get-instagram-accounts.api');
     Route::post('/instagram/get-accounts', [InstagramController::class, 'getAccountsList'])->name('get-instagram-accounts.api');
+    Route::post('/instagram/save-accounts', [InstagramController::class, 'savePagesList'])->name('save-instagram-accounts.api');
     Route::post('/get-facebook-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
     Route::post('/facebook/get-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
     Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
@@ -49,5 +50,6 @@ Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
     Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::post('/facebook/send-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
+    Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
     Route::post('/send-facebook-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
 });

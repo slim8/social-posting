@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\ProviderToken;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class FacebookController extends Controller
 {
     use UserTrait;
+    use RequestsTrait;
 
     /**
      * Update or Add a new Provider Token.
@@ -156,24 +158,24 @@ class FacebookController extends Controller
         }
     }
 
-    /**
-     * Return All facebook pages by Company ID.
-     */
-    public function getPagesByCompanyId($companyId)
-    {
-        $AllPages = [];
+    // /**
+    //  * Return All facebook pages by Company ID.
+    //  */
+    // public function getPagesByCompanyId($companyId)
+    // {
+    //     $AllPages = [];
 
-        foreach (DB::table('accounts')->where('company_id', $companyId)->where('provider', 'facebook')->where('providerType', 'page')->where('status', 1)->orderBy('id')->lazy() as $account) {
-            $id = $account->id;
-            $uid = $account->uid;
-            $pageFacebookPageLink = $account->profilePicture;
-            $category = $account->category;
-            $name = $account->name;
-            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageFacebookPageLink, 'category' => $category,  'pageName' => $name];
-        }
+    //     foreach (DB::table('accounts')->where('company_id', $companyId)->where('provider', 'facebook')->where('providerType', 'page')->where('status', 1)->orderBy('id')->lazy() as $account) {
+    //         $id = $account->id;
+    //         $uid = $account->uid;
+    //         $pageFacebookPageLink = $account->profilePicture;
+    //         $category = $account->category;
+    //         $name = $account->name;
+    //         $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageFacebookPageLink, 'category' => $category,  'pageName' => $name];
+    //     }
 
-        return $AllPages;
-    }
+    //     return $AllPages;
+    // }
 
     /**
      * Return All facebook pages for current user for ROUTES.
@@ -187,7 +189,7 @@ class FacebookController extends Controller
 
     public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
     {
-        $AllPages = $this->getPagesByCompanyId($companyId);
+        $AllPages = RequestsTrait::getSavedAccountFromDB();
 
         if ($returnJson) {
             if ($AllPages) {
