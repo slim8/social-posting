@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FacebookSocialComponent } from './facebook-social.component';
+import { FacebookPagesComponent } from './components/facebook-pages/facebook-pages.component';
 
-const routes: Routes = [{ path: '', component: FacebookSocialComponent }];
+const routes: Routes = [
+    { path: '', component: FacebookSocialComponent },
+    { path: 'pages', component: FacebookPagesComponent }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
