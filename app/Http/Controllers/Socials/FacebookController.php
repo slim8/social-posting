@@ -147,7 +147,7 @@ class FacebookController extends Controller
      */
     public function getAllPagesByCompanyId()
     {
-        $actualCompanyId = Auth::user()->company_id;
+        $actualCompanyId = UserTrait::getCompanyId();
 
         return $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId, 1);
     }
@@ -188,7 +188,7 @@ class FacebookController extends Controller
 
         $AllPages = [];
 
-        $actualCompanyId = Auth::user()->company_id;
+        $actualCompanyId = UserTrait::getCompanyId();
 
         // dd($actualCompanyId);
 
