@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent implements OnInit {
   credentials = {
     email: 'eve.holt@reqres.ifffn',
-    password: 'cityslickacsssdqsd',
+    password: 'cddhsfgsdbjgs',
   };
   passwordVisible = false;
   password?: string;

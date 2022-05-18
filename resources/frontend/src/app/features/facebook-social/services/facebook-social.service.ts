@@ -9,6 +9,7 @@ import {
   UIParams,
   UIResponse,
 } from 'ngx-facebook';
+import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 @Injectable({
   providedIn: 'root',
@@ -63,8 +64,14 @@ export class FacebookSocialService {
    * @returns a list of pages you have a role and information about each Page such as the Page category,
    * the specific permissions you have on each Page, and the Page access token
    */
-  getCurrentFBPages(user: any) {
+  getCurrentFBPages(accessToken: any) {
     const url = `https://graph.facebook.com/1703848376633794/accounts?access_token=EAAH6ob18mfkBADyEMJLVDZBnCCbcQs838U4Fo9FeqcXgMcOq8ZAWZANTphTZCiNE2y7qkPiAfUFGHrg1DjTC5Ntbj4PclMsu7VMJYJNBNe90fxBLdKhANVIafFK8jbaE6jSdMiEErbM2d7qdxYbUIFdtu0dVDKegFfBc6aScZAebZCssHAiNZCY0E8AkFqvOpbroy4ZCohcgV2MKYgUSwtpdbfPPlV5eK9kZD`;
+
+    return this.http.get(url);
+  }
+
+  getCurrentApprovedFBPages() {
+    const url = sharedConstants.API_ENDPOINT + '/facebook/load-pages';
 
     return this.http.get(url);
   }

@@ -1,0 +1,39 @@
+.mod-facebook-pages {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    > .m-page {
+        margin: 20px;
+        width: 283px;
+        height: 277px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+            transition: 0.3s all;
+            border: 1px solid grey;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        > .m-page-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            > .m-picture {
+                width: 155px;
+                margin-bottom: 30px;
+            }
+
+            > .m-page-name {
+                font-weight: 700;
+                font-size: 32px;
+            }
+        }
+    }
+}
