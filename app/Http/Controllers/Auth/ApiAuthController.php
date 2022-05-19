@@ -62,6 +62,7 @@ class ApiAuthController extends Controller
             'adress' => $request->adress,
             'website' => $request->website,
             'plan_id' => '1',
+            'is_admin' => false,
         ]);
         $password = str::random(10);
         $user = User::create([
@@ -76,7 +77,7 @@ class ApiAuthController extends Controller
             'autoRefresh' => 1,
         ]);
 
-        $user->attachRole('admin');
+        $user->attachRole('companyadmin');
 
         MailTrait::index('A new user has been Created <br> <strong>Email:</strong> '.$request->email.'<br> <strong>Password:</strong>'.$password, $request->email, 'Company Account Created', 'emails.accountCreated');
 

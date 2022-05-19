@@ -34,7 +34,7 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
     Route::post('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 });
 
-Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
+Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
     Route::post('/get-instagram-accounts', [InstagramController::class, 'getAccountsList'])->name('get-instagram-accounts.api');
     Route::post('/instagram/get-accounts', [InstagramController::class, 'getAccountsList'])->name('get-instagram-accounts.api');
     Route::post('/instagram/save-accounts', [InstagramController::class, 'savePagesList'])->name('save-instagram-accounts.api');
@@ -46,7 +46,7 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
 });
 
-Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
+Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
     Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::post('/facebook/send-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
