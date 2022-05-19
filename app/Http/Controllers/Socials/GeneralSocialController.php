@@ -6,124 +6,52 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
-use App\Models\ProviderToken;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
-class FacebookController extends Controller
+class GeneralSocialController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
 
     /**
-     * Update or Add a new Provider Token.
+     * post to facebook from Route.
      */
-    public function updateOrReturnProviderIdUser($adminId, $longLifeToken, $accountUserId)
-    {
-        $account = UserTrait::getCurrentProviderId();
-
-        if ($account) {
-            ProviderToken::whereId($account)->update(['longLifeToken' => $longLifeToken]);
-
-            return $account;
-        } else {
-            $provider = ProviderToken::create(
-                [
-                    'expiryDate' => date('Y-m-d', strtotime('+60 days')),
-                    'longLifeToken' => $longLifeToken,
-                    'created_by' => $adminId,
-                    'accountUserId' => $accountUserId,
-                ]);
-
-            return $provider->id;
-        }
-    }
-
-    /**
-     * Generate Long Life Token.
-     */
-    public function generateLongLifeToken($tokenKey, string $facebookUserId = '')
-    {
-        $facebookAppKey = env('FACEBOOK_APP_ID');
-        $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
-        $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
-
-        $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'), $facebookUserId);
-
-        $providerObject = new \stdClass();
-        $providerObject->id = $providerId;
-        $providerObject->token = $response->json('access_token');
-
-        return $providerObject;
-    }
-
-    /**
-     * Request Long Life Facebook Token.
-     */
-    public function getLongLifeToken(Request $request)
+    public function sentToPost(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'accessToken' => 'required|string',
+            'accountIds' => 'required',
+            'message' => 'string|max:255',
         ]);
-
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
-        $tokenKey = $request->accessToken;
-        $longLife = $this->generateLongLifeToken($tokenKey)->token;
+        foreach ($request->accountIds as $singleAccountId) {
+            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
+            $FacebookController = new FacebookController();
+            $InstagramController = new InstagramController();
+            $accountProvider = $account->provider;
 
-        return response()->json(['success' => true,
-        'long_life_access_token' => $longLife, ], 201);
-    }
+            if ($accountProvider == 'facebook') {
+                if ($request->message) {
+                    $obj['message'] = $request->message;
+                }
+                $obj['access_token'] = $account->accessToken;
 
-    /**
-     * Return UID account from ID.
-     */
-    public function getProviderTokenByid($id)
-    {
-        return RequestsTrait::findAccountByUid($id, 'id')->accessToken;
-    }
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images);
+            } elseif ($accountProvider == 'instagram') {
+                if ($request->message) {
+                    $obj['caption'] = $request->message;
+                }
+                $BusinessIG = $account->uid;
 
-    /**
-     * Return UID account from ID.
-     */
-    public function getUidAccountById($id)
-    {
-        return RequestsTrait::findAccountByUid($id, 'id')->uid;
-    }
-
-    public function postPicture($pageId, $token, $url)
-    {
-        // code...
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
-
-        // return $response->json('data')['url'];
-        return $response->json('id');
-    }
-
-    /**
-     * post to facebook from Route.
-    */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls)
-    {
-        $images = [];
-
-        if ($imagesUrls) {
-            foreach ($imagesUrls as $image) {
-                $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
+                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id');
+                $obj['access_token'] = $IgAccount->accessToken;
+                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images);
             }
-            $object['attached_media'] = json_encode($images);
         }
-
-        $client = new Client();
-        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
-            'form_params' => $object,
-        ]);
-        // }
     }
 
     /**

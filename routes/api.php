@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\Socials\FacebookController;
+use App\Http\Controllers\Socials\GeneralSocialController;
 use App\Http\Controllers\Socials\InstagramController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
@@ -50,6 +51,11 @@ Route::group(['middleware' => ['checkroles', 'role:admin|user']], function () {
     Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::post('/facebook/send-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
+
+
+    Route::post('/send-post', [GeneralSocialController::class, 'sentToPost'])->name('send-general-post.api');
+    Route::post('/instagram/send-post', [InstagramController::class, 'postToInstagram'])->name('send-instagram-post.api');
+
     Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
     Route::post('/send-facebook-post', [FacebookController::class, 'postToFacebook'])->name('send-post.api');
 });
