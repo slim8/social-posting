@@ -42,8 +42,8 @@ class AdminSeeder extends Seeder
             'plan_id' => $plan->id,
             'is_admin' => true,
         ]);
-        
-        User::create([
+
+        $user = User::create([
             'firstName' => 'MGO',
             'lastName' => 'Administrator',
             'name' => 'MGO',
@@ -54,5 +54,7 @@ class AdminSeeder extends Seeder
             'password' => hash::make('Soft1to2do'),
             'autoRefresh' => 1,
         ]);
+
+        $user->attachRole('admin');
     }
 }

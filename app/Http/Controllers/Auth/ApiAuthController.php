@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\repositories\UserRepository;
 use App\Http\Traits\MailTrait;
 use App\Models\Company;
 // use App\Models\User as ModelsUser;
@@ -18,15 +19,11 @@ class ApiAuthController extends Controller
 {
     use MailTrait;
 
-    public function getCurrentRoles($user)
+    protected $userRepository;
+
+    public function __construct()
     {
-        $roles = [];
-
-        foreach ($user->roles->toArray() as $role) {
-            $roles[] = $role['name'];
-        }
-
-        return $roles;
+        $this->userRepository = new UserRepository();
     }
 
     public function logout(Request $request)
@@ -160,7 +157,7 @@ class ApiAuthController extends Controller
                             'token' => $jwt,
                             'expireAt' => $expire_claim,
                             'success' => true,
-                            'roles' => $this->getCurrentRoles($user),
+                            'roles' => $this->userRepository->getCurrentRoles($user),
                         ], 200);
                 } else {
                     $response = ['message' => trans('message.password_mismatch'), 'status' => false];

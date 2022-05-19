@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\GeneralSocialController;
 use App\Http\Controllers\Socials\InstagramController;
@@ -52,4 +53,9 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::post('/send-post', [GeneralSocialController::class, 'sentToPost'])->name('send-general-post.api');
     Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
+});
+
+Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
+    Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
+    Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
 });
