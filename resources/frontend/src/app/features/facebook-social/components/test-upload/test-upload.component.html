@@ -1,0 +1,51 @@
+
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <div class="clearfix">
+            <nz-upload
+                formControlName="uploadFile"
+                nzAction=""
+                nzListType="picture-card"
+                [(nzFileList)]="fileList"
+                [nzShowButton]="fileList.length < 8"
+                [nzPreview]="handlePreview"
+                >
+            <div>
+                <i nz-icon nzType="plus"></i>
+                <div style="margin-top: 8px">Upload</div>
+            </div>
+            </nz-upload>
+            <nz-modal
+                [nzVisible]="previewVisible"
+                [nzContent]="modalContent"
+                [nzFooter]="null"
+                (nzOnCancel)="previewVisible = false"
+                >
+                <ng-template #modalContent>
+                    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                </ng-template>
+            </nz-modal>
+        </div>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-upload
+            [nzHeaders]="{ authorization: 'authorization-text' }"
+            (nzChange)="handleChange($event)"
+        >
+            <button nz-button>
+                <i nz-icon nzType="upload"></i>
+                    Click to Upload
+                </button>
+        </nz-upload>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 8 }">
+          <button nz-button nzType="primary">Submit</button>
+        </nz-form-control>
+      </nz-form-item>
+</form>
+
+
+
+
