@@ -1,0 +1,17 @@
+{
+    "request": {
+        "criterias": [
+            {
+                "operation": "like,>=,=",
+                "fieldName": "name",
+                "fieldValue": "%ali%"
+            }
+        ],
+        "paginator": {
+            "currentPage": "1",
+            "elementsPerPage": "15",
+            "sortBy": "name",
+            "sortDirection": "ASC/DESC"
+        }
+    }
+}

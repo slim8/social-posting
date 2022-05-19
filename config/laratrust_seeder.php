@@ -12,6 +12,16 @@ return [
     'truncate_tables' => true,
 
     'roles_structure' => [
+        'superadmin' => [
+            'users' => 'c,r,u,d',
+            'payments' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
+        'companyadmin' => [
+            'users' => 'c,r,u,d',
+            'payments' => 'c,r,u,d',
+            'profile' => 'r,u'
+        ],
         'admin' => [
             'users' => 'c,r,u,d',
             'payments' => 'c,r,u,d',
@@ -21,18 +31,8 @@ return [
             'users' => 'c,r,u,d',
             'profile' => 'r,u'
         ],
-        'blogwriter' => [
-            'users' => 'c,r,u,d',
-            'profile' => 'r,u'
-        ],
         'user' => [
             'profile' => 'r,u',
-        ],
-        'role_name' => [
-            'module_1_name' => 'c,r,u,d',
-        ],
-        'role_exemple' => [
-            'module_1_name' => 'c,r,u,d',
         ],
         'guest' => [
             'module_1_name' => 'r',
