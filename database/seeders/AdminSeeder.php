@@ -26,10 +26,10 @@ class AdminSeeder extends Seeder
             'usersLimit' => '1000',
         ]);
 
-        $planProvider = PlanProvider::create([
+        PlanProvider::create([
             'limit' => '1000',
         'remaining' => '1000',
-        'provider', '1000',
+        'provider' => 'facebook',
         'plan_id' => $plan->id,
         ]);
 
@@ -39,10 +39,11 @@ class AdminSeeder extends Seeder
             'phoneNumber' => '000000000',
             'adress' => 'Adresse',
             'website' => 'Website',
-            'plan_id' => $planProvider->id,
+            'plan_id' => $plan->id,
             'is_admin' => true,
         ]);
-        $user = User::create([
+        
+        User::create([
             'firstName' => 'MGO',
             'lastName' => 'Administrator',
             'name' => 'MGO',
