@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -14,6 +15,67 @@ class InstagramController extends Controller
     use UserTrait;
     use RequestsTrait;
 
+    /**
+     * Post Media Instagram.
+     */
+    public function postPicture($igUser, $token, $url)
+    {
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&image_url='.$url.'&is_carousel_item=true');
+
+        if ($response->json('id')) {
+            return $response->json('id');
+        } else {
+            $response->json('error')['message'];
+        }
+    }
+
+    /**
+     * Generate Container of instagram carrousel.
+     */
+    public function publishCarrousel($object, $igUser)
+    {
+        $parameter = RequestsTrait::prepareParameters($object);
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
+
+        return $response->json('id');
+    }
+
+    /**
+     * Generate Container of instagram carrousel.
+     */
+    public function postContainer($object, $igUser)
+    {
+        $parameter = RequestsTrait::prepareParameters($object);
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+
+        return $response->json('id');
+    }
+
+    /**
+     * Post to Instagram Method.
+     */
+    public function postToInstagramMethod($object, $igUser, $imagesUrls)
+    {
+        $images = [];
+
+        if ($imagesUrls) {
+            foreach ($imagesUrls as $image) {
+                $images[] = $this->postPicture($igUser, $object['access_token'], $image);
+            }
+            $object['children'] = implode(',', $images);
+
+            // $object['children'] = json_encode($images);
+        }
+
+        $object['media_type'] = 'CAROUSEL';
+
+        $object['creation_id'] = $this->postContainer($object, $igUser);
+        unset($object['caption']);
+        unset($object['children']);
+
+        return $this->publishCarrousel($object, $igUser);
+
+    }
 
     /**
      * Return All Instagram pages for current user for ROUTES.
@@ -22,7 +84,6 @@ class InstagramController extends Controller
     {
         return $this->getSavedPagefromDataBaseByCompanyId(1);
     }
-
 
     public function getSavedPagefromDataBaseByCompanyId(int $returnJson = 0)
     {
