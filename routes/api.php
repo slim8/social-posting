@@ -51,7 +51,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
     Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
-    Route::post('/send-post', [GeneralSocialController::class, 'sentToPost'])->name('send-general-post.api');
+    Route::post('/send-post', [GeneralSocialController::class, 'tryToPost'])->name('send-general-post.api');
     Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
 });
 
