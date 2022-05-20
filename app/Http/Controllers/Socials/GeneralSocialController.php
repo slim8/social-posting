@@ -17,15 +17,13 @@ class GeneralSocialController extends Controller
 
     public function tryToPost(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'accountIds' => 'required',
-        //     'message' => 'string|max:255',
-        // ]);
-        // if ($validator->fails()) {
-        //     return response(['errors' => $validator->errors()->all()], 422);
-        // }
-        $request->accountIds = ['4'];
-        $req = file_get_contents('php://input');
+        $validator = Validator::make($request->all(), [
+            'accountIds' => 'required',
+            'message' => 'string|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
         foreach ($request->accountIds as $singleAccountId) {
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
             $FacebookController = new FacebookController();
@@ -37,10 +35,6 @@ class GeneralSocialController extends Controller
                     $obj['message'] = $request->message;
                 }
                 $obj['access_token'] = $account->accessToken;
-
-                // dd($request->file('sources'));
-                // $path = storage_path('app').'/'.$request->file('sources')->store('/images/1/smalls');
-                //  dd(storage_path('app'));
 
                 $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images,$request->file('sources'));
             } elseif ($accountProvider == 'instagram') {
