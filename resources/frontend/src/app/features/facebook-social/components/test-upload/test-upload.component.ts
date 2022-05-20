@@ -17,7 +17,7 @@ export class TestUploadComponent implements OnInit {
     previewImage: string | undefined = '';
     previewVisible = false;
     sources: object[] = [];
-    selectedFile:any;
+    selectedFile: any;
 
     constructor(private fb: FormBuilder, private msg: NzMessageService, private ts: TestService, private http: HttpClient) { }
 
@@ -29,18 +29,19 @@ export class TestUploadComponent implements OnInit {
 
     submitForm() {
         const fd = new FormData();
-        fd.append('accountIds', "['4','4']");
+        fd.append('accountIds', '["4"]');
         fd.append('message', 'This message is a test message with multiple images on multiples pages');
-        fd.append('images', this.selectedFile);
+        fd.append('sources', this.selectedFile);
+        fd.append('_method', 'PUT');
         console.log(fd);
-        this.http.post('http://posting.local/api/send-post', fd,{
-            reportProgress:true,
-            observe:'events'
+        this.http.post('http://posting.local/api/send-post', fd, {
+            reportProgress: true,
+            observe: 'events'
         }).subscribe(event => {
-            if(event.type === HttpEventType.UploadProgress) {
-                if (event.total) { 
-                    const total: number = event.total;  
-                    console.log('Upload Progress: ' + Math.round( event.loaded / total ) * 100 + '%');
+            if (event.type === HttpEventType.UploadProgress) {
+                if (event.total) {
+                    const total: number = event.total;
+                    console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
                 }
             } else if (event.type === HttpEventType.Response) {
                 console.log(event);
