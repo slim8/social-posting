@@ -101,14 +101,14 @@ class FacebookController extends Controller
         $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&source='.$url.'&published=false');
 
         // // return $response->json('data')['url'];
-        dd($response->json());
+        // dd($response->json());
 
         return $response->json('id');
     }
 
     public function postPictureTwo($pageId, $token, $url)
     {
-        dd($url);
+         dd($url);
         // code...
         // $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
@@ -123,7 +123,7 @@ class FacebookController extends Controller
                 'access_token' => $token,
             ],
         ]);
-        dd($res);
+        // dd($res);
     }
 
     /**
@@ -133,12 +133,13 @@ class FacebookController extends Controller
     {
         $images = [];
 
-        if ($imagesUrls) {
-            foreach ($imagesUrls as $image) {
-                $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
-            }
-            $object['attached_media'] = json_encode($images);
-        }
+        // if ($imagesUrls) {
+        //     foreach ($imagesUrls as $image) {
+        //         $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
+        //     }
+        //     $object['attached_media'] = json_encode($images);
+        // }
+
 
         if ($imagesSources) {
             foreach ($imagesSources as $image) {

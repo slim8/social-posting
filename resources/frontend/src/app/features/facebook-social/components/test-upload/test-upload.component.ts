@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -17,28 +17,55 @@ export class TestUploadComponent implements OnInit {
     previewImage: string | undefined = '';
     previewVisible = false;
     sources: object[] = [];
+    selectedFile: any;
 
     constructor(private fb: FormBuilder, private msg: NzMessageService, private ts: TestService, private http: HttpClient) { }
 
     ngOnInit(): void {
-        this.validateForm = this.fb.group({
-            uploadFile: []
-        });
+        // this.validateForm = this.fb.group({
+        //     uploadFile: []
+        // });
     }
 
     submitForm() {
-        // console.log(this.sources);
-        let credentials = {
-            accountIds: ["4"],
-            message: 'This message is a test message with multiple images on multiples pages',
-            sources: this.sources
-        };
+        const fd = new FormData();
+        fd.append('accountIds', '["4"]');
+        fd.append('message', 'This message is a test message with multiple images on multiples pages');
+        fd.append('sources', this.selectedFile);
+        fd.append('_method', 'PUT');
+        console.log(fd);
+        this.http.post('http://posting.local/api/send-post', fd, {
+            reportProgress: true,
+            observe: 'events'
+        }).subscribe(event => {
+            if (event.type === HttpEventType.UploadProgress) {
+                if (event.total) {
+                    const total: number = event.total;
+                    console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
+                }
+            } else if (event.type === HttpEventType.Response) {
+                console.log(event);
+            }
+        });
 
-        this.http.post('http://posting.local/api/send-post', credentials).subscribe(
-            (success => {
-                console.log('success')
-            }) 
-        );
+        // this.http.post('http://posting.local/api/send-post', credentials).subscribe(
+        //     (success => {
+        //         console.log('success')
+        //     }) 
+        // );
+
+        // console.log(this.sources);
+        // let credentials = {
+        //     accountIds: ["4"],
+        //     message: 'This message is a test message with multiple images on multiples pages',
+        //     sources: this.sources
+        // };
+
+        // this.http.post('http://posting.local/api/send-post', credentials).subscribe(
+        //     (success => {
+        //         console.log('success')
+        //     }) 
+        // );
         // this.handleChange(info: NzUploadChangeParam);
         // console.log(this.validateForm.value);
     }
@@ -48,18 +75,15 @@ export class TestUploadComponent implements OnInit {
             var reader = new FileReader();
             file['preview'] = await reader.readAsDataURL(file.originFileObj!);
         }
+
         this.previewImage = file.url || file['preview'];
         this.previewVisible = true;
         console.log(this.previewImage);
     };
 
-    handleChange(info: NzUploadChangeParam): void {
-        if (info.file.status !== 'uploading') {
-            console.log(info.file, info.fileList);
-            this.sources = info.fileList;
-        }
+    handleChange(event: any): void {
+        this.selectedFile = event.target.files[0];
+        // console.log(this.selectedFile);
     }
-
-
 
 }
