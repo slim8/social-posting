@@ -9,7 +9,7 @@ class Company extends Model
 {
     use HasFactory;
 
-     /**
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -22,7 +22,8 @@ class Company extends Model
         'phoneNumber',
         'email',
         'website',
-        'plan_id'
+        'plan_id',
+        'is_admin',
     ];
 
     public function users()
@@ -39,7 +40,4 @@ class Company extends Model
     {
         return $this->belongsTo(Plan::class);
     }
-
-
-
 }
