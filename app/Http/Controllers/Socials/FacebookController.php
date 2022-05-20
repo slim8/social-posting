@@ -95,7 +95,7 @@ class FacebookController extends Controller
         return RequestsTrait::findAccountByUid($id, 'id')->uid;
     }
 
-    public function postPicture($pageId, $token, $url)
+    public function postPictureFromUrl($pageId, $token, $url)
     {
         // code...
         $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&source='.$url.'&published=false');
@@ -106,24 +106,37 @@ class FacebookController extends Controller
         return $response->json('id');
     }
 
-    public function postPictureTwo($pageId, $token, $url)
+    public function postPictureFromFile($pageId, $token, $url)
     {
-         dd($url);
         // code...
         // $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
         // // return $response->json('data')['url'];
         // return $response->json('id');
 
+        // dd($url["pathname"]);²
         $client = new Client();
+        // dd($url);
         $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/photos', [
-            'form_params' => [
-                'source' => $url,
-                'published' => false,
-                'access_token' => $token,
+            'multipart' => [
+                [
+                    'name' => 'source',
+                    'contents' => fopen($url, 'rb'),
+                ],
+                [
+                    'name' => 'access_token',
+                    'contents' => $token,
+                ],
+                [
+                    'name' => 'published',
+                    'contents' => false,
+                ],
             ],
         ]);
-        // dd($res);
+
+        $response = json_decode($res->getBody());
+
+        return $response->id;
     }
 
     /**
@@ -135,15 +148,16 @@ class FacebookController extends Controller
 
         // if ($imagesUrls) {
         //     foreach ($imagesUrls as $image) {
-        //         $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
+        //         $images[] = ['media_fbid' => $this->postPictureFromUrl($pageId, $object['access_token'], $image)];
         //     }
         //     $object['attached_media'] = json_encode($images);
         // }
 
-
         if ($imagesSources) {
+            $images[] = ['media_fbid' => $this->postPictureFromFile($pageId, $object['access_token'], $imagesSources)];
             foreach ($imagesSources as $image) {
-                $images[] = ['media_fbid' => $this->postPictureTwo($pageId, $object['access_token'], $image)];
+                dd($image);
+                $images[] = ['media_fbid' => $this->postPictureFromFile($pageId, $object['access_token'], $image)];
             }
             $object['attached_media'] = json_encode($images);
         }
