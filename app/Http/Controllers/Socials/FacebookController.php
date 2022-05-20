@@ -9,7 +9,6 @@ use App\Models\Account;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -99,22 +98,51 @@ class FacebookController extends Controller
     public function postPicture($pageId, $token, $url)
     {
         // code...
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&source='.$url.'&published=false');
 
-        // return $response->json('data')['url'];
+        // // return $response->json('data')['url'];
+        dd($response->json());
+
         return $response->json('id');
+    }
+
+    public function postPictureTwo($pageId, $token, $url)
+    {
+        dd($url);
+        // code...
+        // $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
+
+        // // return $response->json('data')['url'];
+        // return $response->json('id');
+
+        $client = new Client();
+        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/photos', [
+            'form_params' => [
+                'source' => $url,
+                'published' => false,
+                'access_token' => $token,
+            ],
+        ]);
+        dd($res);
     }
 
     /**
      * post to facebook from Route.
-    */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls)
+     */
+    public function postToFacebookMethod($object, $pageId, $imagesUrls, $imagesSources)
     {
         $images = [];
 
         if ($imagesUrls) {
             foreach ($imagesUrls as $image) {
                 $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
+            }
+            $object['attached_media'] = json_encode($images);
+        }
+
+        if ($imagesSources) {
+            foreach ($imagesSources as $image) {
+                $images[] = ['media_fbid' => $this->postPictureTwo($pageId, $object['access_token'], $image)];
             }
             $object['attached_media'] = json_encode($images);
         }

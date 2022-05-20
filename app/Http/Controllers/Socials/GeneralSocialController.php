@@ -15,10 +15,7 @@ class GeneralSocialController extends Controller
     use UserTrait;
     use RequestsTrait;
 
-    /**
-     * post to facebook from Route.
-     */
-    public function sentToPost(Request $request)
+    public function tryToPost(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
@@ -27,6 +24,7 @@ class GeneralSocialController extends Controller
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
+        $request->accountIds = ['4'];
 
         foreach ($request->accountIds as $singleAccountId) {
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
@@ -39,8 +37,7 @@ class GeneralSocialController extends Controller
                     $obj['message'] = $request->message;
                 }
                 $obj['access_token'] = $account->accessToken;
-
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images);
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images, $request->sources);
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
@@ -53,6 +50,46 @@ class GeneralSocialController extends Controller
             }
         }
     }
+
+    /**
+     * post to facebook from Route.
+     */
+    // public function sentToPost(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'accountIds' => 'required',
+    //         'message' => 'string|max:255',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return response(['errors' => $validator->errors()->all()], 422);
+    //     }
+
+    //     dd($request);
+    //     foreach ($request->accountIds as $singleAccountId) {
+    //         $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
+    //         $FacebookController = new FacebookController();
+    //         $InstagramController = new InstagramController();
+    //         $accountProvider = $account->provider;
+
+    //         if ($accountProvider == 'facebook') {
+    //             if ($request->message) {
+    //                 $obj['message'] = $request->message;
+    //             }
+    //             $obj['access_token'] = $account->accessToken;
+
+    //             $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images);
+    //         } elseif ($accountProvider == 'instagram') {
+    //             if ($request->message) {
+    //                 $obj['caption'] = $request->message;
+    //             }
+    //             $BusinessIG = $account->uid;
+
+    //             $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id');
+    //             $obj['access_token'] = $IgAccount->accessToken;
+    //             $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images);
+    //         }
+    //     }
+    // }
 
     /**
      * Return All facebook pages for current user for ROUTES.
