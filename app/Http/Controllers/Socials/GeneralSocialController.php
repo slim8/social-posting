@@ -6,50 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
-use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use ParseInputStream;
 
 class GeneralSocialController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
 
-
-    public function tester($request)
-    {
-        $next = new Closure();
-        if ($request->method() == 'POST' OR $request->method() == 'GET') {
-            return $next($request);
-        }
-
-        if (preg_match('/multipart\/form-data/', $request->headers->get('Content-Type')) or
-            preg_match('/multipart\/form-data/', $request->headers->get('content-type'))
-        ) {
-            $params = array();
-            new ParseInputStream($params);
-            $files = array();
-            $parameters = array();
-            foreach ($params as $key => $param) {
-                if ($param instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-                    $files[$key] = $param;
-                } else {
-                    $parameters[$key] = $param;
-                }
-            }
-            if (count($files) > 0) {
-                $request->files->add($files);
-            }
-            if (count($parameters) > 0) {
-                $request->request->add($parameters);
-            }
-        }
-        return $next($request);
-    }
-
-    
     public function tryToPost(Request $request)
     {
         // $validator = Validator::make($request->all(), [
@@ -59,13 +24,8 @@ class GeneralSocialController extends Controller
         // if ($validator->fails()) {
         //     return response(['errors' => $validator->errors()->all()], 422);
         // }
-        $tester = $this->tester($request);
-        dd($tester);
         $request->accountIds = ['4'];
-        $req= file_get_contents('php://input');
-            dd($req['accountIds']);
-        dd($request->all());
-            dd($request->message);
+        $req = file_get_contents('php://input');
         foreach ($request->accountIds as $singleAccountId) {
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
             $FacebookController = new FacebookController();
@@ -77,7 +37,12 @@ class GeneralSocialController extends Controller
                     $obj['message'] = $request->message;
                 }
                 $obj['access_token'] = $account->accessToken;
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images, $request->sources);
+
+                // dd($request->file('sources'));
+                // $path = storage_path('app').'/'.$request->file('sources')->store('/images/1/smalls');
+                //  dd(storage_path('app'));
+
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images,$request->file('sources'));
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
