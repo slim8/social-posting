@@ -25,6 +25,7 @@ class GeneralSocialController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
         foreach ($request->accountIds as $singleAccountId) {
+            // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
             $FacebookController = new FacebookController();
             $InstagramController = new InstagramController();
@@ -36,16 +37,17 @@ class GeneralSocialController extends Controller
                 }
                 $obj['access_token'] = $account->accessToken;
 
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images,$request->file('sources'));
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images, $request->file('sources'));
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
                 }
                 $BusinessIG = $account->uid;
 
-                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id');
-                $obj['access_token'] = $IgAccount->accessToken;
-                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images);
+                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
+                $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+
+                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images, $request->file('sources'));
             }
         }
     }

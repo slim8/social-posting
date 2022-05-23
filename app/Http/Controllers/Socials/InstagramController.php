@@ -18,7 +18,7 @@ class InstagramController extends Controller
     /**
      * Post Media Instagram.
      */
-    public function postPicture($igUser, $token, $url)
+    public function postPictureUrl($igUser, $token, $url)
     {
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&image_url='.$url.'&is_carousel_item=true');
 
@@ -28,6 +28,43 @@ class InstagramController extends Controller
             $response->json('error')['message'];
         }
     }
+
+    public function postPictureSource($igUser, $token, $url)
+    {
+        $client = new Client();
+
+        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$igUser.'/media', [
+            'multipart' => [
+                [
+                    'name' => 'image_url',
+                    'contents' => fopen($url, 'rb'),
+                ],
+                [
+                    'name' => 'access_token',
+                    'contents' => $token,
+                ],
+                [
+                    'name' => 'is_carousel_item',
+                    'contents' => true,
+                ],
+            ],
+        ]);
+
+        $response = json_decode($res->getBody());
+
+        return $response->id;
+    }
+
+    // public function postPictureSource($igUser, $token, $url)
+    // {
+    //     $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&image_url='.$url.'&is_carousel_item=true');
+
+    //     if ($response->json('id')) {
+    //         return $response->json('id');
+    //     } else {
+    //         $response->json('error')['message'];
+    //     }
+    // }
 
     /**
      * Generate Container of instagram carrousel.
@@ -54,9 +91,25 @@ class InstagramController extends Controller
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls)
+    public function postToInstagramMethod($object, $igUser, $imagesUrls, $imagesSources)
     {
         $images = [];
+
+        if ($imagesSources) {
+            foreach ($imagesSources as $image) {
+                $images[] = $this->postPictureSource($igUser, $object['access_token'], $image);
+            }
+            $object['children'] = implode(',', $images);
+        }
+
+        if ($imagesUrls) {
+            foreach ($imagesUrls as $image) {
+                $images[] = $this->postPictureUrl($igUser, $object['access_token'], $image);
+            }
+            $object['children'] = implode(',', $images);
+
+            // $object['children'] = json_encode($images);
+        }
 
         if ($imagesUrls) {
             foreach ($imagesUrls as $image) {
@@ -74,7 +127,6 @@ class InstagramController extends Controller
         unset($object['children']);
 
         return $this->publishCarrousel($object, $igUser);
-
     }
 
     /**
@@ -111,12 +163,18 @@ class InstagramController extends Controller
 
         $actualCompanyId = UserTrait::getCompanyId();
 
+        /*
+         * To do --> Save TokenAccess Or Save Facebook Page
+         */
         if ($jsonPageList) {
             foreach ($jsonPageList as $instagramAccount) {
                 $id = $instagramAccount['id'];
-                $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id;
+                $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
                 $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ? $instagramAccount['accountPictureUrl'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
                 $name = $instagramAccount['pageName'];
+                $token = $relatedAccountId ? 'NA' : $instagramAccount['accessToken'];
+
+                $relatedUid = $instagramAccount['relatedAccountId'];
 
                 $page = Account::where('uid', $id)->first();
 
@@ -134,9 +192,10 @@ class InstagramController extends Controller
                         'profilePicture' => $pageinstagramAccountLink,
                         'category' => 'NA',
                         'providerType' => 'page',
-                        'accessToken' => 'NA',
+                        'accessToken' => $token,
                         'related_account_id' => $relatedAccountId,
                         'provider_token_id' => UserTrait::getCurrentProviderId(),
+                        'related_Uid' => $relatedUid,
                     ]);
                 }
             }
@@ -196,7 +255,7 @@ class InstagramController extends Controller
                 if ($businessAccountId !== false) {
                     $instagramAccount = $this->getInstagramInformationFromBID($businessAccountId, $accessToken);
 
-                    $businessAccounts[] = ['id' => $businessAccountId, 'relatedAccountId' => $pageId, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                    $businessAccounts[] = ['accessToken' => $accessToken, 'id' => $businessAccountId, 'relatedAccountId' => $pageId, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
                 }
             }
 
