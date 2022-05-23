@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
@@ -15,8 +16,16 @@ class GeneralSocialController extends Controller
     use UserTrait;
     use RequestsTrait;
 
+    protected $utilitiesController;
+
+    public function __construct()
+    {
+        $this->utilitiesController = new UtilitiesController();
+    }
+
     public function sendToPost(Request $request)
     {
+        $inc = 0;
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
             'message' => 'string|max:255',
@@ -24,6 +33,7 @@ class GeneralSocialController extends Controller
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
+        $images = $request->images;
         foreach ($request->accountIds as $singleAccountId) {
             // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
@@ -31,13 +41,22 @@ class GeneralSocialController extends Controller
             $InstagramController = new InstagramController();
             $accountProvider = $account->provider;
 
+            if ($inc == 0) {
+                if ($request->file('sources')) {
+                    foreach ($request->file('sources') as $image) {
+                        $images[] = $this->utilitiesController->uploadImage($image);
+                    }
+                }
+            }
+            ++$inc;
+
             if ($accountProvider == 'facebook') {
                 if ($request->message) {
                     $obj['message'] = $request->message;
                 }
                 $obj['access_token'] = $account->accessToken;
 
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images, $request->file('sources'));
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $images);
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
@@ -47,7 +66,7 @@ class GeneralSocialController extends Controller
                 $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                 $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images, $request->file('sources'));
+                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
             }
         }
     }
