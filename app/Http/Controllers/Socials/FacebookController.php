@@ -9,7 +9,6 @@ use App\Models\Account;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -96,25 +95,56 @@ class FacebookController extends Controller
         return RequestsTrait::findAccountByUid($id, 'id')->uid;
     }
 
-    public function postPicture($pageId, $token, $url)
+    public function postPictureFromUrl($pageId, $token, $url)
     {
-        // code...
         $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
-        // return $response->json('data')['url'];
         return $response->json('id');
+    }
+
+    public function postPictureFromFile($pageId, $token, $url)
+    {
+        $client = new Client();
+
+        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/photos', [
+            'multipart' => [
+                [
+                    'name' => 'source',
+                    'contents' => fopen($url, 'rb'),
+                ],
+                [
+                    'name' => 'access_token',
+                    'contents' => $token,
+                ],
+                [
+                    'name' => 'published',
+                    'contents' => false,
+                ],
+            ],
+        ]);
+
+        $response = json_decode($res->getBody());
+
+        return $response->id;
     }
 
     /**
      * post to facebook from Route.
-    */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls)
+     */
+    public function postToFacebookMethod($object, $pageId, $imagesUrls, $imagesSources)
     {
         $images = [];
 
         if ($imagesUrls) {
             foreach ($imagesUrls as $image) {
-                $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
+                $images[] = ['media_fbid' => $this->postPictureFromUrl($pageId, $object['access_token'], $image)];
+            }
+            $object['attached_media'] = json_encode($images);
+        }
+
+        if ($imagesSources) {
+            foreach ($imagesSources as $image) {
+                $images[] = ['media_fbid' => $this->postPictureFromFile($pageId, $object['access_token'], $image)];
             }
             $object['attached_media'] = json_encode($images);
         }
@@ -123,7 +153,6 @@ class FacebookController extends Controller
         $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,
         ]);
-        // }
     }
 
     /**

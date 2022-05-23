@@ -1,0 +1,81 @@
+<form nz-form [formGroup]="validateForm">
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="Statut">Statut</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <textarea nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+        </nz-form-control>
+    </nz-form-item >
+
+
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="upload">Upload images</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <div class="clearfix">
+                <nz-upload
+                  nzAction=""
+                  nzListType="picture-card"
+                  [(nzFileList)]="fileList"
+                  [nzShowButton]="fileList.length < 8"
+                >
+                  <div>
+                    <i nz-icon nzType="plus"></i>
+                    <div style="margin-top: 8px">Upload</div>
+                  </div>
+                </nz-upload>
+                <nz-modal
+                  [nzVisible]="previewVisible"
+                  [nzContent]="modalContent"
+                  [nzFooter]="null"
+                  (nzOnCancel)="previewVisible = false"
+                >
+                  <ng-template #modalContent>
+                    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                  </ng-template>
+                </nz-modal>
+            </div>
+        </nz-form-control>
+    </nz-form-item >
+    
+
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="url">Picture URL</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <div>
+                <nz-input-group nzSearch>
+                    <input type="text" nz-input placeholder="input search text" />
+                </nz-input-group>
+                <br >
+                <div *ngFor="let item of urlLinks">
+                    <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                        <input type="text" [id]="item" nz-input placeholder="input search text" />
+                    </nz-input-group>
+                    <ng-template #suffixIconButton>
+                        <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)"><i nz-icon nzType="delete"></i></button>
+                    </ng-template>
+                    <br/><br/> 
+                </div> 
+                <button nz-button nzType="dashed" (click)="addLink()">add item</button>
+            </div>
+        </nz-form-control>
+    </nz-form-item >
+
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="pages">Choose facebook page</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <nz-select [(ngModel)]="tagValue" name="pages" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzValue]="option.id"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item >
+
+    <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 6 }">
+          <button nz-button nzType="primary" (click)="test()">Submit</button>
+        </nz-form-control>
+      </nz-form-item>
+
+</form>
+
+
+
+

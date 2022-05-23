@@ -29,6 +29,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
+    Route::post('/uploadimage', [ExempleController::class, 'uploadimage'])->name('uploadimage.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:user']], function () {
@@ -51,7 +52,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
     Route::get('/load-facebook-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
-    Route::post('/send-post', [GeneralSocialController::class, 'sentToPost'])->name('send-general-post.api');
+    Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
     Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
 });
 

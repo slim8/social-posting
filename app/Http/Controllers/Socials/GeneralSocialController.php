@@ -15,10 +15,7 @@ class GeneralSocialController extends Controller
     use UserTrait;
     use RequestsTrait;
 
-    /**
-     * post to facebook from Route.
-     */
-    public function sentToPost(Request $request)
+    public function sendToPost(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
@@ -27,8 +24,8 @@ class GeneralSocialController extends Controller
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
-
         foreach ($request->accountIds as $singleAccountId) {
+            // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
             $FacebookController = new FacebookController();
             $InstagramController = new InstagramController();
@@ -40,16 +37,17 @@ class GeneralSocialController extends Controller
                 }
                 $obj['access_token'] = $account->accessToken;
 
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images);
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images, $request->file('sources'));
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
                 }
                 $BusinessIG = $account->uid;
 
-                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id');
-                $obj['access_token'] = $IgAccount->accessToken;
-                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images);
+                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
+                $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+
+                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images, $request->file('sources'));
             }
         }
     }
