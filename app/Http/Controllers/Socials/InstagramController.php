@@ -162,10 +162,6 @@ class InstagramController extends Controller
         $jsonPageList = $request->json('pages');
 
         $actualCompanyId = UserTrait::getCompanyId();
-
-        /*
-         * To do --> Save TokenAccess Or Save Facebook Page
-         */
         if ($jsonPageList) {
             foreach ($jsonPageList as $instagramAccount) {
                 $id = $instagramAccount['id'];
