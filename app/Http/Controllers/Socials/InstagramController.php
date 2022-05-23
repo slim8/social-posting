@@ -37,16 +37,6 @@ class InstagramController extends Controller
     }
 
     /**
-     * Post Media Instagram From Source (Upload Source to public url and then post using Url).
-     */
-    public function postPictureSource($igUser, $token, $url)
-    {
-        $imageLink = $this->utilitiesController->uploadImage($url);
-
-        return $this->postPictureUrl($igUser, $token, $imageLink);
-    }
-
-    /**
      * Generate Container of instagram carrousel.
      */
     public function publishContainer($object, $igUser)
@@ -60,11 +50,12 @@ class InstagramController extends Controller
     /**
      * Post Single Image to Instagram.
      */
-    public function postSingleImage($igUser, $object, $imagesSources, $imagesUrls)
+    public function postSingleImage($igUser, $object, $imagesUrls)
     {
-        $object['image_url'] = $imagesSources ? $this->utilitiesController->uploadImage($imagesSources[0]) : $imagesUrls[0];
+        $object['image_url'] = $imagesUrls[0];
         $parameter = RequestsTrait::prepareParameters($object);
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+
         return $response->json('id');
     }
 
@@ -82,29 +73,20 @@ class InstagramController extends Controller
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls, $imagesSources)
+    public function postToInstagramMethod($object, $igUser, $imagesUrls)
     {
         $images = [];
-        $countedImagesSource = $imagesSources ? count($imagesSources) : 0;
-        $countedImagesUrl = $imagesUrls ? count($imagesUrls) : 0;
-        $imagesCount = $countedImagesSource + $countedImagesUrl;
+        $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
 
         if ($imagesCount == 0) {
             return false;
         }
 
         if ($imagesCount == 1) {
-            $object['creation_id'] = $this->postSingleImage($igUser, $object, $imagesSources, $imagesUrls);
+            $object['creation_id'] = $this->postSingleImage($igUser, $object, $imagesUrls);
 
-           return $this->publishContainer($object, $igUser);
-
+            return $this->publishContainer($object, $igUser);
         } else {
-            if ($imagesSources) {
-                foreach ($imagesSources as $image) {
-                    $images[] = $this->postPictureSource($igUser, $object['access_token'], $image);
-                }
-            }
-
             if ($imagesUrls) {
                 foreach ($imagesUrls as $image) {
                     $images[] = $this->postPictureUrl($igUser, $object['access_token'], $image);
