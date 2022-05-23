@@ -36,12 +36,12 @@ export class TestUploadComponent implements OnInit {
 
     submitForm() {
         const formData: FormData = new FormData();
-        formData.append('sources[]', this.selectedFile, this.selectedFile.name);
+         formData.append('sources[]', this.selectedFile, this.selectedFile.name);
         formData.append('message', 'This message is a test message with multiple images on multiples pages');
-        formData.append('accountIds', '4');
+        formData.append('accountIds[]', '4');
 
-        // fd.append('_method', 'PUT');
-        this.http.post('http://posting.local/api/send-post', formData, {
+        // formData.append('_method', 'POST');
+        this.http.post('http://posting.local/api/send-post', formData , {
             reportProgress: true,
             observe: 'events'
         }).subscribe(event => {

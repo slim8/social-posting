@@ -12,17 +12,7 @@ export class TokenInterceptorService implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token = localStorage.getItem(sharedConstants.HTTP_TOKEN);
-        if (!req.headers.has(sharedConstants.HTTP_APPLICATION)) {
-            if (req.url.includes("send-post")) {
-                req = req.clone({
-                    headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_MULTI_DATAFORM)
-                });
-            } else {
-                req = req.clone({
-                    headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_APP_JSON)
-                });
-            }
-        }
+        
 
         if (token) {
             // If we have a token, we set it to the header
@@ -31,6 +21,21 @@ export class TokenInterceptorService implements HttpInterceptor {
             });
         }
 
+        // if (!req.headers.has(sharedConstants.HTTP_APPLICATION)) {
+        //     if (req.url.includes("send-post")) {
+        //         console.log(sharedConstants.HTTP_MULTI_DATAFORM);
+        //         req = req.clone({
+        //             headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_MULTI_DATAFORM)
+        //         });
+        //     } else {
+        //         console.log(sharedConstants.HTTP_APP_JSON);
+        //         req = req.clone({
+        //             headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_APP_JSON)
+        //         });
+        //     }
+        // }
+
+        console.log(req.headers);
         return next.handle(req);
     }
 }
