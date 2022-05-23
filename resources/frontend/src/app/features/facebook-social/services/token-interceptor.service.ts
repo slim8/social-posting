@@ -4,28 +4,38 @@ import { Observable } from 'rxjs';
 import { sharedConstants } from '../../../shared/sharedConstants'
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class TokenInterceptorService implements HttpInterceptor {
 
-  constructor() { }
+    constructor() { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem(sharedConstants.HTTP_TOKEN);
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        const token = localStorage.getItem(sharedConstants.HTTP_TOKEN);
+        
 
-    if (!req.headers.has(sharedConstants.HTTP_APPLICATION)) {
-      req = req.clone({
-        headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_CONTENT)
-      });
+        if (token) {
+            // If we have a token, we set it to the header
+            req = req.clone({
+                setHeaders: { Authorization: `${sharedConstants.HTTP_AUTH} ${token}` }
+            });
+        }
+
+        // if (!req.headers.has(sharedConstants.HTTP_APPLICATION)) {
+        //     if (req.url.includes("send-post")) {
+        //         console.log(sharedConstants.HTTP_MULTI_DATAFORM);
+        //         req = req.clone({
+        //             headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_MULTI_DATAFORM)
+        //         });
+        //     } else {
+        //         console.log(sharedConstants.HTTP_APP_JSON);
+        //         req = req.clone({
+        //             headers: req.headers.set(sharedConstants.HTTP_APPLICATION, sharedConstants.HTTP_APP_JSON)
+        //         });
+        //     }
+        // }
+
+        console.log(req.headers);
+        return next.handle(req);
     }
-
-    if (token) {
-        // If we have a token, we set it to the header
-        req = req.clone({
-            setHeaders: {Authorization: `${sharedConstants.HTTP_AUTH} ${token}`}
-        });
-    }
-
-    return next.handle(req);
-  }
 }

@@ -5,6 +5,13 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { TestService } from '../../services/test.service';
 
+const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 
 @Component({
     selector: 'app-test-upload',
@@ -28,13 +35,13 @@ export class TestUploadComponent implements OnInit {
     }
 
     submitForm() {
-        const fd = new FormData();
-        fd.append('accountIds', '["4"]');
-        fd.append('message', 'This message is a test message with multiple images on multiples pages');
-        fd.append('sources', this.selectedFile);
-        fd.append('_method', 'PUT');
-        console.log(fd);
-        this.http.post('http://posting.local/api/send-post', fd, {
+        const formData: FormData = new FormData();
+         formData.append('sources[]', this.selectedFile, this.selectedFile.name);
+        formData.append('message', 'This message is a test message with multiple images on multiples pages');
+        formData.append('accountIds[]', '4');
+
+        // formData.append('_method', 'POST');
+        this.http.post('http://posting.local/api/send-post', formData , {
             reportProgress: true,
             observe: 'events'
         }).subscribe(event => {
@@ -46,6 +53,8 @@ export class TestUploadComponent implements OnInit {
             } else if (event.type === HttpEventType.Response) {
                 console.log(event);
             }
+        }, error => {
+            console.log(error)
         });
 
         // this.http.post('http://posting.local/api/send-post', credentials).subscribe(
@@ -72,18 +81,15 @@ export class TestUploadComponent implements OnInit {
 
     handlePreview = async (file: NzUploadFile): Promise<void> => {
         if (!file.url && !file['preview']) {
-            var reader = new FileReader();
-            file['preview'] = await reader.readAsDataURL(file.originFileObj!);
+            file['preview'] = await getBase64(file.originFileObj!);
         }
 
         this.previewImage = file.url || file['preview'];
         this.previewVisible = true;
-        console.log(this.previewImage);
     };
 
     handleChange(event: any): void {
         this.selectedFile = event.target.files[0];
-        // console.log(this.selectedFile);
+        console.log(this.selectedFile);
     }
-
 }
