@@ -15,7 +15,7 @@ class GeneralSocialController extends Controller
     use UserTrait;
     use RequestsTrait;
 
-    public function tryToPost(Request $request)
+    public function sendToPost(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
@@ -51,46 +51,6 @@ class GeneralSocialController extends Controller
             }
         }
     }
-
-    /**
-     * post to facebook from Route.
-     */
-    // public function sentToPost(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'accountIds' => 'required',
-    //         'message' => 'string|max:255',
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return response(['errors' => $validator->errors()->all()], 422);
-    //     }
-
-    //     dd($request);
-    //     foreach ($request->accountIds as $singleAccountId) {
-    //         $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
-    //         $FacebookController = new FacebookController();
-    //         $InstagramController = new InstagramController();
-    //         $accountProvider = $account->provider;
-
-    //         if ($accountProvider == 'facebook') {
-    //             if ($request->message) {
-    //                 $obj['message'] = $request->message;
-    //             }
-    //             $obj['access_token'] = $account->accessToken;
-
-    //             $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images);
-    //         } elseif ($accountProvider == 'instagram') {
-    //             if ($request->message) {
-    //                 $obj['caption'] = $request->message;
-    //             }
-    //             $BusinessIG = $account->uid;
-
-    //             $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id');
-    //             $obj['access_token'] = $IgAccount->accessToken;
-    //             $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images);
-    //         }
-    //     }
-    // }
 
     /**
      * Return All facebook pages for current user for ROUTES.

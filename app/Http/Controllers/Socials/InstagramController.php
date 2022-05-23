@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -14,6 +14,13 @@ class InstagramController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
+
+    protected $utilitiesController;
+
+    public function __construct()
+    {
+        $this->utilitiesController = new UtilitiesController();
+    }
 
     /**
      * Post Media Instagram.
@@ -31,40 +38,9 @@ class InstagramController extends Controller
 
     public function postPictureSource($igUser, $token, $url)
     {
-        $client = new Client();
-
-        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$igUser.'/media', [
-            'multipart' => [
-                [
-                    'name' => 'image_url',
-                    'contents' => fopen($url, 'rb'),
-                ],
-                [
-                    'name' => 'access_token',
-                    'contents' => $token,
-                ],
-                [
-                    'name' => 'is_carousel_item',
-                    'contents' => true,
-                ],
-            ],
-        ]);
-
-        $response = json_decode($res->getBody());
-
-        return $response->id;
+        $imageLink = $this->utilitiesController->uploadImage($url);
+        return $this->postPictureUrl($igUser, $token, $imageLink);
     }
-
-    // public function postPictureSource($igUser, $token, $url)
-    // {
-    //     $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&image_url='.$url.'&is_carousel_item=true');
-
-    //     if ($response->json('id')) {
-    //         return $response->json('id');
-    //     } else {
-    //         $response->json('error')['message'];
-    //     }
-    // }
 
     /**
      * Generate Container of instagram carrousel.
@@ -108,17 +84,8 @@ class InstagramController extends Controller
             }
             $object['children'] = implode(',', $images);
 
-            // $object['children'] = json_encode($images);
         }
 
-        if ($imagesUrls) {
-            foreach ($imagesUrls as $image) {
-                $images[] = $this->postPicture($igUser, $object['access_token'], $image);
-            }
-            $object['children'] = implode(',', $images);
-
-            // $object['children'] = json_encode($images);
-        }
 
         $object['media_type'] = 'CAROUSEL';
 
