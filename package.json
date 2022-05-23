@@ -10,8 +10,8 @@
         "production": "mix --production",
         "start:swagger" : "php artisan lrd:generate",
         "start:migrate" : "php artisan migrate && php artisan migrate --seed",
-        "start:dev" : "php artisan config:clear && php artisan cache:clear && cd resources/frontend && npm run build:local",
-        "start:build" : "git pull && composer install && php artisan config:clear && php artisan cache:clear && cd resources/frontend && npm i && npm run build:local"
+        "start:dev" : "php artisan config:clear && php artisan cache:clear && cd resources/frontend && npm run build:local && php artisan storage:link",
+        "start:build" : "git pull && composer install && php artisan config:clear && php artisan cache:clear && cd resources/frontend && npm i && npm run build:local && php artisan storage:link"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.4.0",
