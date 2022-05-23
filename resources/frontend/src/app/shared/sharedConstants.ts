@@ -11,5 +11,6 @@ export class sharedConstants {
     public static HTTP_AUTH='Bearer';
     public static HTTP_TOKEN='token';
     public static HTTP_APPLICATION='Content-Type';
-    public static HTTP_CONTENT='application/json';
+    public static HTTP_APP_JSON='application/json';
+    public static HTTP_MULTI_DATAFORM='multipart/form-data';
 }
