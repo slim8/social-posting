@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from './services/facebook-social.service';
+import {FormBuilder, FormArray, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-facebook-social',
@@ -14,10 +15,18 @@ export class FacebookSocialComponent implements OnInit {
     id: '557047552449017',
     pages: [],
   };
-  constructor(private service: FacebookSocialService) {}
+
+  isVisible = false;
+  listpages :any;
+  validateForm!: FormGroup;
+
+  constructor(private service: FacebookSocialService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.service.getLoginStatus();
+    this.validateForm = this.fb.group({
+      myChoices: new FormArray([]),
+    });
   }
 
   loginWithFacebook() {
@@ -30,7 +39,15 @@ export class FacebookSocialComponent implements OnInit {
           id: res.authResponse.userID,
         };
 
-        console.log(' user => ', this.user);
+        this.service.manageFacebookPages("http://media-posting.local/api/get-facebook-pages",
+          {
+            "accessToken": this.user.accessToken,
+            "id": this.user.id
+          }).subscribe((response: any) => {
+          this.listpages = response.pages;
+          this.showModal();
+        });
+
       })
       .catch(() => console.error('error'));
   }
@@ -87,4 +104,58 @@ export class FacebookSocialComponent implements OnInit {
       console.log(file);
     }
   }
+
+  showModal(): void {
+    this.isVisible = true;
+  }
+
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+  }
+
+
+  onSubmit() {
+    if (this.validateForm.valid) {
+      console.log(this.validateForm.value);
+
+      console.log("this.listpages",this.listpages);
+
+      let selectedobject = this.listpages.filter((item: any) => this.validateForm.value.myChoices.includes(item.pageId));
+
+      this.service.manageFacebookPages("http://media-posting.local/api/facebook/save-pages",
+        {
+          "pages": selectedobject
+        }).subscribe((response: any) => {
+        console.log("saveFacebookPages")
+        console.log(response)
+      });
+
+      this.validateForm = this.fb.group({
+        myChoices: new FormArray([]),
+      });
+      this.isVisible = false;
+
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({onlySelf: true});
+        }
+      });
+    }
+  }
+
+  onCheckChange(event:any) {
+    const formArray: FormArray = this.validateForm.get('myChoices') as FormArray;
+    if(event.target.checked){
+      formArray.push(new FormControl(event.target.value));
+    }
+  }
+
 }

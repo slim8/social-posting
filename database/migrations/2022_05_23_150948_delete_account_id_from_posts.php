@@ -13,7 +13,7 @@ return new class() extends Migration {
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-           // $table->dropForeign(['account_id']);
+            $table->dropForeign(['account_id']);
             $table->dropColumn('account_id');
         });
     }
