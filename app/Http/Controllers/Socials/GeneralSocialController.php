@@ -258,4 +258,28 @@ class GeneralSocialController extends Controller
         'pages' => $AllPages, ], 201);
         }
     }
+
+
+    public function getAllAccountsByCompanyId()
+    {
+
+        return $this->getSavedAccountsFromDataBaseByCompanyId(1);
+    }
+
+    public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0)
+    {
+        $AllPages = RequestsTrait::getAllAccountsFromDB();
+
+        if ($returnJson) {
+            if ($AllPages) {
+                return response()->json(['success' => true,
+            'pages' => $AllPages, ], 201);
+            } else {
+                return response()->json(['success' => false,
+            'message' => 'No Accounts Found', ], 201);
+            }
+        } else {
+            return $AllPages;
+        }
+    }
 }
