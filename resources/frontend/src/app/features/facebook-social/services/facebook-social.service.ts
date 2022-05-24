@@ -71,7 +71,7 @@ export class FacebookSocialService {
   }
 
   getCurrentApprovedFBPages() {
-    const url = sharedConstants.API_ENDPOINT + '/facebook/load-pages';
+    const url = sharedConstants.API_ENDPOINT + '/load-accounts';
 
     return this.http.get(url);
   }

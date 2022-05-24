@@ -26,7 +26,7 @@ export class CreatePostComponent implements OnInit {
     previewImage: string | undefined = '';
     previewVisible = false;
     listOfPages: Array<{ id: number; pageName: string; pagePictureUrl: string }> = [];
-    size: NzSelectSizeType = 'default';
+    size: NzSelectSizeType = 'large';
     tagValue = [];
     selectedFile: any = [];
 
@@ -52,6 +52,10 @@ export class CreatePostComponent implements OnInit {
     }
 
     submitForm() {
+        let loadingScreen = document.getElementsByClassName('m-loading-screen')[0]
+        let btnSubmit = document.getElementById('btn-submit')
+        let spinning = document.getElementsByClassName('m-loading-spin')[0]
+
         const formData: FormData = new FormData();
         this.tagValue.forEach((accountId: any) => {
             formData.append('accountIds[]', accountId);
@@ -61,19 +65,35 @@ export class CreatePostComponent implements OnInit {
         });
         formData.append('message', this.message);
 
-        this.http.post(sharedConstants.API_ENDPOINT + '/send-post', formData, {
-            reportProgress: true,
-            observe: 'events'
-        }).subscribe(event => {
-            if (event.type === HttpEventType.UploadProgress) {
-                if (event.total) {
-                    const total: number = event.total;
-                    console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
+        if (formData) {
+
+            this.http.post(sharedConstants.API_ENDPOINT + '/send-post', formData, {
+                reportProgress: true,
+                observe: 'events'
+            }).subscribe({
+                next: event => {
+                    loadingScreen.classList.add('m-loading-screen-active');
+                    spinning.classList.add('show')
+                    btnSubmit?.classList.add('m-btn-submit')
+
+                    if (event.type === HttpEventType.UploadProgress) {
+                        if (event.total) {
+                            const total: number = event.total;
+                            console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
+                        }
+                    }
+                },
+                error: err => {
+                    this.createMessage('error', err.error.message);
+                },
+                complete: () => {
+                    loadingScreen.classList.remove('m-loading-screen-active');
+                    spinning.classList.remove('show')
+                    btnSubmit?.classList.remove('m-btn-submit')
                 }
-            }
-        }, error => {
-            this.createMessage('error', error.error.message);
-        });
+            });
+
+        }
     }
 
     handlePreview = async (file: NzUploadFile): Promise<void> => {
