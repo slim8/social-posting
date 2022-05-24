@@ -13,7 +13,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    
+
         &:hover {
             transition: 0.15s all;
             width: 104px;
@@ -24,10 +24,15 @@
             border-bottom: 4px solid rgb(139, 19, 43);
             border-left: 4px solid rgb(139, 19, 43);
         }
-    
+
         > span {
             color: white;
             font-weight: 700;
         }
+    }
+
+    > span {
+        color: white;
+        font-weight: 700;
     }
 }

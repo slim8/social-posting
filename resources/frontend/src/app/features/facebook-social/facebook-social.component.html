@@ -20,8 +20,32 @@
 
 <button (click)="postSourceImageToPages()">Post Source Image</button>
 <br>
+
+<div routerLink="./pages"><span>Pages</span></div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="onSubmit()">
+      <tr *ngFor="let page of listpages">
+        <td>
+          <label>
+            <input  type="checkbox" [value]="page.pageId" (change)="onCheckChange($event)">
+            {{page.pageName}}
+          </label>
+        </td>
+      </tr>
+
+      <nz-form-item nz-row class="register-area">
+        <nz-form-control [nzSpan]="14" [nzOffset]="6">
+          <button nz-button nzType="primary">save</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
 <div class="m-buttons-container">
     <div class="m-button" routerLink="./pages"><span>Pages</span></div>
     <div class="m-button" routerLink="./create-post"><span>Create Post</span></div>
 </div>
-
