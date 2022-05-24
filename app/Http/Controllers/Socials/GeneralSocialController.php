@@ -22,11 +22,13 @@ class GeneralSocialController extends Controller
 
     protected $utilitiesController;
     protected $facebookController;
+    protected $instagramController;
 
     public function __construct()
     {
         $this->utilitiesController = new UtilitiesController();
         $this->facebookController = new FacebookController();
+        $this->instagramController = new InstagramController();
     }
 
     public function sendToPost(Request $request)
@@ -124,7 +126,7 @@ class GeneralSocialController extends Controller
 
     public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
     {
-        $AllPages = RequestsTrait::getSavedAccountFromDB();
+        $AllPages = RequestsTrait::getAllAccountsFromDB();
 
         if ($returnJson) {
             if ($AllPages) {
@@ -147,59 +149,6 @@ class GeneralSocialController extends Controller
         $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
 
         return $response->json('data')['url'];
-    }
-
-    /**
-     * Save Facebook List of pages after autorization.
-     */
-    public function savePagesList(Request $request)
-    {
-        $jsonPageList = $request->json('pages');
-
-        $AllPages = [];
-
-        $actualCompanyId = UserTrait::getCompanyId();
-
-        // dd($actualCompanyId);
-
-        if ($jsonPageList) {
-            foreach ($jsonPageList as $facebookPage) {
-                $id = $facebookPage['pageId'];
-                $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
-                $pageToken = $facebookPage['pageToken'];
-                $category = $facebookPage['category'];
-                $name = $facebookPage['pageName'];
-
-                $page = Account::where('uid', $id)->first();
-
-                if (!$page) {
-                    Account::create([
-                        'name' => $name,
-                        'provider' => 'facebook',
-                        'status' => true,
-                        'expiryDate' => date('Y-m-d'),
-                        'scoope' => '',
-                        'authorities' => '',
-                        'link' => '',
-                        'company_id' => $actualCompanyId,
-                        'uid' => $id,
-                        'profilePicture' => $pageFacebookPageLink,
-                        'category' => $category,
-                        'providerType' => 'page',
-                        'accessToken' => $pageToken,
-                        'provider_token_id' => UserTrait::getCurrentProviderId(),
-                    ]);
-                }
-            }
-
-            $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
-
-            return response()->json(['success' => true,
-        'pages' => $Pages, ], 201);
-        } else {
-            return response()->json(['success' => false,
-        'message' => 'No page autorized', ], 201);
-        }
     }
 
     public function getAccountPagesAccount($facebookUserId, $tokenKey)
@@ -303,6 +252,45 @@ class GeneralSocialController extends Controller
         } else {
             return response()->json(['success' => false,
         'pages' => $AllPages, ], 201);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public function saveMetaPagesAndGroups(Request $request)
+    {
+        $jsonPageList = $request->json('pages');
+
+        $AllPages = [];
+
+        $actualCompanyId = UserTrait::getCompanyId();
+
+        if ($jsonPageList) {
+            foreach ($jsonPageList as $providerAccount) {
+                $provider = $providerAccount['provider'];
+                if($provider == 'facebook'){
+                    $this->facebookController->savePage($providerAccount);
+                }else {
+                    $this->instagramController->saveInstagramAccount($providerAccount);
+                }
+
+            }
+
+            $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
+
+            return response()->json(['success' => true,
+        'pages' => $Pages, ], 201);
+        } else {
+            return response()->json(['success' => false,
+        'message' => 'No page autorized', ], 201);
         }
     }
 }

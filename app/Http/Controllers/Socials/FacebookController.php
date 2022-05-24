@@ -179,26 +179,20 @@ class FacebookController extends Controller
     /**
      * Save Facebook List of pages after autorization.
      */
-    public function savePagesList(Request $request)
+    public function savePage($facebookPage)
     {
-        $jsonPageList = $request->json('pages');
-
-        $AllPages = [];
-
         $actualCompanyId = UserTrait::getCompanyId();
 
-        if ($jsonPageList) {
-            foreach ($jsonPageList as $facebookPage) {
-                $id = $facebookPage['pageId'];
-                $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
-                $pageToken = $facebookPage['pageToken'];
-                $category = $facebookPage['category'];
-                $name = $facebookPage['pageName'];
+        $id = $facebookPage['pageId'];
+        $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
+        $pageToken = $facebookPage['pageToken'];
+        $category = $facebookPage['category'];
+        $name = $facebookPage['pageName'];
 
-                $page = Account::where('uid', $id)->first();
+        $page = Account::where('uid', $id)->first();
 
-                if (!$page) {
-                    Account::create([
+        if (!$page) {
+            Account::create([
                         'name' => $name,
                         'provider' => 'facebook',
                         'status' => true,
@@ -214,16 +208,6 @@ class FacebookController extends Controller
                         'accessToken' => $pageToken,
                         'provider_token_id' => UserTrait::getCurrentProviderId(),
                     ]);
-                }
-            }
-
-            $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
-
-            return response()->json(['success' => true,
-        'pages' => $Pages, ], 201);
-        } else {
-            return response()->json(['success' => false,
-        'message' => 'No page autorized', ], 201);
         }
     }
 
