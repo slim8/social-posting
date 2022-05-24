@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -25,7 +26,8 @@ class Account extends Model
         'providerType',
         'accessToken',
         'related_account_id',
-        'provider_token_id'
+        'provider_token_id',
+        'related_Uid',
     ];
 
     public function company()
@@ -35,10 +37,11 @@ class Account extends Model
 
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->belongsToMany(Post::class, 'account_posts');
     }
 
-    public function related_account(){
+    public function related_account()
+    {
         return $this->belongsTo(Account::class, 'related_account_id');
     }
 }

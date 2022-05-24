@@ -9,7 +9,6 @@ use App\Models\Account;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -96,34 +95,41 @@ class FacebookController extends Controller
         return RequestsTrait::findAccountByUid($id, 'id')->uid;
     }
 
-    public function postPicture($pageId, $token, $url)
+    public function postPictureFromUrl($pageId, $token, $url)
     {
-        // code...
         $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
-        // return $response->json('data')['url'];
         return $response->json('id');
     }
 
     /**
      * post to facebook from Route.
-    */
+     */
     public function postToFacebookMethod($object, $pageId, $imagesUrls)
     {
         $images = [];
 
         if ($imagesUrls) {
             foreach ($imagesUrls as $image) {
-                $images[] = ['media_fbid' => $this->postPicture($pageId, $object['access_token'], $image)];
+                $images[] = ['media_fbid' => $this->postPictureFromUrl($pageId, $object['access_token'], $image)];
             }
             $object['attached_media'] = json_encode($images);
         }
 
         $client = new Client();
-        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
+        $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,
         ]);
-        // }
+
+        if ($response->getStatusCode() == 200) {
+            $responseObject['status'] = true;
+            $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+        } else {
+            $responseObject['status'] = false;
+            $responseObject['message'] = 'to be defined';
+        }
+
+        return $responseObject;
     }
 
     /**
@@ -173,8 +179,6 @@ class FacebookController extends Controller
         $AllPages = [];
 
         $actualCompanyId = UserTrait::getCompanyId();
-
-        // dd($actualCompanyId);
 
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {

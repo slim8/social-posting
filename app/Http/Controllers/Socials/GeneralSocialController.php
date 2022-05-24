@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
+use App\Models\Post;
+use App\Models\PostMedia;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -15,11 +20,17 @@ class GeneralSocialController extends Controller
     use UserTrait;
     use RequestsTrait;
 
-    /**
-     * post to facebook from Route.
-     */
-    public function sentToPost(Request $request)
+    protected $utilitiesController;
+
+    public function __construct()
     {
+        $this->utilitiesController = new UtilitiesController();
+    }
+
+    public function sendToPost(Request $request)
+    {
+        $errorLog = [];
+        $inc = 0;
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
             'message' => 'string|max:255',
@@ -27,12 +38,39 @@ class GeneralSocialController extends Controller
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
-
+        $images = $request->images;
         foreach ($request->accountIds as $singleAccountId) {
+            // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
             $FacebookController = new FacebookController();
             $InstagramController = new InstagramController();
             $accountProvider = $account->provider;
+            $postResponse = [];
+
+            if ($inc == 0) {
+                $postId = Post::create([
+                    'url' => 'url',
+                    'message' => $request->message,
+                    'status' => true,
+                    'publishedAt' => Carbon::now(),
+                    'isScheduled' => 0,
+                ]);
+
+                if ($request->file('sources')) {
+                    foreach ($request->file('sources') as $image) {
+                        $images[] = $this->utilitiesController->uploadImage($image);
+                    }
+                }
+
+                foreach ($images as $image) {
+                    PostMedia::create([
+                        'url' => $image,
+                        'post_id' => $postId->id,
+                        'type' => 'image',
+                    ]);
+                }
+            }
+            ++$inc;
 
             if ($accountProvider == 'facebook') {
                 if ($request->message) {
@@ -40,18 +78,37 @@ class GeneralSocialController extends Controller
                 }
                 $obj['access_token'] = $account->accessToken;
 
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $request->images);
+                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $images);
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
                 }
                 $BusinessIG = $account->uid;
 
-                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id');
-                $obj['access_token'] = $IgAccount->accessToken;
-                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $request->images);
+                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
+                $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+
+                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
+            }
+
+            if ($postResponse['status']) {
+                AccountPost::create([
+                    'url' => '',
+                    'post_id' => $postId->id,
+                    'account_id' => $singleAccountId,
+                    'post_id_provider' => $postResponse['id'],
+                ]);
+            } else {
+                $errorLog[] = $postResponse['message'];
             }
         }
+
+        if ($errorLog) {
+            return response()->json(['success' => false,
+            'message' => $errorLog, ], 201);
+        }
+
+        return response()->json(['success' => true], 201);
     }
 
     /**
@@ -199,6 +256,30 @@ class GeneralSocialController extends Controller
         } else {
             return response()->json(['success' => false,
         'pages' => $AllPages, ], 201);
+        }
+    }
+
+
+    public function getAllAccountsByCompanyId()
+    {
+
+        return $this->getSavedAccountsFromDataBaseByCompanyId(1);
+    }
+
+    public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0)
+    {
+        $AllPages = RequestsTrait::getAllAccountsFromDB();
+
+        if ($returnJson) {
+            if ($AllPages) {
+                return response()->json(['success' => true,
+            'pages' => $AllPages, ], 201);
+            } else {
+                return response()->json(['success' => false,
+            'message' => 'No Accounts Found', ], 201);
+            }
+        } else {
+            return $AllPages;
         }
     }
 }

@@ -41,16 +41,13 @@ export class FacebookSocialComponent implements OnInit {
 
         this.service.manageFacebookPages("http://media-posting.local/api/get-facebook-pages",
           {
-            "accessToken": "",
-            "id": "1703848376633794"
+            "accessToken": this.user.accessToken,
+            "id": this.user.id
           }).subscribe((response: any) => {
-          console.log(this.listpages)
           this.listpages = response.pages;
-          console.log(this.listpages);
           this.showModal();
         });
 
-        console.log(' user => ', this.user);
       })
       .catch(() => console.error('error'));
   }

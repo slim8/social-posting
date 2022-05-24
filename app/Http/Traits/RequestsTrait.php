@@ -25,6 +25,23 @@ trait RequestsTrait
         return $AllPages;
     }
 
+    public static function getAllAccountsFromDB()
+    {
+        $AllPages = [];
+
+        foreach (DB::table('accounts')->where('company_id', UserTrait::getCompanyId())->where('status', 1)->orderBy('id')->lazy() as $account) {
+            $id = $account->id;
+            $uid = $account->uid;
+            $provider = $account->provider;
+            $pageProfilePicture = $account->profilePicture;
+            $category = $account->category;
+            $name = $account->name;
+            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider];
+        }
+
+        return $AllPages;
+    }
+
     public static function findAccountByUid($value, string $key = 'uid')
     {
         $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId())->first();
@@ -47,6 +64,7 @@ trait RequestsTrait
             ++$i;
             $parameter = $parameter.$key.'='.$value;
         }
+
         return $parameter;
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -15,10 +15,17 @@ class InstagramController extends Controller
     use UserTrait;
     use RequestsTrait;
 
+    protected $utilitiesController;
+
+    public function __construct()
+    {
+        $this->utilitiesController = new UtilitiesController();
+    }
+
     /**
-     * Post Media Instagram.
+     * Post Media Instagram From URL.
      */
-    public function postPicture($igUser, $token, $url)
+    public function postPictureUrl($igUser, $token, $url)
     {
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&image_url='.$url.'&is_carousel_item=true');
 
@@ -32,10 +39,29 @@ class InstagramController extends Controller
     /**
      * Generate Container of instagram carrousel.
      */
-    public function publishCarrousel($object, $igUser)
+    public function publishContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
+
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
+        if ($response->json('id')){
+            $responseObject['id'] = $response->json('id');
+            $responseObject['status'] = true;
+        } else {
+            $responseObject['status'] = false;
+            $responseObject['message'] = "to be defined";
+        }
+        return $responseObject;
+    }
+
+    /**
+     * Post Single Image to Instagram.
+     */
+    public function postSingleImage($igUser, $object, $imagesUrls)
+    {
+        $object['image_url'] = $imagesUrls[0];
+        $parameter = RequestsTrait::prepareParameters($object);
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
 
         return $response->json('id');
     }
@@ -57,24 +83,31 @@ class InstagramController extends Controller
     public function postToInstagramMethod($object, $igUser, $imagesUrls)
     {
         $images = [];
+        $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
 
-        if ($imagesUrls) {
-            foreach ($imagesUrls as $image) {
-                $images[] = $this->postPicture($igUser, $object['access_token'], $image);
-            }
-            $object['children'] = implode(',', $images);
-
-            // $object['children'] = json_encode($images);
+        if ($imagesCount == 0) {
+            return false;
         }
 
-        $object['media_type'] = 'CAROUSEL';
+        if ($imagesCount == 1) {
+            $object['creation_id'] = $this->postSingleImage($igUser, $object, $imagesUrls);
 
-        $object['creation_id'] = $this->postContainer($object, $igUser);
-        unset($object['caption']);
-        unset($object['children']);
+            return $this->publishContainer($object, $igUser);
+        } else {
+            if ($imagesUrls) {
+                foreach ($imagesUrls as $image) {
+                    $images[] = $this->postPictureUrl($igUser, $object['access_token'], $image);
+                }
+            }
+            $object['children'] = implode(',', $images);
+            $object['media_type'] = 'CAROUSEL';
 
-        return $this->publishCarrousel($object, $igUser);
+            $object['creation_id'] = $this->postContainer($object, $igUser);
+            unset($object['caption']);
+            unset($object['children']);
 
+            return $this->publishContainer($object, $igUser);
+        }
     }
 
     /**
@@ -110,13 +143,15 @@ class InstagramController extends Controller
         $jsonPageList = $request->json('pages');
 
         $actualCompanyId = UserTrait::getCompanyId();
-
         if ($jsonPageList) {
             foreach ($jsonPageList as $instagramAccount) {
                 $id = $instagramAccount['id'];
-                $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id;
+                $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
                 $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ? $instagramAccount['accountPictureUrl'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
                 $name = $instagramAccount['pageName'];
+                $token = $relatedAccountId ? 'NA' : $instagramAccount['accessToken'];
+
+                $relatedUid = $instagramAccount['relatedAccountId'];
 
                 $page = Account::where('uid', $id)->first();
 
@@ -134,9 +169,10 @@ class InstagramController extends Controller
                         'profilePicture' => $pageinstagramAccountLink,
                         'category' => 'NA',
                         'providerType' => 'page',
-                        'accessToken' => 'NA',
+                        'accessToken' => $token,
                         'related_account_id' => $relatedAccountId,
                         'provider_token_id' => UserTrait::getCurrentProviderId(),
+                        'related_Uid' => $relatedUid,
                     ]);
                 }
             }
@@ -196,7 +232,7 @@ class InstagramController extends Controller
                 if ($businessAccountId !== false) {
                     $instagramAccount = $this->getInstagramInformationFromBID($businessAccountId, $accessToken);
 
-                    $businessAccounts[] = ['id' => $businessAccountId, 'relatedAccountId' => $pageId, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                    $businessAccounts[] = ['accessToken' => $accessToken, 'id' => $businessAccountId, 'relatedAccountId' => $pageId, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
                 }
             }
 

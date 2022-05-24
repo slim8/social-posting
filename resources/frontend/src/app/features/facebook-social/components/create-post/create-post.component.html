@@ -1,0 +1,49 @@
+
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="Statut">Statut</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+        </nz-form-control>
+    </nz-form-item >
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="upload">Upload images</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <div class="clearfix">
+                <nz-upload
+                  nzListType="picture-card"
+                  [(nzFileList)]="fileList"
+                  [nzShowButton]="fileList.length < 8"
+                  (nzChange)="handleChange($event)"
+                >
+                  <div>
+                    <i nz-icon nzType="plus"></i>
+                    <div style="margin-top: 8px">Upload</div>
+                  </div>
+                </nz-upload>
+                <nz-modal
+                  [nzVisible]="previewVisible"
+                  [nzContent]="modalContent"
+                  [nzFooter]="null"
+                  (nzOnCancel)="previewVisible = false"
+                >
+                  <ng-template #modalContent>
+                    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                  </ng-template>
+                </nz-modal>
+            </div>
+        </nz-form-control>
+    </nz-form-item >
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzFor="pages">Choose facebook page</nz-form-label>
+        <nz-form-control [nzSpan]="14">
+            <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item >
+
+    <nz-form-item>
+        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 6 }">
+          <button nz-button nzType="primary" (click)="submitForm()">Submit</button>
+        </nz-form-control>
+      </nz-form-item>

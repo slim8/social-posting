@@ -20,6 +20,7 @@
 
 <button (click)="postSourceImageToPages()">Post Source Image</button>
 <br>
+
 <div routerLink="./pages"><span>Pages</span></div>
 
 <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
@@ -43,3 +44,8 @@
     </form>
   </ng-container>
 </nz-modal>
+
+<div class="m-buttons-container">
+    <div class="m-button" routerLink="./pages"><span>Pages</span></div>
+    <div class="m-button" routerLink="./create-post"><span>Create Post</span></div>
+</div>
