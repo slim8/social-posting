@@ -26,6 +26,14 @@ class ApiAuthController extends Controller
         $this->userRepository = new UserRepository();
     }
 
+    /**
+     * Api To check if current user is logged in.
+     */
+    public function checkLoggedIn()
+    {
+        return response()->json(['success' => true], 201);
+    }
+
     public function logout(Request $request)
     {
         $token = $request->user()->token();
