@@ -42,9 +42,16 @@ class InstagramController extends Controller
     public function publishContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
 
-        return $response->json('id');
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
+        if ($response->json('id')){
+            $responseObject['id'] = $response->json('id');
+            $responseObject['status'] = true;
+        } else {
+            $responseObject['status'] = false;
+            $responseObject['message'] = "to be defined";
+        }
+        return $responseObject;
     }
 
     /**

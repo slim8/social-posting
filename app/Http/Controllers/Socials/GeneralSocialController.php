@@ -7,6 +7,10 @@ use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
+use App\Models\Post;
+use App\Models\PostMedia;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -25,6 +29,7 @@ class GeneralSocialController extends Controller
 
     public function sendToPost(Request $request)
     {
+        $errorLog = [];
         $inc = 0;
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
@@ -40,12 +45,29 @@ class GeneralSocialController extends Controller
             $FacebookController = new FacebookController();
             $InstagramController = new InstagramController();
             $accountProvider = $account->provider;
+            $postResponse = [];
 
             if ($inc == 0) {
+                $postId = Post::create([
+                    'url' => 'url',
+                    'message' => $request->message,
+                    'status' => true,
+                    'publishedAt' => Carbon::now(),
+                    'isScheduled' => 0,
+                ]);
+
                 if ($request->file('sources')) {
                     foreach ($request->file('sources') as $image) {
                         $images[] = $this->utilitiesController->uploadImage($image);
                     }
+                }
+
+                foreach ($images as $image) {
+                    PostMedia::create([
+                        'url' => $image,
+                        'post_id' => $postId->id,
+                        'type' => 'image',
+                    ]);
                 }
             }
             ++$inc;
@@ -68,7 +90,25 @@ class GeneralSocialController extends Controller
 
                 $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
             }
+
+            if ($postResponse['status']) {
+                AccountPost::create([
+                    'url' => '',
+                    'post_id' => $postId->id,
+                    'account_id' => $singleAccountId,
+                    'post_id_provider' => $postResponse['id'],
+                ]);
+            } else {
+                $errorLog[] = $postResponse['message'];
+            }
         }
+
+        if ($errorLog) {
+            return response()->json(['success' => false,
+            'message' => $errorLog, ], 201);
+        }
+
+        return response()->json(['success' => true], 201);
     }
 
     /**
