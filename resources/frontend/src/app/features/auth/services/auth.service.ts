@@ -3,13 +3,18 @@ import { Injectable } from '@angular/core';
 import { sharedConstants } from '../../../shared/sharedConstants';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
-  public login(credentials:any) {
-      return this.http.post(sharedConstants.API_ENDPOINT+'/login', credentials );
-  }
+    public login(credentials: any) {
+        return this.http.post(sharedConstants.API_ENDPOINT + '/login', credentials);
+    }
+
+    public checkLoggedIn() {
+        return this.http.get(sharedConstants.API_ENDPOINT+'/check-logged-in' );
+    }
+  
 }
