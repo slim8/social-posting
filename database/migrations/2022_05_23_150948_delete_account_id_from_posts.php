@@ -13,7 +13,7 @@ return new class() extends Migration {
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->dropForeign(['account_id']);
+           // $table->dropForeign(['account_id']);
             $table->dropColumn('account_id');
         });
     }
@@ -26,7 +26,7 @@ return new class() extends Migration {
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->foreignId('account_id')->references('id')->on('accounts')->onDelete('cascade');
+            //$table->foreignId('account_id')->references('id')->on('accounts')->onDelete('cascade');
         });
     }
 };

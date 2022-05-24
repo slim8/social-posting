@@ -102,7 +102,6 @@ class FacebookController extends Controller
         return $response->json('id');
     }
 
-
     /**
      * post to facebook from Route.
      */
@@ -117,11 +116,20 @@ class FacebookController extends Controller
             $object['attached_media'] = json_encode($images);
         }
 
-
         $client = new Client();
-        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
+        $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,
         ]);
+
+        if ($response->getStatusCode() == 200) {
+            $responseObject['status'] = true;
+            $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+        } else {
+            $responseObject['status'] = false;
+            $responseObject['message'] = 'to be defined';
+        }
+
+        return $responseObject;
     }
 
     /**
