@@ -7,6 +7,7 @@ use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\GeneralSocialController;
 use App\Http\Controllers\Socials\InstagramController;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,4 +60,10 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
     Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
+});
+
+Route::get('/test', function () {
+    return Account::with('posts')->whereHas('posts', function ($query) {
+        $query->with('media');
+    })->get();
 });

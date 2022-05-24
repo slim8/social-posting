@@ -102,36 +102,10 @@ class FacebookController extends Controller
         return $response->json('id');
     }
 
-    public function postPictureFromFile($pageId, $token, $url)
-    {
-        $client = new Client();
-
-        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/photos', [
-            'multipart' => [
-                [
-                    'name' => 'source',
-                    'contents' => fopen($url, 'rb'),
-                ],
-                [
-                    'name' => 'access_token',
-                    'contents' => $token,
-                ],
-                [
-                    'name' => 'published',
-                    'contents' => false,
-                ],
-            ],
-        ]);
-
-        $response = json_decode($res->getBody());
-
-        return $response->id;
-    }
-
     /**
      * post to facebook from Route.
      */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls, $imagesSources)
+    public function postToFacebookMethod($object, $pageId, $imagesUrls)
     {
         $images = [];
 
@@ -142,17 +116,20 @@ class FacebookController extends Controller
             $object['attached_media'] = json_encode($images);
         }
 
-        if ($imagesSources) {
-            foreach ($imagesSources as $image) {
-                $images[] = ['media_fbid' => $this->postPictureFromFile($pageId, $object['access_token'], $image)];
-            }
-            $object['attached_media'] = json_encode($images);
-        }
-
         $client = new Client();
-        $res = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
+        $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,
         ]);
+
+        if ($response->getStatusCode() == 200) {
+            $responseObject['status'] = true;
+            $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+        } else {
+            $responseObject['status'] = false;
+            $responseObject['message'] = 'to be defined';
+        }
+
+        return $responseObject;
     }
 
     /**
@@ -202,8 +179,6 @@ class FacebookController extends Controller
         $AllPages = [];
 
         $actualCompanyId = UserTrait::getCompanyId();
-
-        // dd($actualCompanyId);
 
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {

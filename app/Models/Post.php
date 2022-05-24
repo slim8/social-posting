@@ -8,20 +8,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'message',
         'url',
         'status',
         'publishedAt',
+        'isScheduled',
         'deleted',
-        'account_id',
     ];
 
-    public function account()
+    public function accounts()
     {
-        return $this->belongsTo(Account::class);
+        return $this->hasMany(Account::class, 'account_posts');
     }
 
     public function PostMedia()
