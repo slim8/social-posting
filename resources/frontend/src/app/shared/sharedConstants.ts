@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
     imports: [CommonModule],
     exports: [],
 })
-export class sharedConstants { 
+export class sharedConstants {
     public static API_ENDPOINT='http://posting.local/api';
     public static HTTP_AUTH='Bearer';
     public static HTTP_TOKEN='token';

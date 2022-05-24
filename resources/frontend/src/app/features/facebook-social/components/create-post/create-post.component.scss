@@ -1,3 +1,37 @@
 nz-select {
     width: 100%;
 }
+
+.m-page-img {
+    height: 19px;
+}
+cdk-virtual-scroll-viewport {
+    height: 150px;
+}
+.m-loading-screen-active {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.25;
+    z-index: 1;
+}
+.m-btn-submit {
+    position: relative;
+    width: 100px;
+    background-color: #d3e9fb;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #a8d7fd;
+}
+.m-loading-spin {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+.show {
+    display: block;
+}

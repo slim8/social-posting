@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
@@ -26,11 +27,11 @@ export class CreatePostComponent implements OnInit {
     previewImage: string | undefined = '';
     previewVisible = false;
     listOfPages: Array<{ id: number; pageName: string; pagePictureUrl: string }> = [];
-    size: NzSelectSizeType = 'default';
+    size: NzSelectSizeType = 'large';
     tagValue = [];
     selectedFile: any = [];
 
-    constructor(private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder, private http: HttpClient) { }
+    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder, private http: HttpClient) { }
 
     ngOnInit(): void {
         this.getPages();
@@ -42,16 +43,16 @@ export class CreatePostComponent implements OnInit {
                 this.listOfPages = success.pages;
             },
             (error) => {
-                this.createMessage('error', error.error.message);
+                this.shared.createMessage('error', error.error.message);
             }
         );
     }
 
-    createMessage(type: string, message: any): void {
-        this.messageService.create(type, ` ${message}`);
-    }
-
     submitForm() {
+        let loadingScreen = document.getElementsByClassName('m-loading-screen')[0]
+        let btnSubmit = document.getElementById('btn-submit')
+        let spinning = document.getElementsByClassName('m-loading-spin')[0]
+
         const formData: FormData = new FormData();
         this.tagValue.forEach((accountId: any) => {
             formData.append('accountIds[]', accountId);
@@ -61,19 +62,40 @@ export class CreatePostComponent implements OnInit {
         });
         formData.append('message', this.message);
 
-        this.http.post(sharedConstants.API_ENDPOINT + '/send-post', formData, {
-            reportProgress: true,
-            observe: 'events'
-        }).subscribe(event => {
-            if (event.type === HttpEventType.UploadProgress) {
-                if (event.total) {
-                    const total: number = event.total;
-                    console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
+        if (formData) {
+
+            this.http.post(sharedConstants.API_ENDPOINT + '/send-post', formData, {
+                reportProgress: true,
+                observe: 'events'
+            }).subscribe({
+                next: event => {
+                    loadingScreen.classList.add('m-loading-screen-active');
+                    spinning.classList.add('show')
+                    btnSubmit?.classList.add('m-btn-submit')
+
+                    if (event.type === HttpEventType.UploadProgress) {
+                        if (event.total) {
+                            const total: number = event.total;
+                            console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
+                        }
+                    }
+                },
+                error: err => {
+                    err.error.errors.forEach((error : any )=> {
+                        this.shared.createMessage('error', error);
+                    })
+                    loadingScreen.classList.remove('m-loading-screen-active');
+                    spinning.classList.remove('show')
+                    btnSubmit?.classList.remove('m-btn-submit')
+                },
+                complete: () => {
+                    loadingScreen.classList.remove('m-loading-screen-active');
+                    spinning.classList.remove('show')
+                    btnSubmit?.classList.remove('m-btn-submit')
                 }
-            }
-        }, error => {
-            this.createMessage('error', error.error.message);
-        });
+            });
+
+        }
     }
 
     handlePreview = async (file: NzUploadFile): Promise<void> => {

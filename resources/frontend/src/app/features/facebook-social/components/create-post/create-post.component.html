@@ -1,4 +1,4 @@
-
+<div class="m-loading-screen"></div>
     <nz-form-item>
         <nz-form-label [nzSpan]="6" nzFor="Statut">Statut</nz-form-label>
         <nz-form-control [nzSpan]="14">
@@ -37,13 +37,13 @@
         <nz-form-label [nzSpan]="6" nzFor="pages">Choose facebook page</nz-form-label>
         <nz-form-control [nzSpan]="14">
             <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
-                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
+                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
             </nz-select>
         </nz-form-control>
     </nz-form-item >
 
     <nz-form-item>
         <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 6 }">
-          <button nz-button nzType="primary" (click)="submitForm()">Submit</button>
+          <button id="btn-submit" nz-button nzType="primary" (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
         </nz-form-control>
       </nz-form-item>

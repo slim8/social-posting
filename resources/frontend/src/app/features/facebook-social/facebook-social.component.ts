@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from './services/facebook-social.service';
+import {FormBuilder, FormArray, FormControl, FormGroup} from '@angular/forms';
+import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 @Component({
   selector: 'app-facebook-social',
@@ -14,10 +16,18 @@ export class FacebookSocialComponent implements OnInit {
     id: '557047552449017',
     pages: [],
   };
-  constructor(private service: FacebookSocialService) {}
+
+  isVisible = false;
+  listpages :any;
+  validateForm!: FormGroup;
+
+  constructor(private service: FacebookSocialService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.service.getLoginStatus();
+    this.validateForm = this.fb.group({
+      myChoices: new FormArray([]),
+    });
   }
 
   loginWithFacebook() {
@@ -30,61 +40,70 @@ export class FacebookSocialComponent implements OnInit {
           id: res.authResponse.userID,
         };
 
-        console.log(' user => ', this.user);
+        this.service.manageFacebookPages(sharedConstants.API_ENDPOINT+"/get-facebook-pages",
+          {
+            "accessToken": this.user.accessToken,
+            "id": this.user.id
+          }).subscribe((response: any) => {
+          this.listpages = response.pages;
+          this.showModal();
+        });
+
       })
       .catch(() => console.error('error'));
   }
 
-  getCurrentFBPages() {
-    this.service.getCurrentFBPages(this.user).subscribe((response: any) => {
-      console.log('response => ', response.data);
-
-      this.user = {
-        ...this.user,
-        pages: response.data,
-      };
-    });
+  showModal(): void {
+    this.isVisible = true;
   }
 
-  postTextToPages() {
-    this.user.pages.forEach((page) => {
-      this.service.postTextToPage(page).then((response) => {
-        console.log('post Result => ' + response);
+  handleOk(): void {
+    console.log('Button ok clicked!');
+    this.isVisible = false;
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+  }
+
+
+  onSubmit() {
+    if (this.validateForm.valid) {
+      console.log(this.validateForm.value);
+
+      console.log("this.listpages",this.listpages);
+
+      let selectedobject = this.listpages.filter((item: any) => this.validateForm.value.myChoices.includes(item.pageId));
+
+      this.service.manageFacebookPages(sharedConstants.API_ENDPOINT+"/facebook/save-pages",
+        {
+          "pages": selectedobject
+        }).subscribe((response: any) => {
+        console.log("saveFacebookPages")
+        console.log(response)
       });
-    });
-  }
 
-  postImageToPages() {
-    this.user.pages.forEach((page) => {
-      this.service.postPublicImageToPage(page).then((response) => {
-        console.log('post Result => ' + response);
+      this.validateForm = this.fb.group({
+        myChoices: new FormArray([]),
       });
-    });
-  }
+      this.isVisible = false;
 
-  postSourceImageToPages() {
-    this.user.pages.forEach((page: any) => {
-      this.service
-        .postSourceImageToPage(page, this.formData)
-        .subscribe((response) => {
-          console.log('post Result => ' + response);
-        });
-    });
-  }
-
-  fileChange(event: any) {
-    let fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      let file: File = fileList[0];
-
-      this.formData.append('source', file);
-      // this.formData.append('access_token', this.user.accessToken);
-      this.formData.append(
-        'message',
-        'Upload Multipart File Success ! From Ali Werghemmi'
-      );
-
-      console.log(file);
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({onlySelf: true});
+        }
+      });
     }
   }
+
+  onCheckChange(event:any) {
+    const formArray: FormArray = this.validateForm.get('myChoices') as FormArray;
+    if(event.target.checked){
+      formArray.push(new FormControl(event.target.value));
+    }
+  }
+
 }

@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DemoNgZorroAntdModule } from '../../shared/ng-zorro-antd.module';
+import { IconsProviderModule } from '../../shared/icons-provider.module';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FacebookSocialRoutingModule } from './facebook-social-routing.module';
@@ -10,21 +14,23 @@ import { FacebookPagesComponent } from './components/facebook-pages/facebook-pag
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import {  } from '../../shared/ng-zorro-antd.module'
 import { SharedModule } from 'src/app/shared/shared.module';
-import { TestUploadComponent } from './components/test-upload/test-upload.component';
- 
+
 
 @NgModule({
   declarations: [
     FacebookSocialComponent,
     FacebookPagesComponent,
-    CreatePostComponent,
-    TestUploadComponent
+    CreatePostComponent
   ],
   imports: [
     NzIconModule,
     CommonModule,
     FacebookSocialRoutingModule,
     FacebookModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DemoNgZorroAntdModule,
+    IconsProviderModule,
     SharedModule,
   ]
 })
