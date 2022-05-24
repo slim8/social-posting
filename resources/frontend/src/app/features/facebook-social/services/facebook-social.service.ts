@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   AuthResponse,
@@ -121,5 +121,10 @@ export class FacebookSocialService {
    */
   private handleError(error: any) {
     console.error('Error processing action', error);
+  }
+
+
+  manageFacebookPages(url: any,data: any) {
+    return this.http.post(url,data);
   }
 }
