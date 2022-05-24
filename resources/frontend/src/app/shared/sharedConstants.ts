@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
     exports: [],
 })
 export class sharedConstants {
-    public static API_ENDPOINT='http://media-posting.local/api';
+    public static API_ENDPOINT='http://posting.local/api';
     public static HTTP_AUTH='Bearer';
     public static HTTP_TOKEN='token';
     public static HTTP_APPLICATION='Content-Type';
