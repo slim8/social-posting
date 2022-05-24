@@ -44,13 +44,14 @@ class InstagramController extends Controller
         $parameter = RequestsTrait::prepareParameters($object);
 
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
-        if ($response->json('id')){
+        if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
         } else {
             $responseObject['status'] = false;
-            $responseObject['message'] = "to be defined";
+            $responseObject['message'] = 'to be defined';
         }
+
         return $responseObject;
     }
 
@@ -138,25 +139,20 @@ class InstagramController extends Controller
     /**
      * Save Instagram Accounts.
      */
-    public function savePagesList(Request $request)
+    public function saveInstagramAccount($instagramAccount)
     {
-        $jsonPageList = $request->json('pages');
+        $id = $instagramAccount['id'];
+        $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
+        $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ? $instagramAccount['accountPictureUrl'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
+        $name = $instagramAccount['pageName'];
+        $token = $relatedAccountId ? 'NA' : $instagramAccount['accessToken'];
 
-        $actualCompanyId = UserTrait::getCompanyId();
-        if ($jsonPageList) {
-            foreach ($jsonPageList as $instagramAccount) {
-                $id = $instagramAccount['id'];
-                $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
-                $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ? $instagramAccount['accountPictureUrl'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
-                $name = $instagramAccount['pageName'];
-                $token = $relatedAccountId ? 'NA' : $instagramAccount['accessToken'];
+        $relatedUid = $instagramAccount['relatedAccountId'];
 
-                $relatedUid = $instagramAccount['relatedAccountId'];
+        $page = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
 
-                $page = Account::where('uid', $id)->first();
-
-                if (!$page) {
-                    Account::create([
+        if (!$page) {
+            Account::create([
                         'name' => $name,
                         'provider' => 'instagram',
                         'status' => true,
@@ -164,7 +160,7 @@ class InstagramController extends Controller
                         'scoope' => '',
                         'authorities' => '',
                         'link' => '',
-                        'company_id' => $actualCompanyId,
+                        'company_id' => UserTrait::getCompanyId(),
                         'uid' => $id,
                         'profilePicture' => $pageinstagramAccountLink,
                         'category' => 'NA',
@@ -174,16 +170,6 @@ class InstagramController extends Controller
                         'provider_token_id' => UserTrait::getCurrentProviderId(),
                         'related_Uid' => $relatedUid,
                     ]);
-                }
-            }
-
-            $Pages = $this->getSavedPagefromDataBaseByCompanyId();
-
-            return response()->json(['success' => true,
-        'pages' => $Pages, ], 201);
-        } else {
-            return response()->json(['success' => false,
-        'message' => 'No page autorized', ], 201);
         }
     }
 

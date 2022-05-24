@@ -41,11 +41,19 @@ Route::group(['middleware' => ['checkroles', 'role:user']], function () {
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
     Route::post('/get-instagram-accounts', [InstagramController::class, 'getAccountsList'])->name('get-instagram-accounts.api');
     Route::post('/instagram/get-accounts', [InstagramController::class, 'getAccountsList'])->name('get-instagram-accounts.api');
-    Route::post('/instagram/save-accounts', [InstagramController::class, 'savePagesList'])->name('save-instagram-accounts.api');
+    // Route::post('/instagram/save-accounts', [InstagramController::class, 'savePagesList'])->name('save-instagram-accounts.api');
     Route::post('/get-facebook-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
+
+
+
+    Route::post('/get-meta-pages-groups', [GeneralSocialController::class, 'getMetaPagesAndGroups'])->name('get-meta-pages-groups.api');
+    Route::post('/save-meta-pages-groups', [GeneralSocialController::class, 'saveMetaPagesAndGroups'])->name('save-meta-pages-groups.api');
+
+
+
     Route::post('/facebook/get-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
-    Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
-    Route::post('/save-facebook-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
+    // Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
+    // Route::post('/save-facebook-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
 });
