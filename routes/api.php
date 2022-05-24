@@ -34,7 +34,7 @@ Route::group(['middleware' => ['cors']], function () {
 });
 
 Route::group(['middleware' => ['checkroles', 'role:user']], function () {
-    Route::get('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
+
     Route::post('/testifloggedin', 'App\Http\Controllers\Functions\RoutersController@index')->name('dashboard');
 });
 
@@ -59,6 +59,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
+    Route::get('/check-logged-in',  [ApiAuthController::class, 'checkLoggedIn'])->name('check-logged-in-api');
     Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
     Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
