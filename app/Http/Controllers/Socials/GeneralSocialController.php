@@ -21,10 +21,12 @@ class GeneralSocialController extends Controller
     use RequestsTrait;
 
     protected $utilitiesController;
+    protected $facebookController;
 
     public function __construct()
     {
         $this->utilitiesController = new UtilitiesController();
+        $this->facebookController = new FacebookController();
     }
 
     public function sendToPost(Request $request)
@@ -42,7 +44,6 @@ class GeneralSocialController extends Controller
         foreach ($request->accountIds as $singleAccountId) {
             // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
-            $FacebookController = new FacebookController();
             $InstagramController = new InstagramController();
             $accountProvider = $account->provider;
             $postResponse = [];
@@ -78,7 +79,7 @@ class GeneralSocialController extends Controller
                 }
                 $obj['access_token'] = $account->accessToken;
 
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $images);
+                $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images);
             } elseif ($accountProvider == 'instagram') {
                 if ($request->message) {
                     $obj['caption'] = $request->message;
@@ -259,10 +260,8 @@ class GeneralSocialController extends Controller
         }
     }
 
-
     public function getAllAccountsByCompanyId()
     {
-
         return $this->getSavedAccountsFromDataBaseByCompanyId(1);
     }
 
@@ -280,6 +279,30 @@ class GeneralSocialController extends Controller
             }
         } else {
             return $AllPages;
+        }
+    }
+
+    public function getMetaPagesAndGroups(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'accessToken' => 'required|string',
+            'id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+        $facebookUserId = $request->id;
+        $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
+
+        $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey , 1);
+
+        if ($AllPages) {
+            return response()->json(['success' => true,
+        'pages' => $AllPages, ], 201);
+        } else {
+            return response()->json(['success' => false,
+        'pages' => $AllPages, ], 201);
         }
     }
 }

@@ -17,6 +17,13 @@ class FacebookController extends Controller
     use UserTrait;
     use RequestsTrait;
 
+    protected $instagramController;
+
+    public function __construct()
+    {
+        $this->instagramController = new InstagramController();
+    }
+
     /**
      * Update or Add a new Provider Token.
      */
@@ -220,7 +227,7 @@ class FacebookController extends Controller
         }
     }
 
-    public function getAccountPagesAccount($facebookUserId, $tokenKey)
+    public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0)
     {
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
@@ -237,7 +244,15 @@ class FacebookController extends Controller
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
-                $AllPages[] = ['pageId' => $id, 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+
+                if ($getInstagramAccount) {
+                    $businessAccountId = $this->instagramController->getBusinessAccountId($id, $pageToken);
+                    if ($businessAccountId !== false) {
+                        $instagramAccount = $this->instagramController->getInstagramInformationFromBID($businessAccountId, $pageToken);
+                        $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'id' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                    }
+                }
             }
         }
 
