@@ -149,7 +149,7 @@ class InstagramController extends Controller
 
         $relatedUid = $instagramAccount['relatedAccountId'];
 
-        $page = Account::where('uid', $id)->first();
+        $page = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
 
         if (!$page) {
             Account::create([

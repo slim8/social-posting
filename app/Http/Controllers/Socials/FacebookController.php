@@ -189,7 +189,7 @@ class FacebookController extends Controller
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];
 
-        $page = Account::where('uid', $id)->first();
+        $page = Account::where('uid', $id)->where('company_id',$actualCompanyId)->first();
 
         if (!$page) {
             Account::create([
@@ -228,13 +228,22 @@ class FacebookController extends Controller
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
-                $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+
+                $checkIfExist = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
+
+                if(!$checkIfExist){
+                    $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                }
 
                 if ($getInstagramAccount) {
                     $businessAccountId = $this->instagramController->getBusinessAccountId($id, $pageToken);
                     if ($businessAccountId !== false) {
                         $instagramAccount = $this->instagramController->getInstagramInformationFromBID($businessAccountId, $pageToken);
-                        $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'id' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+
+                        $checkIfExist = Account::where('uid', $businessAccountId)->where('company_id', UserTrait::getCompanyId())->first();
+                        if (!$checkIfExist) {
+                            $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'id' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                        }
                     }
                 }
             }

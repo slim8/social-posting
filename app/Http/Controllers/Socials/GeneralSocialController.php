@@ -255,16 +255,6 @@ class GeneralSocialController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     public function saveMetaPagesAndGroups(Request $request)
     {
         $jsonPageList = $request->json('pages');
