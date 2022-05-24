@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from './services/facebook-social.service';
 import {FormBuilder, FormArray, FormControl, FormGroup} from '@angular/forms';
+import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 @Component({
   selector: 'app-facebook-social',
@@ -39,7 +40,7 @@ export class FacebookSocialComponent implements OnInit {
           id: res.authResponse.userID,
         };
 
-        this.service.manageFacebookPages("http://media-posting.local/api/get-facebook-pages",
+        this.service.manageFacebookPages(sharedConstants.API_ENDPOINT+"/get-facebook-pages",
           {
             "accessToken": this.user.accessToken,
             "id": this.user.id
@@ -50,59 +51,6 @@ export class FacebookSocialComponent implements OnInit {
 
       })
       .catch(() => console.error('error'));
-  }
-
-  getCurrentFBPages() {
-    this.service.getCurrentFBPages(this.user).subscribe((response: any) => {
-      console.log('response => ', response.data);
-
-      this.user = {
-        ...this.user,
-        pages: response.data,
-      };
-    });
-  }
-
-  postTextToPages() {
-    this.user.pages.forEach((page) => {
-      this.service.postTextToPage(page).then((response) => {
-        console.log('post Result => ' + response);
-      });
-    });
-  }
-
-  postImageToPages() {
-    this.user.pages.forEach((page) => {
-      this.service.postPublicImageToPage(page).then((response) => {
-        console.log('post Result => ' + response);
-      });
-    });
-  }
-
-  postSourceImageToPages() {
-    this.user.pages.forEach((page: any) => {
-      this.service
-        .postSourceImageToPage(page, this.formData)
-        .subscribe((response) => {
-          console.log('post Result => ' + response);
-        });
-    });
-  }
-
-  fileChange(event: any) {
-    let fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      let file: File = fileList[0];
-
-      this.formData.append('source', file);
-      // this.formData.append('access_token', this.user.accessToken);
-      this.formData.append(
-        'message',
-        'Upload Multipart File Success ! From Ali Werghemmi'
-      );
-
-      console.log(file);
-    }
   }
 
   showModal(): void {
@@ -128,7 +76,7 @@ export class FacebookSocialComponent implements OnInit {
 
       let selectedobject = this.listpages.filter((item: any) => this.validateForm.value.myChoices.includes(item.pageId));
 
-      this.service.manageFacebookPages("http://media-posting.local/api/facebook/save-pages",
+      this.service.manageFacebookPages(sharedConstants.API_ENDPOINT+"/facebook/save-pages",
         {
           "pages": selectedobject
         }).subscribe((response: any) => {
