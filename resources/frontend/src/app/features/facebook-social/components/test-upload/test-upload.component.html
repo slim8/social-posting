@@ -3,11 +3,11 @@
     <nz-form-item>
         <div class="clearfix">
             <nz-upload
-                nzAction=""
                 nzListType="picture-card"
                 [(nzFileList)]="fileList"
                 [nzShowButton]="fileList.length < 8"
                 [nzPreview]="handlePreview"
+                (nzChange)="handleChange($event)"
                 >
             <div>
                 <i nz-icon nzType="plus"></i>
@@ -25,9 +25,6 @@
                 </ng-template>
             </nz-modal>
         </div>
-    </nz-form-item>
-    <nz-form-item>
-        <input type="file" name="" id="" (change)="handleChange($event)">
     </nz-form-item>
 
     <nz-form-item>
