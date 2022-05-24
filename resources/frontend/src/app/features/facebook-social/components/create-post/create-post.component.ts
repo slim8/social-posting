@@ -85,6 +85,9 @@ export class CreatePostComponent implements OnInit {
                 },
                 error: err => {
                     this.createMessage('error', err.error.message);
+                    loadingScreen.classList.remove('m-loading-screen-active');
+                    spinning.classList.remove('show')
+                    btnSubmit?.classList.remove('m-btn-submit')
                 },
                 complete: () => {
                     loadingScreen.classList.remove('m-loading-screen-active');
