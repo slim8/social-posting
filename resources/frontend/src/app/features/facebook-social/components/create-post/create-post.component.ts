@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
@@ -30,7 +31,7 @@ export class CreatePostComponent implements OnInit {
     tagValue = [];
     selectedFile: any = [];
 
-    constructor(private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder, private http: HttpClient) { }
+    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder, private http: HttpClient) { }
 
     ngOnInit(): void {
         this.getPages();
@@ -42,13 +43,9 @@ export class CreatePostComponent implements OnInit {
                 this.listOfPages = success.pages;
             },
             (error) => {
-                this.createMessage('error', error.error.message);
+                this.shared.createMessage('error', error.error.message);
             }
         );
-    }
-
-    createMessage(type: string, message: any): void {
-        this.messageService.create(type, ` ${message}`);
     }
 
     submitForm() {
@@ -85,7 +82,7 @@ export class CreatePostComponent implements OnInit {
                 },
                 error: err => {
                     err.error.errors.forEach((error : any )=> {
-                        this.createMessage('error', error);
+                        this.shared.createMessage('error', error);
                     })
                     loadingScreen.classList.remove('m-loading-screen-active');
                     spinning.classList.remove('show')
