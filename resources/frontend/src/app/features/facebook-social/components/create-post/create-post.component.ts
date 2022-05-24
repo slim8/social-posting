@@ -1,10 +1,19 @@
+import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { FacebookSocialService } from '../../services/facebook-social.service';
 
+const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 
 @Component({
     selector: 'app-create-post',
@@ -12,30 +21,19 @@ import { FacebookSocialService } from '../../services/facebook-social.service';
     styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
-    validateForm!: FormGroup;
+    message: string = "";
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
     previewVisible = false;
-    listOfPages: Array<{ id: number; pageName: string }> = [];
+    listOfPages: Array<{ id: number; pageName: string; pagePictureUrl: string }> = [];
     size: NzSelectSizeType = 'default';
-    singleValue = 'a10';
-    // multipleValue = ['a10', 'c12'];
     tagValue = [];
-    urlLinks : number [] = [];
-    urlLinksIndex: number = 0;
+    selectedFile: any = [];
 
-    constructor(private facebookSocialService: FacebookSocialService, private message: NzMessageService,private fb: FormBuilder) { }
+    constructor(private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder, private http: HttpClient) { }
 
     ngOnInit(): void {
         this.getPages();
-        this.validateForm = this.fb.group({
-            datePicker: [null],
-            datePickerTime: [null],
-            monthPicker: [null],
-            rangePicker: [[]],
-            rangePickerTime: [[]],
-            timePicker: [null]
-          });
     }
 
     getPages() {
@@ -50,28 +48,44 @@ export class CreatePostComponent implements OnInit {
     }
 
     createMessage(type: string, message: any): void {
-        this.message.create(type, ` ${message}`);
+        this.messageService.create(type, ` ${message}`);
     }
 
-    addLink() {
-        this.urlLinks.push(this.urlLinksIndex);
-        this.urlLinksIndex ++;
-        console.log('add');
-        console.log(this.urlLinks);
-    }
-
-    removeLink(index: number) {
-        this.urlLinks.forEach((element, i ) => {
-            if(element == index) {
-                this.urlLinks.splice(i,1);
-            }
+    submitForm() {
+        const formData: FormData = new FormData();
+        this.tagValue.forEach((accountId: any) => {
+            formData.append('accountIds[]', accountId);
         });
-        console.log('remove');
-        console.log(this.urlLinks);
+        this.selectedFile.forEach((file: any) => {
+            formData.append('sources[]', file.originFileObj);
+        });
+        formData.append('message', this.message);
+
+        this.http.post(sharedConstants.API_ENDPOINT + '/send-post', formData, {
+            reportProgress: true,
+            observe: 'events'
+        }).subscribe(event => {
+            if (event.type === HttpEventType.UploadProgress) {
+                if (event.total) {
+                    const total: number = event.total;
+                    console.log('Upload Progress: ' + Math.round(event.loaded / total) * 100 + '%');
+                }
+            }
+        }, error => {
+            this.createMessage('error', error.error.message);
+        });
     }
 
-    test() {
-        console.log(this.validateForm.value);
-    }
+    handlePreview = async (file: NzUploadFile): Promise<void> => {
+        if (!file.url && !file['preview']) {
+            file['preview'] = await getBase64(file.originFileObj!);
+        }
 
+        this.previewImage = file.url || file['preview'];
+        this.previewVisible = true;
+    };
+
+    handleChange(event: any): void {
+        this.selectedFile = event.fileList;
+    }
 }
