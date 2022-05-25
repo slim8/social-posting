@@ -141,7 +141,7 @@ class InstagramController extends Controller
      */
     public function saveInstagramAccount($instagramAccount)
     {
-        $id = $instagramAccount['id'];
+        $id = $instagramAccount['pageId'];
         $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
         $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ? $instagramAccount['accountPictureUrl'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
         $name = $instagramAccount['pageName'];

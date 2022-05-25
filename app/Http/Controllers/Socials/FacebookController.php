@@ -242,7 +242,7 @@ class FacebookController extends Controller
 
                         $checkIfExist = Account::where('uid', $businessAccountId)->where('company_id', UserTrait::getCompanyId())->first();
                         if (!$checkIfExist) {
-                            $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'id' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                            $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
                         }
                     }
                 }
