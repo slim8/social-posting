@@ -22,7 +22,7 @@ class Post extends Model
 
     public function accounts()
     {
-        return $this->hasMany(Account::class, 'account_posts');
+        return $this->belongsToMany(Account::class, 'account_posts' , 'post_id');
     }
 
     public function PostMedia()
