@@ -34,6 +34,7 @@ export class RegisterComponent implements OnInit {
             data['isSubscriber'] = true;
             this.registerService.saveResources(environment.apiURL + 'register', data)
                 .subscribe(res => {
+                    this.router.navigate(['/auth/login']);
                 }, err => {
                     console.log(err);
                 }
