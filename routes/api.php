@@ -72,8 +72,8 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
 });
 
-Route::get('/test', function () {
-    return Account::with('posts')->whereHas('posts', function ($query) {
-        $query->with('media');
-    })->get();
-});
+// Route::get('/test', function () {
+//     return Account::with('posts')->whereHas('posts', function ($query) {
+//         $query->with('media');
+//     })->get();
+// });
