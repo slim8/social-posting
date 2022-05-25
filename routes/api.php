@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 $redirect = new RedirectIfAuthenticated();
 $request = new Request();
 
+// ALL commented Routes will be deleted after Some verifications ...
+
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
@@ -47,8 +49,6 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/get-meta-pages-groups', [GeneralSocialController::class, 'getMetaPagesAndGroups'])->name('get-meta-pages-groups.api');
     Route::post('/save-meta-pages-groups', [GeneralSocialController::class, 'saveMetaPagesAndGroups'])->name('save-meta-pages-groups.api');
 
-
-
     // Route::post('/facebook/get-pages', [FacebookController::class, 'getPagesList'])->name('get-facebook-pages.api');
     // Route::post('/facebook/save-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
     // Route::post('/save-facebook-pages', [FacebookController::class, 'savePagesList'])->name('save-facebook-pages.api');
@@ -57,11 +57,11 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
-    Route::get('/check-logged-in',  [ApiAuthController::class, 'checkLoggedIn'])->name('check-logged-in-api');
+    Route::get('/check-logged-in', [ApiAuthController::class, 'checkLoggedIn'])->name('check-logged-in-api');
     // Route::get('/facebook/load-pages', [FacebookController::class, 'getAllPagesByCompanyId'])->name('load-facebook-pages.api');
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
     Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
-    Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
+    // Route::get('/instagram/load-accounts', [InstagramController::class, 'getAllPagesByCompanyId'])->name('load-instagram-accounts.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
