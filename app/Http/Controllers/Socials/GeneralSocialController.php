@@ -46,63 +46,68 @@ class GeneralSocialController extends Controller
         foreach ($request->accountIds as $singleAccountId) {
             // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
-            $InstagramController = new InstagramController();
-            $accountProvider = $account->provider;
-            $postResponse = [];
 
-            if ($inc == 0) {
-                $postId = Post::create([
-                    'url' => 'url',
-                    'message' => $request->message,
-                    'status' => true,
-                    'publishedAt' => Carbon::now(),
-                    'isScheduled' => 0,
-                ]);
+            if ($account) {
+                $InstagramController = new InstagramController();
+                $accountProvider = $account->provider;
+                $postResponse = [];
 
-                if ($request->file('sources')) {
-                    foreach ($request->file('sources') as $image) {
-                        $images[] = $this->utilitiesController->uploadImage($image);
+                if ($inc == 0) {
+                    $postId = Post::create([
+                        'url' => 'url',
+                        'message' => $request->message,
+                        'status' => true,
+                        'publishedAt' => Carbon::now(),
+                        'isScheduled' => 0,
+                    ]);
+
+                    if ($request->file('sources')) {
+                        foreach ($request->file('sources') as $image) {
+                            $images[] = $this->utilitiesController->uploadImage($image);
+                        }
+                    }
+
+                    foreach ($images as $image) {
+                        PostMedia::create([
+                            'url' => $image,
+                            'post_id' => $postId->id,
+                            'type' => 'image',
+                        ]);
                     }
                 }
+                ++$inc;
 
-                foreach ($images as $image) {
-                    PostMedia::create([
-                        'url' => $image,
+                if ($accountProvider == 'facebook') {
+                    if ($request->message) {
+                        $obj['message'] = $request->message;
+                    }
+                    $obj['access_token'] = $account->accessToken;
+
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images);
+                } elseif ($accountProvider == 'instagram') {
+                    if ($request->message) {
+                        $obj['caption'] = $request->message;
+                    }
+                    $BusinessIG = $account->uid;
+
+                    $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
+                    $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
+                }
+
+                if ($postResponse['status']) {
+                    AccountPost::create([
+                        'url' => '',
                         'post_id' => $postId->id,
-                        'type' => 'image',
+                        'account_id' => $singleAccountId,
+                        'post_id_provider' => $postResponse['id'],
                     ]);
+                } else {
+                    $errorLog[] = $postResponse['message'];
                 }
-            }
-            ++$inc;
-
-            if ($accountProvider == 'facebook') {
-                if ($request->message) {
-                    $obj['message'] = $request->message;
-                }
-                $obj['access_token'] = $account->accessToken;
-
-                $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images);
-            } elseif ($accountProvider == 'instagram') {
-                if ($request->message) {
-                    $obj['caption'] = $request->message;
-                }
-                $BusinessIG = $account->uid;
-
-                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
-                $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
-
-                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
-            }
-
-            if ($postResponse['status']) {
-                AccountPost::create([
-                    'url' => '',
-                    'post_id' => $postId->id,
-                    'account_id' => $singleAccountId,
-                    'post_id_provider' => $postResponse['id'],
-                ]);
             } else {
-                $errorLog[] = $postResponse['message'];
+                $errorLog[] = 'Cannot find a cannected account for ID '.$singleAccountId;
             }
         }
 
@@ -151,6 +156,9 @@ class GeneralSocialController extends Controller
         return $response->json('data')['url'];
     }
 
+    /**
+     * Get All facebook accounst.
+     */
     public function getAccountPagesAccount($facebookUserId, $tokenKey)
     {
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
@@ -214,6 +222,9 @@ class GeneralSocialController extends Controller
         return $this->getSavedAccountsFromDataBaseByCompanyId(1);
     }
 
+    /**
+     * Return saved accounts from data base.
+     */
     public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0)
     {
         $AllPages = RequestsTrait::getAllAccountsFromDB();
@@ -231,6 +242,9 @@ class GeneralSocialController extends Controller
         }
     }
 
+    /**
+     * Return All Pages And Instagram Accounts After Login To facebook.
+     */
     public function getMetaPagesAndGroups(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -244,7 +258,7 @@ class GeneralSocialController extends Controller
         $facebookUserId = $request->id;
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
 
-        $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey , 1);
+        $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
         if ($AllPages) {
             return response()->json(['success' => true,
@@ -255,6 +269,9 @@ class GeneralSocialController extends Controller
         }
     }
 
+    /**
+     * Autorize Facebook Pages and Isntagram Accounts ( Save to Database).
+     */
     public function saveMetaPagesAndGroups(Request $request)
     {
         $jsonPageList = $request->json('pages');
@@ -266,12 +283,11 @@ class GeneralSocialController extends Controller
         if ($jsonPageList) {
             foreach ($jsonPageList as $providerAccount) {
                 $provider = $providerAccount['provider'];
-                if($provider == 'facebook'){
+                if ($provider == 'facebook') {
                     $this->facebookController->savePage($providerAccount);
-                }else {
+                } else {
                     $this->instagramController->saveInstagramAccount($providerAccount);
                 }
-
             }
 
             $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
@@ -282,5 +298,31 @@ class GeneralSocialController extends Controller
             return response()->json(['success' => false,
         'message' => 'No page autorized', ], 201);
         }
+    }
+
+    /**
+     * Get Posts By Account Id
+     */
+    public function getPostsByAccountId(Request $request ,$id)
+    {
+        $account = RequestsTrait::findAccountByUid($id, 'id');
+
+        if ($account) {
+            $res = Post::whereHas('accounts' , function ($query) use ($id) {
+                $query->where('accounts.id' , $id);
+            })->with('PostMedia')->get();
+            if (count($res) > 0){
+                $response['status'] = true;
+                $response['posts'] = $res;
+            } else {
+            $response['status'] = false;
+            $response['errorMessage'] = 'This Account has not any POSTS';
+            }
+        } else {
+            $response['status'] = false;
+            $response['errorMessage'] = 'No Account found with id '.$id;
+        }
+
+        return response()->json($response,201);
     }
 }
