@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from './services/facebook-social.service';
-import {FormBuilder, FormArray, FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 @Component({
@@ -18,10 +18,13 @@ export class FacebookSocialComponent implements OnInit {
   };
 
   isVisible = false;
-  listpages :any;
+  listpages: any;
   validateForm!: FormGroup;
 
-  constructor(private service: FacebookSocialService, private fb: FormBuilder) {}
+  constructor(
+    private service: FacebookSocialService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.service.getLoginStatus();
@@ -40,15 +43,18 @@ export class FacebookSocialComponent implements OnInit {
           id: res.authResponse.userID,
         };
 
-        this.service.manageFacebookPages(sharedConstants.API_ENDPOINT+"/get-facebook-pages",
-          {
-            "accessToken": this.user.accessToken,
-            "id": this.user.id
-          }).subscribe((response: any) => {
-          this.listpages = response.pages;
-          this.showModal();
-        });
-
+        this.service
+          .manageFacebookPages(
+            sharedConstants.API_ENDPOINT + '/get-meta-pages-groups',
+            {
+              accessToken: this.user.accessToken,
+              id: this.user.id,
+            }
+          )
+          .subscribe((response: any) => {
+            this.listpages = response.pages;
+            this.showModal();
+          });
       })
       .catch(() => console.error('error'));
   }
@@ -67,43 +73,48 @@ export class FacebookSocialComponent implements OnInit {
     this.isVisible = false;
   }
 
-
   onSubmit() {
     if (this.validateForm.valid) {
       console.log(this.validateForm.value);
 
-      console.log("this.listpages",this.listpages);
+      console.log('this.listpages', this.listpages);
 
-      let selectedobject = this.listpages.filter((item: any) => this.validateForm.value.myChoices.includes(item.pageId));
-
-      this.service.manageFacebookPages(sharedConstants.API_ENDPOINT+"/facebook/save-pages",
-        {
-          "pages": selectedobject
-        }).subscribe((response: any) => {
-        console.log("saveFacebookPages")
-        console.log(response)
-      });
+      let selectedobject = this.listpages.filter((item: any) =>
+        this.validateForm.value.myChoices.includes(item.pageId)
+      );
+      console.log(selectedobject);
+      this.service
+        .manageFacebookPages(
+          sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+          {
+            pages: selectedobject,
+          }
+        )
+        .subscribe((response: any) => {
+          console.log('saveFacebookPages');
+          console.log(response);
+        });
 
       this.validateForm = this.fb.group({
         myChoices: new FormArray([]),
       });
       this.isVisible = false;
-
     } else {
-      Object.values(this.validateForm.controls).forEach(control => {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
-          control.updateValueAndValidity({onlySelf: true});
+          control.updateValueAndValidity({ onlySelf: true });
         }
       });
     }
   }
 
-  onCheckChange(event:any) {
-    const formArray: FormArray = this.validateForm.get('myChoices') as FormArray;
-    if(event.target.checked){
+  onCheckChange(event: any) {
+    const formArray: FormArray = this.validateForm.get(
+      'myChoices'
+    ) as FormArray;
+    if (event.target.checked) {
       formArray.push(new FormControl(event.target.value));
     }
   }
-
 }
