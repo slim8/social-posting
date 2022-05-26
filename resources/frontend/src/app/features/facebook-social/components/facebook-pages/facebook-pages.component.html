@@ -1,7 +1,7 @@
 <div class="mod-facebook-pages">
     <div class="m-page" *ngFor="let page of pages">
         <div class="m-page-container" [attr.data-pageId]="page.pageId" [attr.data-id]="page.id" >
-            <div class="m-img-container">
+            <div class="m-img-container" (click)="getPostsBypageId(page.id)">
                 <img class="m-picture" src="{{page.pagePictureUrl}}" alt="">
             </div>
             <div class="m-category">{{page.category}}</div>
