@@ -112,7 +112,7 @@ class FacebookController extends Controller
     /**
      * post to facebook from Route.
      */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls)
+    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags)
     {
         $images = [];
 
@@ -122,7 +122,13 @@ class FacebookController extends Controller
             }
             $object['attached_media'] = json_encode($images);
         }
-
+        $tagsString = ' ';
+        if ($tags) {
+            foreach ($tags as $tag) {
+                $tagsString = $tagsString.'#'.RequestsTrait::formatTags($tag).' ';
+            }
+        }
+        $object['message'] = $object['message'].$tagsString;
         $client = new Client();
         $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,
@@ -189,7 +195,7 @@ class FacebookController extends Controller
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];
 
-        $page = Account::where('uid', $id)->where('company_id',$actualCompanyId)->first();
+        $page = Account::where('uid', $id)->where('company_id', $actualCompanyId)->first();
 
         if (!$page) {
             Account::create([
@@ -229,9 +235,9 @@ class FacebookController extends Controller
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
 
-                $checkIfExist = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
+                $checkIfExist = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
 
-                if(!$checkIfExist){
+                if (!$checkIfExist) {
                     $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
                 }
 

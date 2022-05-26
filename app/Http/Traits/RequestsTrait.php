@@ -67,4 +67,9 @@ trait RequestsTrait
 
         return $parameter;
     }
+
+    public static function formatTags($tag)
+    {
+        return str_replace(' ','_',$tag);
+    }
 }
