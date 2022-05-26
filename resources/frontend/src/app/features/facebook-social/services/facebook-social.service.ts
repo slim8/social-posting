@@ -86,4 +86,8 @@ export class FacebookSocialService {
         })
     }
 
+  getPostsBypageId(pageId: any){
+    return this.http.get(sharedConstants.API_ENDPOINT+"/accounts/get-posts/"+pageId);
+  }
+
 }
