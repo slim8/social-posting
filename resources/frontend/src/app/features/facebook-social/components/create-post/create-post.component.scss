@@ -50,8 +50,8 @@ cdk-virtual-scroll-viewport {
         gap: 21px;
 
         > .m-post-form {
+            background-color: #D9D9D94D;
             padding: 26px;
-            border: 1px solid grey;
             width: calc(50% - 11px);
             min-width: 520px;
             height: 100%;
@@ -64,7 +64,6 @@ cdk-virtual-scroll-viewport {
         >.m-preview-post {
             width: calc(50% - 11px);
             min-width: 520px;
-            border: 1px solid grey;
             height: 100%;
             background-color: #D9D9D94D;
 
@@ -90,7 +89,7 @@ cdk-virtual-scroll-viewport {
                                 height: 100%;
                                 background-color: white;
                                 margin: 0;
-                                
+
                             }
                             > .ant-tabs-nav {
                                 display: none;
@@ -100,17 +99,127 @@ cdk-virtual-scroll-viewport {
                                 background-color: white;
                                 height: 100%;
                             }
-                            // > .m-tab-title {
+                            .test {
+                                height: 100%;
+                                background-color: #D9D9D9;
+                                padding: 71px 74px;
 
-                            //     >.test {
-                            //         height: 100vh;
-                            //         background-color: white;
-                            //     }
-                            // }
+                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+.ant-tabs-nav {
+    margin: 0!important;
+}
+
+nz-tabs-nav {
+    margin: 0;
+    display: none!important;
+}
+.m-instagram {
+    height: 541.9677124023438px;
+    width: 371px;
+    background-color: rgb(0, 0, 0);
+    margin: auto;
+    >.m-insta-header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        >.m-image {
+            padding: 10px;
+            >img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        >.m-title {
+            margin-left: 3px;
+            width: 114px;
+            height: 12px;
+            background: linear-gradient(-45deg, #c0c0c0, #616161, #d8d8d8, #727171);
+            background-size: 500% 100%;
+            animation: gradient 2s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    }
+
+    >.m-post {
+        width: 100%;
+        min-height: 272px;
+        height: 329px;
+        background-color: #979797;
+    }
+
+    >.m-insta-buttons {
+        width: 100%;
+        height: 38px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        >.m-btn-left {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: 10px;
+            >.m-heart {
+                width: 23px;
+                height: 23px;
+                background-image: url('../../../../../assets/img/svgs/heart.svg');
+                background-repeat: no-repeat;
+                filter: invert(1);
+                background-position: center;
+                margin: 8px 5px;
+            }
+            >.m-comment {
+                width: 25px;
+                height: 25px;
+                background-image: url('../../../../../assets/img/svgs/comment.svg');
+                background-repeat: no-repeat;
+                filter: invert(1);
+                background-position: center;
+                transform: rotateY(180deg);
+                margin: 8px 5px;
+            }
+            >.m-send {
+                width: 25px;
+                height: 25px;
+                background-image: url('../../../../../assets/img/svgs/send.svg');
+                background-repeat: no-repeat;
+                filter: invert(1);
+                background-position: center;
+                margin: 8px 5px;
+            }
+        }
+        >.m-btn-right {
+            >.m-bookmark {
+                width: 25px;
+                height: 25px;
+                background-image: url('../../../../../assets/img/svgs/bookmark2.svg');
+                background-repeat: no-repeat;
+                filter: invert(1);
+                background-position: center;
+                margin: 8px 14px;
+            }
+        }
+
     }
 }
