@@ -81,10 +81,19 @@ class InstagramController extends Controller
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls)
+    public function postToInstagramMethod($object, $igUser, $imagesUrls, $tags)
     {
         $images = [];
         $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
+
+        $tagsString = ' ';
+        if ($tags) {
+            foreach ($tags as $tag) {
+                $tagsString = $tagsString.'%23'.RequestsTrait::formatTags($tag).' ';
+            }
+        }
+
+        $object['caption'] = $object['caption'].$tagsString;
 
         if ($imagesCount == 0) {
             return false;
@@ -149,7 +158,7 @@ class InstagramController extends Controller
 
         $relatedUid = $instagramAccount['relatedAccountId'];
 
-        $page = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
+        $page = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
 
         if (!$page) {
             Account::create([
