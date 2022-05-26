@@ -1,0 +1,310 @@
+.tumbler{
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container{
+  background-color: white;
+  border: 0.5px solid #80808055;
+  margin: 10px;
+  min-width: 420px;
+  max-width: 420px;
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: unset;
+}
+
+.container > .top{
+  border-bottom: 0.5px solid #5a5a5a51;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 60px;
+  width: 100%;
+  background-color: white;
+  padding: 0 10px;
+  gap : 10px;
+}
+
+.container > .top > .image{
+  min-width: 40px;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: none;
+  border-radius: 100% ;
+}
+
+.container > .top > .information{
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.container > .top > .information > .username,.name{
+  font-size: 1rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
+
+.container > .top > .information .username {
+  display: flex;
+  align-items: center;
+}
+
+.container > .top > .information > .username > .designation{
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container
+> .top
+> .information
+> .username
+> .blue-tick{
+  display: flex;
+  align-items: center;
+}
+
+.container > .top > .information > .username:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.container > .top > .information > .name{
+  font-size: 12px;
+}
+
+.container > .top > .menu > button{
+  background-color: #ffffff;
+  border: none;
+  padding: 0 10px;
+}
+
+.container > .middle{
+  height: inherit;
+  width: 100%;
+  min-height: 100%;
+  max-width: 420px;
+  display: flex;
+}
+
+.container > .middle > .post{
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.container > .options{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 5px;
+}
+
+.container > .options > .buttons{
+  width: 100%;
+  padding: 0 5px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.container > .options > .buttons > .save{
+  margin-left: auto;
+}
+
+.container > .caption{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.container > .caption > .content{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  overflow: hidden;
+}
+
+.container > .caption > .content > .information {
+  width: 100%;
+  display: flex;
+  gap: 2.5px;
+  align-items: center;
+  padding: 0 5px 0 1rem;
+  font-size: 14px;
+}
+
+.container > .caption > .content > .information > .username{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 35%;
+  overflow: hidden ;
+  text-overflow: ellipsis;
+}
+
+.container > .caption > .content > .information > .text{
+  max-width: 35%;
+  overflow: hidden ;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.container > .caption > .content > .information > button{
+  background-color:#00000000;
+  color: grey;
+  border: none;
+  padding: 0 5px;
+  cursor: pointer;
+}
+
+.container > .caption > .content > .information > .blue-tick{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container > .topComments{
+  width: 100%;
+  padding: 10px 1rem;
+  gap: 3.5px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.container > .topComments > .comment{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.container > .topComments .comment > .username{
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.container > .topComments > .comment > .text{
+  font-size: 13px;
+}
+
+.container > .bottom{
+  border-top: 0.5px solid #80808055;
+  min-height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.container > .bottom > .bin{
+  gap: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.container > .bottom > .bin > .emoji-picker{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.container > .likes{
+  color: black;
+  width: 100%;
+  padding: 5px 1rem;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.container > .direction{
+
+  font-size: 13px;
+  padding: 5px 1rem;
+  font-weight: 400;
+  color: gray;
+  width: 100%;
+
+}
+
+.container > .time{
+  font-size: 10px;
+  padding: 5px 1rem;
+  font-weight: 400;
+  color: gray;
+  width: 100%;
+}
+
+.container > .bottom > .bin > #post{
+  border: none;
+  font-weight: 700;
+  background-color: #00000000;
+  color: #0062ff;
+  padding: 0 5px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.container > .bottom > .bin > #post:disabled{
+  color: #0062ff96;
+}
+
+.container > .bottom > .bin > textarea, textarea:focus{
+  width: 100%;
+  resize: none;
+  outline:none;
+  border:none;
+  background-color: #00000000;
+  font-family: "Open Sans";
+  max-height: 75px;
+}
+
+.suggestions{
+  display: none;
+  width: 540px;
+  height: 540px;
+  background-color: red;
+  top: 60px;
+  position: sticky;
+  float: right;
+  right: 0;
+}
+
+@media only screen and (max-width: 1000px){
+  .suggestions{
+    display: none;
+  }
+
+}

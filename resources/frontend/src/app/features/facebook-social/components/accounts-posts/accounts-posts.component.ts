@@ -8,7 +8,7 @@ import {FacebookSocialService} from "../../services/facebook-social.service";
   styleUrls: ['./accounts-posts.component.scss']
 })
 export class AccountsPostsComponent implements OnInit {
-  private posts:any;
+  listPosts:any;
 
   constructor(private facebookSocialService: FacebookSocialService,
               private activatedRoute: ActivatedRoute,
@@ -23,7 +23,7 @@ export class AccountsPostsComponent implements OnInit {
     this.facebookSocialService.getPostsBypageId(id).subscribe({
       next: (response: any) => {
         console.log('response',response);
-        this.posts=response;
+        this.listPosts=response.posts;
       },
       error: err => {
         console.log(err);
