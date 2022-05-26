@@ -45,6 +45,8 @@ class GeneralSocialController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
         $images = $request->images;
+        $videos = $request->videos;
+
         foreach ($request->accountIds as $singleAccountId) {
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
 
@@ -52,7 +54,6 @@ class GeneralSocialController extends Controller
                 $InstagramController = new InstagramController();
                 $accountProvider = $account->provider;
                 $postResponse = [];
-
                 if ($inc == 0) {
                     $postId = Post::create([
                         'url' => 'url',
@@ -76,17 +77,36 @@ class GeneralSocialController extends Controller
                     }
 
                     if ($request->file('sources')) {
-                        foreach ($request->file('sources') as $image) {
-                            $images[] = $this->utilitiesController->uploadImage($image);
+                        foreach ($request->file('sources') as $file) {
+                            $uploadedFile = $this->utilitiesController->uploadFile($file);
+
+                            if ($uploadedFile->url) {
+                                if ($uploadedFile->type == 'image') {
+                                    $images[] = $uploadedFile->url;
+                                } elseif ($uploadedFile->type == 'video') {
+                                    $videos[] = $uploadedFile->url;
+                                }
+                            }
+                        }
+                    }
+                    if ($images) {
+                        foreach ($images as $image) {
+                            PostMedia::create([
+                                'url' => $image,
+                                'post_id' => $postId->id,
+                                'type' => 'image',
+                            ]);
                         }
                     }
 
-                    foreach ($images as $image) {
-                        PostMedia::create([
-                            'url' => $image,
-                            'post_id' => $postId->id,
-                            'type' => 'image',
-                        ]);
+                    if ($videos) {
+                        foreach ($videos as $video) {
+                            PostMedia::create([
+                                'url' => $video,
+                                'post_id' => $postId->id,
+                                'type' => 'video',
+                            ]);
+                        }
                     }
                 }
                 ++$inc;
@@ -97,7 +117,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags);
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags , $videos);
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -107,7 +127,7 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags);
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags , $videos);
                 }
 
                 if ($postResponse['status']) {
