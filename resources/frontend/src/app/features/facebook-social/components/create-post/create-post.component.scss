@@ -35,3 +35,82 @@ cdk-virtual-scroll-viewport {
 .show {
     display: block;
 }
+
+
+.mod-create-post {
+    height: 100%;
+
+    > .m-container {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 21px;
+
+        > .m-post-form {
+            padding: 26px;
+            border: 1px solid grey;
+            width: calc(50% - 11px);
+            min-width: 520px;
+            height: 100%;
+
+            > .m-wrapper {
+
+            }
+        }
+
+        >.m-preview-post {
+            width: calc(50% - 11px);
+            min-width: 520px;
+            border: 1px solid grey;
+            height: 100%;
+            background-color: #D9D9D94D;
+
+            > .m-wrapper {
+                height: 100%;
+                overflow: hidden;
+
+                > .m-preview-title {
+                    font-weight: 700;
+                    margin: 15px 19px 17px 19px;
+                }
+
+                > .m-preview-tabs {
+                    height: calc(100% - 50px);
+
+                    > .m-card-container {
+                        height: 100%;
+
+                        
+                        > .m-preview-tabs-content {
+                            height: 100%;
+                            > .ant-tabs-nav {
+                                height: 100%;
+                                background-color: white;
+                                margin: 0;
+                                
+                            }
+                            > .ant-tabs-nav {
+                                display: none;
+                            }
+                            > .ant-tabs-content-holder {
+                                display: none;
+                                background-color: white;
+                                height: 100%;
+                            }
+                            // > .m-tab-title {
+
+                            //     >.test {
+                            //         height: 100vh;
+                            //         background-color: white;
+                            //     }
+                            // }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

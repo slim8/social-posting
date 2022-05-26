@@ -1,75 +1,103 @@
 <div class="m-loading-screen"></div>
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="Statut">Statut</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
-        </nz-form-control>
-    </nz-form-item >
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="Statut">Hashtags</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <!-- [nzMode]="i === 0 ? 'default' : 'closeable'" -->
-            <nz-tag
-                *ngFor="let tag of tags; let i = index"
-                [nzMode]="'closeable'"
-                (nzOnClose)="handleClose(tag)"
-                >{{ sliceTagName(tag) }}</nz-tag>
-            <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                <i nz-icon nzType="plus"></i>  New tag
-            </nz-tag>
-            <input
-                #inputElement
-                nz-input
-                nzSize="small"
-                *ngIf="inputVisible"
-                type="text"
-                [(ngModel)]="inputValue"
-                style="width: 78px;"
-                (blur)="handleInputConfirm()"
-                (keydown.enter)="handleInputConfirm()"
-            />
-            
-        </nz-form-control>
-    </nz-form-item >
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="upload">Upload images</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <div class="clearfix">
-                <nz-upload
-                  nzListType="picture-card"
-                  [(nzFileList)]="fileList"
-                  [nzShowButton]="fileList.length < 8"
-                  (nzChange)="handleChange($event)"
-                >
-                  <div>
-                    <i nz-icon nzType="plus"></i>
-                    <div style="margin-top: 8px">Upload</div>
-                  </div>
-                </nz-upload>
-                <nz-modal
-                  [nzVisible]="previewVisible"
-                  [nzContent]="modalContent"
-                  [nzFooter]="null"
-                  (nzOnCancel)="previewVisible = false"
-                >
-                  <ng-template #modalContent>
-                    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
-                  </ng-template>
-                </nz-modal>
+<div class="mod-create-post">
+    <div class="m-container">
+        <div class="m-post-form">
+            <div class="m-wrapper">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="6" nzFor="Statut">Statut</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item >
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="6" nzFor="Statut">Hashtags</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <!-- [nzMode]="i === 0 ? 'default' : 'closeable'" -->
+                        <nz-tag
+                            *ngFor="let tag of tags; let i = index"
+                            [nzMode]="'closeable'"
+                            (nzOnClose)="handleClose(tag)"
+                            >{{ sliceTagName(tag) }}</nz-tag>
+                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                            <i nz-icon nzType="plus"></i>  New tag
+                        </nz-tag>
+                        <input
+                            #inputElement
+                            nz-input
+                            nzSize="small"
+                            *ngIf="inputVisible"
+                            type="text"
+                            [(ngModel)]="inputValue"
+                            style="width: 78px;"
+                            (blur)="handleInputConfirm()"
+                            (keydown.enter)="handleInputConfirm()"
+                        />
+                        
+                    </nz-form-control>
+                </nz-form-item >
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="6" nzFor="upload">Upload images</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <div class="clearfix">
+                            <nz-upload
+                              nzListType="picture-card"
+                              [(nzFileList)]="fileList"
+                              [nzShowButton]="fileList.length < 8"
+                              (nzChange)="handleChange($event)"
+                            >
+                              <div>
+                                <i nz-icon nzType="plus"></i>
+                                <div style="margin-top: 8px">Upload</div>
+                              </div>
+                            </nz-upload>
+                            <nz-modal
+                              [nzVisible]="previewVisible"
+                              [nzContent]="modalContent"
+                              [nzFooter]="null"
+                              (nzOnCancel)="previewVisible = false"
+                            >
+                              <ng-template #modalContent>
+                                <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                              </ng-template>
+                            </nz-modal>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item >
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="6" nzFor="pages">Choose facebook page</nz-form-label>
+                    <nz-form-control [nzSpan]="14">
+                        <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                            <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item >
+                <nz-form-item>
+                    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 6 }">
+                      <button id="btn-submit" nz-button nzType="primary" (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
+                    </nz-form-control>
+                </nz-form-item>
             </div>
-        </nz-form-control>
-    </nz-form-item >
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="pages">Choose facebook page</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
-                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item >
+        </div>
+        <div class="m-preview-post">
+            <div class="m-wrapper">
+                <div class="m-preview-title">
+                    Vorschau
+                </div>
+                <div class="m-preview-tabs">
+                    <div class="m-card-container">
+                        <nz-tabset class="m-preview-tabs-content" nzType="card">
+                            <nz-tab class="m-instagram-preview-tab m-tab-title" [nzTitle]="'Instagram'">
+                                <div class="test">
+                                    test
+                                </div>
+                            </nz-tab>
+                            <nz-tab class="m-facebook-preview-tab m-tab-title" [nzTitle]="'Facebook'">
+                            </nz-tab>
+                        </nz-tabset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <nz-form-item>
-        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 6 }">
-          <button id="btn-submit" nz-button nzType="primary" (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
-        </nz-form-control>
-      </nz-form-item>

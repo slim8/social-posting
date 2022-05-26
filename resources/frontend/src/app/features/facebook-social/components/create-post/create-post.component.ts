@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
@@ -66,7 +67,7 @@ export class CreatePostComponent implements OnInit {
 
         if (this.tags.length > 0) {
             this.tags.forEach((tag: any) => {
-                formData.append('tag[]', tag);
+                formData.append('tags[]', tag);
             });
         }
 
