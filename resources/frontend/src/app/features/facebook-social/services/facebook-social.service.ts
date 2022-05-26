@@ -47,7 +47,7 @@ export class FacebookSocialService {
             enable_profile_selector: true,
             return_scopes: true,
             scope:
-                'public_profile,publish_to_groups,email,pages_show_list,pages_manage_posts,pages_read_engagement,pages_read_user_content,user_posts',
+                'public_profile,publish_to_groups,email,pages_show_list,pages_manage_posts,pages_read_engagement,pages_read_user_content,user_posts,instagram_content_publish,instagram_basic,instagram_manage_insights,instagram_manage_comments,instagram_manage_messages,pages_manage_instant_articles,pages_manage_metadata',
         };
 
         return this.fb.login(loginOptions);
