@@ -1,5 +1,5 @@
 import { HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
@@ -22,6 +22,11 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
+    tags: string[] = [];
+    inputVisible = false;
+    inputValue = '';
+    @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
+
     message: string = "";
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
@@ -54,12 +59,23 @@ export class CreatePostComponent implements OnInit {
         let spinning = document.getElementsByClassName('m-loading-spin')[0]
 
         const formData: FormData = new FormData();
+
         this.tagValue.forEach((accountId: any) => {
             formData.append('accountIds[]', accountId);
         });
-        this.selectedFile.forEach((file: any) => {
-            formData.append('sources[]', file.originFileObj);
-        });
+
+        if (this.tags.length > 0) {
+            this.tags.forEach((tag: any) => {
+                formData.append('tag[]', tag);
+            });
+        }
+
+        if (this.selectedFile.length > 0) {
+            this.selectedFile.forEach((file: any) => {
+                formData.append('sources[]', file.originFileObj);
+            });
+        }
+
         formData.append('message', this.message);
 
         if (formData) {
@@ -78,7 +94,7 @@ export class CreatePostComponent implements OnInit {
                     }
                 },
                 error: err => {
-                    err.error.errors.forEach((error : any )=> {
+                    err.error.errors.forEach((error: any) => {
                         this.shared.createMessage('error', error);
                     })
                     loadingScreen.classList.remove('m-loading-screen-active');
@@ -106,5 +122,29 @@ export class CreatePostComponent implements OnInit {
 
     handleChange(event: any): void {
         this.selectedFile = event.fileList;
+    }
+
+    handleClose(removedTag: {}): void {
+        this.tags = this.tags.filter(tag => tag !== removedTag);
+    }
+
+    sliceTagName(tag: string): string {
+        const isLongTag = tag.length > 20;
+        return isLongTag ? `${tag.slice(0, 20)}...` : tag;
+    }
+
+    showInput(): void {
+        this.inputVisible = true;
+        setTimeout(() => {
+            this.inputElement?.nativeElement.focus();
+        }, 10);
+    }
+
+    handleInputConfirm(): void {
+        if (this.inputValue) {
+            this.tags = [...this.tags, this.inputValue];
+        }
+        this.inputValue = '';
+        this.inputVisible = true;
     }
 }
