@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FacebookSocialService } from '../../services/facebook-social.service';
 import { SharedModule } from '../../../../shared/shared.module';
+import {Router} from "@angular/router";
 
 interface Page {
     id: Number;
@@ -19,7 +20,10 @@ interface Page {
 
 export class FacebookPagesComponent implements OnInit {
 
-    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService) { }
+    constructor(private shared: SharedModule,
+                private facebookSocialService: FacebookSocialService,
+                private messageService: NzMessageService,
+                private router: Router) { }
 
     pages: any[] = [];
     container = [];
@@ -43,4 +47,8 @@ export class FacebookPagesComponent implements OnInit {
             }
         })
     }
+
+  getPostsBypageId(pageId:any) {
+    this.router.navigateByUrl("/home/facebook/accounts-posts/"+btoa(pageId));
+  }
 }

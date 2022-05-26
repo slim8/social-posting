@@ -29,19 +29,44 @@ class UtilitiesController extends Controller
         return $response->image->file->resource->chain->image;
     }
 
-    public function uploadLocalImage($image)
+    public function uploadLocalImage($file, $type)
     {
-        $object = $image->store('images/'.date('Y').'/'.date('m').'/'.date('d'));
+        $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
 
         return env('APP_URL').'/'.$object;
     }
 
-    public function uploadImage($image)
+    public function uploadFile($file)
     {
+        $fileObject = new \stdClass();
+        $fileObject->type = $this->checkTypeOfFile($file);
         if (env('APP_ENV') == 'local') {
-            return $this->uploadDistantImage($image);
+            if ($fileObject->type == 'image') {
+                $fileObject->url = $this->uploadDistantImage($file);
+            } else {
+              //  dd('could not be uploaded');
+                $fileObject->url = false;
+            }
         } else {
-            return $this->uploadLocalImage($image);
+            $fileObject->url = $this->uploadLocal($file, $fileObject->type);
         }
+
+        return $fileObject;
+    }
+
+    /**
+     * Return the Type Of the Uploaded File
+     */
+    public function checkTypeOfFile($file)
+    {
+        $mimes = 'video/x-ms-asf,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/avi';
+        $mimes = explode(',', $mimes);
+        $type = 'image';
+
+        if (in_array($file->getMimeType(), $mimes)) {
+            $type = 'video';
+        }
+
+        return $type;
     }
 }
