@@ -1,6 +1,6 @@
-import { HttpClient, HttpEventType } from '@angular/common/http';
+import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -31,7 +31,7 @@ export class CreatePostComponent implements OnInit {
     tagValue = [];
     selectedFile: any = [];
 
-    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder, private http: HttpClient) { }
+    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder) { }
 
     ngOnInit(): void {
         this.getPages();
@@ -64,10 +64,7 @@ export class CreatePostComponent implements OnInit {
 
         if (formData) {
 
-            this.http.post(sharedConstants.API_ENDPOINT + '/send-post', formData, {
-                reportProgress: true,
-                observe: 'events'
-            }).subscribe({
+            this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: event => {
                     loadingScreen.classList.add('m-loading-screen-active');
                     spinning.classList.add('show')

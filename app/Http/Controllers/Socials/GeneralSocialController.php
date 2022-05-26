@@ -21,10 +21,14 @@ class GeneralSocialController extends Controller
     use RequestsTrait;
 
     protected $utilitiesController;
+    protected $facebookController;
+    protected $instagramController;
 
     public function __construct()
     {
         $this->utilitiesController = new UtilitiesController();
+        $this->facebookController = new FacebookController();
+        $this->instagramController = new InstagramController();
     }
 
     public function sendToPost(Request $request)
@@ -42,64 +46,68 @@ class GeneralSocialController extends Controller
         foreach ($request->accountIds as $singleAccountId) {
             // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
-            $FacebookController = new FacebookController();
-            $InstagramController = new InstagramController();
-            $accountProvider = $account->provider;
-            $postResponse = [];
 
-            if ($inc == 0) {
-                $postId = Post::create([
-                    'url' => 'url',
-                    'message' => $request->message,
-                    'status' => true,
-                    'publishedAt' => Carbon::now(),
-                    'isScheduled' => 0,
-                ]);
+            if ($account) {
+                $InstagramController = new InstagramController();
+                $accountProvider = $account->provider;
+                $postResponse = [];
 
-                if ($request->file('sources')) {
-                    foreach ($request->file('sources') as $image) {
-                        $images[] = $this->utilitiesController->uploadImage($image);
+                if ($inc == 0) {
+                    $postId = Post::create([
+                        'url' => 'url',
+                        'message' => $request->message,
+                        'status' => true,
+                        'publishedAt' => Carbon::now(),
+                        'isScheduled' => 0,
+                    ]);
+
+                    if ($request->file('sources')) {
+                        foreach ($request->file('sources') as $image) {
+                            $images[] = $this->utilitiesController->uploadImage($image);
+                        }
+                    }
+
+                    foreach ($images as $image) {
+                        PostMedia::create([
+                            'url' => $image,
+                            'post_id' => $postId->id,
+                            'type' => 'image',
+                        ]);
                     }
                 }
+                ++$inc;
 
-                foreach ($images as $image) {
-                    PostMedia::create([
-                        'url' => $image,
+                if ($accountProvider == 'facebook') {
+                    if ($request->message) {
+                        $obj['message'] = $request->message;
+                    }
+                    $obj['access_token'] = $account->accessToken;
+
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images);
+                } elseif ($accountProvider == 'instagram') {
+                    if ($request->message) {
+                        $obj['caption'] = $request->message;
+                    }
+                    $BusinessIG = $account->uid;
+
+                    $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
+                    $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
+                }
+
+                if ($postResponse['status']) {
+                    AccountPost::create([
+                        'url' => '',
                         'post_id' => $postId->id,
-                        'type' => 'image',
+                        'account_id' => $singleAccountId,
+                        'post_id_provider' => $postResponse['id'],
                     ]);
+                } else {
+                    $errorLog[] = $postResponse['message'];
                 }
-            }
-            ++$inc;
-
-            if ($accountProvider == 'facebook') {
-                if ($request->message) {
-                    $obj['message'] = $request->message;
-                }
-                $obj['access_token'] = $account->accessToken;
-
-                $postResponse = $FacebookController->postToFacebookMethod($obj, $account->uid, $images);
-            } elseif ($accountProvider == 'instagram') {
-                if ($request->message) {
-                    $obj['caption'] = $request->message;
-                }
-                $BusinessIG = $account->uid;
-
-                $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
-                $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
-
-                $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
-            }
-
-            if ($postResponse['status']) {
-                AccountPost::create([
-                    'url' => '',
-                    'post_id' => $postId->id,
-                    'account_id' => $singleAccountId,
-                    'post_id_provider' => $postResponse['id'],
-                ]);
             } else {
-                $errorLog[] = $postResponse['message'];
+                $errorLog[] = 'Cannot find a cannected account for ID '.$singleAccountId;
             }
         }
 
@@ -123,7 +131,7 @@ class GeneralSocialController extends Controller
 
     public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
     {
-        $AllPages = RequestsTrait::getSavedAccountFromDB();
+        $AllPages = RequestsTrait::getAllAccountsFromDB();
 
         if ($returnJson) {
             if ($AllPages) {
@@ -149,58 +157,8 @@ class GeneralSocialController extends Controller
     }
 
     /**
-     * Save Facebook List of pages after autorization.
+     * Get All facebook accounst.
      */
-    public function savePagesList(Request $request)
-    {
-        $jsonPageList = $request->json('pages');
-
-        $AllPages = [];
-
-        $actualCompanyId = UserTrait::getCompanyId();
-
-        // dd($actualCompanyId);
-
-        if ($jsonPageList) {
-            foreach ($jsonPageList as $facebookPage) {
-                $id = $facebookPage['pageId'];
-                $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
-                $pageToken = $facebookPage['pageToken'];
-                $category = $facebookPage['category'];
-                $name = $facebookPage['pageName'];
-
-                $page = Account::where('uid', $id)->first();
-
-                if (!$page) {
-                    Account::create([
-                        'name' => $name,
-                        'provider' => 'facebook',
-                        'status' => true,
-                        'expiryDate' => date('Y-m-d'),
-                        'scoope' => '',
-                        'authorities' => '',
-                        'link' => '',
-                        'company_id' => $actualCompanyId,
-                        'uid' => $id,
-                        'profilePicture' => $pageFacebookPageLink,
-                        'category' => $category,
-                        'providerType' => 'page',
-                        'accessToken' => $pageToken,
-                        'provider_token_id' => UserTrait::getCurrentProviderId(),
-                    ]);
-                }
-            }
-
-            $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
-
-            return response()->json(['success' => true,
-        'pages' => $Pages, ], 201);
-        } else {
-            return response()->json(['success' => false,
-        'message' => 'No page autorized', ], 201);
-        }
-    }
-
     public function getAccountPagesAccount($facebookUserId, $tokenKey)
     {
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
@@ -259,13 +217,14 @@ class GeneralSocialController extends Controller
         }
     }
 
-
     public function getAllAccountsByCompanyId()
     {
-
         return $this->getSavedAccountsFromDataBaseByCompanyId(1);
     }
 
+    /**
+     * Return saved accounts from data base.
+     */
     public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0)
     {
         $AllPages = RequestsTrait::getAllAccountsFromDB();
@@ -281,5 +240,89 @@ class GeneralSocialController extends Controller
         } else {
             return $AllPages;
         }
+    }
+
+    /**
+     * Return All Pages And Instagram Accounts After Login To facebook.
+     */
+    public function getMetaPagesAndGroups(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'accessToken' => 'required|string',
+            'id' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+        $facebookUserId = $request->id;
+        $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
+
+        $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
+
+        if ($AllPages) {
+            return response()->json(['success' => true,
+        'pages' => $AllPages, ], 201);
+        } else {
+            return response()->json(['success' => false,
+        'pages' => $AllPages, ], 201);
+        }
+    }
+
+    /**
+     * Autorize Facebook Pages and Isntagram Accounts ( Save to Database).
+     */
+    public function saveMetaPagesAndGroups(Request $request)
+    {
+        $jsonPageList = $request->json('pages');
+
+        $AllPages = [];
+
+        $actualCompanyId = UserTrait::getCompanyId();
+
+        if ($jsonPageList) {
+            foreach ($jsonPageList as $providerAccount) {
+                $provider = $providerAccount['provider'];
+                if ($provider == 'facebook') {
+                    $this->facebookController->savePage($providerAccount);
+                } else {
+                    $this->instagramController->saveInstagramAccount($providerAccount);
+                }
+            }
+
+            $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
+
+            return response()->json(['success' => true,
+        'pages' => $Pages, ], 201);
+        } else {
+            return response()->json(['success' => false,
+        'message' => 'No page autorized', ], 201);
+        }
+    }
+
+    /**
+     * Get Posts By Account Id
+     */
+    public function getPostsByAccountId(Request $request ,$id)
+    {
+        $account = RequestsTrait::findAccountByUid($id, 'id');
+
+        if ($account) {
+            $res = Post::whereHas('accounts' , function ($query) use ($id) {
+                $query->where('accounts.id' , $id);
+            })->with('PostMedia')->get();
+            if (count($res) > 0){
+                $response['status'] = true;
+                $response['posts'] = $res;
+            } else {
+            $response['status'] = false;
+            $response['errorMessage'] = 'This Account has not any POSTS';
+            }
+        } else {
+            $response['status'] = false;
+            $response['errorMessage'] = 'No Account found with id '.$id;
+        }
+
+        return response()->json($response,201);
     }
 }

@@ -32,8 +32,9 @@ export class RegisterComponent implements OnInit {
         if (this.validateForm.valid) {
             let data = this.validateForm.value;
             data['isSubscriber'] = true;
-            this.registerService.saveResources(environment.apiURL + 'register', data)
+            this.registerService.saveResources("http://posting.local/api/" + 'register', data)
                 .subscribe(res => {
+                    this.router.navigate(['/auth/login']);
                 }, err => {
                     console.log(err);
                 }

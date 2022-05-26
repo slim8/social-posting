@@ -26,6 +26,14 @@ class ApiAuthController extends Controller
         $this->userRepository = new UserRepository();
     }
 
+    /**
+     * Api To check if current user is logged in.
+     */
+    public function checkLoggedIn()
+    {
+        return response()->json(['success' => true], 201);
+    }
+
     public function logout(Request $request)
     {
         $token = $request->user()->token();
@@ -134,7 +142,7 @@ class ApiAuthController extends Controller
                     $issuer_claim = env('JWT_ISSUER_CLAIMER'); // this can be the servername
                     $audience_claim = env('JWT_AUDIANCE_KLAIMER');
                     $issuedat_claim = time(); // issued at
-                    $notbefore_claim = $issuedat_claim + 1; // not before in seconds
+                    $notbefore_claim = $issuedat_claim + 0; // not before in seconds
                     $expiration_time_env = (int) env('JWT_EXPIRATION_TIME');
                     $expire_claim = $issuedat_claim + $expiration_time_env; // expire time in seconds
                     $token = [

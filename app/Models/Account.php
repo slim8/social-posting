@@ -37,7 +37,7 @@ class Account extends Model
 
     public function posts()
     {
-        return $this->belongsToMany(Post::class, 'account_posts');
+        return $this->belongsToMany(Post::class, 'account_posts' , 'post_id');
     }
 
     public function related_account()

@@ -10,6 +10,7 @@ const routes: Routes = [
     children: [
       { path: 'welcome', component: WelcomeComponent },
       { path: 'facebook', loadChildren: () => import('../features/facebook-social/facebook-social.module').then(m => m.FacebookSocialModule) },
+      { path: 'user', loadChildren: () => import('../features/user/user.module').then(m => m.UserModule) },
     ],
   },
   // { path: '', component: MainComponent },

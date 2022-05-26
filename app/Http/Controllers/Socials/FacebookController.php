@@ -17,6 +17,13 @@ class FacebookController extends Controller
     use UserTrait;
     use RequestsTrait;
 
+    protected $instagramController;
+
+    public function __construct()
+    {
+        $this->instagramController = new InstagramController();
+    }
+
     /**
      * Update or Add a new Provider Token.
      */
@@ -172,26 +179,20 @@ class FacebookController extends Controller
     /**
      * Save Facebook List of pages after autorization.
      */
-    public function savePagesList(Request $request)
+    public function savePage($facebookPage)
     {
-        $jsonPageList = $request->json('pages');
-
-        $AllPages = [];
-
         $actualCompanyId = UserTrait::getCompanyId();
 
-        if ($jsonPageList) {
-            foreach ($jsonPageList as $facebookPage) {
-                $id = $facebookPage['pageId'];
-                $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
-                $pageToken = $facebookPage['pageToken'];
-                $category = $facebookPage['category'];
-                $name = $facebookPage['pageName'];
+        $id = $facebookPage['pageId'];
+        $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
+        $pageToken = $facebookPage['pageToken'];
+        $category = $facebookPage['category'];
+        $name = $facebookPage['pageName'];
 
-                $page = Account::where('uid', $id)->first();
+        $page = Account::where('uid', $id)->where('company_id',$actualCompanyId)->first();
 
-                if (!$page) {
-                    Account::create([
+        if (!$page) {
+            Account::create([
                         'name' => $name,
                         'provider' => 'facebook',
                         'status' => true,
@@ -207,20 +208,10 @@ class FacebookController extends Controller
                         'accessToken' => $pageToken,
                         'provider_token_id' => UserTrait::getCurrentProviderId(),
                     ]);
-                }
-            }
-
-            $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
-
-            return response()->json(['success' => true,
-        'pages' => $Pages, ], 201);
-        } else {
-            return response()->json(['success' => false,
-        'message' => 'No page autorized', ], 201);
         }
     }
 
-    public function getAccountPagesAccount($facebookUserId, $tokenKey)
+    public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0)
     {
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
@@ -237,7 +228,24 @@ class FacebookController extends Controller
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
-                $AllPages[] = ['pageId' => $id, 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+
+                $checkIfExist = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
+
+                if(!$checkIfExist){
+                    $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                }
+
+                if ($getInstagramAccount) {
+                    $businessAccountId = $this->instagramController->getBusinessAccountId($id, $pageToken);
+                    if ($businessAccountId !== false) {
+                        $instagramAccount = $this->instagramController->getInstagramInformationFromBID($businessAccountId, $pageToken);
+
+                        $checkIfExist = Account::where('uid', $businessAccountId)->where('company_id', UserTrait::getCompanyId())->first();
+                        if (!$checkIfExist) {
+                            $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                        }
+                    }
+                }
             }
         }
 
