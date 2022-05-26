@@ -10,6 +10,8 @@ use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Post;
 use App\Models\PostMedia;
+use App\Models\PostTag;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -61,6 +63,19 @@ class GeneralSocialController extends Controller
                         'isScheduled' => 0,
                     ]);
 
+                    if ($request->tags) {
+                        foreach ($request->tags as $tag) {
+                            $tagId = Tag::create([
+                                'name' => RequestsTrait::formatTags($tag),
+                            ]);
+
+                            PostTag::create([
+                                'post_id' => $postId->id,
+                                'tag_id' => $tagId->id,
+                            ]);
+                        }
+                    }
+
                     if ($request->file('sources')) {
                         foreach ($request->file('sources') as $file) {
                             $uploadedFile = $this->utilitiesController->uploadFile($file);
@@ -102,7 +117,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $videos);
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags , $videos);
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -112,10 +127,9 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $videos);
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags , $videos);
                 }
 
-                dd($postResponse);
                 if ($postResponse['status']) {
                     AccountPost::create([
                         'url' => '',

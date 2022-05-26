@@ -126,7 +126,8 @@ class InstagramController extends Controller
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls, $videos)
+
+    public function postToInstagramMethod($object, $igUser, $imagesUrls, $tags , $videos)
     {
         $images = [];
         $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
@@ -136,6 +137,17 @@ class InstagramController extends Controller
         if (!$counts) {
             return false;
         }
+
+        $tagsString = ' ';
+        
+        if ($tags) {
+            foreach ($tags as $tag) {
+                $tagsString = $tagsString.'%23'.RequestsTrait::formatTags($tag).' ';
+            }
+        }
+
+        $object['caption'] = $object['caption'].$tagsString;
+
         //  if ($counts == 1 && $imagesCount == 1) {
         if ($counts == 1) {
             $object['creation_id'] = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos);
