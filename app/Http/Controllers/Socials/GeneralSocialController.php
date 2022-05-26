@@ -43,15 +43,15 @@ class GeneralSocialController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
         $images = $request->images;
+        $videos = $request->videos;
+
         foreach ($request->accountIds as $singleAccountId) {
-            // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
 
             if ($account) {
                 $InstagramController = new InstagramController();
                 $accountProvider = $account->provider;
                 $postResponse = [];
-
                 if ($inc == 0) {
                     $postId = Post::create([
                         'url' => 'url',
@@ -62,17 +62,36 @@ class GeneralSocialController extends Controller
                     ]);
 
                     if ($request->file('sources')) {
-                        foreach ($request->file('sources') as $image) {
-                            $images[] = $this->utilitiesController->uploadImage($image);
+                        foreach ($request->file('sources') as $file) {
+                            $uploadedFile = $this->utilitiesController->uploadFile($file);
+
+                            if ($uploadedFile->url) {
+                                if ($uploadedFile->type == 'image') {
+                                    $images[] = $uploadedFile->url;
+                                } elseif ($uploadedFile->type == 'video') {
+                                    $videos[] = $uploadedFile->url;
+                                }
+                            }
+                        }
+                    }
+                    if ($images) {
+                        foreach ($images as $image) {
+                            PostMedia::create([
+                                'url' => $image,
+                                'post_id' => $postId->id,
+                                'type' => 'image',
+                            ]);
                         }
                     }
 
-                    foreach ($images as $image) {
-                        PostMedia::create([
-                            'url' => $image,
-                            'post_id' => $postId->id,
-                            'type' => 'image',
-                        ]);
+                    if ($videos) {
+                        foreach ($videos as $video) {
+                            PostMedia::create([
+                                'url' => $video,
+                                'post_id' => $postId->id,
+                                'type' => 'video',
+                            ]);
+                        }
                     }
                 }
                 ++$inc;
@@ -83,7 +102,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images);
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $videos);
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -93,9 +112,10 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $videos);
                 }
 
+                dd($postResponse);
                 if ($postResponse['status']) {
                     AccountPost::create([
                         'url' => '',
@@ -301,28 +321,28 @@ class GeneralSocialController extends Controller
     }
 
     /**
-     * Get Posts By Account Id
+     * Get Posts By Account Id.
      */
-    public function getPostsByAccountId(Request $request ,$id)
+    public function getPostsByAccountId(Request $request, $id)
     {
         $account = RequestsTrait::findAccountByUid($id, 'id');
 
         if ($account) {
-            $res = Post::whereHas('accounts' , function ($query) use ($id) {
-                $query->where('accounts.id' , $id);
+            $res = Post::whereHas('accounts', function ($query) use ($id) {
+                $query->where('accounts.id', $id);
             })->with('PostMedia')->get();
-            if (count($res) > 0){
+            if (count($res) > 0) {
                 $response['status'] = true;
                 $response['posts'] = $res;
             } else {
-            $response['status'] = false;
-            $response['errorMessage'] = 'This Account has not any POSTS';
+                $response['status'] = false;
+                $response['errorMessage'] = 'This Account has not any POSTS';
             }
         } else {
             $response['status'] = false;
             $response['errorMessage'] = 'No Account found with id '.$id;
         }
 
-        return response()->json($response,201);
+        return response()->json($response, 201);
     }
 }

@@ -25,9 +25,10 @@ class InstagramController extends Controller
     /**
      * Post Media Instagram From URL.
      */
-    public function postPictureUrl($igUser, $token, $url)
+    public function postMediaUrl($igUser, $token, $url, string $type = 'image')
     {
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&image_url='.$url.'&is_carousel_item=true');
+        $mediaParameters = $type == 'video' ? '&media_type=VIDEO&video_url=' : '&image_url=';
+        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.$mediaParameters.$url.'&is_carousel_item=true');
 
         if ($response->json('id')) {
             return $response->json('id');
@@ -36,6 +37,16 @@ class InstagramController extends Controller
         }
     }
 
+    // public function postVideoUrl($igUser, $token, $url)
+    // {
+    //     $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.'&media_type=VIDEO&video_url='.$url.'&is_carousel_item=true');
+    //     if ($response->json('id')) {
+    //         return $response->json('id');
+    //     } else {
+    //         $response->json('error')['message'];
+    //     }
+    // }
+
     /**
      * Generate Container of instagram carrousel.
      */
@@ -43,24 +54,31 @@ class InstagramController extends Controller
     {
         $parameter = RequestsTrait::prepareParameters($object);
 
+        sleep(30);
+
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
+        dd($response->json());
         if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
         } else {
             $responseObject['status'] = false;
-            $responseObject['message'] = 'to be defined';
+            $responseObject['message'] = $response->json('error') ? $response->json('error')['error_user_msg'] : 'to be defined';
         }
 
         return $responseObject;
     }
 
     /**
-     * Post Single Image to Instagram.
+     * Post Single Media to Instagram.
      */
-    public function postSingleImage($igUser, $object, $imagesUrls)
+    public function postSingleMedia($igUser, $object, $imagesUrls, $videos)
     {
-        $object['image_url'] = $imagesUrls[0];
+        $object[$videos ? 'video_url' : 'image_url'] = $videos ? $videos[0] : $imagesUrls[0];
+
+        if ($videos) {
+            $object['media_type'] = 'VIDEO';
+        }
         $parameter = RequestsTrait::prepareParameters($object);
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
 
@@ -73,31 +91,66 @@ class InstagramController extends Controller
     public function postContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
+        sleep(29);
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+        //    dd(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+        //  dd($response->json());
 
-        return $response->json('id');
+// $url =env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter;
+
+// echo $url;
+// echo '<br>';
+// $i = "1";
+// dd($url);
+//         $curl = curl_init();
+// //  dd(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+//         curl_setopt_array($curl, [
+//   CURLOPT_URL => $url,
+//   CURLOPT_RETURNTRANSFER => true,
+//   CURLOPT_ENCODING => '',
+//   CURLOPT_MAXREDIRS => 10,
+//   CURLOPT_TIMEOUT => 0,
+//   CURLOPT_FOLLOWLOCATION => true,
+//   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//   CURLOPT_CUSTOMREQUEST => 'POST',
+// ]);
+
+//         $response = curl_exec($curl);
+
+//         curl_close($curl);
+//         dd($response);
+
+         return $response->json('id');
     }
 
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls)
+    public function postToInstagramMethod($object, $igUser, $imagesUrls, $videos)
     {
         $images = [];
         $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
+        $videosCount = $videos ? count($videos) : 0;
+        $counts = $videosCount + $imagesCount;
 
-        if ($imagesCount == 0) {
+        if (!$counts) {
             return false;
         }
-
-        if ($imagesCount == 1) {
-            $object['creation_id'] = $this->postSingleImage($igUser, $object, $imagesUrls);
+        //  if ($counts == 1 && $imagesCount == 1) {
+        if ($counts == 1) {
+            $object['creation_id'] = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos);
 
             return $this->publishContainer($object, $igUser);
         } else {
             if ($imagesUrls) {
                 foreach ($imagesUrls as $image) {
-                    $images[] = $this->postPictureUrl($igUser, $object['access_token'], $image);
+                    $images[] = $this->postMediaUrl($igUser, $object['access_token'], $image);
+                }
+            }
+
+            if ($videos) {
+                foreach ($videos as $video) {
+                    $images[] = $this->postMediaUrl($igUser, $object['access_token'], $video, 'video');
                 }
             }
             $object['children'] = implode(',', $images);
@@ -149,7 +202,7 @@ class InstagramController extends Controller
 
         $relatedUid = $instagramAccount['relatedAccountId'];
 
-        $page = Account::where('uid', $id)->where('company_id',UserTrait::getCompanyId())->first();
+        $page = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
 
         if (!$page) {
             Account::create([

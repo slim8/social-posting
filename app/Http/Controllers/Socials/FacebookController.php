@@ -112,7 +112,7 @@ class FacebookController extends Controller
     /**
      * post to facebook from Route.
      */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls)
+    public function postToFacebookMethod($object, $pageId, $imagesUrls , $videos)
     {
         $images = [];
 
