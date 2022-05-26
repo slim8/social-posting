@@ -10,6 +10,8 @@ use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Post;
 use App\Models\PostMedia;
+use App\Models\PostTag;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -44,7 +46,6 @@ class GeneralSocialController extends Controller
         }
         $images = $request->images;
         foreach ($request->accountIds as $singleAccountId) {
-            // TODO --> check if Account is linked to current Company
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
 
             if ($account) {
@@ -60,6 +61,19 @@ class GeneralSocialController extends Controller
                         'publishedAt' => Carbon::now(),
                         'isScheduled' => 0,
                     ]);
+
+                    if ($request->tags) {
+                        foreach ($request->tags as $tag) {
+                            $tagId = Tag::create([
+                                'name' => RequestsTrait::formatTags($tag),
+                            ]);
+
+                            PostTag::create([
+                                'post_id' => $postId->id,
+                                'tag_id' => $tagId->id,
+                            ]);
+                        }
+                    }
 
                     if ($request->file('sources')) {
                         foreach ($request->file('sources') as $image) {
@@ -83,7 +97,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images);
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags);
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -93,7 +107,7 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images);
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags);
                 }
 
                 if ($postResponse['status']) {
@@ -301,28 +315,28 @@ class GeneralSocialController extends Controller
     }
 
     /**
-     * Get Posts By Account Id
+     * Get Posts By Account Id.
      */
-    public function getPostsByAccountId(Request $request ,$id)
+    public function getPostsByAccountId(Request $request, $id)
     {
         $account = RequestsTrait::findAccountByUid($id, 'id');
 
         if ($account) {
-            $res = Post::whereHas('accounts' , function ($query) use ($id) {
-                $query->where('accounts.id' , $id);
+            $res = Post::whereHas('accounts', function ($query) use ($id) {
+                $query->where('accounts.id', $id);
             })->with('PostMedia')->get();
-            if (count($res) > 0){
+            if (count($res) > 0) {
                 $response['status'] = true;
                 $response['posts'] = $res;
             } else {
-            $response['status'] = false;
-            $response['errorMessage'] = 'This Account has not any POSTS';
+                $response['status'] = false;
+                $response['errorMessage'] = 'This Account has not any POSTS';
             }
         } else {
             $response['status'] = false;
             $response['errorMessage'] = 'No Account found with id '.$id;
         }
 
-        return response()->json($response,201);
+        return response()->json($response, 201);
     }
 }
