@@ -8,6 +8,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
+import { Router } from '@angular/router';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -27,7 +28,8 @@ export class CreatePostComponent implements OnInit {
     inputVisible = false;
     inputValue = '';
     @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
-    tabId : any = 'instagram-tab-title'
+    tabId: any = 'instagram-tab-title'
+    imgSrc: any
     message: string = "";
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
@@ -37,7 +39,7 @@ export class CreatePostComponent implements OnInit {
     tagValue = [];
     selectedFile: any = [];
 
-    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder) { }
+    constructor(private router: Router, private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder) { }
 
     ngOnInit(): void {
         this.getPages();
@@ -106,6 +108,7 @@ export class CreatePostComponent implements OnInit {
                     loadingScreen.classList.remove('m-loading-screen-active');
                     spinning.classList.remove('show')
                     btnSubmit?.classList.remove('m-btn-submit')
+                    this.router.navigateByUrl("/home/facebook");
                 }
             });
 
@@ -122,7 +125,11 @@ export class CreatePostComponent implements OnInit {
     };
 
     handleChange(event: any): void {
-        this.selectedFile = event.fileList;
+        if (event.type == 'error') {
+            let fileCount = event.fileList.length
+            let postImg = document.getElementById('post-image') as HTMLImageElement
+            postImg.src = event.fileList[fileCount - 1].thumbUrl;
+        }
     }
 
     handleClose(removedTag: {}): void {
@@ -149,12 +156,21 @@ export class CreatePostComponent implements OnInit {
         this.inputVisible = true;
     }
 
-    tabChange(id : any, event : any) {
-        let list =[].slice.call(event.target.parentNode.children) 
-        list.forEach((elem : any ) => {
+    tabChange(id: any, event: any) {
+        let list = [].slice.call(event.target.parentNode.children)
+        list.forEach((elem: any) => {
             elem.classList.remove('is-active');
         })
         event.target.classList.add('is-active');
         this.tabId = id;
+    }
+
+    like(e: any) {
+        if (e.target.classList.contains('liked')) {
+            e.target.classList.remove('liked')
+        } else {
+            e.target.classList.add('liked')
+        }
+
     }
 }

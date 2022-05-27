@@ -165,9 +165,16 @@ cdk-virtual-scroll-viewport {
                                     
                                         >.m-post {
                                             width: 100%;
-                                            min-height: 272px;
-                                            height: 329px;
+                                            min-height: 320px;
+                                            display: flex;
+                                            align-items: center;
                                             background-color: #979797;
+                                            height: fit-content;
+
+                                            > img {
+                                                width: 100%;
+                                                max-height: 359px;
+                                            }
                                         }
                                     
                                         >.m-insta-buttons {
@@ -190,6 +197,27 @@ cdk-virtual-scroll-viewport {
                                                     filter: invert(1);
                                                     background-position: center;
                                                     margin: 8px 5px;
+
+                                                    &.liked {
+                                                        filter: invert(0);
+                                                        background-image: url('../../../../../assets/img/svgs/liked.svg');
+                                                        animation: like 0.3s;
+
+                                                        @keyframes like {
+                                                            0% {
+                                                                transform: scale(0.9);
+                                                            }
+                                                            40% {
+                                                                transform: scale(1.18);
+                                                            }
+                                                            95% {
+                                                                transform: scale(0.98);
+                                                            }
+                                                            100% {
+                                                                transform: scale(1);
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                                 >.m-comment {
                                                     width: 25px;
