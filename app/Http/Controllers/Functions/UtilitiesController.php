@@ -5,6 +5,7 @@ namespace App\Http\Controllers\functions;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Storage;
 
 class UtilitiesController extends Controller
 {
@@ -44,26 +45,10 @@ class UtilitiesController extends Controller
         return $responseObject;
     }
 
-    public function uploadDistantImage($image)
+    public function uploadFileToFtp($image , $type)
     {
-        $client = new Client();
-
-        $res = $client->request('POST', env('UPLOAD_LOCAL_SERVER_LINK'), [
-            'multipart' => [
-                [
-                    'name' => 'source',
-                    'contents' => fopen($image, 'rb'),
-                ],
-                [
-                    'name' => 'key',
-                    'contents' => env('UPLOAD_LOCAL_SERVER_KEY'),
-                ],
-            ],
-        ]);
-
-        $response = json_decode($res->getBody());
-
-        return $response->image->file->resource->chain->image;
+        $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images' : 'others' , $image);
+        return env('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
     }
 
     public function uploadLocalImage($file, $type)
@@ -78,12 +63,7 @@ class UtilitiesController extends Controller
         $fileObject = new \stdClass();
         $fileObject->type = $this->checkTypeOfFile($file);
         if (env('APP_ENV') == 'local') {
-            if ($fileObject->type == 'image') {
-                $fileObject->url = $this->uploadDistantImage($file);
-            } else {
-                //  dd('could not be uploaded');
-                $fileObject->url = false;
-            }
+            $fileObject->url = $this->uploadFileToFtp($file , $fileObject->type);
         } else {
             $fileObject->url = $this->uploadLocal($file, $fileObject->type);
         }

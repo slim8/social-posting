@@ -44,6 +44,20 @@ return [
             'visibility' => 'public',
         ],
 
+        'custom-ftp' => [
+
+            'driver' => 'ftp',
+            'host' => env('UPLOAD_FTP_SERVER_HOTE'),
+            'username' => env('UPLOAD_FTP_SERVER_USERNAME'),
+            'password' => env('UPLOAD_FTP_SERVER_PASWORD'),
+            'root' => env('UPLOAD_FTP_SERVER_PATH'),
+            // 'port'     => 21,
+            //
+            // 'passive'  => true,
+            // 'ssl'      => true,
+            // 'timeout'  => 30,
+        ],
+
 
         's3' => [
             'driver' => 's3',
