@@ -85,9 +85,13 @@
                 </div>
                 <div class="m-preview-tabs">
                     <div class="m-card-container">
-                        <nz-tabset class="m-preview-tabs-content" nzType="card">
-                            <nz-tab class="m-instagram-preview-tab m-tab-title" [nzTitle]="'Instagram'">
-                                <div class="test">
+                        <div class="m-tab">
+                            <ul>
+                                <li id="instagram-tab-title" class="is-active" (click)="tabChange('instagram-tab-title', $event)">Instagram</li>
+                                <li id="facebook-tab-title" (click)="tabChange('facebook-tab-title', $event)">Facebook</li>
+                            </ul>
+                            <div class="m-tab-content">
+                                <div class="m-content" *ngIf="tabId == 'instagram-tab-title'">
                                     <div class="m-instagram">
                                         <div class="m-insta-header">
                                             <div class="m-image">
@@ -98,7 +102,7 @@
                                             </div>
                                         </div>
                                         <div class="m-post">
-
+                                            <img id="post-image" src="">
                                         </div>
                                         <div class="m-insta-buttons">
                                             <div class="m-btn-left">
@@ -112,13 +116,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </nz-tab>
-                            <nz-tab class="m-facebook-preview-tab m-tab-title" [nzTitle]="'Facebook'">
-                                <div class="test">
-                                    
+
+                                <div class="m-content" *ngIf="tabId == 'facebook-tab-title'">
+                                    <div class="m-facebook">
+                                        test
+                                    </div>
                                 </div>
-                            </nz-tab>
-                        </nz-tabset>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

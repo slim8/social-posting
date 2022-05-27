@@ -27,7 +27,7 @@ export class CreatePostComponent implements OnInit {
     inputVisible = false;
     inputValue = '';
     @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
-
+    tabId : any = 'instagram-tab-title'
     message: string = "";
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
@@ -147,5 +147,14 @@ export class CreatePostComponent implements OnInit {
         }
         this.inputValue = '';
         this.inputVisible = true;
+    }
+
+    tabChange(id : any, event : any) {
+        let list =[].slice.call(event.target.parentNode.children) 
+        list.forEach((elem : any ) => {
+            elem.classList.remove('is-active');
+        })
+        event.target.classList.add('is-active');
+        this.tabId = id;
     }
 }
