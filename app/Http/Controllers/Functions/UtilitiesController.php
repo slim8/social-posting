@@ -24,7 +24,12 @@ class UtilitiesController extends Controller
         }
         $responseObject->status = true;
         $isFacebookPage = (in_array('facebook', $providersName)) && (in_array('page', $providersType));
+        $isInstagramAccountPage = in_array('instagram', $providersName);
 
+        if(!$videos && !$images &&  $isInstagramAccountPage){
+            $responseObject->status = false;
+            $responseObject->message = 'Can not post to Instagram Without Media';
+        }
         if ($videos && count($videos) > 1 && $isFacebookPage) {
             $responseObject->status = false;
             $responseObject->message = 'Can not upload more than one video on Facebook';
