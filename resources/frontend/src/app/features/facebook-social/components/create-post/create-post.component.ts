@@ -23,13 +23,16 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.scss']
 })
+
 export class CreatePostComponent implements OnInit {
+    urlLinks: number[] = [];
+    urlLinksIndex: number = 0;
     tags: string[] = [];
     inputVisible = false;
     inputValue = '';
     @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
-    tabId: any = 'instagram-tab-title'
-    imgSrc: any
+    tabId1: any = 'instagram-tab-title'
+    tabId: any = 'images'
     message: string = "";
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
@@ -125,11 +128,9 @@ export class CreatePostComponent implements OnInit {
     };
 
     handleChange(event: any): void {
-        if (event.type == 'error') {
-            let fileCount = event.fileList.length
-            let postImg = document.getElementById('post-image') as HTMLImageElement
-            postImg.src = event.fileList[fileCount - 1].thumbUrl;
-        }
+        let fileCount = event.fileList.length
+        let postImg = document.getElementById('post-image') as HTMLImageElement
+        postImg.src = event.fileList[fileCount - 1].thumbUrl;
     }
 
     handleClose(removedTag: {}): void {
@@ -156,7 +157,16 @@ export class CreatePostComponent implements OnInit {
         this.inputVisible = true;
     }
 
-    tabChange(id: any, event: any) {
+    tabChange1(id: any, event: any) {
+        let list = [].slice.call(event.target.parentNode.children)
+        list.forEach((elem: any) => {
+            elem.classList.remove('is-active');
+        })
+        event.target.classList.add('is-active');
+        this.tabId1 = id;
+    }
+
+    tabChange2(id: any, event: any) {
         let list = [].slice.call(event.target.parentNode.children)
         list.forEach((elem: any) => {
             elem.classList.remove('is-active');
@@ -173,4 +183,22 @@ export class CreatePostComponent implements OnInit {
         }
 
     }
+
+    addLink() {
+        this.urlLinks.push(this.urlLinksIndex);
+        this.urlLinksIndex++;
+        console.log('add');
+        console.log(this.urlLinks);
+    }
+
+    removeLink(index: number) {
+        this.urlLinks.forEach((element, i) => {
+            if (element == index) {
+                this.urlLinks.splice(i, 1);
+            }
+        });
+        console.log('remove');
+        console.log(this.urlLinks);
+    }
+
 }
