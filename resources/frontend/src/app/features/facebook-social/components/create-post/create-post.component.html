@@ -1,49 +1,164 @@
 <div class="m-loading-screen"></div>
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="Statut">Statut</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
-        </nz-form-control>
-    </nz-form-item >
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="upload">Upload images</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <div class="clearfix">
-                <nz-upload
-                  nzListType="picture-card"
-                  [(nzFileList)]="fileList"
-                  [nzShowButton]="fileList.length < 8"
-                  (nzChange)="handleChange($event)"
-                >
-                  <div>
-                    <i nz-icon nzType="plus"></i>
-                    <div style="margin-top: 8px">Upload</div>
-                  </div>
-                </nz-upload>
-                <nz-modal
-                  [nzVisible]="previewVisible"
-                  [nzContent]="modalContent"
-                  [nzFooter]="null"
-                  (nzOnCancel)="previewVisible = false"
-                >
-                  <ng-template #modalContent>
-                    <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
-                  </ng-template>
-                </nz-modal>
-            </div>
-        </nz-form-control>
-    </nz-form-item >
-    <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzFor="pages">Choose facebook page</nz-form-label>
-        <nz-form-control [nzSpan]="14">
-            <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
-                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item >
+<div class="mod-create-post">
+    <div class="m-container">
+        <div class="m-post-form">
+            <div class="m-wrapper">
+                
+                    <nz-form-label [nzSpan]="24" nzFor="Statut">Statut</nz-form-label>
+                    <nz-form-control [nzSpan]="24">
+                        <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
+                    </nz-form-control>
+                <br/>
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="4" nzFor="Statut">Hashtags</nz-form-label>
+                    <nz-form-control [nzSpan]="20">
+                        <nz-tag
+                            *ngFor="let tag of tags; let i = index"
+                            [nzMode]="'closeable'"
+                            (nzOnClose)="handleClose(tag)"
+                            >{{ sliceTagName(tag) }}</nz-tag>
+                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                            <i nz-icon nzType="plus"></i>  New tag
+                        </nz-tag>
+                        <input
+                            #inputElement
+                            nz-input
+                            nzSize="small"
+                            *ngIf="inputVisible"
+                            type="text"
+                            [(ngModel)]="inputValue"
+                            style="width: 78px;"
+                            (blur)="handleInputConfirm()"
+                            (keydown.enter)="handleInputConfirm()"
+                        />
+                    </nz-form-control>
+                </nz-form-item >
 
-    <nz-form-item>
-        <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{ span: 16, offset: 6 }">
-          <button id="btn-submit" nz-button nzType="primary" (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
-        </nz-form-control>
-      </nz-form-item>
+
+                <div class="m-tab">
+                    <ul>
+                        <li id="images" class="is-active" (click)="tabChange2('images', $event)">Images</li>
+                        <li id="videos" (click)="tabChange2('videos', $event)">Videos</li>
+                    </ul>
+                    <div class="m-tab-content">
+                        <div class="m-content" *ngIf="tabId == 'images'">
+                            <nz-form-label [nzSpan]="4" nzFor="url">Picture URL</nz-form-label>
+                            <nz-form-control [nzSpan]="24">
+                                <div>
+                                    <nz-input-group nzSearch>
+                                        <input type="text" nz-input placeholder="input search text" />
+                                    </nz-input-group>
+                                    <br >
+                                    <div *ngFor="let item of urlLinks">
+                                        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+                                            <input type="text" [id]="item" nz-input placeholder="input search text" />
+                                        </nz-input-group>
+                                        <ng-template #suffixIconButton>
+                                            <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)"><i nz-icon nzType="delete"></i></button>
+                                        </ng-template>
+                                        <br/><br/> 
+                                    </div> 
+                                    <button nz-button nzType="dashed" (click)="addLink()">add item</button>
+                                </div>
+                            </nz-form-control>
+
+                            <nz-form-label [nzSpan]="24" nzFor="upload">Upload images</nz-form-label>
+                            <nz-form-control [nzSpan]="24">
+                                <div class="clearfix">
+                                    <nz-upload
+                                    nzListType="picture-card"
+                                    [(nzFileList)]="fileList"
+                                    [nzShowButton]="fileList.length < 8"
+                                    (nzChange)="handleChange($event)"
+                                    >
+                                    <div>
+                                        <i nz-icon nzType="plus"></i>
+                                        <div style="margin-top: 8px">Upload</div>
+                                    </div>
+                                    </nz-upload>
+                                    <nz-modal
+                                    [nzVisible]="previewVisible"
+                                    [nzContent]="modalContent"
+                                    [nzFooter]="null"
+                                    (nzOnCancel)="previewVisible = false"
+                                    >
+                                    <ng-template #modalContent>
+                                        <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                                    </ng-template>
+                                    </nz-modal>
+                                </div>
+                            </nz-form-control>
+                        </div>
+
+                        <div class="m-content" *ngIf="tabId == 'videos'">
+                            
+                        </div>
+                    </div>
+                </div>
+
+                    <nz-form-label [nzSpan]="24" nzFor="pages">Choose facebook page</nz-form-label>
+                    <nz-form-control [nzSpan]="24">
+                        <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                            <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                    <br>
+                    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{offset: 18 }">
+                      <button id="btn-submit" nz-button (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
+                    </nz-form-control>
+
+            </div>
+        </div>
+        <div class="m-preview-post">
+            <div class="m-wrapper">
+                <div class="m-preview-title">
+                    Vorschau
+                </div>
+                <div class="m-preview-tabs">
+                    <div class="m-card-container">
+                        <div class="m-tab">
+                            <ul>
+                                <li id="instagram-tab-title" class="is-active" (click)="tabChange1('instagram-tab-title', $event)">Instagram</li>
+                                <li id="facebook-tab-title" (click)="tabChange1('facebook-tab-title', $event)">Facebook</li>
+                            </ul>
+                            <div class="m-tab-content">
+                                <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
+                                    <div class="m-instagram">
+                                        <div class="m-insta-header">
+                                            <div class="m-image">
+                                                <img src="../../../../../assets/img/instapic.jpg" />
+                                            </div>
+                                            <div class="m-title">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="m-post">
+                                            <img id="post-image" src="">
+                                        </div>
+                                        <div class="m-insta-buttons">
+                                            <div class="m-btn-left">
+                                                <div class="m-heart" (click)="like($event)"></div>
+                                                <div class="m-comment"></div>
+                                                <div class="m-send"></div>
+                                            </div>
+                                            <div class="m-btn-right">
+                                                <div class="m-bookmark"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
+                                    <div class="m-facebook">
+                                        test
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

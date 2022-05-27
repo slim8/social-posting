@@ -1,12 +1,14 @@
 import { HttpEventType } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
+import { Router } from '@angular/router';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -21,7 +23,16 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.scss']
 })
+
 export class CreatePostComponent implements OnInit {
+    urlLinks: number[] = [];
+    urlLinksIndex: number = 0;
+    tags: string[] = [];
+    inputVisible = false;
+    inputValue = '';
+    @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
+    tabId1: any = 'instagram-tab-title'
+    tabId: any = 'images'
     message: string = "";
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
@@ -31,7 +42,7 @@ export class CreatePostComponent implements OnInit {
     tagValue = [];
     selectedFile: any = [];
 
-    constructor(private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder) { }
+    constructor(private router: Router, private shared: SharedModule, private facebookSocialService: FacebookSocialService, private messageService: NzMessageService, private fb: FormBuilder) { }
 
     ngOnInit(): void {
         this.getPages();
@@ -54,12 +65,23 @@ export class CreatePostComponent implements OnInit {
         let spinning = document.getElementsByClassName('m-loading-spin')[0]
 
         const formData: FormData = new FormData();
+
         this.tagValue.forEach((accountId: any) => {
             formData.append('accountIds[]', accountId);
         });
-        this.selectedFile.forEach((file: any) => {
-            formData.append('sources[]', file.originFileObj);
-        });
+
+        if (this.tags.length > 0) {
+            this.tags.forEach((tag: any) => {
+                formData.append('tags[]', tag);
+            });
+        }
+
+        if (this.selectedFile.length > 0) {
+            this.selectedFile.forEach((file: any) => {
+                formData.append('sources[]', file.originFileObj);
+            });
+        }
+
         formData.append('message', this.message);
 
         if (formData) {
@@ -78,7 +100,7 @@ export class CreatePostComponent implements OnInit {
                     }
                 },
                 error: err => {
-                    err.error.errors.forEach((error : any )=> {
+                    err.error.errors.forEach((error: any) => {
                         this.shared.createMessage('error', error);
                     })
                     loadingScreen.classList.remove('m-loading-screen-active');
@@ -89,6 +111,7 @@ export class CreatePostComponent implements OnInit {
                     loadingScreen.classList.remove('m-loading-screen-active');
                     spinning.classList.remove('show')
                     btnSubmit?.classList.remove('m-btn-submit')
+                    this.router.navigateByUrl("/home/facebook");
                 }
             });
 
@@ -105,6 +128,77 @@ export class CreatePostComponent implements OnInit {
     };
 
     handleChange(event: any): void {
-        this.selectedFile = event.fileList;
+        let fileCount = event.fileList.length
+        let postImg = document.getElementById('post-image') as HTMLImageElement
+        postImg.src = event.fileList[fileCount - 1].thumbUrl;
     }
+
+    handleClose(removedTag: {}): void {
+        this.tags = this.tags.filter(tag => tag !== removedTag);
+    }
+
+    sliceTagName(tag: string): string {
+        const isLongTag = tag.length > 20;
+        return isLongTag ? `${tag.slice(0, 20)}...` : tag;
+    }
+
+    showInput(): void {
+        this.inputVisible = true;
+        setTimeout(() => {
+            this.inputElement?.nativeElement.focus();
+        }, 10);
+    }
+
+    handleInputConfirm(): void {
+        if (this.inputValue) {
+            this.tags = [...this.tags, this.inputValue];
+        }
+        this.inputValue = '';
+        this.inputVisible = true;
+    }
+
+    tabChange1(id: any, event: any) {
+        let list = [].slice.call(event.target.parentNode.children)
+        list.forEach((elem: any) => {
+            elem.classList.remove('is-active');
+        })
+        event.target.classList.add('is-active');
+        this.tabId1 = id;
+    }
+
+    tabChange2(id: any, event: any) {
+        let list = [].slice.call(event.target.parentNode.children)
+        list.forEach((elem: any) => {
+            elem.classList.remove('is-active');
+        })
+        event.target.classList.add('is-active');
+        this.tabId = id;
+    }
+
+    like(e: any) {
+        if (e.target.classList.contains('liked')) {
+            e.target.classList.remove('liked')
+        } else {
+            e.target.classList.add('liked')
+        }
+
+    }
+
+    addLink() {
+        this.urlLinks.push(this.urlLinksIndex);
+        this.urlLinksIndex++;
+        console.log('add');
+        console.log(this.urlLinks);
+    }
+
+    removeLink(index: number) {
+        this.urlLinks.forEach((element, i) => {
+            if (element == index) {
+                this.urlLinks.splice(i, 1);
+            }
+        });
+        console.log('remove');
+        console.log(this.urlLinks);
+    }
+
 }

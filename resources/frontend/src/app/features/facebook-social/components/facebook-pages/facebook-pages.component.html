@@ -1,29 +1,69 @@
-<div class="mod-facebook-pages">
-    <div class="m-page" *ngFor="let page of pages">
-        <div class="m-page-container" [attr.data-pageId]="page.pageId" [attr.data-id]="page.id" >
-            <div class="m-img-container" (click)="getPostsBypageId(page.id)">
-                <img class="m-picture" src="{{page.pagePictureUrl}}" alt="">
+<div class="mod-meta-pages">
+    <div class="m-facebook-info" *ngIf="fbPageCount > 0">
+        <div class="m-title">Facebook pages</div>
+        <div class="m-facebook-pages" >
+            <div class="m-page" *ngFor="let page of facebookPages">
+        
+                <nz-card style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                    <nz-card-meta
+                        nzTitle="{{page.pageName}}"
+                        nzDescription="{{page.category}}"
+                        [nzAvatar]="avatarTemplate"
+                    ></nz-card-meta>
+                </nz-card>
+                <ng-template #avatarTemplate>
+                    <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
+                </ng-template>
+                <ng-template #actionSetting>
+                    {{page.provider}}
+                </ng-template>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i nz-icon nzType="ellipsis"></i>
+                </ng-template>
             </div>
-            <div class="m-category">{{page.category}}</div>
-            <div class="m-page-name">{{page.pageName}}</div>
-            <div class="m-account">
-                <div>
-                    <div class="m-title">
-                        <i nz-icon nzType="unordered-list" nzTheme="outline"></i>{{page.provider}}</div>
-                    <button class="m-button">
-                    <div class="icon">
-                            <i nz-icon nzType="delete" nzTheme="outline"></i>
-                        </div>
-                        Delete
-                    </button>
+            <div class="m-page">
+                <div class="m-page-container">
+                    <i class="m-icon" nz-icon nzType="plus" nzTheme="outline"></i>
                 </div>
-
             </div>
         </div>
     </div>
-    <div class="m-page">
-        <div class="m-page-container">
-            <i class="m-icon" nz-icon nzType="plus" nzTheme="outline"></i>
+
+    <div class="m-instagram-info" *ngIf="instaPageCount > 0">
+        <div class="m-title">Instagram pages</div>
+        <div class="m-instagram-pages" >
+            <div class="m-page" *ngFor="let page of instaPages">
+        
+                <nz-card style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                    <nz-card-meta
+                        nzTitle="{{page.pageName}}"
+                        nzDescription="{{page.category}}"
+                        [nzAvatar]="avatarTemplate"
+                    ></nz-card-meta>
+                </nz-card>
+                <ng-template #avatarTemplate>
+                    <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
+                </ng-template>
+                <ng-template #actionSetting>
+                    {{page.provider}}
+                </ng-template>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i nz-icon nzType="ellipsis"></i>
+                </ng-template>
+            </div>
+            <div class="m-page">
+                <div class="m-page-container">
+                    <i class="m-icon" nz-icon nzType="plus" nzTheme="outline"></i>
+                </div>
+            </div>
         </div>
     </div>
+    
 </div>
+
