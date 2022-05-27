@@ -56,9 +56,7 @@ class FacebookController extends Controller
         $facebookAppKey = env('FACEBOOK_APP_ID');
         $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
         $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
-
         $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'), $facebookUserId);
-
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
         $providerObject->token = $response->json('access_token');
@@ -102,7 +100,31 @@ class FacebookController extends Controller
         return RequestsTrait::findAccountByUid($id, 'id')->uid;
     }
 
-    public function postPictureFromUrl($pageId, $token, $url)
+    public function postVideoPublicationFormUrl($pageId, $object)
+    {
+        $client = new Client();
+
+        // $facebookLinkEndpoint = $type == 'image' ? '/photos?access_token='.$token.'&url='.$url : '/videos?access_token='.$token.'&file_url='.$url;
+        // $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.$facebookLinkEndpoint.'&published=true');
+
+        // return $response->json('id');
+
+        $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/videos', [
+            'form_params' => $object,
+        ]);
+
+        if ($response->getStatusCode() == 200) {
+            $responseObject['status'] = true;
+            $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+        } else {
+            $responseObject['status'] = false;
+            $responseObject['message'] = 'to be defined';
+        }
+
+        return $responseObject;
+    }
+
+    public function postMediaFromUrl($pageId, $token, $url)
     {
         $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
@@ -112,16 +134,10 @@ class FacebookController extends Controller
     /**
      * post to facebook from Route.
      */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags , $videos)
+    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags, $videos , $videoTitle)
     {
         $images = [];
 
-        if ($imagesUrls) {
-            foreach ($imagesUrls as $image) {
-                $images[] = ['media_fbid' => $this->postPictureFromUrl($pageId, $object['access_token'], $image)];
-            }
-            $object['attached_media'] = json_encode($images);
-        }
         $tagsString = ' ';
         if ($tags) {
             foreach ($tags as $tag) {
@@ -129,6 +145,30 @@ class FacebookController extends Controller
             }
         }
         $object['message'] = $object['message'].$tagsString;
+
+        if ($videos) {
+            $object['file_url'] = $videos[0];
+            $object['publihshed'] = true;
+            $object['description'] =  $object['message'];
+            if ($videoTitle){
+                $object['title'] =  $videoTitle;
+            }
+
+            return $this->postVideoPublicationFormUrl($pageId , $object);
+        }
+
+
+        if ($imagesUrls) {
+            if ($imagesUrls) {
+                foreach ($imagesUrls as $image) {
+                    $images[] = ['media_fbid' => $this->postMediaFromUrl($pageId, $object['access_token'], $image)];
+                }
+            }
+
+            $object['attached_media'] = json_encode($images);
+
+        }
+
         $client = new Client();
         $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,

@@ -3,10 +3,42 @@
 namespace App\Http\Controllers\functions;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\RequestsTrait;
 use GuzzleHttp\Client;
 
 class UtilitiesController extends Controller
 {
+    use RequestsTrait;
+
+    public function postValidator($accountIds, $images, $videos)
+    {
+        $providersType = [];
+        $providersName = [];
+        $responseObject = new \stdClass();
+
+        foreach ($accountIds as $singleAccountId) {
+            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
+
+            array_push($providersType, $account->providerType);
+            array_push($providersName, $account->provider);
+        }
+        $responseObject->status = true;
+        $isFacebookPage = (in_array('facebook', $providersName)) && (in_array('page', $providersType));
+
+        if ($videos && count($videos) > 1 && $isFacebookPage) {
+            $responseObject->status = false;
+            $responseObject->message = 'Can not upload more than one video on Facebook';
+        }
+
+        if ($videos && count($videos) > 0 && $images && count($images) && $isFacebookPage) {
+            $responseObject->status = false;
+            $responseObject->message = 'Can not upload video and images on the same post on Facebook';
+        }
+
+
+        return $responseObject;
+    }
+
     public function uploadDistantImage($image)
     {
         $client = new Client();
@@ -44,7 +76,7 @@ class UtilitiesController extends Controller
             if ($fileObject->type == 'image') {
                 $fileObject->url = $this->uploadDistantImage($file);
             } else {
-              //  dd('could not be uploaded');
+                //  dd('could not be uploaded');
                 $fileObject->url = false;
             }
         } else {
@@ -55,7 +87,7 @@ class UtilitiesController extends Controller
     }
 
     /**
-     * Return the Type Of the Uploaded File
+     * Return the Type Of the Uploaded File.
      */
     public function checkTypeOfFile($file)
     {
