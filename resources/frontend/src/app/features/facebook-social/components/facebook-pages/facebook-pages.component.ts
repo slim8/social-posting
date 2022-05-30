@@ -2,59 +2,65 @@ import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { FacebookSocialService } from '../../services/facebook-social.service';
 import { SharedModule } from '../../../../shared/shared.module';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
-    selector: 'app-facebook-pages',
-    templateUrl: './facebook-pages.component.html',
-    styleUrls: ['./facebook-pages.component.scss']
+  selector: 'app-facebook-pages',
+  templateUrl: './facebook-pages.component.html',
+  styleUrls: ['./facebook-pages.component.scss']
 })
 
 export class FacebookPagesComponent implements OnInit {
 
-    constructor(private shared: SharedModule,
-                private facebookSocialService: FacebookSocialService,
-                private messageService: NzMessageService,
-                private router: Router) { }
+  constructor(private shared: SharedModule,
+    private facebookSocialService: FacebookSocialService,
+    private messageService: NzMessageService,
+    private router: Router) { }
 
-    pages: any[] = [];
-    fbPageCount = 0
-    instaPageCount = 0
-    instaPages: any[] = [];
-    facebookPages: any[] = [];
-    container = [];
-    loading = true;
+  pages: any[] = [];
+  fbPageCount = 0
+  instaPageCount = 0
+  instaPages: any[] = [];
+  facebookPages: any[] = [];
+  container = [];
+  loading = true;
 
-    ngOnInit(): void {
-        this.getPages();
-    }
+  ngOnInit(): void {
+    this.getPages();
+  }
 
-    getPages() {
-        this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
-            next: (event: any) => {
-                this.container = event.pages;
-                console.log('loading');
-            },
-            error: err => {
-                this.shared.createMessage('error', err.error.errors);
-            },
-            complete: () => {
-                console.log('complete');
-                this.container.forEach((page : any) => {
-                    if(page.provider == 'facebook') {
-                        this.facebookPages.push(page)
-                    } else if(page.provider == 'instagram') {
-                        this.instaPages.push(page)
-                    }
-                })
-                this.instaPageCount = this.instaPages.length
-                this.fbPageCount = this.facebookPages.length
-                this.pages = this.container
+  getPages() {
+    this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
+      next: (event: any) => {
+        console.log(event);
+        this.container = event.pages;
+        console.log('loading');
+      },
+      error: err => {
+        console.log('error ' + err);
+        this.shared.createMessage('error', err.error.errors);
+      },
+      complete: () => {
+        console.log('complete');
+        console.log(this.container);
+        if (this.container) {
+          this.container.forEach((page: any) => {
+            if (page.provider == 'facebook') {
+              this.facebookPages.push(page)
+            } else if (page.provider == 'instagram') {
+              this.instaPages.push(page)
             }
-        })
-    }
+          })
+          this.instaPageCount = this.instaPages.length
+          this.fbPageCount = this.facebookPages.length
+          this.pages = this.container
+        }
 
-  getPostsBypageId(pageId:any) {
-    this.router.navigateByUrl("/home/facebook/accounts-posts/"+btoa(pageId));
+      }
+    })
+  }
+
+  getPostsBypageId(pageId: any) {
+    this.router.navigateByUrl("/home/facebook/accounts-posts/" + btoa(pageId));
   }
 }

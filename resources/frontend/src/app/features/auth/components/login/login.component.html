@@ -54,9 +54,13 @@
       <br />
 
       <div class="m-button">
+
         <button nz-button
                 (click)="login()"
-                nzType="primary">Sign In</button>
+                nzType="primary"
+                [nzLoading]="isLoading">
+          Sign In
+        </button>
       </div>
 
 

@@ -55,7 +55,7 @@ class ApiAuthController extends Controller
             'phoneNumber' => 'required|string|max:255|unique:companies',
             'isSubscriber' => '',
         ], [
-           'companyName.required' => 'This is a required message for company name',
+            'companyName.required' => 'This is a required message for company name',
         ]);
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
@@ -84,11 +84,13 @@ class ApiAuthController extends Controller
 
         $user->attachRole('companyadmin');
 
-        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> '.$request->email.'<br> <strong>Password:</strong>'.$password, $request->email, 'Company Account Created', 'emails.accountCreated');
+        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
 
-        return response()->json(['success' => true,
-        'password' => $password,
-        'message' => trans('message.company_created_sucess').$request->email, ], 201);
+        return response()->json([
+            'success' => true,
+            'password' => $password,
+            'message' => trans('message.company_created_sucess') . $request->email,
+        ], 201);
     }
 
     public function registerUser(Request $request)
@@ -101,7 +103,7 @@ class ApiAuthController extends Controller
             'password' => 'required|string|min:6',
             'isSubscriber' => '',
         ], [
-           'companyName.required' => 'This is a required message for company name',
+            'companyName.required' => 'This is a required message for company name',
         ]);
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
@@ -110,7 +112,7 @@ class ApiAuthController extends Controller
         $user = User::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
-            'name' => $request->firstName.' '.$request->lastName,
+            'name' => $request->firstName . ' ' . $request->lastName,
             'email' => $request->email,
             'status' => 1,
             'isSubscriber' => $request->isSubscriber,
@@ -120,8 +122,10 @@ class ApiAuthController extends Controller
 
         $user->attachRole('user');
 
-        return response()->json(['success' => true,
-        'message' => trans('message.user_created_suceess').$request->email, ], 201);
+        return response()->json([
+            'success' => true,
+            'message' => trans('message.user_created_suceess') . $request->email,
+        ], 201);
     }
 
     public function login(Request $request)
@@ -153,7 +157,7 @@ class ApiAuthController extends Controller
                         'exp' => $expire_claim,
                         'data' => [
                             'id' => $user['id'],
-                            'name' => $user['name'],
+                            'fullName' => $user['firstName'] . ' ' . $user['lastName'],
                             'email' => $user['email'],
                         ],
                     ];
@@ -161,12 +165,12 @@ class ApiAuthController extends Controller
                     $jwt = JWT::encode($token, $secret_key, env('JWT_HASH_ALGORITHME'));
 
                     return response()->json([
-                            'message' => trans('message.sucess_login'),
-                            'token' => $jwt,
-                            'expireAt' => $expire_claim,
-                            'success' => true,
-                            'roles' => $this->userRepository->getCurrentRoles($user),
-                        ], 200);
+                        'message' => trans('message.sucess_login'),
+                        'token' => $jwt,
+                        'expireAt' => $expire_claim,
+                        'success' => true,
+                        'roles' => $this->userRepository->getCurrentRoles($user),
+                    ], 200);
                 } else {
                     $response = ['message' => trans('message.password_mismatch'), 'status' => false];
 
