@@ -100,14 +100,12 @@ class FacebookController extends Controller
         return RequestsTrait::findAccountByUid($id, 'id')->uid;
     }
 
+    /**
+     * Post Single Video Post from URL
+     */
     public function postVideoPublicationFormUrl($pageId, $object)
     {
         $client = new Client();
-
-        // $facebookLinkEndpoint = $type == 'image' ? '/photos?access_token='.$token.'&url='.$url : '/videos?access_token='.$token.'&file_url='.$url;
-        // $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.$facebookLinkEndpoint.'&published=true');
-
-        // return $response->json('id');
 
         $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/videos', [
             'form_params' => $object,
