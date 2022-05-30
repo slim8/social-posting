@@ -22,13 +22,11 @@ class ExempleController extends Controller
         MailTrait::index('This is an mail exemple', 'zied.maaloul@softtodo.com', 'Subject Exemple');
     }
 
-    public function uploadimage(Request $request)
+    public function uploadfile(Request $request)
     {
-        $response = [];
-        foreach ($request->file('sources') as $image) {
-            $response[] = $this->utilitiesController->uploadImage($image);
-        }
+        $response = $request->file('file') ? $this->utilitiesController->uploadFile($request->file('file')) : false;
 
-        return $response;
+        return response()->json(['success' => $response ? true : false,
+        'files' => $response, ], 201);
     }
 }
