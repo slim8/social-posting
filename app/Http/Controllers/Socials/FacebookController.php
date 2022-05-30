@@ -24,24 +24,39 @@ class FacebookController extends Controller
         $this->instagramController = new InstagramController();
     }
 
+    public function getFacebookPersonalInformations($accessToken)
+    {
+        $responseObject = [];
+        $response = Http::post(env('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
+        $responseObject['name'] = $response->json('name');
+        return  $responseObject;
+    }
+
     /**
      * Update or Add a new Provider Token.
      */
     public function updateOrReturnProviderIdUser($adminId, $longLifeToken, $accountUserId)
     {
-        $account = UserTrait::getCurrentProviderId();
+        $account = UserTrait::getUniqueProviderTokenByProvider($accountUserId);
+
+        $personalInformation = $this->getFacebookPersonalInformations($longLifeToken);
 
         if ($account) {
             ProviderToken::whereId($account)->update(['longLifeToken' => $longLifeToken]);
 
             return $account;
         } else {
+            $personalInformation = $this->getFacebookPersonalInformations($longLifeToken);
             $provider = ProviderToken::create(
                 [
                     'expiryDate' => date('Y-m-d', strtotime('+60 days')),
                     'longLifeToken' => $longLifeToken,
                     'created_by' => $adminId,
                     'accountUserId' => $accountUserId,
+                    'provider' => 'facebook',
+                    'profile_picture' => 'picture file',
+                    'profile_name' => $personalInformation['name'] ? $personalInformation['name'] : '',
+                    'user_name' => '',
                 ]);
 
             return $provider->id;
@@ -101,7 +116,7 @@ class FacebookController extends Controller
     }
 
     /**
-     * Post Single Video Post from URL
+     * Post Single Video Post from URL.
      */
     public function postVideoPublicationFormUrl($pageId, $object)
     {
@@ -132,7 +147,7 @@ class FacebookController extends Controller
     /**
      * post to facebook from Route.
      */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags, $videos , $videoTitle)
+    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags, $videos, $videoTitle)
     {
         $images = [];
 
@@ -147,14 +162,13 @@ class FacebookController extends Controller
         if ($videos) {
             $object['file_url'] = $videos[0];
             $object['publihshed'] = true;
-            $object['description'] =  $object['message'];
-            if ($videoTitle){
-                $object['title'] =  $videoTitle;
+            $object['description'] = $object['message'];
+            if ($videoTitle) {
+                $object['title'] = $videoTitle;
             }
 
-            return $this->postVideoPublicationFormUrl($pageId , $object);
+            return $this->postVideoPublicationFormUrl($pageId, $object);
         }
-
 
         if ($imagesUrls) {
             if ($imagesUrls) {
@@ -164,7 +178,6 @@ class FacebookController extends Controller
             }
 
             $object['attached_media'] = json_encode($images);
-
         }
 
         $client = new Client();
@@ -223,7 +236,7 @@ class FacebookController extends Controller
     /**
      * Save Facebook List of pages after autorization.
      */
-    public function savePage($facebookPage)
+    public function savePage($facebookPage , $userUid)
     {
         $actualCompanyId = UserTrait::getCompanyId();
 
@@ -250,7 +263,7 @@ class FacebookController extends Controller
                         'category' => $category,
                         'providerType' => 'page',
                         'accessToken' => $pageToken,
-                        'provider_token_id' => UserTrait::getCurrentProviderId(),
+                        'provider_token_id' => UserTrait::getUniqueProviderTokenByProvider($userUid),
                     ]);
         }
     }

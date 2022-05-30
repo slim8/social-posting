@@ -235,7 +235,7 @@ class InstagramController extends Controller
     /**
      * Save Instagram Accounts.
      */
-    public function saveInstagramAccount($instagramAccount)
+    public function saveInstagramAccount($instagramAccount , $userUid)
     {
         $id = $instagramAccount['pageId'];
         $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
@@ -263,7 +263,7 @@ class InstagramController extends Controller
                         'providerType' => 'page',
                         'accessToken' => $token,
                         'related_account_id' => $relatedAccountId,
-                        'provider_token_id' => UserTrait::getCurrentProviderId(),
+                        'provider_token_id' => UserTrait::getUniqueProviderTokenByProvider($userUid),
                         'related_Uid' => $relatedUid,
                     ]);
         }
