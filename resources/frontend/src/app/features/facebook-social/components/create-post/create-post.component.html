@@ -66,6 +66,7 @@
                             <nz-form-control [nzSpan]="24">
                                 <div class="clearfix">
                                     <nz-upload
+                                    nzAction="http://posting.local/api/uploadfile/"
                                     nzListType="picture-card"
                                     [(nzFileList)]="fileList"
                                     [nzShowButton]="fileList.length < 8"
@@ -123,7 +124,7 @@
                             </ul>
                             <div class="m-tab-content">
                                 <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
-                                    <div class="m-instagram">
+                                    <!-- <div class="m-instagram">
                                         <div class="m-insta-header">
                                             <div class="m-image">
                                                 <img src="../../../../../assets/img/instapic.jpg" />
@@ -145,7 +146,9 @@
                                                 <div class="m-bookmark"></div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
+
+                                    <!-- <app-instagram-preview></app-instagram-preview> -->
                                 </div>
 
                                 <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
