@@ -32,7 +32,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
-    Route::post('/uploadimage', [ExempleController::class, 'uploadimage'])->name('uploadimage.api');
+    Route::post('/uploadfile', [ExempleController::class, 'uploadfile'])->name('uploadfile.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
