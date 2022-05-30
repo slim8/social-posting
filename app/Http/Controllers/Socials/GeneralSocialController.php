@@ -47,6 +47,27 @@ class GeneralSocialController extends Controller
         $images = $request->images;
         $videos = $request->videos;
 
+        if ($request->file('sources')) {
+            foreach ($request->file('sources') as $file) {
+                $uploadedFile = $this->utilitiesController->uploadFile($file);
+
+                if ($uploadedFile->url) {
+                    if ($uploadedFile->type == 'image') {
+                        $images[] = $uploadedFile->url;
+                    } elseif ($uploadedFile->type == 'video') {
+                        $videos[] = $uploadedFile->url;
+                    }
+                }
+            }
+        }
+
+        $validator = $this->utilitiesController->postValidator($request->accountIds, $images, $videos);
+
+        if (!$validator->status) {
+            return response()->json(['success' => false,
+            'message' => $validator->message, ], 201);
+        }
+
         foreach ($request->accountIds as $singleAccountId) {
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
 
@@ -58,6 +79,7 @@ class GeneralSocialController extends Controller
                     $postId = Post::create([
                         'url' => 'url',
                         'message' => $request->message,
+                        'video_title' => $request->videoTitle ? $request->videoTitle : '',
                         'status' => true,
                         'publishedAt' => Carbon::now(),
                         'isScheduled' => 0,
@@ -76,19 +98,6 @@ class GeneralSocialController extends Controller
                         }
                     }
 
-                    if ($request->file('sources')) {
-                        foreach ($request->file('sources') as $file) {
-                            $uploadedFile = $this->utilitiesController->uploadFile($file);
-
-                            if ($uploadedFile->url) {
-                                if ($uploadedFile->type == 'image') {
-                                    $images[] = $uploadedFile->url;
-                                } elseif ($uploadedFile->type == 'video') {
-                                    $videos[] = $uploadedFile->url;
-                                }
-                            }
-                        }
-                    }
                     if ($images) {
                         foreach ($images as $image) {
                             PostMedia::create([
@@ -117,7 +126,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags , $videos);
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags, $videos, $request->videoTitle);
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -127,7 +136,7 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags , $videos);
+                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags, $videos);
                 }
 
                 if ($postResponse['status']) {

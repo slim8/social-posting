@@ -16,13 +16,14 @@ class Post extends Model
         'url',
         'status',
         'publishedAt',
+        'video_title',
         'isScheduled',
         'deleted',
     ];
 
     public function accounts()
     {
-        return $this->belongsToMany(Account::class, 'account_posts' , 'post_id');
+        return $this->belongsToMany(Account::class, 'account_posts', 'post_id');
     }
 
     public function PostMedia()
