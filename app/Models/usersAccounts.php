@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class usersAccounts extends Model
+class UsersAccounts extends Model
 {
     use HasFactory;
 
@@ -30,8 +30,8 @@ class usersAccounts extends Model
         return $this->hasMany(User::class);
     }
 
-    public function hasAccountPermission($user_id,$account_id)
+    public static function hasAccountPermission($user_id,$account_id)
     {
-        return usersAccounts::where('account_id', $account_id)->where('user_id', $user_id)->count();
+        return UsersAccounts::where('account_id', $account_id)->where('user_id', $user_id)->count();
     }
 }

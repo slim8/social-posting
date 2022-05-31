@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\Roles\CompanyAdminsController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\GeneralSocialController;
@@ -40,6 +41,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/save-meta-pages-groups', [GeneralSocialController::class, 'saveMetaPagesAndGroups'])->name('save-meta-pages-groups.api');
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
+    Route::post('/managment/add-permissions', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {

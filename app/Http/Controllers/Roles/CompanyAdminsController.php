@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\functions\UtilitiesController;
 use App\Models\User;
+use App\Models\UsersAccounts;
 use GuzzleHttp\Psr7\Request;
 
 class CompanyAdminsController extends Controller
@@ -46,9 +47,12 @@ class CompanyAdminsController extends Controller
 
 
         foreach($pages as $page){
-            if(){
-                
+            foreach($users as $user){
+                if(!UsersAccounts::hasAccountPermission($user,$page)){
+                    dd('add the new user to the page');
+                }
             }
+
         }
     }
 }
