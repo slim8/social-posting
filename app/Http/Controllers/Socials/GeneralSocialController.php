@@ -300,7 +300,6 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
-
         $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
         if ($AllPages) {
@@ -318,7 +317,15 @@ class GeneralSocialController extends Controller
     public function saveMetaPagesAndGroups(Request $request)
     {
         $jsonPageList = $request->json('pages');
+        $userUid = $request->json('user');
 
+
+        if (!UserTrait::getUniqueProviderTokenByProvider($userUid)){
+            return response()->json(['success' => false,
+        'message' => 'No User Id Found in this Account', ], 201);
+        }
+
+        // Check and return false if userUid not autorized for this action ;
         $AllPages = [];
 
         $actualCompanyId = UserTrait::getCompanyId();
@@ -327,9 +334,9 @@ class GeneralSocialController extends Controller
             foreach ($jsonPageList as $providerAccount) {
                 $provider = $providerAccount['provider'];
                 if ($provider == 'facebook') {
-                    $this->facebookController->savePage($providerAccount);
+                    $this->facebookController->savePage($providerAccount , $userUid);
                 } else {
-                    $this->instagramController->saveInstagramAccount($providerAccount);
+                    $this->instagramController->saveInstagramAccount($providerAccount , $userUid);
                 }
             }
 

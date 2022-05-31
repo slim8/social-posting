@@ -13,6 +13,10 @@ class ProviderToken extends Model
         'expiryDate',
         'longLifeToken',
         'created_by',
+        'provider',
+        'profile_picture',
+        'profile_name',
+        'user_name',
         'accountUserId'
     ];
 

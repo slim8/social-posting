@@ -14,6 +14,9 @@ import { DemoNgZorroAntdModule } from './shared/ng-zorro-antd.module';
 import { Observable } from 'rxjs';
 import { Token } from '@angular/compiler';
 import { TokenInterceptorService } from './features/facebook-social/services/token-interceptor.service'
+import { JwtModule } from '@auth0/angular-jwt';
+import { sharedConstants } from './shared/sharedConstants';
+
 registerLocaleData(en);
 
 @NgModule({
@@ -29,13 +32,27 @@ registerLocaleData(en);
         BrowserAnimationsModule,
         IconsProviderModule,
         DemoNgZorroAntdModule,
-        FormsModule
+        FormsModule,
+        JwtModule.forRoot({
+            config: {
+                tokenGetter: function tokenGetter() {
+                    return localStorage.getItem(sharedConstants.HTTP_TOKEN);
+                },
+                allowedDomains: ['http://localhost:4200'],
+                disallowedRoutes: ['http://localhost:4200/auth/login']
+            }
+        }),
     ],
-    providers: [{ provide: NZ_I18N, useValue: en_US },{
+    exports: [
+        JwtModule
+    ],
+    providers: [{ provide: NZ_I18N, useValue: en_US },
+    {
         provide: HTTP_INTERCEPTORS,
         useClass: TokenInterceptorService,
         multi: true
-    }],
+    }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
@@ -44,15 +61,15 @@ export class AppModule {
         const token = localStorage.getItem('token');
 
         if (!req.headers.has('Content-Type')) {
-          req = req.clone({
-            headers: req.headers.set('Content-Type', 'application/json')
-          });
+            req = req.clone({
+                headers: req.headers.set('Content-Type', 'application/json')
+            });
         }
 
         if (token) {
             // If we have a token, we set it to the header
             req = req.clone({
-               setHeaders: {Authorization: `Authorization token ${token}`}
+                setHeaders: { Authorization: `Authorization token ${token}` }
             });
         }
 

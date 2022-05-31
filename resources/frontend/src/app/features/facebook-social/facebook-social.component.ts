@@ -13,13 +13,14 @@ export class FacebookSocialComponent implements OnInit {
   private formData: FormData = new FormData();
   private user = {
     accessToken: '',
-    id: '557047552449017',
+    id: '',
     pages: [],
   };
 
   isVisible = false;
   listpages: any;
   validateForm!: FormGroup;
+  userInfo =''
 
   constructor(
     private service: FacebookSocialService,
@@ -88,9 +89,11 @@ export class FacebookSocialComponent implements OnInit {
           sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
           {
             pages: selectedobject,
+            user : this.user.id
           }
         )
         .subscribe((response: any) => {
+
           console.log('saveFacebookPages');
           console.log(response);
         });
