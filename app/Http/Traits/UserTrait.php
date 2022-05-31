@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Auth;
 trait UserTrait
 {
     /**
+     * get Connected User Object.
+     */
+    public static function getUserObject()
+    {
+        return Auth::user();
+    }
+
+    /**
      * get current Company Id.
      */
     public static function getCompanyId()
@@ -38,9 +46,9 @@ trait UserTrait
     }
 
     /**
-     * Get Current TokenProvider Id. By User ID
+     * Get Current TokenProvider Id. By User ID.
      */
-    public static function getUniqueProviderTokenByProvider($accountUserId ,  string $provider = 'facebook')
+    public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook')
     {
         $account = ProviderToken::where('created_by', UserTrait::getCurrentAdminId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
 
@@ -52,7 +60,7 @@ trait UserTrait
     }
 
     /**
-     * Get Current Provider Object
+     * Get Current Provider Object.
      */
     public static function getCurrentProviderObject()
     {

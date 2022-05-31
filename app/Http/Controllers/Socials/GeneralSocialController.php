@@ -11,6 +11,7 @@ use App\Models\AccountPost;
 use App\Models\Post;
 use App\Models\PostMedia;
 use App\Models\PostTag;
+use App\Models\ProviderToken;
 use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -319,8 +320,7 @@ class GeneralSocialController extends Controller
         $jsonPageList = $request->json('pages');
         $userUid = $request->json('user');
 
-
-        if (!UserTrait::getUniqueProviderTokenByProvider($userUid)){
+        if (!UserTrait::getUniqueProviderTokenByProvider($userUid)) {
             return response()->json(['success' => false,
         'message' => 'No User Id Found in this Account', ], 201);
         }
@@ -334,9 +334,9 @@ class GeneralSocialController extends Controller
             foreach ($jsonPageList as $providerAccount) {
                 $provider = $providerAccount['provider'];
                 if ($provider == 'facebook') {
-                    $this->facebookController->savePage($providerAccount , $userUid);
+                    $this->facebookController->savePage($providerAccount, $userUid);
                 } else {
-                    $this->instagramController->saveInstagramAccount($providerAccount , $userUid);
+                    $this->instagramController->saveInstagramAccount($providerAccount, $userUid);
                 }
             }
 
@@ -374,5 +374,32 @@ class GeneralSocialController extends Controller
         }
 
         return response()->json($response, 201);
+    }
+
+    public function getConnectedAccounts(Request $request)
+    {
+        $response = [];
+        $userId = UserTrait::getCurrentAdminId();
+        $accounts = ProviderToken::where('created_by', $userId)->get();
+        foreach ($accounts as $account) {
+            $now = strtotime('+0', strtotime(date('Y-m-d')));
+
+            if ($account->expiryDate >= date('Y-m-d')) {
+                $expiry = strtotime('-5 days', strtotime($account->expiryDate));
+                $dateDifference = abs(strtotime(date('Y-m-d')) - strtotime($account->expiryDate));
+                $years = floor($dateDifference / (365 * 60 * 60 * 24));
+                $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+                $days = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+                array_push($response, ['mustBeRefreshed' =>(!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $months.' months and '.$days.' days']);
+            }
+        }
+
+        if($response){
+            return response()->json(['success' => true,
+            'accounts' => $response, ], 201);
+        }else{
+            return response()->json(['success' => false,
+            'message' => 'No account autorized', ], 201);
+        }
     }
 }
