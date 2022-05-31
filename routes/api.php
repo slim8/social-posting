@@ -40,6 +40,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/save-meta-pages-groups', [GeneralSocialController::class, 'saveMetaPagesAndGroups'])->name('save-meta-pages-groups.api');
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
+    Route::get('/get-connected-accounts', [GeneralSocialController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
