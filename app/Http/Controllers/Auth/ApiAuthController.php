@@ -116,6 +116,7 @@ class ApiAuthController extends Controller
             'isSubscriber' => $request->isSubscriber,
             'company_id' => $actualCompanyId,
             'password' => hash::make($request->password),
+            'autoRefresh' => 1,
         ]);
 
         $user->attachRole('user');

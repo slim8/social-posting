@@ -4,6 +4,7 @@ namespace App\Http\Traits;
 
 use App\Models\ProviderToken;
 use App\Models\User;
+use App\Models\UsersAccounts;
 use Illuminate\Support\Facades\Auth;
 
 trait UserTrait
@@ -39,9 +40,9 @@ trait UserTrait
     }
 
     /**
-     * Get Current TokenProvider Id. By User ID
+     * Get Current TokenProvider Id. By User ID.
      */
-    public static function getUniqueProviderTokenByProvider($accountUserId ,  string $provider = 'facebook')
+    public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook')
     {
         $account = ProviderToken::where('created_by', UserTrait::getCurrentAdminId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
 
@@ -53,7 +54,7 @@ trait UserTrait
     }
 
     /**
-     * Get Current Provider Object
+     * Get Current Provider Object.
      */
     public static function getCurrentProviderObject()
     {
@@ -66,9 +67,8 @@ trait UserTrait
         return $account;
     }
 
-
     /**
-     * Get Current Provider Object
+     * Get Current Provider Object.
      */
     public static function isUserLinkedToActualCompany($user)
     {
@@ -81,14 +81,11 @@ trait UserTrait
         return $account;
     }
 
-    public static function hasPermission($accountId , int $user = null)
+    public static function setPermissionaccountToUser($userId, $accountId)
     {
-        if(!$user){
-            $user = User::getCurrentAdminId();
-        }
-
-        // Add Here check On Account ID and User
-
-        // Response True/False
+        UsersAccounts::create([
+            'account_id' => $accountId,
+            'user_id' => $userId,
+        ]);
     }
 }

@@ -30,8 +30,8 @@ class UsersAccounts extends Model
         return $this->hasMany(User::class);
     }
 
-    public static function hasAccountPermission($user_id,$account_id)
+    public static function hasAccountPermission($userId,$accountId)
     {
-        return UsersAccounts::where('account_id', $account_id)->where('user_id', $user_id)->count();
+        return UsersAccounts::where('account_id', $accountId)->where('user_id', $userId)->count();
     }
 }
