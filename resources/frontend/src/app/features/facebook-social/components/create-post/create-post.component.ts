@@ -25,6 +25,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 })
 
 export class CreatePostComponent implements OnInit {
+    isliked:boolean = false
     urlLinks: number[] = [];
     urlLinksIndex: number = 0;
     tags: string[] = [];
@@ -128,9 +129,22 @@ export class CreatePostComponent implements OnInit {
     };
 
     handleChange(event: any): void {
-        let fileCount = event.fileList.length
-        let postImg = document.getElementById('post-image') as HTMLImageElement
-        postImg.src = event.fileList[fileCount - 1].thumbUrl;
+        // if(event.type == 'success') {
+        //     this.fileList = event.fileList
+        // }
+        // let instagramPost = document.getElementById('ip') as HTMLImageElement;
+        let facebookPost = document.getElementById('fp') as HTMLImageElement;
+        // // // console.log(instagramPost);
+        console.log(facebookPost);
+        // // // this.fileList.forEach((file : any, index) => {
+        // // //     // console.log(instagramPost)
+        // // //     // console.log(facebookPost)
+        // // //     // console.log(event.fileList[index].response.files.url)
+
+        // // //     facebookPost.src = event.fileList[index].response.files.url;
+        // // //     // instagramPost.src = event.fileList[index].response.files.url;
+        // // // })
+
     }
 
     handleClose(removedTag: {}): void {
@@ -199,6 +213,12 @@ export class CreatePostComponent implements OnInit {
         });
         console.log('remove');
         console.log(this.urlLinks);
+    }
+
+    liked(event : any) {
+        event.target.classList.toggle('like')
+        event.target.classList.toggle('is-liked')
+        this.isliked = !this.isliked
     }
 
 }

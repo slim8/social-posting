@@ -33,13 +33,11 @@ export class FacebookPagesComponent implements OnInit {
         this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
             next: (event: any) => {
                 this.container = event.pages;
-                console.log('loading');
             },
             error: err => {
                 this.shared.createMessage('error', err.error.errors);
             },
             complete: () => {
-                console.log('complete');
                 this.container.forEach((page : any) => {
                     if(page.provider == 'facebook') {
                         this.facebookPages.push(page)
