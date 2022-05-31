@@ -4,12 +4,9 @@ import { DemoNgZorroAntdModule } from './ng-zorro-antd.module';
 import { IconsProviderModule } from './icons-provider.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-// import { InstagramPreviewComponent } from './components/instagram-preview/instagram-preview.component';
 
 @NgModule({
-    declarations: [
-        // InstagramPreviewComponent
-      ],
+    declarations: [],
     exports: [
         DemoNgZorroAntdModule,
         IconsProviderModule,
@@ -24,4 +21,5 @@ export class SharedModule {
     createMessage(type: string, message: any): void {
         this.messageService.create(type, ` ${message}`);
     }
+
 }

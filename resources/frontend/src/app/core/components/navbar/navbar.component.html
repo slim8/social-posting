@@ -6,5 +6,37 @@
          nz-icon
          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
     </span>
+    <div class="m-loggedin">
+        <div class="m-connected-user" (click)="menuCollapse($event)">
+            <div class="m-user-image">
+                <img src="../../../../assets/img/user.png">
+            </div>
+            <div class="m-user-name">
+                {{userInfo.data.fullName}}
+            </div>
+            <div class="m-button">
+                <div class="m-menu-btn">
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                </div>
+            </div>
+        </div>
+        <div id="loggedMenu" class="m-menu">
+            <div class="m-menu-header">
+                <div class="m-user-image">
+                    <img src="../../../../assets/img/user.png">
+                </div>
+                <div class="m-user-info">
+                    <div class="m-user-name">{{userInfo.data.fullName}}</div>
+                    <div class="m-user-mail">{{userInfo.data.email}}</div>
+                </div>
+                <div class="m-profile-btn">
+                    profile
+                </div>
+            </div>
+            <div class="m-menu-items">
+                <a routerLink="/auth/login">log out</a>
+            </div>
+        </div>
+    </div>
   </div>
 </nz-header>
