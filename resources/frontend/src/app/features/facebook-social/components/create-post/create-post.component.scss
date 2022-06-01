@@ -2,6 +2,28 @@ nz-select {
     width: 100%;
 }
 
+.m-success {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background-color: #80808038;
+
+    >.m-success-result {
+        background-color: white;
+        box-shadow: 0 0 60px 79px white;
+    }
+
+    &.is-hidden  {
+        display: none;
+    }
+}
+
 .m-page-img {
     height: 19px;
 }
@@ -128,8 +150,7 @@ cdk-virtual-scroll-viewport {
                                     > .m-instagram-device {
                                         width:100%;
                                         max-width: 360px;
-                                        height: 525px;
-                                        max-height: 640px;
+                                        height: fit-content;
                                         margin: 1em auto;
 
                                         > .m-instagram {
@@ -269,8 +290,23 @@ cdk-virtual-scroll-viewport {
                                                         }
                                                     }
 
-                                                    > .m-post-photo {
-                                                        width: 100%;
+                                                    > div {
+                                                        position: relative;
+
+                                                        > .m-post-photo {
+                                                            width: 100%;
+                                                        }
+
+                                                        > .m-input-tag {
+                                                            position: absolute;
+                                                            display: none;
+                                                            width: 200px;
+
+                                                            &.is-shown {
+                                                                z-index: 3;
+                                                                display: block !important;
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

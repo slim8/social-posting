@@ -25,6 +25,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 })
 
 export class CreatePostComponent implements OnInit {
+    selectedValue = []
     isliked:boolean = false
     urlLinks: number[] = [];
     urlLinksIndex: number = 0;
@@ -47,6 +48,18 @@ export class CreatePostComponent implements OnInit {
 
     ngOnInit(): void {
         this.getPages();
+        document.addEventListener("click", this.resetPostView);
+    }
+
+    resetPostView(e:any)  {
+        let instaPost = document.getElementById("instagramPost") as HTMLElement;
+        let tagPerson = document.getElementById("tagPerson") as HTMLElement;
+        let input = document.getElementsByClassName('m-input-tag')[0] as HTMLElement;
+        let tagOption = document.getElementsByClassName('tag-option');
+        if(!e.path.includes(instaPost) && !e.path.includes(tagPerson) && !e.path.includes(tagOption)) {
+            input.classList.remove("is-shown");
+            instaPost.setAttribute("style","filter: none;");
+        }
     }
 
     getPages() {
@@ -63,6 +76,7 @@ export class CreatePostComponent implements OnInit {
     submitForm() {
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0]
         let btnSubmit = document.getElementById('btn-submit')
+        let successDialog = document.getElementById('successDialog')
         let spinning = document.getElementsByClassName('m-loading-spin')[0]
         const formData: FormData = new FormData();
 
@@ -110,14 +124,18 @@ export class CreatePostComponent implements OnInit {
                         this.shared.createMessage('error', error);
                     })
                     loadingScreen.classList.remove('m-loading-screen-active');
-                    spinning.classList.remove('show')
-                    btnSubmit?.classList.remove('m-btn-submit')
+                    spinning.classList.remove('show');
+                    btnSubmit?.classList.remove('m-btn-submit');
                 },
                 complete: () => {
+                    this.selectedFile = [];
+                    this.message = '';
+                    this.tagValue = [];
+
                     loadingScreen.classList.remove('m-loading-screen-active');
-                    spinning.classList.remove('show')
-                    btnSubmit?.classList.remove('m-btn-submit')
-                    // this.router.navigateByUrl("/home/facebook");
+                    spinning.classList.remove('show');
+                    btnSubmit?.classList.remove('m-btn-submit');
+                    successDialog?.classList.remove('is-hidden');
                 }
             });
         }
@@ -133,22 +151,15 @@ export class CreatePostComponent implements OnInit {
     };
 
     handleChange(event: any): void {
+        let instagramPost = document.getElementById('instagramPost') as HTMLImageElement;
+        // let facebookPost = document.getElementById('fp') as HTMLImageElement;
+        // console.log(facebookPost);
         if(event.type == 'success') {
             this.selectedFile = event.fileList
+            this.fileList.forEach((file : any, index) => {
+                instagramPost.src = event.fileList[index].response.files.url;
+            })
         }
-        // let instagramPost = document.getElementById('ip') as HTMLImageElement;
-        let facebookPost = document.getElementById('fp') as HTMLImageElement;
-        // // // console.log(instagramPost);
-        console.log(facebookPost);
-        // // this.fileList.forEach((file : any, index) => {
-        // //     // console.log(instagramPost)
-        // //     // console.log(facebookPost)
-        // //     // console.log(event.fileList[index].response.files.url)
-
-        // //     facebookPost.src = event.fileList[index].response.files.url;
-        // //     // instagramPost.src = event.fileList[index].response.files.url;
-        // // })
-
     }
 
     handleClose(removedTag: {}): void {
@@ -225,4 +236,22 @@ export class CreatePostComponent implements OnInit {
         this.isliked = !this.isliked
     }
 
+    resetSuccess() {
+        let successDialog = document.getElementById('successDialog');
+        successDialog?.classList.add('is-hidden')
+    }
+
+    test(urls : any) {
+        
+    }
+    tag(event: any) {
+        console.log(event)
+        let post = document.getElementsByClassName('m-post-photo')[0] as HTMLElement;
+        let input = document.getElementsByClassName('m-input-tag')[0] as HTMLElement;
+        let posX = event.offsetX - 100;
+        let posY = event.offsetY + 20;
+        input?.classList.add('is-shown');
+        input?.setAttribute("style", "top: "+ posY +"px;left: "+ posX +"px;");
+        post?.setAttribute("style", "filter: brightness(0.5);")
+    }
 }

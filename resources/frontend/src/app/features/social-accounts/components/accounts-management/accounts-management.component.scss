@@ -76,7 +76,6 @@ nz-page-header-subtitle {
                 width: 30%;
                 height: 29px;
                 color: #969696;
-                border-radius: 50px;
                 margin: 5px auto 10px;
                 border: 1px solid rgb(255, 255, 255);
                 text-align: center;
@@ -84,7 +83,7 @@ nz-page-header-subtitle {
         
                 &:hover {
                     transition: 0.2s all;
-                    border: 1px solid rgb(167, 167, 167);
+                    color: #3a426b;
                     cursor: pointer;
                 }
             }

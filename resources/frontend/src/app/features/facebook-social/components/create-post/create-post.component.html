@@ -1,4 +1,16 @@
 <div class="m-loading-screen"></div>
+<div id="successDialog" class="m-success is-hidden">
+    <nz-result class="m-success-result"
+          nzStatus="success"
+          nzTitle="Your post has been submitted successfully! "
+          nzSubTitle="Thank you for using mgo360 SHARE"
+        >
+        <div nz-result-extra>
+            <button (click)="resetSuccess()" nz-button>OK</button>
+        </div>
+    </nz-result>
+</div>
+
 <div class="mod-create-post">
     <div class="m-container">
         <div class="m-post-form">
@@ -140,7 +152,14 @@
                                                             <span class="m-menu">&nbsp;</span>
                                                         </div>
                                                     </div>
-                                                    <img id="ip" src="../../../../../assets/img/no-image.jpg" alt="post" class="m-post-photo">
+                                                    <div>
+                                                        <nz-select id="tagPerson" class="m-input-tag" nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="selectedValue">
+                                                            <nz-option class="tag-option" nzLabel="Jack" nzValue="jack"></nz-option>
+                                                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
+                                                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
+                                                          </nz-select>
+                                                        <img (dblclick)="tag($event)" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" >
+                                                    </div>
                                                     <div class="m-post-footer">
                                                         <br>
                                                         <div class="m-buttons">

@@ -59,6 +59,7 @@ nz-header {
         } 
 
         >.m-menu {
+            z-index: 3;
             user-select: none;
             display: none;
             width: 330px;
