@@ -382,15 +382,11 @@ class GeneralSocialController extends Controller
         $userId = UserTrait::getCurrentAdminId();
         $accounts = ProviderToken::where('created_by', $userId)->get();
         foreach ($accounts as $account) {
-            $now = strtotime('+0', strtotime(date('Y-m-d')));
+            $now = strtotime(date('Y-m-d'));
 
             if ($account->expiryDate >= date('Y-m-d')) {
                 $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-                $dateDifference = abs(strtotime(date('Y-m-d')) - strtotime($account->expiryDate));
-                $years = floor($dateDifference / (365 * 60 * 60 * 24));
-                $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
-                $days = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
-                array_push($response, ['mustBeRefreshed' =>(!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $months.' months and '.$days.' days']);
+                array_push($response, ['mustBeRefreshed' =>(!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate)]);
             }
         }
 
