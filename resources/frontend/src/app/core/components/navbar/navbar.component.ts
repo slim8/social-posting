@@ -17,7 +17,7 @@ export class NavbarComponent implements OnInit {
 
     ngOnInit(): void {
         this.userInfo = this.jwtService.decodeToken();
-        console.log(this.userInfo);
+        document.addEventListener("click", this.resetMenu);
     }
 
     collapse() {
@@ -28,6 +28,14 @@ export class NavbarComponent implements OnInit {
     menuCollapse(event: any) {
         let menu = document.getElementById("loggedMenu") as HTMLElement
         menu.classList.toggle("is-open")
+    }
+
+    resetMenu(e:any)  {
+        let menuBtn = document.getElementById("loggedin") as HTMLElement
+        let menu = document.getElementById("loggedMenu") as HTMLElement
+        if(!e.path.includes(menuBtn) && !e.path.includes(menu)) {
+            menu.classList.remove("is-open")
+        }
     }
 
 }

@@ -9,7 +9,8 @@ const routes: Routes = [
     { path: '', component: SocialAccountsComponent },
     { path: 'pages', component: AccountPagesComponent },
     { path: 'accounts-management', component: AccountsManagementComponent },
-    { path: 'create-post', component: CreatePostComponent }
+    { path: 'create-post', component: CreatePostComponent },
+    { path: 'pages', component: AccountPagesComponent },
 ];
 
 @NgModule({

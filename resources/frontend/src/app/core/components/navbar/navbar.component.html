@@ -7,9 +7,10 @@
          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
     </span>
     <div class="m-loggedin">
-        <div class="m-connected-user" (click)="menuCollapse($event)">
+        <div id="loggedin" class="m-connected-user" (click)="menuCollapse($event)">
             <div class="m-user-image">
-                <img src="../../../../assets/img/user.png">
+                <!-- <img src="../../../../assets/img/user.png"> -->
+                <nz-avatar [nzSize]="40" nzIcon="user"></nz-avatar>
             </div>
             <div class="m-user-name">
                 {{userInfo.data.fullName}}
@@ -23,7 +24,8 @@
         <div id="loggedMenu" class="m-menu">
             <div class="m-menu-header">
                 <div class="m-user-image">
-                    <img src="../../../../assets/img/user.png">
+                    <!-- <img src="../../../../assets/img/user.png"> -->
+                    <nz-avatar [nzSize]="64" nzIcon="user"></nz-avatar>
                 </div>
                 <div class="m-user-info">
                     <div class="m-user-name">{{userInfo.data.fullName}}</div>

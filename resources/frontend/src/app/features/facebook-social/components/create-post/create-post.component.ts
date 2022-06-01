@@ -64,7 +64,6 @@ export class CreatePostComponent implements OnInit {
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0]
         let btnSubmit = document.getElementById('btn-submit')
         let spinning = document.getElementsByClassName('m-loading-spin')[0]
-
         const formData: FormData = new FormData();
 
         this.tagValue.forEach((accountId: any) => {
@@ -82,6 +81,12 @@ export class CreatePostComponent implements OnInit {
                 formData.append('sources[]', file.originFileObj);
             });
         }
+
+        // if (this.selectedFile.length > 0) {
+        //     this.selectedFile.forEach((file: any) => {
+        //         formData.append('images[]', file.originFileObj);
+        //     });
+        // }
 
         formData.append('message', this.message);
 
@@ -112,10 +117,9 @@ export class CreatePostComponent implements OnInit {
                     loadingScreen.classList.remove('m-loading-screen-active');
                     spinning.classList.remove('show')
                     btnSubmit?.classList.remove('m-btn-submit')
-                    this.router.navigateByUrl("/home/facebook");
+                    // this.router.navigateByUrl("/home/facebook");
                 }
             });
-
         }
     }
 
@@ -129,21 +133,21 @@ export class CreatePostComponent implements OnInit {
     };
 
     handleChange(event: any): void {
-        // if(event.type == 'success') {
-        //     this.fileList = event.fileList
-        // }
+        if(event.type == 'success') {
+            this.selectedFile = event.fileList
+        }
         // let instagramPost = document.getElementById('ip') as HTMLImageElement;
         let facebookPost = document.getElementById('fp') as HTMLImageElement;
         // // // console.log(instagramPost);
         console.log(facebookPost);
-        // // // this.fileList.forEach((file : any, index) => {
-        // // //     // console.log(instagramPost)
-        // // //     // console.log(facebookPost)
-        // // //     // console.log(event.fileList[index].response.files.url)
+        // // this.fileList.forEach((file : any, index) => {
+        // //     // console.log(instagramPost)
+        // //     // console.log(facebookPost)
+        // //     // console.log(event.fileList[index].response.files.url)
 
-        // // //     facebookPost.src = event.fileList[index].response.files.url;
-        // // //     // instagramPost.src = event.fileList[index].response.files.url;
-        // // // })
+        // //     facebookPost.src = event.fileList[index].response.files.url;
+        // //     // instagramPost.src = event.fileList[index].response.files.url;
+        // // })
 
     }
 
