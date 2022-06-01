@@ -51,6 +51,7 @@ return [
             'username' => env('UPLOAD_FTP_SERVER_USERNAME'),
             'password' => env('UPLOAD_FTP_SERVER_PASWORD'),
             'root' => env('UPLOAD_FTP_SERVER_PATH'),
+            'ssl' => env('UPLOAD_FTP_SERVER_USE_SSL'),
             // 'port'     => 21,
             //
             // 'passive'  => true,
