@@ -72,4 +72,5 @@ trait RequestsTrait
     {
         return str_replace(' ','_',$tag);
     }
+
 }
