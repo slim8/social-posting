@@ -18,37 +18,32 @@
       <li nz-menu-item>
         <a routerLink="/home">Home</a>
       </li>
-      <li nz-menu-item>
+      <!-- <li nz-menu-item>
         <a routerLink="/home/welcome">Welcome</a>
-      </li>
+      </li> -->
       <li nz-menu-item>
         <a routerLink="/home/facebook">Meta</a>
       </li>
-      <li nz-menu-item>
-        <a>Workplace</a>
-      </li>
     </ul>
   </li>
-  <li nz-submenu
-      nzOpen
-      nzTitle="Form"
-      nzIcon="form">
-    <ul>
-      <li nz-menu-item>
-        <a routerLink="/home/user">User Management</a>
-      </li>
-    </ul>
-  </li>
-
   <li nz-submenu
       nzOpen
       nzTitle="Social Accounts"
       nzIcon="global">
     <ul>
-      <li nz-menu-item
-          nzMatchRouter>
-        <a>Facebook</a>
-      </li>
+        <li nz-menu-item
+            nzMatchRouter>
+            <a routerLink="/home/social-accounts/accounts-management">Accounts management</a>
+        </li>
+        <li nz-menu-item
+            nzMatchRouter>
+            <a routerLink="/home/social-accounts/pages">Approved pages</a>
+        </li>
+        <li nz-menu-item
+            nzMatchRouter>
+            <i nz-icon nzType="plus"></i>
+            <a routerLink="/home/social-accounts/create-post">&nbsp;&nbsp;Create post</a>
+        </li>
     </ul>
   </li>
   <li nz-menu-item
