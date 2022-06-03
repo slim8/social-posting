@@ -3,8 +3,7 @@
         <div class="m-title">Facebook pages</div>
         <div class="m-facebook-pages" >
             <div class="m-page" *ngFor="let page of facebookPages">
-        
-                <nz-card style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                <nz-card (click)="getPostsBypageId(page.id)" style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
                     <nz-card-meta
                         nzTitle="{{page.pageName}}"
                         nzDescription="{{page.category}}"
@@ -15,7 +14,7 @@
                     <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
                 </ng-template>
                 <ng-template #actionSetting>
-                    {{page.provider}}
+                    <i  nz-icon nzType="facebook" nzTheme="outline"></i>{{page.provider}}
                 </ng-template>
                 <ng-template #actionEdit>
                     <i nz-icon nzType="edit"></i>
@@ -23,11 +22,6 @@
                 <ng-template #actionEllipsis>
                     <i nz-icon nzType="ellipsis"></i>
                 </ng-template>
-            </div>
-            <div class="m-page">
-                <div class="m-page-container">
-                    <i class="m-icon" nz-icon nzType="plus" nzTheme="outline"></i>
-                </div>
             </div>
         </div>
     </div>
@@ -37,7 +31,7 @@
         <div class="m-instagram-pages" >
             <div class="m-page" *ngFor="let page of instaPages">
         
-                <nz-card style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                <nz-card (click)="getPostsBypageId(page.id)" style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
                     <nz-card-meta
                         nzTitle="{{page.pageName}}"
                         nzDescription="{{page.category}}"
@@ -48,7 +42,7 @@
                     <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
                 </ng-template>
                 <ng-template #actionSetting>
-                    {{page.provider}}
+                    <i nz-icon nzType="instagram" zTheme="outline"></i>{{page.provider}}
                 </ng-template>
                 <ng-template #actionEdit>
                     <i nz-icon nzType="edit"></i>
@@ -57,11 +51,7 @@
                     <i nz-icon nzType="ellipsis"></i>
                 </ng-template>
             </div>
-            <div class="m-page">
-                <div class="m-page-container">
-                    <i class="m-icon" nz-icon nzType="plus" nzTheme="outline"></i>
-                </div>
-            </div>
+            
         </div>
     </div>
     

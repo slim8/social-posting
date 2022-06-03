@@ -11,6 +11,7 @@ const routes: Routes = [
       { path: 'welcome', component: WelcomeComponent },
       { path: 'facebook', loadChildren: () => import('../features/facebook-social/facebook-social.module').then(m => m.FacebookSocialModule) },
       { path: 'user', loadChildren: () => import('../features/user/user.module').then(m => m.UserModule) },
+      { path: 'social-accounts', loadChildren: () => import('../features/social-accounts/social-accounts.module').then(m => m.SocialAccountsModule) },
     ],
   },
   // { path: '', component: MainComponent },

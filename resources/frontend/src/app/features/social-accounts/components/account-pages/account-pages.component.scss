@@ -1,0 +1,125 @@
+.mod-meta-pages {
+
+    >.m-facebook-info , .m-instagram-info {
+
+        >.m-title {
+            font-size: 30px;
+        }
+
+        .m-facebook-pages , .m-instagram-pages {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: start;
+        
+            > .m-page {
+                border-radius: 5px;
+                margin: 30px 17px 30px 17px;
+                background-color: #e4efff;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+        
+                &:hover {
+                    transition: 0.3s all;
+                    box-shadow: 0px 0px 10px 1px rgb(245, 245, 245);
+                    user-select: none;
+                }   
+        
+                > .m-page-container {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+        
+                    > .m-img-container {
+                        box-shadow: 0px 0px 3px 0px;
+                        position: absolute;
+                        top: -66px;
+                        border: 3px solid white;
+                        width: 150px;
+                        height: 150px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+        
+                        > .m-picture {
+                            width: 180px;
+                        }
+                    }
+        
+                    > .m-category {
+                        text-align: center;
+                    }
+        
+                    > .m-page-name {
+                        text-align: center;
+                        font-weight: 700;
+                        font-size: 23px;
+                    }
+        
+                    > .m-icon {
+                            // display: none;
+                        svg {
+                            width: 30px;
+                            height: 30px;
+                            color: blue;
+                        }
+                    }
+        
+                    > .m-account {
+                        position: absolute;
+                        bottom: 0;
+                        width: 100%;
+                        height: 59px;
+                        padding-top: 10px;
+                        background-color: #367bc3;
+                        border-bottom-left-radius: 5px;
+                        border-bottom-right-radius: 5px;
+                        color: white;
+                        font-size: 25px;
+                        font-weight: 500;
+                        text-align: center;
+                        overflow: hidden;
+        
+                        > div {
+                            > .m-button {
+                                font-size: 16px;
+                                margin: auto;
+                                border-radius: 8px;
+                                background-color: #1d446c;
+                                width: 104px;
+                                border: none;
+                                height: 38px;
+                                color: white;
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: center;
+                                align-items: center;
+                                cursor: pointer;
+                            }
+                            > .m-title {
+                                margin-bottom: 15px;
+                            }
+                        }
+        
+                        &:hover {
+                            >div {
+                                transition: 0.2s all;
+                                transform: translateY(-53px);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
