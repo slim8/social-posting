@@ -41,12 +41,15 @@ class GeneralSocialController extends Controller
         $validator = Validator::make($request->all(), [
             'accountIds' => 'required',
             'message' => 'string|max:255',
+            'status' => 'string|max:255',
         ]);
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
         }
         $images = $request->images;
         $videos = $request->videos;
+        $statusPost = $request->status;
+        $requestPostId = $request->originalId ? $request->originalId : null;
 
         if ($request->file('sources')) {
             foreach ($request->file('sources') as $file) {
@@ -77,14 +80,25 @@ class GeneralSocialController extends Controller
                 $accountProvider = $account->provider;
                 $postResponse = [];
                 if ($inc == 0) {
-                    $postId = Post::create([
+                    $postObject = [
                         'url' => 'url',
                         'message' => $request->message,
                         'video_title' => $request->videoTitle ? $request->videoTitle : '',
-                        'status' => true,
+                        'status' => $request->status,
                         'publishedAt' => Carbon::now(),
+                        'created_by' => UserTrait::getCurrentAdminId(),
                         'isScheduled' => 0,
-                    ]);
+                    ];
+                    if (!$requestPostId) {
+                        $postId = Post::create($postObject);
+                    } else {
+                        $postId = Post::where('id', $requestPostId)->update($postObject);
+                        $postId = Post::where('id', $requestPostId)->first();
+
+                        // Delete All PostTag
+
+                        // Delete All PostMedia
+                    }
 
                     if ($request->tags) {
                         foreach ($request->tags as $tag) {
@@ -127,7 +141,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags, $videos, $request->videoTitle);
+                    $postResponse = ($statusPost == 'PUBLISH') ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags, $videos, $request->videoTitle) : 'DRAFT';
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -137,15 +151,15 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags, $videos);
+                    $postResponse = ($statusPost == 'PUBLISH') ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags, $videos) : 'DRAFT';
                 }
 
-                if ($postResponse['status']) {
+                if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == 'DRAFT') {
                     AccountPost::create([
                         'url' => '',
                         'post_id' => $postId->id,
                         'account_id' => $singleAccountId,
-                        'post_id_provider' => $postResponse['id'],
+                        'post_id_provider' => (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse,
                     ]);
                 } else {
                     $errorLog[] = $postResponse['message'];
@@ -386,16 +400,44 @@ class GeneralSocialController extends Controller
 
             if ($account->expiryDate >= date('Y-m-d')) {
                 $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-                array_push($response, ['mustBeRefreshed' =>(!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate)]);
+                array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate)]);
             }
         }
 
-        if($response){
+        if ($response) {
             return response()->json(['success' => true,
             'accounts' => $response, ], 201);
-        }else{
+        } else {
             return response()->json(['success' => false,
             'message' => 'No account autorized', ], 201);
         }
+    }
+
+    /**
+     * Get All posts By Criteria.
+     */
+    public function getPosts(Request $request)
+    {
+        $companyId = UserTrait::getCompanyId();
+        $response = Post::whereHas('accounts', function ($query) use ($companyId) {
+            $query->where('accounts.company_id', $companyId);
+        })->with('PostMedia');
+        if ($request->status) {
+            $response = $response->where('status', $request->status);
+        }
+        $response = $response->get();
+
+        if ($response) {
+            return response()->json(['success' => true,
+            'posts' => $response, ], 201);
+        } else {
+            return response()->json(['success' => false,
+            'message' => 'No posts found', ], 201);
+        }
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        # code...
     }
 }
