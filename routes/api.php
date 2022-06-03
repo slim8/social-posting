@@ -48,6 +48,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
     Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
     Route::get('/accounts/get-posts/{id}', [GeneralSocialController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
+    Route::get('/posts', [GeneralSocialController::class, 'getPosts'])->name('get-posts-api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
