@@ -2,6 +2,10 @@ nz-select {
     width: 100%;
 }
 
+.view-mentions {
+    display: none!important;
+}
+
 .m-success {
     width: 100vw;
     height: 100vh;
@@ -290,7 +294,45 @@ cdk-virtual-scroll-viewport {
                                                         }
                                                     }
 
-                                                    > div {
+                                                    > #postView {
+
+                                                        >.view-mentions {
+                                                            display: none !important;
+                                                        }
+
+                                                        > .tooltip{
+                                                            user-select: none;
+                                                            display: none;
+                                                            background: #000;
+                                                            border-radius: 6px;
+                                                            bottom: 135%;
+                                                            font-size: 16px;
+                                                            color: #fff;
+                                                            width: 94px;
+                                                            height: 35px;
+                                                            opacity: 1;
+                                                            padding: 4px 4px;
+                                                            position: absolute;
+                                                            text-align: center;
+                                                            transform: translateX(-50%);
+                                                            left: 50%;
+
+                                                            &::before {
+                                                                content: '';
+                                                                border-color: transparent transparent #000 transparent;
+                                                                border-style: solid;
+                                                                border-width: 10px;
+                                                                left: 42%;
+                                                                position: absolute;
+                                                                top: -49%;
+                                                            }
+
+                                                            &.is-shown {
+                                                                z-index: 3;
+                                                                display: block !important;
+                                                            }
+                                                        }
+
                                                         position: relative;
 
                                                         > .m-post-photo {
@@ -299,8 +341,11 @@ cdk-virtual-scroll-viewport {
 
                                                         > .m-input-tag {
                                                             position: absolute;
+                                                            bottom: -30px;
+                                                            left: 0;
+                                                            border: none;
                                                             display: none;
-                                                            width: 200px;
+                                                            width: 100%;
 
                                                             &.is-shown {
                                                                 z-index: 3;

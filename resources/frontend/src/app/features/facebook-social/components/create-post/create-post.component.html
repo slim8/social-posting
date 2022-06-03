@@ -61,9 +61,9 @@
                                         <input type="text" nz-input placeholder="input search text" />
                                     </nz-input-group>
                                     <br >
-                                    <div *ngFor="let item of urlLinks">
+                                    <div *ngFor="let item of urlLinks; let i = index">
                                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                                            <input type="text" [id]="item" nz-input placeholder="input search text" />
+                                            <input type="text" [id]="item" nz-input placeholder="input search text" [(ngModel)]="urlLinks[i]" />
                                         </nz-input-group>
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)"><i nz-icon nzType="delete"></i></button>
@@ -152,13 +152,14 @@
                                                             <span class="m-menu">&nbsp;</span>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <nz-select id="tagPerson" class="m-input-tag" nzShowSearch nzAllowClear nzPlaceHolder="Select a person" [(ngModel)]="selectedValue">
-                                                            <nz-option class="tag-option" nzLabel="Jack" nzValue="jack"></nz-option>
-                                                            <nz-option nzLabel="Lucy" nzValue="lucy"></nz-option>
-                                                            <nz-option nzLabel="Tom" nzValue="tom"></nz-option>
-                                                          </nz-select>
-                                                        <img (dblclick)="tag($event)" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" >
+                                                    <div id="postView">
+                                                        <div id="tooltip" class="tooltip">who's this?</div>
+
+                                                        <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect($event)">
+                                                            <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
+                                                        </nz-mention>
+
+                                                        <img (dblclick)="tag($event)" (click)="viewMentions()" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" >
                                                     </div>
                                                     <div class="m-post-footer">
                                                         <br>
