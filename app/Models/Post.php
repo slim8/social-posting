@@ -10,7 +10,6 @@ class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
     protected $fillable = [
         'message',
         'url',
@@ -18,6 +17,7 @@ class Post extends Model
         'publishedAt',
         'video_title',
         'isScheduled',
+        'created_by',
         'deleted',
     ];
 
@@ -34,5 +34,10 @@ class Post extends Model
     public function tags()
     {
         return $this->hasMany(Tag::class)->using(PostTag::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(Users::class, 'created_by');
     }
 }
