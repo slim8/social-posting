@@ -314,15 +314,38 @@ class GeneralSocialController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
         $facebookUserId = $request->id;
-        $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
-        $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
-        if ($AllPages) {
+        $providerToken = ProviderToken::where('longLifeToken', 'DISCONNECTED')->where('created_by', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
+        $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
+        $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
+
+        /* Start Reconnect Block */
+        if ($providerToken) {
+            if ($facebookResponse['SelectedPages']) {
+                foreach ($facebookResponse['SelectedPages'] as $page) {
+                    $provider = $page['provider'];
+                    if ($provider == 'facebook') {
+                        Account::where('provider_token_id', $providerToken->id)->where('uid', $page['pageId'])
+                        ->update(['status' => 1, 'accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+                    } else {
+                        $instagramAccount = Account::where('provider_token_id', $providerToken->id)->where('uid', $page['pageId'])->first();
+                        if ($instagramAccount) {
+                            Account::where('provider_token_id', $providerToken->id)->where('uid', $page['pageId'])->update(['status' => 1, 'accessToken' => $instagramAccount->related_account_id == null ? $page['accessToken'] : 'NA', 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+                        }
+                    }
+                }
+            }
+
+            return RequestsTrait::processResponse(true, ['message' => 'Your account and his sub pages has been Re-connected']);
+        }
+
+        /* End  Reconnect Block */
+        if ($facebookResponse['AllPages']) {
             return response()->json(['success' => true,
-        'pages' => $AllPages, ], 201);
+        'pages' => $facebookResponse['AllPages'], ], 201);
         } else {
             return response()->json(['success' => false,
-        'pages' => $AllPages, ], 201);
+        'pages' => $facebookResponse['AllPages'], ], 201);
         }
     }
 
@@ -335,8 +358,7 @@ class GeneralSocialController extends Controller
         $userUid = $request->json('user');
 
         if (!UserTrait::getUniqueProviderTokenByProvider($userUid)) {
-            return response()->json(['success' => false,
-        'message' => 'No User Id Found in this Account', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'No User Id Found in this Account']);
         }
 
         // Check and return false if userUid not autorized for this action ;
