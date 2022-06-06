@@ -398,18 +398,14 @@ class GeneralSocialController extends Controller
         foreach ($accounts as $account) {
             $now = strtotime(date('Y-m-d'));
 
-            if ($account->expiryDate >= date('Y-m-d')) {
-                $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-                array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate)]);
-            }
+            $expiry = strtotime('-5 days', strtotime($account->expiryDate));
+            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === 'DISCONNECTED') ? false : true]);
         }
 
         if ($response) {
-            return response()->json(['success' => true,
-            'accounts' => $response, ], 201);
+            return RequestsTrait::processResponse(true, ['accounts' => $response]);
         } else {
-            return response()->json(['success' => false,
-            'message' => 'No account autorized', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'No account autorized']);
         }
     }
 
@@ -422,22 +418,21 @@ class GeneralSocialController extends Controller
         $response = Post::whereHas('accounts', function ($query) use ($companyId) {
             $query->where('accounts.company_id', $companyId);
         })->with('PostMedia');
+
         if ($request->status) {
             $response = $response->where('status', $request->status);
         }
         $response = $response->get();
 
         if ($response) {
-            return response()->json(['success' => true,
-            'posts' => $response, ], 201);
+            return RequestsTrait::processResponse(true, ['posts' => $response]);
         } else {
-            return response()->json(['success' => false,
-            'message' => 'No posts found', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
         }
     }
 
     public function deleteAccount(Request $request)
     {
-        # code...
+        // code...
     }
 }
