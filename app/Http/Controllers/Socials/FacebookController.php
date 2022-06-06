@@ -213,11 +213,9 @@ class FacebookController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true , ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Facebook Page Found', ], 201);
+                return RequestsTrait::processResponse(false , [ 'message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
@@ -340,11 +338,9 @@ class FacebookController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return response()->json(['success' => true,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(true , ['pages' => $AllPages]);
         } else {
-            return response()->json(['success' => false,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(false);
         }
     }
 }
