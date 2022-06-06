@@ -7,6 +7,11 @@
          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
     </span>
     <div class="m-loggedin">
+        <div routerLink="/home/premium" class="m-premium">
+            <div>Go premium!</div>
+            <i nz-icon nzType="shopping" nzTheme="outline"></i>
+        </div>
+
         <div id="loggedin" class="m-connected-user" (click)="menuCollapse($event)">
             <div class="m-user-image">
                 <!-- <img src="../../../../assets/img/user.png"> -->

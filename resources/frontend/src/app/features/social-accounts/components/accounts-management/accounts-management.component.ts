@@ -31,18 +31,7 @@ export class AccountsManagementComponent implements OnInit {
             myChoices: new FormArray([]),
         });
 
-        this.accountsService.getConnectedAccounts().subscribe({
-            next: (response: any) => {
-                console.log(response)
-                this.connectedAccounts = response.accounts
-            },
-            error: err => {
-                console.log(err)
-            },
-            complete: () => {
-                // console.log('done')
-            }
-        })
+        this.getConnectedAccounts();
     }
 
     loginWithFacebook() {
@@ -54,19 +43,14 @@ export class AccountsManagementComponent implements OnInit {
                     accessToken: res.authResponse.accessToken,
                     id: res.authResponse.userID,
                 };
-
-                this.service
-                    .manageFacebookPages(
-                        sharedConstants.API_ENDPOINT + '/get-meta-pages-groups',
-                        {
-                            accessToken: this.user.accessToken,
-                            id: this.user.id,
-                        }
-                    )
-                    .subscribe((response: any) => {
-                        this.listpages = response.pages;
-                        this.showModal();
-                    });
+                this.getConnectedAccounts();
+                this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
+                    accessToken: this.user.accessToken,
+                    id: this.user.id,
+                }).subscribe((response: any) => {
+                    this.listpages = response.pages;
+                    this.showModal();
+                });
             })
             .catch(() => console.error('error'));
     }
@@ -76,27 +60,20 @@ export class AccountsManagementComponent implements OnInit {
     }
 
     handleOk(): void {
-        console.log('Button ok clicked!');
         this.isVisible = false;
     }
 
     handleCancel(): void {
-        console.log('Button cancel clicked!');
         this.isVisible = false;
     }
 
     onSubmit() {
         if (this.validateForm.valid) {
-            console.log(this.validateForm.value);
-
-            console.log('this.listpages', this.listpages);
-
             let selectedobject = this.listpages.filter((item: any) =>
                 this.validateForm.value.myChoices.includes(item.pageId)
             );
-            console.log(selectedobject);
-            this.service
-                .manageFacebookPages(
+
+            this.service.manageFacebookPages(
                     sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
                     {
                         pages: selectedobject,
@@ -104,8 +81,6 @@ export class AccountsManagementComponent implements OnInit {
                     }
                 )
                 .subscribe((response: any) => {
-
-                    console.log('saveFacebookPages');
                     console.log(response);
                 });
 
@@ -125,11 +100,40 @@ export class AccountsManagementComponent implements OnInit {
 
     onCheckChange(event: any) {
         const formArray: FormArray = this.validateForm.get(
-          'myChoices'
+            'myChoices'
         ) as FormArray;
         if (event.target.checked) {
-          formArray.push(new FormControl(event.target.value));
+            formArray.push(new FormControl(event.target.value));
         }
-      }
+    }
+
+    disconnect(id: string) {
+        this.accountsService.disconnectAccountById(id).subscribe({
+            next: (response: any) => {
+                console.log(response)
+                this.connectedAccounts = response.accounts
+            },
+            error: err => {
+                console.log(err)
+            },
+            complete: () => {
+                // console.log('done')
+            }
+        })
+    }
+
+    getConnectedAccounts() {
+        this.accountsService.getConnectedAccounts().subscribe({
+            next: (response: any) => {
+                this.connectedAccounts = response.accounts
+            },
+            error: err => {
+                console.log(err)
+            },
+            complete: () => {
+                // console.log('done')
+            }
+        })
+    }
 
 }

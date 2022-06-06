@@ -23,6 +23,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 })
 
 export class CreatePostComponent implements OnInit {
+    url1 ='';
     bool:boolean = false;
     imageWidth = 0;
     imageHeight = 0;
@@ -30,8 +31,8 @@ export class CreatePostComponent implements OnInit {
     mentions: any = [];
     selectedValue = []
     isliked: boolean = false
-    urlLinks: any[] = [];
-    urlLinksIndex: number = 0;
+    urlLinks:any = [];
+    urlLinksIndex = 0;
     tags: string[] = [];
     inputVisible = false;
     inputValue = '';
@@ -69,9 +70,9 @@ export class CreatePostComponent implements OnInit {
         let tagOption = document.getElementsByClassName('tag-option');
         let tooltip = document.getElementById('tooltip') as HTMLElement;
         if (!e.path.includes(instaPost) && !e.path.includes(tagPerson) && !e.path.includes(tagOption) && !e.path.includes(tooltip)) {
-            input.classList.remove("is-shown");
-            tooltip.classList.remove("is-shown");
-            instaPost.setAttribute("style", "filter: none;");
+            input?.classList.remove("is-shown");
+            tooltip?.classList.remove("is-shown");
+            instaPost?.setAttribute("style", "filter: none;");
         }
     }
 
@@ -86,7 +87,7 @@ export class CreatePostComponent implements OnInit {
         );
     }
 
-    submitForm() {
+    submitForm(param : string) {
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0]
         let btnSubmit = document.getElementById('btn-submit')
         let successDialog = document.getElementById('successDialog')
@@ -103,18 +104,25 @@ export class CreatePostComponent implements OnInit {
             });
         }
 
+        if(this.mentions.length > 0) {
+            this.mentions.forEach((mention: any) => {
+                formData.append('mention[]', mention);
+            });
+        }
+
+        if(this.urlLinks.length > 0) {
+            this.urlLinks.forEach((url : any) => {
+                formData.append('images[]', url);
+            })
+        }
+
         if (this.selectedFile.length > 0) {
             this.selectedFile.forEach((file: any) => {
                 formData.append('sources[]', file.originFileObj);
             });
         }
 
-        // if (this.selectedFile.length > 0) {
-        //     this.selectedFile.forEach((file: any) => {
-        //         formData.append('images[]', file.originFileObj);
-        //     });
-        // }
-
+        formData.append('status', param);
         formData.append('message', this.message);
 
         if (formData) {
@@ -227,20 +235,16 @@ export class CreatePostComponent implements OnInit {
     }
 
     addLink() {
-        this.urlLinks.push(this.urlLinksIndex);
+        this.urlLinks.push(this.urlLinks[this.urlLinksIndex]);
         this.urlLinksIndex++;
-        console.log('add');
-        console.log(this.urlLinks);
     }
 
     removeLink(index: number) {
-        this.urlLinks.forEach((element, i) => {
+        this.urlLinks.forEach((element:any, i:any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
             }
         });
-        console.log('remove');
-        console.log(this.urlLinks);
     }
 
     liked(event: any) {
@@ -253,17 +257,8 @@ export class CreatePostComponent implements OnInit {
         let successDialog = document.getElementById('successDialog');
         successDialog?.classList.add('is-hidden')
     }
-
-    test(urls: any) {
-
-    }
-
+    
     tag(event: any) {
-        // console.log(event);
-        // console.log('image width: ' + event.path[0].clientWidth);
-        // console.log('image height: ' + event.path[0].clientHeight);
-        // console.log(event.offsetX);
-        // console.log(event.offsetY);
 
         this.imageHeight = event.path[0].clientHeight;
         this.imageWidth = event.path[0].clientWidth;
@@ -285,25 +280,25 @@ export class CreatePostComponent implements OnInit {
         console.log(value);
     }
 
-    onSelect(suggestion: string): void {
+    onSelect(): void {
         let tooltip = document.createElement('div');
+        let mentioned = document.querySelector('.mentioned');
         tooltip.setAttribute('data-index', this.mentionIndex.toString());
         tooltip.setAttribute('class', 'mentioned');
         let close = document.createElement('div');
         let imagetop = this.posY;
         let imageleft = this.posX;
-
         let mention = {
             username: '',
             x: 0,
             y: 0,
         }
 
-        let mentioned = document.querySelector('.mentioned');
         mention.username = this.inputValue2;
-        mention.x = this.posX;
-        mention.y = this.posY;
+        mention.x = Math.round((this.posX/this.imageWidth) * 100) / 100;
+        mention.y = Math.round((this.posY/this.imageHeight) * 100) / 100;
         this.mentions.push(mention);
+        console.log(this.mentions);
 
         mentioned?.addEventListener('click', this.edit);
 
@@ -370,5 +365,10 @@ export class CreatePostComponent implements OnInit {
                 element.style.opacity='0.3'
             }
         });
+    }
+
+    test() {
+        console.log(this.url1);
+        
     }
 }

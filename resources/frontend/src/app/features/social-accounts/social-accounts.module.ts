@@ -6,13 +6,15 @@ import { SocialAccountsComponent } from './social-accounts.component';
 import { AccountPagesComponent } from './components/account-pages/account-pages.component';
 import { AccountsManagementComponent } from './components/accounts-management/accounts-management.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DraftComponent } from './components/draft/draft.component';
 
 
 @NgModule({
   declarations: [
     SocialAccountsComponent,
     AccountPagesComponent,
-    AccountsManagementComponent
+    AccountsManagementComponent,
+    DraftComponent
   ],
   imports: [
     CommonModule,
