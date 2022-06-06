@@ -58,12 +58,12 @@
                             <nz-form-control [nzSpan]="24">
                                 <div>
                                     <nz-input-group nzSearch>
-                                        <input type="text" nz-input placeholder="input search text" />
+                                        <input type="text" [(ngModel)]="url1" nz-input placeholder="input search text" />
                                     </nz-input-group>
                                     <br >
-                                    <div *ngFor="let item of urlLinks; let i = index">
+                                    <div *ngFor="let item of urlLinks; let index = index;">
                                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                                            <input type="text" [id]="item" nz-input placeholder="input search text" [(ngModel)]="urlLinks[i]" />
+                                            <input type="text" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index]" />
                                         </nz-input-group>
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)"><i nz-icon nzType="delete"></i></button>
@@ -116,8 +116,9 @@
                         </nz-select>
                     </nz-form-control>
                     <br>
-                    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{offset: 18 }">
-                      <button id="btn-submit" nz-button (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
+                    <nz-form-control [nzXs]="{ span: 10, offset: 3 }" [nzSm]="{offset: 14 }">
+                        <button id="btn-save" nz-button (click)="submitForm('DRAFT')"><div>Save</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
+                        <button id="btn-submit" nz-button (click)="submitForm('PUBLISH')"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
                     </nz-form-control>
 
             </div>
@@ -155,7 +156,7 @@
                                                     <div id="postView">
                                                         <div id="tooltip" class="tooltip">who's this?</div>
 
-                                                        <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect($event)">
+                                                        <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect()">
                                                             <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
                                                         </nz-mention>
 

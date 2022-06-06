@@ -12,4 +12,9 @@ export class AccountsService {
     getConnectedAccounts () {
         return this.http.get(sharedConstants.API_ENDPOINT+ '/get-connected-accounts');
     }
+
+    disconnectAccountById(id : string) {
+        return this.http.get(sharedConstants.API_ENDPOINT+ '/disconnect');
+    }
+
 }
