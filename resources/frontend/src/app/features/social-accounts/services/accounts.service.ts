@@ -14,7 +14,7 @@ export class AccountsService {
     }
 
     disconnectAccountById(id : string) {
-        return this.http.get(sharedConstants.API_ENDPOINT+ '/disconnect');
+        return this.http.post(sharedConstants.API_ENDPOINT+ '/disconnect-token', {'id' : id});
     }
 
 }
