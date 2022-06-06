@@ -38,7 +38,7 @@
             <div *ngIf="account.isConnected" (click)="showDisconnectConfirm(account.providerId)" class="m-profile-btn">
                 <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
             </div>
-            <div *ngIf="!account.isConnected" (click)="disconnect(account.providerId)"class="m-profile-btn reconnect">
+            <div *ngIf="!account.isConnected" (click)="loginWithFacebook()" class="m-profile-btn reconnect">
                 <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
             </div>
         </div>
