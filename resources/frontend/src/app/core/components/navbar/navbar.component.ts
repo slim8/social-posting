@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit {
     resetMenu(e:any)  {
         let menuBtn = document.getElementById("loggedin") as HTMLElement
         let menu = document.getElementById("loggedMenu") as HTMLElement
-        if(!e.path.includes(menuBtn) && !e.path.includes(menu)) {
+        if(!e.path?.includes(menuBtn) && !e.path?.includes(menu)) {
             menu.classList.remove("is-open")
         }
     }

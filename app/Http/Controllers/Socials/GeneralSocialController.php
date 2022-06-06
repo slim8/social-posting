@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Socials;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
@@ -22,6 +23,7 @@ class GeneralSocialController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
+    use FacebookService;
 
     protected $utilitiesController;
     protected $facebookController;
@@ -68,8 +70,7 @@ class GeneralSocialController extends Controller
         $validator = $this->utilitiesController->postValidator($request->accountIds, $images, $videos);
 
         if (!$validator->status) {
-            return response()->json(['success' => false,
-            'message' => $validator->message, ], 201);
+            return RequestsTrait::processResponse(false, ['message' => $validator->message]);
         }
 
         foreach ($request->accountIds as $singleAccountId) {
@@ -170,11 +171,10 @@ class GeneralSocialController extends Controller
         }
 
         if ($errorLog) {
-            return response()->json(['success' => false,
-            'message' => $errorLog, ], 201);
+            return RequestsTrait::processResponse(false, ['message' => $errorLog]);
         }
 
-        return response()->json(['success' => true], 201);
+        return RequestsTrait::processResponse(true);
     }
 
     /**
@@ -193,11 +193,9 @@ class GeneralSocialController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Facebook Page Found', ], 201);
+                return RequestsTrait::processResponse(false, ['message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
@@ -267,11 +265,9 @@ class GeneralSocialController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return response()->json(['success' => true,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
         } else {
-            return response()->json(['success' => false,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(false);
         }
     }
 
@@ -289,11 +285,9 @@ class GeneralSocialController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Accounts Found', ], 201);
+                return RequestsTrait::processResponse(false, ['message' => 'No Accounts Found']);
             }
         } else {
             return $AllPages;
@@ -314,15 +308,23 @@ class GeneralSocialController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
         $facebookUserId = $request->id;
-        $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
-        $AllPages = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
-        if ($AllPages) {
-            return response()->json(['success' => true,
-        'pages' => $AllPages, ], 201);
+        $providerToken = ProviderToken::where('longLifeToken', 'DISCONNECTED')->where('created_by', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
+        $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
+        $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
+
+        /* Start Reconnect Block */
+        if ($providerToken) {
+            FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerToken->id);
+
+            return RequestsTrait::processResponse(true, ['message' => 'Your account and his sub pages has been Re-connected']);
+        }
+
+        /* End  Reconnect Block */
+        if ($facebookResponse['AllPages']) {
+            return RequestsTrait::processResponse(true, ['pages' => $facebookResponse['AllPages']]);
         } else {
-            return response()->json(['success' => false,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(false);
         }
     }
 
@@ -335,8 +337,7 @@ class GeneralSocialController extends Controller
         $userUid = $request->json('user');
 
         if (!UserTrait::getUniqueProviderTokenByProvider($userUid)) {
-            return response()->json(['success' => false,
-        'message' => 'No User Id Found in this Account', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'No User Id Found in this Account']);
         }
 
         // Check and return false if userUid not autorized for this action ;

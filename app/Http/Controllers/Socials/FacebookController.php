@@ -29,7 +29,8 @@ class FacebookController extends Controller
         $responseObject = [];
         $response = Http::post(env('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
         $responseObject['name'] = $response->json('name');
-        return  $responseObject;
+
+        return $responseObject;
     }
 
     /**
@@ -212,11 +213,9 @@ class FacebookController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true , ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Facebook Page Found', ], 201);
+                return RequestsTrait::processResponse(false , [ 'message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
@@ -236,7 +235,7 @@ class FacebookController extends Controller
     /**
      * Save Facebook List of pages after autorization.
      */
-    public function savePage($facebookPage , $userUid)
+    public function savePage($facebookPage, $userUid)
     {
         $actualCompanyId = UserTrait::getCompanyId();
 
@@ -276,7 +275,8 @@ class FacebookController extends Controller
 
         $jsonPageList = $response->json('data');
 
-        $AllPages = [];
+        $AllPages = []; // Used to return Only Non Exist Pages
+        $SelectedPages = []; // Used to return all Selected Pages
 
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {
@@ -287,9 +287,10 @@ class FacebookController extends Controller
                 $name = $facebookPage['name'];
 
                 $checkIfExist = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
-
+                $pageArraySelected = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                $SelectedPages[] = $pageArraySelected;
                 if (!$checkIfExist) {
-                    $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                    $AllPages[] = $pageArraySelected;
                 }
 
                 if ($getInstagramAccount) {
@@ -298,15 +299,17 @@ class FacebookController extends Controller
                         $instagramAccount = $this->instagramController->getInstagramInformationFromBID($businessAccountId, $pageToken);
 
                         $checkIfExist = Account::where('uid', $businessAccountId)->where('company_id', UserTrait::getCompanyId())->first();
+                        $instagramSelected = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
                         if (!$checkIfExist) {
-                            $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                            $AllPages[] = $instagramSelected;
                         }
+                        $SelectedPages[] = $instagramSelected;
                     }
                 }
             }
         }
 
-        return $AllPages;
+        return ['AllPages' => $AllPages, 'SelectedPages' => $SelectedPages];
     }
 
     public function getPagesAccountInterne()
@@ -335,11 +338,9 @@ class FacebookController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return response()->json(['success' => true,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(true , ['pages' => $AllPages]);
         } else {
-            return response()->json(['success' => false,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(false);
         }
     }
 }

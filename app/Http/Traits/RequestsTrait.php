@@ -74,10 +74,14 @@ trait RequestsTrait
         return str_replace(' ', '_', $tag);
     }
 
-    public static function processResponse($sucess, $object)
+    /**
+     * Function to Process Json Response
+     */
+    public static function processResponse($sucess, array $object = [])
     {
+
         $object['success'] = $sucess;
 
-        return response()->json($object, 201);
+        return response()->json($object, $sucess ? 201 : 401);
     }
 }
