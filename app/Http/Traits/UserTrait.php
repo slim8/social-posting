@@ -72,4 +72,18 @@ trait UserTrait
 
         return $account;
     }
+
+    /**
+     * Get ProviderT By Provider UID.
+     */
+    public static function getProviderTByProviderUID($uid)
+    {
+        $account = ProviderToken::where('created_by', UserTrait::getCurrentAdminId())->where('accountUserId', $uid)->first();
+
+        if (!$account) {
+            return false;
+        }
+
+        return $account;
+    }
 }
