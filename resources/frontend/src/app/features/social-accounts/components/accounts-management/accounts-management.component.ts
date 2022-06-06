@@ -117,7 +117,7 @@ export class AccountsManagementComponent implements OnInit {
                 console.log(err)
             },
             complete: () => {
-                // console.log('done')
+                this.getConnectedAccounts();
             }
         })
     }
@@ -125,7 +125,8 @@ export class AccountsManagementComponent implements OnInit {
     getConnectedAccounts() {
         this.accountsService.getConnectedAccounts().subscribe({
             next: (response: any) => {
-                this.connectedAccounts = response.accounts
+                this.connectedAccounts = response.accounts;
+                console.log(response);
             },
             error: err => {
                 console.log(err)
