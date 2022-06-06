@@ -36,7 +36,8 @@ trait RequestsTrait
             $pageProfilePicture = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
-            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider];
+            $isConnected = ($account->accessToken == 'DISCONNECTED') ? 0 : 1; // Check if Account has token (Is Connected)
+            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider, 'isConnected' => $isConnected];
         }
 
         return $AllPages;
@@ -70,7 +71,13 @@ trait RequestsTrait
 
     public static function formatTags($tag)
     {
-        return str_replace(' ','_',$tag);
+        return str_replace(' ', '_', $tag);
     }
 
+    public static function processResponse($sucess, $object)
+    {
+        $object['success'] = $sucess;
+
+        return response()->json($object, 201);
+    }
 }
