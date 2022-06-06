@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from 'src/app/features/facebook-social/services/facebook-social.service';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -24,13 +25,13 @@ export class AccountsManagementComponent implements OnInit {
 
     constructor(private accountsService: AccountsService,
         private service: FacebookSocialService,
-        private formBuilder: FormBuilder) { }
+        private formBuilder: FormBuilder,
+        private modal: NzModalService) { }
 
     ngOnInit(): void {
         this.validateForm = this.formBuilder.group({
             myChoices: new FormArray([]),
         });
-
         this.getConnectedAccounts();
     }
 
@@ -126,15 +127,27 @@ export class AccountsManagementComponent implements OnInit {
         this.accountsService.getConnectedAccounts().subscribe({
             next: (response: any) => {
                 this.connectedAccounts = response.accounts;
-                console.log(response);
             },
             error: err => {
                 console.log(err)
             },
             complete: () => {
-                // console.log('done')
+                console.log(this.connectedAccounts);
             }
         })
     }
 
+
+    showDisconnectConfirm( id : any): void {
+        this.modal.confirm({
+          nzTitle: 'Do you really want to disconnect this account?',
+          nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.disconnect(id),
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel')
+        });
+      }
 }

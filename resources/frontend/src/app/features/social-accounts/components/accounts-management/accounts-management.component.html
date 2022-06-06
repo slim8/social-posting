@@ -11,7 +11,7 @@
     </div>
 </div>
 <div class="m-accounts">
-    <div class="m-account-card" *ngFor="let account of connectedAccounts">
+    <div class="m-account-card"  *ngFor="let account of connectedAccounts">
         <!-- 
             account.mustBeRefreshed
             account.profileName
@@ -20,22 +20,26 @@
             account.tokenExpireOn
             account.userName
          -->
-        <div class="m-menu-header">
+        <div class="m-menu-header" [ngClass]="{'disconnected' : !account.isConnected}">
             <div class="m-user-image">
-                <nz-avatar [nzSize]="64" nzIcon="user"></nz-avatar>
+                <nz-avatar *ngIf="account.isConnected" [nzSize]="64" nzIcon="user"></nz-avatar>
+                <i *ngIf="!account.isConnected" nz-icon nzType="disconnect" nzTheme="outline"></i>
             </div>
             <div class="m-user-info">
-                <div class="m-user-name">{{account.profileName}}</div>
+                <div class="m-user-name" [ngClass]="{'disconnected' : !account.isConnected}">{{account.profileName}}</div>
                 <div class="m-user-mail"><i nz-icon nzType="facebook" nzTheme="outline"></i>&nbsp;&nbsp;{{account.provider}}</div>
             </div>
-            <div class="m-profile-btn">
+            <div class="m-profile-btn" [ngClass]="{'disconnected' : !account.isConnected}">
                 <i nz-icon nzType="profile" nzTheme="outline"></i> profile
             </div>
-            <div class="m-profile-btn">
+            <div class="m-profile-btn" [ngClass]="{'disconnected' : !account.isConnected}">
                 <i nz-icon nzType="menu" nzTheme="outline"></i>
             </div>
-            <div (click)="disconnect(account.providerId)"class="m-profile-btn">
+            <div *ngIf="account.isConnected" (click)="showDisconnectConfirm(account.providerId)" class="m-profile-btn">
                 <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
+            </div>
+            <div *ngIf="!account.isConnected" (click)="disconnect(account.providerId)"class="m-profile-btn reconnect">
+                <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
             </div>
         </div>
     </div>
