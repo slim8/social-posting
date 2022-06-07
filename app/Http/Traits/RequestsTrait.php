@@ -36,7 +36,7 @@ trait RequestsTrait
             $pageProfilePicture = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
-            $isConnected = ($account->accessToken == 'DISCONNECTED') ? 0 : 1; // Check if Account has token (Is Connected)
+            $isConnected = ($account->accessToken == Account::$STATUS_DISCONNECTED) ? 0 : 1; // Check if Account has token (Is Connected)
             $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider, 'isConnected' => $isConnected];
         }
 
