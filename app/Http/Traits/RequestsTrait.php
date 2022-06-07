@@ -47,10 +47,10 @@ trait RequestsTrait
     {
         $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId());
 
-        // Check if the Account is Connected (accessToken not DISCONNECTED)
-        
+        // Check if the Account is Connected
+
         if($onlyConnected){
-            $account = $account->where('accessToken' , 'not like' , '%DISCONNECTED%');
+            $account = $account->where('status' , 1);
         }
 
         $account = $account->first();
