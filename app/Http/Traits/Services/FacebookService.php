@@ -5,6 +5,7 @@ namespace App\Http\Traits\Services;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 trait FacebookService
 {
@@ -31,6 +32,16 @@ trait FacebookService
                 }
             }
         }
+    }
+
+     /**
+     * Get facebook page picture from Facebook ID.
+     */
+    public static function getPagePicture($pageId)
+    {
+        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
+
+        return $response->json('data')['url'];
     }
 
 }

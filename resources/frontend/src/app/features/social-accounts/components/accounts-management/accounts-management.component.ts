@@ -116,6 +116,7 @@ export class AccountsManagementComponent implements OnInit {
             },
             error: err => {
                 console.log(err)
+                this.connectedAccounts = []
             },
             complete: () => {
                 this.getConnectedAccounts();

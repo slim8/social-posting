@@ -11,6 +11,8 @@ class Account extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $hidden = ['pivot'];
+
     protected $fillable = [
         'name',
         'provider',
@@ -43,5 +45,10 @@ class Account extends Model
     public function related_account()
     {
         return $this->belongsTo(Account::class, 'related_account_id');
+    }
+
+    public function providerToken()
+    {
+        return $this->belongsTo(ProviderToken::class,'provider_token_id');
     }
 }
