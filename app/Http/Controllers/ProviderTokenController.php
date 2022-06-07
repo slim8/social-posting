@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\Services\FacebookService;
@@ -17,9 +18,13 @@ class ProviderTokenController extends Controller
     use FacebookService;
     use RequestsTrait;
 
+    protected $facebookController;
+    protected $utilitiesController;
+
     public function __construct()
     {
         $this->facebookController = new FacebookController();
+        $this->utilitiesController = new UtilitiesController();
     }
 
     /**
@@ -80,14 +85,13 @@ class ProviderTokenController extends Controller
                 $expiry = strtotime('-3 days', strtotime($providerAcount->expiryDate));
 
                 if ($expiry == $now) {
-                    $tokenKey = $this->facebookController->generateLongLifeToken($providerAcount->longLifeToken, $providerAcount->accountUserId , $providerAcount->created_by)->token;
-                    $facebookResponse = $this->facebookController->getAccountPagesAccount($providerAcount->accountUserId, $tokenKey, 1 , 1);
+                    $tokenKey = $this->facebookController->generateLongLifeToken($providerAcount->longLifeToken, $providerAcount->accountUserId, $providerAcount->created_by)->token;
+                    $facebookResponse = $this->facebookController->getAccountPagesAccount($providerAcount->accountUserId, $tokenKey, 1, 1);
                     FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerAcount->id, 1);
                 }
             }
-
         }
-    return RequestsTrait::processResponse(true);
-    }
 
+        return RequestsTrait::processResponse(true);
+    }
 }
