@@ -55,7 +55,7 @@ class GeneralSocialController extends Controller
 
         // Check if post status is DRAFT
         if ($requestPostId) {
-            if (Post::where('id', $requestPostId)->where('status', 'PUBLISH')->first()) {
+            if (Post::where('id', $requestPostId)->where('status', POST::$STATUS_PUBLISH)->first()) {
                 return RequestsTrait::processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
             }
         }
@@ -148,7 +148,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
 
-                    $postResponse = ($statusPost == 'PUBLISH') ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags, $videos, $request->videoTitle) : 'DRAFT';
+                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $request->tags, $videos, $request->videoTitle) : 'DRAFT';
                 } elseif ($accountProvider == 'instagram') {
                     if ($request->message) {
                         $obj['caption'] = $request->message;
@@ -158,10 +158,10 @@ class GeneralSocialController extends Controller
                     $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
-                    $postResponse = ($statusPost == 'PUBLISH') ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags, $videos) : 'DRAFT';
+                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags, $videos) : 'DRAFT';
                 }
 
-                if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == 'DRAFT') {
+                if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
                     AccountPost::create([
                         'url' => '',
                         'post_id' => $postId->id,
@@ -307,7 +307,7 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
-        $providerToken = ProviderToken::where('longLifeToken', 'DISCONNECTED')->where('created_by', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
+        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('created_by', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 

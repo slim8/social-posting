@@ -13,6 +13,8 @@ class Account extends Model
 
     protected $hidden = ['pivot'];
 
+    static $STATUS_DISCONNECTED = "DISCONNECTED";
+
     protected $fillable = [
         'name',
         'provider',

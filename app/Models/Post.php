@@ -10,6 +10,8 @@ class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    static $STATUS_PUBLISH = 'PUBLISH';
+    static $STATUS_DRAFT = 'DRAFT';
     protected $fillable = [
         'message',
         'url',

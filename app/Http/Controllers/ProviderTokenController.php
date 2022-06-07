@@ -47,9 +47,9 @@ class ProviderTokenController extends Controller
 
         $id = $providerToken->id;
 
-        $providerToken->longLifeToken = 'DISCONNECTED';
+        $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
         $providerToken = $providerToken->update();
-        Account::where('provider_token_id', $id)->update(['accessToken' => 'DISCONNECTED', 'status' => 0]);
+        Account::where('provider_token_id', $id)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
 
         return RequestsTrait::processResponse(true, ['message' => 'Your account has been disconnected']);
     }
@@ -66,7 +66,7 @@ class ProviderTokenController extends Controller
             $now = strtotime(date('Y-m-d'));
 
             $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === 'DISCONNECTED') ? false : true]);
+            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === Account::$STATUS_DISCONNECTED) ? false : true]);
         }
 
         if ($response) {
@@ -78,7 +78,7 @@ class ProviderTokenController extends Controller
 
     public function refreshToken(Request $request)
     {
-        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%DISCONNECTED%')->where('provider', 'facebook')->get();
+        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%'.Account::$STATUS_DISCONNECTED.'%')->where('provider', 'facebook')->get();
         if ($providerAcounts) {
             $now = strtotime(date('Y-m-d'));
             foreach ($providerAcounts as $providerAcount) {

@@ -20,7 +20,7 @@ trait FacebookService
                     $accountModel =  Account::where('provider_token_id', $providerTokenId)->where('uid', $page['pageId']);
 
                     if(!$refrech){
-                        $accountModel->where('accessToken',"DISCONNECTED");
+                        $accountModel->where('accessToken',Account::$STATUS_DISCONNECTED);
                     }
 
                     $accountModel->update(['status' => 1, 'accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
