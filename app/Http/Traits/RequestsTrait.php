@@ -43,9 +43,17 @@ trait RequestsTrait
         return $AllPages;
     }
 
-    public static function findAccountByUid($value, string $key = 'uid')
+    public static function findAccountByUid($value, string $key = 'uid' , int $onlyConnected = 0)
     {
-        $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId())->first();
+        $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId());
+
+        // Check if the Account is Connected (accessToken not DISCONNECTED)
+        
+        if($onlyConnected){
+            $account = $account->where('accessToken' , 'not like' , '%DISCONNECTED%');
+        }
+
+        $account = $account->first();
 
         return $account;
     }

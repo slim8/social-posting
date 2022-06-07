@@ -51,7 +51,7 @@ class GeneralSocialController extends Controller
         $images = $request->images;
         $videos = $request->videos;
         $statusPost = $request->status;
-        $requestPostId = $request->originalId ? $request->originalId : null;
+        $requestPostId = $request->originalId && $request->originalId !== null && $request->originalId !== "null" ? $request->originalId : null;
 
         if ($request->file('sources')) {
             foreach ($request->file('sources') as $file) {
@@ -74,7 +74,7 @@ class GeneralSocialController extends Controller
         }
 
         foreach ($request->accountIds as $singleAccountId) {
-            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
+            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id' , 1);
 
             if ($account) {
                 $InstagramController = new InstagramController();
@@ -166,7 +166,7 @@ class GeneralSocialController extends Controller
                     $errorLog[] = $postResponse['message'];
                 }
             } else {
-                $errorLog[] = 'Cannot find a cannected account for ID '.$singleAccountId;
+                $errorLog[] = 'Cannot find a connected account for ID '.$singleAccountId;
             }
         }
 
@@ -413,20 +413,26 @@ class GeneralSocialController extends Controller
     /**
      * Get All posts By Criteria.
      */
-    public function getPosts(Request $request)
+    public function getPosts(Request $request , int $postId = null)
     {
         $companyId = UserTrait::getCompanyId();
-        $response = Post::whereHas('accounts', function ($query) use ($companyId) {
+        $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
             $query->where('accounts.company_id', $companyId);
         })->with('PostMedia');
 
-        if ($request->status) {
-            $response = $response->where('status', $request->status);
+        // $postId Used to return Single Post Id
+        if($postId){
+            $postRequest = $postRequest->where('id',$postId);
         }
-        $response = $response->get();
 
-        if ($response) {
-            return RequestsTrait::processResponse(true, ['posts' => $response]);
+        if ($request->status) {
+            $postRequest = $postRequest->where('status', $request->status);
+        }
+
+        $postRequest = $postId ? $postRequest->first() : $postRequest->get();
+
+        if ($postRequest) {
+            return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $postRequest]); // if single post return posts else return all Posts
         } else {
             return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
         }
