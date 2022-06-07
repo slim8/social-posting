@@ -103,7 +103,6 @@ class GeneralSocialController extends Controller
                         $postId = Post::where('id', $requestPostId)->first();
 
                         // Delete All Saved Account Posts , Post tags and Post Media
-
                         PostTag::where('post_id' , $postId->id)->delete();
                         PostMedia::where('post_id' , $postId->id)->delete();
                         AccountPost::where('post_id' , $postId->id)->delete();
@@ -209,15 +208,7 @@ class GeneralSocialController extends Controller
         }
     }
 
-    /**
-     * Get facebook page picture from Facebook ID.
-     */
-    public function getPagePicture($pageId)
-    {
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
 
-        return $response->json('data')['url'];
-    }
 
     /**
      * Get All facebook accounst.
@@ -235,7 +226,7 @@ class GeneralSocialController extends Controller
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {
                 $id = $facebookPage['id'];
-                $pageFacebookPageLink = $this->getPagePicture($id);
+                $pageFacebookPageLink = FacebookService::getPagePicture($id);
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];

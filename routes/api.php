@@ -33,6 +33,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
+    Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {

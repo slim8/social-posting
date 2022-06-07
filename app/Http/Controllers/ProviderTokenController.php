@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\ProviderToken;
@@ -12,7 +14,13 @@ use Illuminate\Support\Facades\Validator;
 class ProviderTokenController extends Controller
 {
     use UserTrait;
+    use FacebookService;
     use RequestsTrait;
+
+    public function __construct()
+    {
+        $this->facebookController = new FacebookController();
+    }
 
     /**
      * Disconnect Provider token and his Accounts.
@@ -36,14 +44,13 @@ class ProviderTokenController extends Controller
 
         $providerToken->longLifeToken = 'DISCONNECTED';
         $providerToken = $providerToken->update();
-        Account::where('provider_token_id', $id)->update(['accessToken' => 'DISCONNECTED' , 'status' => 0]);
+        Account::where('provider_token_id', $id)->update(['accessToken' => 'DISCONNECTED', 'status' => 0]);
 
         return RequestsTrait::processResponse(true, ['message' => 'Your account has been disconnected']);
     }
 
-
     /**
-     * Return All Connected Provider Accounts
+     * Return All Connected Provider Accounts.
      */
     public function getConnectedAccounts(Request $request)
     {
@@ -63,4 +70,24 @@ class ProviderTokenController extends Controller
             return RequestsTrait::processResponse(false, ['message' => 'No account autorized']);
         }
     }
+
+    public function refreshToken(Request $request)
+    {
+        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%DISCONNECTED%')->where('provider', 'facebook')->get();
+        if ($providerAcounts) {
+            $now = strtotime(date('Y-m-d'));
+            foreach ($providerAcounts as $providerAcount) {
+                $expiry = strtotime('-3 days', strtotime($providerAcount->expiryDate));
+
+                if ($expiry == $now) {
+                    $tokenKey = $this->facebookController->generateLongLifeToken($providerAcount->longLifeToken, $providerAcount->accountUserId , $providerAcount->created_by)->token;
+                    $facebookResponse = $this->facebookController->getAccountPagesAccount($providerAcount->accountUserId, $tokenKey, 1 , 1);
+                    FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerAcount->id, 1);
+                }
+            }
+
+        }
+    return RequestsTrait::processResponse(true);
+    }
+
 }
