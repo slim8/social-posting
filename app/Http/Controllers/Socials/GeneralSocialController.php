@@ -372,60 +372,6 @@ class GeneralSocialController extends Controller
         }
     }
 
-    /**
-     * Get Posts By Account Id.
-     */
-    public function getPostsByAccountId(Request $request, $id)
-    {
-        $account = RequestsTrait::findAccountByUid($id, 'id');
-
-        if ($account) {
-            $res = Post::whereHas('accounts', function ($query) use ($id) {
-                $query->where('accounts.id', $id);
-            })->with('PostMedia')->get();
-            if (count($res) > 0) {
-                $response['status'] = true;
-                $response['posts'] = $res;
-            } else {
-                $response['status'] = false;
-                $response['errorMessage'] = 'This Account has not any POSTS';
-            }
-        } else {
-            $response['status'] = false;
-            $response['errorMessage'] = 'No Account found with id '.$id;
-        }
-
-        return response()->json($response, 201);
-    }
-
-
-    /**
-     * Get All posts By Criteria.
-     */
-    public function getPosts(Request $request, int $postId = null)
-    {
-        $companyId = UserTrait::getCompanyId();
-        $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
-            $query->where('accounts.company_id', $companyId);
-        })->with('PostMedia');
-
-        // $postId Used to return Single Post Id
-        if ($postId) {
-            $postRequest = $postRequest->where('id', $postId);
-        }
-
-        if ($request->status) {
-            $postRequest = $postRequest->where('status', $request->status);
-        }
-
-        $postRequest = $postId ? $postRequest->first() : $postRequest->get();
-
-        if ($postRequest) {
-            return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $postRequest]); // if single post return posts else return all Posts
-        } else {
-            return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
-        }
-    }
 
     public function deleteAccount(Request $request)
     {

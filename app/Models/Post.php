@@ -33,7 +33,7 @@ class Post extends Model
 
     public function tags()
     {
-        return $this->hasMany(Tag::class)->using(PostTag::class);
+        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id');
     }
 
     public function creator()

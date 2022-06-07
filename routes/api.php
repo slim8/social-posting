@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Socials\FacebookController;
@@ -48,9 +49,9 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::get('/check-logged-in', [ApiAuthController::class, 'checkLoggedIn'])->name('check-logged-in-api');
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
     Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
-    Route::get('/accounts/get-posts/{id}', [GeneralSocialController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
-    Route::get('/posts', [GeneralSocialController::class, 'getPosts'])->name('get-posts-api');
-    Route::get('/posts/{postId}', [GeneralSocialController::class, 'getPosts'])->name('get-posts-api');
+    Route::get('/accounts/get-posts/{id}', [PostController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
+    Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
+    Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::post('/uploadfile', [ExempleController::class, 'uploadfile'])->name('uploadfile.api');
 });
 

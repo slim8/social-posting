@@ -11,6 +11,8 @@ class Account extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $hidden = ['pivot'];
+
     protected $fillable = [
         'name',
         'provider',
