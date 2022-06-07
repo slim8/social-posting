@@ -44,4 +44,9 @@ class Account extends Model
     {
         return $this->belongsTo(Account::class, 'related_account_id');
     }
+
+    public function providerToken()
+    {
+        return $this->belongsTo(ProviderToken::class,'provider_token_id');
+    }
 }

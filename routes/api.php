@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\ProviderTokenController;
@@ -38,8 +39,9 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/save-meta-pages-groups', [GeneralSocialController::class, 'saveMetaPagesAndGroups'])->name('save-meta-pages-groups.api');
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
-    Route::get('/get-connected-accounts', [GeneralSocialController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
+    Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
+    Route::post('/account/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {

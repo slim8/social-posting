@@ -398,24 +398,6 @@ class GeneralSocialController extends Controller
         return response()->json($response, 201);
     }
 
-    public function getConnectedAccounts(Request $request)
-    {
-        $response = [];
-        $userId = UserTrait::getCurrentAdminId();
-        $accounts = ProviderToken::where('created_by', $userId)->get();
-        foreach ($accounts as $account) {
-            $now = strtotime(date('Y-m-d'));
-
-            $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === 'DISCONNECTED') ? false : true]);
-        }
-
-        if ($response) {
-            return RequestsTrait::processResponse(true, ['accounts' => $response]);
-        } else {
-            return RequestsTrait::processResponse(false, ['message' => 'No account autorized']);
-        }
-    }
 
     /**
      * Get All posts By Criteria.
