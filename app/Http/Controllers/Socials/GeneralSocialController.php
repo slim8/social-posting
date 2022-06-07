@@ -51,8 +51,14 @@ class GeneralSocialController extends Controller
         $images = $request->images;
         $videos = $request->videos;
         $statusPost = $request->status;
-        $requestPostId = $request->originalId && $request->originalId !== null && $request->originalId !== "null" ? $request->originalId : null;
+        $requestPostId = $request->originalId && $request->originalId !== null && $request->originalId !== 'null' ? $request->originalId : null;
 
+        // Check if post status is DRAFT
+        if ($requestPostId) {
+            if (Post::where('id', $requestPostId)->where('status', 'PUBLISH')->first()) {
+                return RequestsTrait::processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
+            }
+        }
         if ($request->file('sources')) {
             foreach ($request->file('sources') as $file) {
                 $uploadedFile = $this->utilitiesController->uploadFile($file);
@@ -74,7 +80,7 @@ class GeneralSocialController extends Controller
         }
 
         foreach ($request->accountIds as $singleAccountId) {
-            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id' , 1);
+            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id', 1);
 
             if ($account) {
                 $InstagramController = new InstagramController();
@@ -96,11 +102,12 @@ class GeneralSocialController extends Controller
                         $postId = Post::where('id', $requestPostId)->update($postObject);
                         $postId = Post::where('id', $requestPostId)->first();
 
-                        // Delete All PostTag
+                        // Delete All Saved Account Posts , Post tags and Post Media
 
-                        // Delete All PostMedia
+                        PostTag::where('post_id' , $postId->id)->delete();
+                        PostMedia::where('post_id' , $postId->id)->delete();
+                        AccountPost::where('post_id' , $postId->id)->delete();
                     }
-
                     if ($request->tags) {
                         foreach ($request->tags as $tag) {
                             $tagId = Tag::create([
@@ -413,7 +420,7 @@ class GeneralSocialController extends Controller
     /**
      * Get All posts By Criteria.
      */
-    public function getPosts(Request $request , int $postId = null)
+    public function getPosts(Request $request, int $postId = null)
     {
         $companyId = UserTrait::getCompanyId();
         $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
@@ -421,8 +428,8 @@ class GeneralSocialController extends Controller
         })->with('PostMedia');
 
         // $postId Used to return Single Post Id
-        if($postId){
-            $postRequest = $postRequest->where('id',$postId);
+        if ($postId) {
+            $postRequest = $postRequest->where('id', $postId);
         }
 
         if ($request->status) {
