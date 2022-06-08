@@ -48,9 +48,9 @@ trait UserTrait
     /**
      * Get Current TokenProvider Id. By User ID.
      */
-    public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook')
+    public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook' , int $userId = null)
     {
-        $account = ProviderToken::where('created_by', UserTrait::getCurrentAdminId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
+        $account = ProviderToken::where('created_by', $userId ? $userId : UserTrait::getCurrentAdminId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
 
         if (!$account) {
             return false;

@@ -10,6 +10,8 @@ class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    static $STATUS_PUBLISH = 'PUBLISH';
+    static $STATUS_DRAFT = 'DRAFT';
     protected $fillable = [
         'message',
         'url',
@@ -33,7 +35,7 @@ class Post extends Model
 
     public function tags()
     {
-        return $this->hasMany(Tag::class)->using(PostTag::class);
+        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id');
     }
 
     public function creator()

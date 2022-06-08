@@ -9,6 +9,8 @@ class Tag extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['pivot'];
+
     protected $fillable = [
         'name',
     ];
@@ -17,5 +19,4 @@ class Tag extends Model
     {
         return $this->belongsToMany(Post::class)->using(PostTag::class);
     }
-
 }

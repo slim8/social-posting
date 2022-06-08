@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\ProviderToken;
@@ -16,6 +17,7 @@ class FacebookController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
+    use FacebookService;
 
     protected $instagramController;
 
@@ -38,7 +40,7 @@ class FacebookController extends Controller
      */
     public function updateOrReturnProviderIdUser($adminId, $longLifeToken, $accountUserId)
     {
-        $account = UserTrait::getUniqueProviderTokenByProvider($accountUserId);
+        $account = UserTrait::getUniqueProviderTokenByProvider($accountUserId, 'facebook', $adminId);
 
         $personalInformation = $this->getFacebookPersonalInformations($longLifeToken);
 
@@ -67,12 +69,13 @@ class FacebookController extends Controller
     /**
      * Generate Long Life Token.
      */
-    public function generateLongLifeToken($tokenKey, string $facebookUserId = '')
+    public function generateLongLifeToken($tokenKey, string $facebookUserId = '', int $userId = null)
     {
+        $userObj = $userId ? $userId : UserTrait::getCurrentAdminId();
         $facebookAppKey = env('FACEBOOK_APP_ID');
         $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
         $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
-        $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'), $facebookUserId);
+        $providerId = $this->updateOrReturnProviderIdUser($userObj, $response->json('access_token'), $facebookUserId);
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
         $providerObject->token = $response->json('access_token');
@@ -213,23 +216,13 @@ class FacebookController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return RequestsTrait::processResponse(true , ['pages' => $AllPages]);
+                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
             } else {
-                return RequestsTrait::processResponse(false , [ 'message' => 'No Facebook Page Found']);
+                return RequestsTrait::processResponse(false, ['message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
         }
-    }
-
-    /**
-     * Get facebook page picture from Facebook ID.
-     */
-    public function getPagePicture($pageId)
-    {
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
-
-        return $response->json('data')['url'];
     }
 
     /**
@@ -267,7 +260,7 @@ class FacebookController extends Controller
         }
     }
 
-    public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0)
+    public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0, int $checkWithCompany = null)
     {
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
@@ -281,12 +274,19 @@ class FacebookController extends Controller
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {
                 $id = $facebookPage['id'];
-                $pageFacebookPageLink = $this->getPagePicture($id);
+                $pageFacebookPageLink = FacebookService::getPagePicture($id);
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
 
-                $checkIfExist = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
+                $checkIfExist = Account::where('uid', $id);
+
+                if (!$checkWithCompany) {
+                    $checkIfExist = $checkIfExist->where('company_id', UserTrait::getCompanyId());
+                }
+
+                $checkIfExist = $checkIfExist->first();
+
                 $pageArraySelected = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
                 $SelectedPages[] = $pageArraySelected;
                 if (!$checkIfExist) {
@@ -298,7 +298,13 @@ class FacebookController extends Controller
                     if ($businessAccountId !== false) {
                         $instagramAccount = $this->instagramController->getInstagramInformationFromBID($businessAccountId, $pageToken);
 
-                        $checkIfExist = Account::where('uid', $businessAccountId)->where('company_id', UserTrait::getCompanyId())->first();
+                        $checkIfExist = Account::where('uid', $businessAccountId);
+
+                        if (!$checkWithCompany) {
+                            $checkIfExist = $checkIfExist->where('company_id', UserTrait::getCompanyId());
+                        }
+
+                        $checkIfExist = $checkIfExist->first();
                         $instagramSelected = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
                         if (!$checkIfExist) {
                             $AllPages[] = $instagramSelected;
@@ -338,7 +344,7 @@ class FacebookController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return RequestsTrait::processResponse(true , ['pages' => $AllPages]);
+            return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
         } else {
             return RequestsTrait::processResponse(false);
         }
