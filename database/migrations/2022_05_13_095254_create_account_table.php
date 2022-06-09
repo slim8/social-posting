@@ -32,6 +32,8 @@ return new class extends Migration
             $table->foreignId('related_account_id')->nullable()->references('id')->on('accounts');
             $table->softDeletes();
             $table->timestamps();
+            $table->string('related_uid')->nullable();
+
         });
     }
 

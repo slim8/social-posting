@@ -1011,8 +1011,7 @@ trait HasAttributes
      */
     protected function setAttributeMarkedMutatedAttributeValue($key, $value)
     {
-        dd('close');
-        $attribute = $this->{Str::camel($key)}();
+       $attribute = $this->{Str::camel($key)}();
 
         $callback = $attribute->set ?: function ($value) use ($key) {
             $this->attributes[$key] = $value;

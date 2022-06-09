@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany as RelationsHasOneOrMany;
 
-abstract class HasOneOrMany extends RelationsHasOneOrMany
+abstract class HasOneOrMany extends \Illuminate\Database\Eloquent\Relations\Relation
 {
     use InteractsWithDictionary;
 
@@ -26,19 +25,22 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
      */
     protected $localKey;
 
+    protected $query;
 
-    // public function __construct(Builder $query, Model $parent, $foreignKey, $localKey)
-    // {
-    //     $this->localKey = $localKey;
-    //     $this->foreignKey = $foreignKey;
+    public function __construct(Builder $query, Model $parent, $foreignKey, $localKey)
+    {
+        $this->query = $query;
+        $this->localKey = $localKey;
+        $this->foreignKey = $foreignKey;
 
-    //     parent::__construct($query, $parent);
-    // }
+        parent::__construct($query, $parent);
+    }
 
     /**
      * Create and return an un-saved instance of the related model.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function make(array $attributes = [])
@@ -51,7 +53,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Create and return an un-saved instance of the related models.
      *
-     * @param  iterable  $records
+     * @param iterable $records
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function makeMany($records)
@@ -76,7 +79,7 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
             $query = $this->getRelationQuery();
 
             $query->where($this->foreignKey, '=', $this->getParentKey());
-
+            // die;
             $query->whereNotNull($this->foreignKey);
         }
     }
@@ -84,24 +87,319 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Set the constraints for an eager load of the relation.
      *
-     * @param  array  $models
+     * @param array $models
+     *
      * @return void
      */
+    protected function getRelationQuery()
+    {
+        return $this->query;
+    }
+
     public function addEagerConstraints(array $models)
     {
         $whereIn = $this->whereInMethod($this->parent, $this->localKey);
-
-        $this->getRelationQuery()->{$whereIn}(
+        $this->{$whereIn}(
             $this->foreignKey, $this->getKeys($models, $this->localKey)
         );
     }
 
+    public function whereIntegerInRaw($column, $values, $boolean = 'and', $not = false)
+    {
+        $type = $not ? 'NotInRaw' : 'InRaw';
+        foreach ($values as &$value) {
+            $value = (int) $value;
+        }
+
+        $this->wheres[] = compact('type', 'column', 'values', 'boolean');
+        for($i=0;$i<count($this->wheres); $i++){
+
+            if($this->wheres[$i]['column']){
+                $this->wheres[$i]['column'] = \Illuminate\Support\Str::snake($this->wheres[$i]['column']);
+            }
+        }
+        return $this;
+    }
+
+    public function fromSub($query, $as)
+    {
+        [$query, $bindings] = $this->createSub($query);
+
+        return $this->fromRaw('('.$query.') as '.$this->grammar->wrapTable($as), $bindings);
+    }
+
+    /**
+     * Add a raw from clause to the query.
+     *
+     * @param string $expression
+     * @param mixed  $bindings
+     *
+     * @return $this
+     */
+    public function fromRaw($expression, $bindings = [])
+    {
+        $this->from = new Expression($expression);
+
+        $this->addBinding($bindings, 'from');
+
+        return $this;
+    }
+
+    protected function createSub($query)
+    {
+        // If the given query is a Closure, we will execute it while passing in a new
+        // query instance to the Closure. This will give the developer a chance to
+        // format and work with the query before we cast it to a raw SQL string.
+        if ($query instanceof Closure) {
+            $callback = $query;
+
+            $callback($query = $this->forSubQuery());
+        }
+
+        return $this->parseSub($query);
+    }
+
+    /**
+     * Parse the subquery into SQL and bindings.
+     *
+     * @param mixed $query
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function parseSub($query)
+    {
+        if ($query instanceof self || $query instanceof EloquentBuilder || $query instanceof Relation) {
+            $query = $this->prependDatabaseNameIfCrossDatabaseQuery($query);
+
+            return [$query->toSql(), $query->getBindings()];
+        } elseif (is_string($query)) {
+            return [$query, []];
+        } else {
+            throw new InvalidArgumentException('A subquery must be a query builder instance, a Closure, or a string.');
+        }
+    }
+
+    protected function prependDatabaseNameIfCrossDatabaseQuery($query)
+    {
+        if ($query->getConnection()->getDatabaseName() !==
+            $this->getConnection()->getDatabaseName()) {
+            $databaseName = $query->getConnection()->getDatabaseName();
+
+            if (!str_starts_with($query->from, $databaseName) && !str_contains($query->from, '.')) {
+                $query->from($databaseName.'.'.$query->from);
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * Add a new select column to the query.
+     *
+     * @param array|mixed $column
+     *
+     * @return $this
+     */
+    public function addSelect($column)
+    {
+        $columns = is_array($column) ? $column : func_get_args();
+
+        foreach ($columns as $as => $column) {
+            if (is_string($as) && $this->isQueryable($column)) {
+                if (is_null($this->columns)) {
+                    $this->select($this->from.'.*');
+                }
+
+                $this->selectSub($column, $as);
+            } else {
+                $this->columns[] = $column;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Force the query to only return distinct results.
+     *
+     * @return $this
+     */
+    public function distinct()
+    {
+        $columns = func_get_args();
+
+        if (count($columns) > 0) {
+            $this->distinct = is_array($columns[0]) || is_bool($columns[0]) ? $columns[0] : $columns;
+        } else {
+            $this->distinct = true;
+        }
+
+        return $this;
+    }
+
+
+
+    public function from($table, $as = null)
+    {
+        if ($this->isQueryable($table)) {
+            return $this->fromSub($table, $as);
+        }
+
+        $this->from = $as ? "{$table} as {$as}" : $table;
+
+        return $this;
+    }
+
+    /**
+     * Add a join clause to the query.
+     *
+     * @param  string  $table
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @param  string  $type
+     * @param  bool  $where
+     * @return $this
+     */
+    public function join($table, $first, $operator = null, $second = null, $type = 'inner', $where = false)
+    {
+        $join = $this->newJoinClause($this, $type, $table);
+
+        // If the first "column" of the join is really a Closure instance the developer
+        // is trying to build a join with a complex "on" clause containing more than
+        // one condition, so we'll add the join and call a Closure with the query.
+        if ($first instanceof Closure) {
+            $first($join);
+
+            $this->joins[] = $join;
+
+            $this->addBinding($join->getBindings(), 'join');
+        }
+
+        // If the column is simply a string, we can assume the join simply has a basic
+        // "on" clause with a single condition. So we will just build the join with
+        // this simple join clauses attached to it. There is not a join callback.
+        else {
+            $method = $where ? 'where' : 'on';
+
+            $this->joins[] = $join->$method($first, $operator, $second);
+
+            $this->addBinding($join->getBindings(), 'join');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add a "join where" clause to the query.
+     *
+     * @param  string  $table
+     * @param  \Closure|string  $first
+     * @param  string  $operator
+     * @param  string  $second
+     * @param  string  $type
+     * @return $this
+     */
+    public function joinWhere($table, $first, $operator, $second, $type = 'inner')
+    {
+        return $this->join($table, $first, $operator, $second, $type, true);
+    }
+
+
+    public function joinSub($query, $as, $first, $operator = null, $second = null, $type = 'inner', $where = false)
+    {
+        [$query, $bindings] = $this->createSub($query);
+
+        $expression = '('.$query.') as '.$this->grammar->wrapTable($as);
+
+        $this->addBinding($bindings, 'join');
+
+        return $this->join(new Expression($expression), $first, $operator, $second, $type, $where);
+    }
+
+    /**
+     * Add a left join to the query.
+     *
+     * @param  string  $table
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
+     */
+    public function leftJoin($table, $first, $operator = null, $second = null)
+    {
+        return $this->join($table, $first, $operator, $second, 'left');
+    }
+
+    /**
+     * Add a "join where" clause to the query.
+     *
+     * @param  string  $table
+     * @param  \Closure|string  $first
+     * @param  string  $operator
+     * @param  string  $second
+     * @return $this
+     */
+    public function leftJoinWhere($table, $first, $operator, $second)
+    {
+        return $this->joinWhere($table, $first, $operator, $second, 'left');
+    }
+
+    /**
+     * Add a subquery left join to the query.
+     *
+     * @param  \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder|string  $query
+     * @param  string  $as
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
+     */
+    public function leftJoinSub($query, $as, $first, $operator = null, $second = null)
+    {
+        return $this->joinSub($query, $as, $first, $operator, $second, 'left');
+    }
+
+    /**
+     * Add a right join to the query.
+     *
+     * @param  string  $table
+     * @param  \Closure|string  $first
+     * @param  string|null  $operator
+     * @param  string|null  $second
+     * @return $this
+     */
+    public function rightJoin($table, $first, $operator = null, $second = null)
+    {
+        return $this->join($table, $first, $operator, $second, 'right');
+    }
+
+    /**
+     * Add a "right join where" clause to the query.
+     *
+     * @param  string  $table
+     * @param  \Closure|string  $first
+     * @param  string  $operator
+     * @param  string  $second
+     * @return $this
+     */
+    public function rightJoinWhere($table, $first, $operator, $second)
+    {
+        return $this->joinWhere($table, $first, $operator, $second, 'right');
+    }
+
+
+
+
     /**
      * Match the eagerly loaded results to their single parents.
      *
-     * @param  array  $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param array                                    $models
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param string                                   $relation
+     *
      * @return array
      */
     public function matchOne(array $models, Collection $results, $relation)
@@ -112,9 +410,10 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Match the eagerly loaded results to their many parents.
      *
-     * @param  array  $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param array                                    $models
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param string                                   $relation
+     *
      * @return array
      */
     public function matchMany(array $models, Collection $results, $relation)
@@ -125,10 +424,11 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Match the eagerly loaded results to their many parents.
      *
-     * @param  array  $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
-     * @param  string  $type
+     * @param array                                    $models
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param string                                   $relation
+     * @param string                                   $type
+     *
      * @return array
      */
     protected function matchOneOrMany(array $models, Collection $results, $relation, $type)
@@ -152,9 +452,10 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Get the value of a relationship by one or many type.
      *
-     * @param  array  $dictionary
-     * @param  string  $key
-     * @param  string  $type
+     * @param array  $dictionary
+     * @param string $key
+     * @param string $type
+     *
      * @return mixed
      */
     protected function getRelationValue(array $dictionary, $key, $type)
@@ -167,7 +468,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Build model dictionary keyed by the relation's foreign key.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     *
      * @return array
      */
     protected function buildDictionary(Collection $results)
@@ -182,8 +484,9 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Find a model by its primary key or return a new instance of the related model.
      *
-     * @param  mixed  $id
-     * @param  array  $columns
+     * @param mixed $id
+     * @param array $columns
+     *
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model
      */
     public function findOrNew($id, $columns = ['*'])
@@ -200,8 +503,9 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Get the first related model record matching the attributes or instantiate it.
      *
-     * @param  array  $attributes
-     * @param  array  $values
+     * @param array $attributes
+     * @param array $values
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrNew(array $attributes = [], array $values = [])
@@ -218,8 +522,9 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Get the first related record matching the attributes or create it.
      *
-     * @param  array  $attributes
-     * @param  array  $values
+     * @param array $attributes
+     * @param array $values
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function firstOrCreate(array $attributes = [], array $values = [])
@@ -234,8 +539,9 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Create or update a related record matching the attributes, and fill it with values.
      *
-     * @param  array  $attributes
-     * @param  array  $values
+     * @param array $attributes
+     * @param array $values
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function updateOrCreate(array $attributes, array $values = [])
@@ -250,7 +556,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Attach a model instance to the parent model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return \Illuminate\Database\Eloquent\Model|false
      */
     public function save(Model $model)
@@ -263,7 +570,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Attach a model instance without raising any events to the parent model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return \Illuminate\Database\Eloquent\Model|false
      */
     public function saveQuietly(Model $model)
@@ -276,7 +584,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Attach a collection of models to the parent instance.
      *
-     * @param  iterable  $models
+     * @param iterable $models
+     *
      * @return iterable
      */
     public function saveMany($models)
@@ -291,7 +600,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Create a new instance of the related model.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function create(array $attributes = [])
@@ -306,7 +616,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Create a new instance of the related model. Allow mass-assignment.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function forceCreate(array $attributes = [])
@@ -319,7 +630,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Create a Collection of new instances of the related model.
      *
-     * @param  iterable  $records
+     * @param iterable $records
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function createMany(iterable $records)
@@ -336,7 +648,8 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Set the foreign ID for creating a related model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
+     *
      * @return void
      */
     protected function setForeignAttributesForCreate(Model $model)
@@ -347,9 +660,10 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Add the constraints for a relationship query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed                           $columns
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
@@ -364,9 +678,10 @@ abstract class HasOneOrMany extends RelationsHasOneOrMany
     /**
      * Add the constraints for a relationship query on the same table.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
+     * @param array|mixed                           $columns
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getRelationExistenceQueryForSelfRelation(Builder $query, Builder $parentQuery, $columns = ['*'])

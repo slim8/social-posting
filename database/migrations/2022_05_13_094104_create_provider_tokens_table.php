@@ -19,6 +19,11 @@ return new class extends Migration
             $table->text('long_life_token');
             $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->enum('provider', ['facebook', 'instagram', 'tiktok' , 'twitter']);
+            $table->text('profile_picture');
+            $table->text('profile_name');
+            $table->text('user_name');
+            $table->string('account_user_id');
         });
     }
 

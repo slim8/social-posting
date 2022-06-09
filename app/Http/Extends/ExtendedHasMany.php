@@ -5,7 +5,7 @@ namespace App\Http\Extends;
 use App\Http\Extends\HasOneOrMany;
 use Illuminate\Database\Eloquent\Collection;
 
-class HasMany extends HasOneOrMany
+class ExtendedHasMany extends HasOneOrMany
 {
     /**
      * Get the results of the relationship.

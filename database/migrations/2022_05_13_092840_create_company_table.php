@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('website');
             $table->foreignId('plan_id')->constrained();
             $table->timestamps();
+            $table->boolean('is_admin');
+
         });
     }
 

@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
 use App\Models\Post;
+use App\Models\PostTag;
+use App\Models\Tag;
 use App\Models\ProviderToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -55,14 +58,10 @@ class PostController extends Controller
      */
     public function getPosts(Request $request, int $postId = null)
     {
-        dd($postRequest = Post::with('tags')->first());
-
-
-
         $companyId = UserTrait::getCompanyId();
         $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
             $query->where('accounts.company_id', $companyId);
-        })->with('post_media')->with('accounts:id')->with('tags:name');
+        })->with('post_media');
 
         // $postId Used to return Single Post Id
         if ($postId) {
@@ -73,10 +72,31 @@ class PostController extends Controller
             $postRequest = $postRequest->where('status', $request->status);
         }
 
-        $postRequest = $postId ? $postRequest->first() : $postRequest->get();
+        $postRequest =  $postRequest->get();
+        $posts = $postId ? null : [];
+        foreach ($postRequest as $postContent){
+            $tags = [];
+            $postTags = PostTag::where('postId' , $postContent->id)->get();
+            foreach($postTags as $postTag){
+                $tags[] = Tag::where('id',$postTag->tagId)->first('name');
+            }
+            $accounts = [];
+            $postAccounts = AccountPost::where('postId' , $postContent->id)->get();
+            foreach($postAccounts as $postAccount){
+                $accounts[] = Account::where('id',$postAccount->accountId)->first('id');
+            }
 
-        if ($postRequest) {
-            return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $postRequest]); // if single post return posts else return all Posts
+            $postContent->tags = $tags;
+            $postContent->accounts = $accounts;
+            if($postId){
+                $posts = $postContent;
+            } else {
+                $posts[] = $postContent;
+            }
+
+        }
+        if ($posts) {
+            return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
         } else {
             return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
         }

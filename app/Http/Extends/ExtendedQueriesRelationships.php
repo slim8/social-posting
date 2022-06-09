@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Database\Query\Builder as QueryBuilder;
+use App\Http\Extends\QueryBuilder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -744,7 +744,7 @@ trait ExtendedQueriesRelationships
 
         return $this->canUseExistsForExistenceCheck($operator, $count)
                 ? $this->addWhereExistsQuery($hasQuery->toBase(), $boolean, $operator === '<' && $count === 1)
-                : $this->addWhereCountQuery($hasQuery->toBase(), $operator, $count, $boolean);
+                : $this->ExtendedaddWhereCountQuery($hasQuery->toBase(), $operator, $count, $boolean);
     }
 
     /**
@@ -802,7 +802,7 @@ trait ExtendedQueriesRelationships
      * @param  string  $boolean
      * @return $this
      */
-    protected function addWhereCountQuery(QueryBuilder $query, $operator = '>=', $count = 1, $boolean = 'and')
+    protected function ExtendedaddWhereCountQuery(QueryBuilder $query, $operator = '>=', $count = 1, $boolean = 'and')
     {
         $this->query->addBinding($query->getBindings(), 'where');
 

@@ -11,7 +11,7 @@ class AccountPost extends ExtendedModel
     use HasFactory;
 
     protected $fillable = [
-        'post_id',
+        'postId',
         'url',
         'postIdProvider',
         'accountId',

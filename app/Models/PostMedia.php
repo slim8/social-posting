@@ -12,7 +12,7 @@ class PostMedia extends ExtendedModel
     protected $fillable = [
         'url',
         'type',
-        'post_id',
+        'postId',
     ];
 
     public function post()

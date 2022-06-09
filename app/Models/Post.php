@@ -30,10 +30,10 @@ class Post extends ExtendedModel
 
     public function post_media()
     {
-        return $this->hasMany(PostMedia::class , 'post_id');
+        return $this->hasMany(PostMedia::class , 'postId');
     }
 
-    public function tags()
+    public function post_tags()
     {
         return $this->belongsToMany(Tag::class, 'post_tags', 'postId');
     }

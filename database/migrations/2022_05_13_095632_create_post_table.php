@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('status');
             $table->boolean('is_scheduled');
             $table->dateTime('published_at')->nullable();
-            $table->foreignId('account_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
+            $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->string('video_title')->nullable();
+
         });
     }
 

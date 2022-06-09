@@ -586,11 +586,12 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
      */
     public static function with($relations)
     {
-        //dd(is_string($relations) ? func_get_args() : $relations);
-        var_dump("execution 1");
+
         return static::query()->with(
             is_string($relations) ? func_get_args() : $relations
         );
+
+
     }
 
     /**
