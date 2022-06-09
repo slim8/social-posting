@@ -541,7 +541,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
      * Begin querying the model on a given connection.
      *
      * @param  string|null  $connection
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public static function on($connection = null)
     {
@@ -582,7 +582,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
      * Begin querying a model with eager loading.
      *
      * @param  array|string  $relations
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public static function with($relations)
     {
@@ -1085,11 +1085,11 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Perform a model update operation.
      *
-     * @param  \App\Http\Extends\BuilderExtended  $query
+     * @param  \App\Http\Extends\ExtendedBuilder  $query
      * @return bool
      */
 
-    protected function performUpdateExtended(\App\Http\Extends\BuilderExtended $query)
+    protected function performUpdateExtended(\App\Http\Extends\ExtendedBuilder $query)
     {
         // If the updating event returns false, we will cancel the update operation so
         // developers can hook Validation systems into their models and cancel this
@@ -1124,8 +1124,8 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Set the keys for a select query.
      *
-     * @param  \App\Http\Extends\BuilderExtended  $query
-     * @return \App\Http\Extends\BuilderExtended
+     * @param  \App\Http\Extends\ExtendedBuilder  $query
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     protected function setKeysForSelectQuery($query)
     {
@@ -1147,8 +1147,8 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Set the keys for a save update query.
      *
-     * @param  \App\Http\Extends\BuilderExtended  $query
-     * @return \App\Http\Extends\BuilderExtended
+     * @param  \App\Http\Extends\ExtendedBuilder  $query
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     protected function setKeysForSaveQuery($query)
     {
@@ -1170,10 +1170,10 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Perform a model insert operation.
      *
-     * @param  \App\Http\Extends\BuilderExtended  $query
+     * @param  \App\Http\Extends\ExtendedBuilder  $query
      * @return bool
      */
-     protected function performInsertExtended(\App\Http\Extends\BuilderExtended $query)
+     protected function performInsertExtended(\App\Http\Extends\ExtendedBuilder $query)
     {
         if ($this->fireModelEvent('creating') === false) {
             return false;
@@ -1221,7 +1221,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Insert the given attributes and set the ID on the model.
      *
-     * @param  \App\Http\Extends\BuilderExtended  $query
+     * @param  \App\Http\Extends\ExtendedBuilder  $query
      * @param  array  $attributes
      * @return void
      */
@@ -1233,7 +1233,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     //     $this->setAttribute($keyName, $id);
     // }
 
-    protected function insertAndSetIdExtended(\App\Http\Extends\BuilderExtended $query, $attributes)
+    protected function insertAndSetIdExtended(\App\Http\Extends\ExtendedBuilder $query, $attributes)
     {
         $obj = [];
         foreach ($attributes as $key => $value){
@@ -1371,7 +1371,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Begin querying the model.
      *
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public static function query()
     {
@@ -1381,7 +1381,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Get a new query builder for the model's table.
      *
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public function newQuery()
     {
@@ -1391,7 +1391,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Get a new query builder that doesn't have any global scopes or eager loading.
      *
-     * @return \App\Http\Extends\BuilderExtended|static
+     * @return \App\Http\Extends\ExtendedBuilder|static
      */
     public function newModelQuery()
     {
@@ -1403,7 +1403,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Get a new query builder with no relationships loaded.
      *
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public function newQueryWithoutRelationships()
     {
@@ -1413,8 +1413,8 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Register the global scopes for this builder instance.
      *
-     * @param  \App\Http\Extends\BuilderExtended  $builder
-     * @return \App\Http\Extends\BuilderExtended
+     * @param  \App\Http\Extends\ExtendedBuilder  $builder
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public function registerGlobalScopes($builder)
     {
@@ -1428,7 +1428,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
     /**
      * Get a new query builder that doesn't have any global scopes.
      *
-     * @return \App\Http\Extends\BuilderExtended|static
+     * @return \App\Http\Extends\ExtendedBuilder|static
      */
     public function newQueryWithoutScopes()
     {
@@ -1441,7 +1441,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
      * Get a new query instance without a given scope.
      *
      * @param  \Illuminate\Database\Eloquent\Scope|string  $scope
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public function newQueryWithoutScope($scope)
     {
@@ -1452,7 +1452,7 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
      * Get a new query to restore one or more models by their queueable IDs.
      *
      * @param  array|int  $ids
-     * @return \App\Http\Extends\BuilderExtended
+     * @return \App\Http\Extends\ExtendedBuilder
      */
     public function newQueryForRestoration($ids)
     {
@@ -1465,11 +1465,11 @@ class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscape
      * Create a new Eloquent query builder for the model.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \App\Http\Extends\BuilderExtended|static
+     * @return \App\Http\Extends\ExtendedBuilder|static
      */
     public function newEloquentBuilder($query)
     {
-        return new \App\Http\Extends\BuilderExtended($query);
+        return new \App\Http\Extends\ExtendedBuilder($query);
     }
 
     /**
