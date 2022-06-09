@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class PostTag extends Model
+class PostTag extends ExtendedModel
 {
     use HasFactory;
 
     protected $fillable = [
-        'post_id',
-        'tag_id',
+        'postId',
+        'tagId',
     ];
 
     public function post()

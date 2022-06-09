@@ -209,6 +209,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Eloquent'   => \App\Http\Extends\ExtendedModel::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

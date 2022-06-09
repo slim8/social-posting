@@ -54,12 +54,12 @@ class FacebookController extends Controller
                 [
                     'expiryDate' => date('Y-m-d', strtotime('+60 days')),
                     'longLifeToken' => $longLifeToken,
-                    'created_by' => $adminId,
+                    'createdBy' => $adminId,
                     'accountUserId' => $accountUserId,
                     'provider' => 'facebook',
-                    'profile_picture' => 'picture file',
-                    'profile_name' => $personalInformation['name'] ? $personalInformation['name'] : '',
-                    'user_name' => '',
+                    'profilePicture' => 'picture file',
+                    'profileName' => $personalInformation['name'] ? $personalInformation['name'] : '',
+                    'userName' => '',
                 ]);
 
             return $provider->id;
@@ -238,7 +238,7 @@ class FacebookController extends Controller
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];
 
-        $page = Account::where('uid', $id)->where('company_id', $actualCompanyId)->first();
+        $page = Account::where('uid', $id)->where('companyId', $actualCompanyId)->first();
 
         if (!$page) {
             Account::create([
@@ -249,13 +249,13 @@ class FacebookController extends Controller
                         'scoope' => '',
                         'authorities' => '',
                         'link' => '',
-                        'company_id' => $actualCompanyId,
+                        'companyId' => $actualCompanyId,
                         'uid' => $id,
                         'profilePicture' => $pageFacebookPageLink,
                         'category' => $category,
                         'providerType' => 'page',
                         'accessToken' => $pageToken,
-                        'provider_token_id' => UserTrait::getUniqueProviderTokenByProvider($userUid),
+                        'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
                     ]);
         }
     }

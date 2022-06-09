@@ -75,6 +75,7 @@ class GeneralSocialController extends Controller
 
         $validator = $this->utilitiesController->postValidator($request->accountIds, $images, $videos);
 
+
         if (!$validator->status) {
             return RequestsTrait::processResponse(false, ['message' => $validator->message]);
         }
@@ -90,10 +91,10 @@ class GeneralSocialController extends Controller
                     $postObject = [
                         'url' => 'url',
                         'message' => $request->message,
-                        'video_title' => $request->videoTitle ? $request->videoTitle : '',
+                        'videoTitle' => $request->videoTitle ? $request->videoTitle : '',
                         'status' => $request->status,
                         'publishedAt' => Carbon::now(),
-                        'created_by' => UserTrait::getCurrentAdminId(),
+                        'createdBy' => UserTrait::getCurrentAdminId(),
                         'isScheduled' => 0,
                     ];
                     if (!$requestPostId) {
@@ -103,9 +104,9 @@ class GeneralSocialController extends Controller
                         $postId = Post::where('id', $requestPostId)->first();
 
                         // Delete All Saved Account Posts , Post tags and Post Media
-                        PostTag::where('post_id' , $postId->id)->delete();
-                        PostMedia::where('post_id' , $postId->id)->delete();
-                        AccountPost::where('post_id' , $postId->id)->delete();
+                        PostTag::where('postId', $postId->id)->delete();
+                        PostMedia::where('postId', $postId->id)->delete();
+                        AccountPost::where('postId', $postId->id)->delete();
                     }
                     if ($request->tags) {
                         foreach ($request->tags as $tag) {
@@ -114,8 +115,8 @@ class GeneralSocialController extends Controller
                             ]);
 
                             PostTag::create([
-                                'post_id' => $postId->id,
-                                'tag_id' => $tagId->id,
+                                'postId' => $postId->id,
+                                'tagId' => $tagId->id,
                             ]);
                         }
                     }
@@ -124,7 +125,7 @@ class GeneralSocialController extends Controller
                         foreach ($images as $image) {
                             PostMedia::create([
                                 'url' => $image,
-                                'post_id' => $postId->id,
+                                'postId' => $postId->id,
                                 'type' => 'image',
                             ]);
                         }
@@ -134,7 +135,7 @@ class GeneralSocialController extends Controller
                         foreach ($videos as $video) {
                             PostMedia::create([
                                 'url' => $video,
-                                'post_id' => $postId->id,
+                                'postId' => $postId->id,
                                 'type' => 'video',
                             ]);
                         }
@@ -155,7 +156,7 @@ class GeneralSocialController extends Controller
                     }
                     $BusinessIG = $account->uid;
 
-                    $IgAccount = RequestsTrait::findAccountByUid($account->related_account_id, 'id') ? RequestsTrait::findAccountByUid($account->related_account_id, 'id') : null;
+                    $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
 
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $request->tags, $videos) : POST::$STATUS_DRAFT;
@@ -164,9 +165,9 @@ class GeneralSocialController extends Controller
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
                     AccountPost::create([
                         'url' => '',
-                        'post_id' => $postId->id,
-                        'account_id' => $singleAccountId,
-                        'post_id_provider' => (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse,
+                        'postId' => $postId->id,
+                        'accountId' => $singleAccountId,
+                        'postIdProvider' => (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse,
                     ]);
                 } else {
                     $errorLog[] = $postResponse['message'];
@@ -207,8 +208,6 @@ class GeneralSocialController extends Controller
             return $AllPages;
         }
     }
-
-
 
     /**
      * Get All facebook accounst.
@@ -307,7 +306,7 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
-        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('created_by', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
+        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
@@ -355,14 +354,11 @@ class GeneralSocialController extends Controller
 
             $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
 
-            return response()->json(['success' => true,
-        'pages' => $Pages, ], 201);
+            return RequestsTrait::processResponse(true, ['pages' => $Pages]);
         } else {
-            return response()->json(['success' => false,
-        'message' => 'No page autorized', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'No page autorized']);
         }
     }
-
 
     public function deleteAccount(Request $request)
     {

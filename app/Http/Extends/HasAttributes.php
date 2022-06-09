@@ -471,7 +471,6 @@ trait HasAttributes
      */
     public function getRelationValue($key)
     {
-        dd('getRelationValue');
         // If the key already exists in the relationships array, it just means the
         // relationship has already been loaded, so we'll just return it out of
         // here because there is no need to query within the relations twice.
@@ -905,6 +904,7 @@ trait HasAttributes
      */
     public function setAttribute($key, $value)
     {
+
         // First we will check for the presence of a mutator for the set operation
         // which simply lets the developers tweak the attribute as it is set on
         // this model, such as "json_encoding" a listing of data for storage.
@@ -1011,6 +1011,7 @@ trait HasAttributes
      */
     protected function setAttributeMarkedMutatedAttributeValue($key, $value)
     {
+        dd('close');
         $attribute = $this->{Str::camel($key)}();
 
         $callback = $attribute->set ?: function ($value) use ($key) {
@@ -1675,8 +1676,15 @@ trait HasAttributes
      */
     public function getAttributes()
     {
-        var_dump($this->attributes);
+        $obj = [];
+
         $this->mergeAttributesFromCachedCasts();
+        if($this->attributes){
+            foreach($this->attributes as $key => $value){
+                $obj[Str::camel($key)] = $value;
+            }
+        }
+        $this->attributes = $obj;
 
         return $this->attributes;
     }

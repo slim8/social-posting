@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('message');
             $table->string('url');
             $table->string('status');
-            $table->boolean('isScheduled');
-            $table->dateTime('publishedAt')->nullable();
+            $table->boolean('is_scheduled');
+            $table->dateTime('published_at')->nullable();
             $table->foreignId('account_id')->constrained();
             $table->softDeletes();
             $table->timestamps();

@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PlanProvider extends Model
+class PlanProvider extends ExtendedModel
 {
     use HasFactory;
 
@@ -13,7 +14,7 @@ class PlanProvider extends Model
         'limit',
         'remaining',
         'provider',
-        'plan_id',
+        'planId',
     ];
 
     public function plan()

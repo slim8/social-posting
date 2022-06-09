@@ -13,16 +13,16 @@ class ProviderToken extends ExtendedModel
     protected $fillable = [
         'expiryDate',
         'longLifeToken',
-        'created_by',
+        'createdBy',
         'provider',
-        'profile_picture',
-        'profile_name',
-        'user_name',
+        'profilePicture',
+        'profileName',
+        'userName',
         'accountUserId'
     ];
 
     public function creator()
     {
-        return $this->belongsTo(Users::class,'created_by');
+        return $this->belongsTo(Users::class,'createdBy');
     }
 }

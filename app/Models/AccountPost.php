@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AccountPost extends Model
+class AccountPost extends ExtendedModel
 {
     use HasFactory;
 
     protected $fillable = [
         'post_id',
         'url',
-        'post_id_provider',
-        'account_id',
+        'postIdProvider',
+        'accountId',
     ];
 
     public function account()

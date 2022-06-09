@@ -49,7 +49,7 @@ class ProviderTokenController extends Controller
 
         $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
         $providerToken = $providerToken->update();
-        Account::where('provider_token_id', $id)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
+        Account::where('providerTokenId', $id)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
 
         return RequestsTrait::processResponse(true, ['message' => 'Your account has been disconnected']);
     }

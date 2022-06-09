@@ -55,10 +55,14 @@ class PostController extends Controller
      */
     public function getPosts(Request $request, int $postId = null)
     {
+        dd($postRequest = Post::with('tags')->first());
+
+
+
         $companyId = UserTrait::getCompanyId();
         $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
             $query->where('accounts.company_id', $companyId);
-        })->with('PostMedia')->with('accounts:id')->with('tags:name');
+        })->with('post_media')->with('accounts:id')->with('tags:name');
 
         // $postId Used to return Single Post Id
         if ($postId) {

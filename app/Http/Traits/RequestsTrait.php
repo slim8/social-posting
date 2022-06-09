@@ -29,7 +29,8 @@ trait RequestsTrait
     {
         $AllPages = [];
 
-        foreach (DB::table('accounts')->where('company_id', UserTrait::getCompanyId())->where('status', 1)->orderBy('id')->lazy() as $account) {
+
+        foreach (Account::where('companyId', UserTrait::getCompanyId())->where('status', 1)->orderBy('id')->lazy() as $account) {
             $id = $account->id;
             $uid = $account->uid;
             $provider = $account->provider;
@@ -45,7 +46,7 @@ trait RequestsTrait
 
     public static function findAccountByUid($value, string $key = 'uid' , int $onlyConnected = 0)
     {
-        $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId());
+        $account = Account::where($key, $value)->where('companyId', UserTrait::getCompanyId());
 
         // Check if the Account is Connected
 

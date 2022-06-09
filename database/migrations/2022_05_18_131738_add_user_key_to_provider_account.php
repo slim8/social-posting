@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('provider_tokens', function (Blueprint $table) {
-            $table->string('accountUserId');
+            $table->string('account_user_id');
         });
     }
 

@@ -17,7 +17,7 @@ trait FacebookService
             foreach ($selectedPages as $page) {
                 $provider = $page['provider'];
                 if ($provider == 'facebook') {
-                    $accountModel =  Account::where('provider_token_id', $providerTokenId)->where('uid', $page['pageId']);
+                    $accountModel =  Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId']);
 
                     if(!$refrech){
                         $accountModel->where('accessToken',Account::$STATUS_DISCONNECTED);
@@ -25,9 +25,9 @@ trait FacebookService
 
                     $accountModel->update(['status' => 1, 'accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
                 } else {
-                    $instagramAccount = Account::where('provider_token_id', $providerTokenId)->where('uid', $page['pageId'])->first();
+                    $instagramAccount = Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId'])->first();
                     if ($instagramAccount) {
-                        Account::where('provider_token_id', $providerTokenId)->where('uid', $page['pageId'])->update(['status' => 1, 'accessToken' => $instagramAccount->related_account_id == null ? $page['accessToken'] : 'NA', 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+                        Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId'])->update(['status' => 1, 'accessToken' => $instagramAccount->related_account_id == null ? $page['accessToken'] : 'NA', 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
                     }
                 }
             }

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price');
-            $table->integer('providerLimit');
-            $table->integer('usersLimit');
+            $table->integer('provider_limit');
+            $table->integer('users_limit');
             $table->timestamps();
         });
     }

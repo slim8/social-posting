@@ -31,15 +31,14 @@ use Illuminate\Support\Traits\ForwardsCalls;
 use JsonSerializable;
 use LogicException;
 
-abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToString, HasBroadcastChannel, Jsonable, JsonSerializable, QueueableEntity, UrlRoutable
+class ExtendedModel extends Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToString, HasBroadcastChannel, Jsonable, JsonSerializable, QueueableEntity, UrlRoutable
 {
     use \App\Http\Extends\HasAttributes,
         HasEvents,
         HasGlobalScopes,
-        HasRelationships,
+        \App\Http\Extends\HasRelationships,
         HasTimestamps,
         HidesAttributes,
-        GuardsAttributes,
         ForwardsCalls;
 
     /**
@@ -542,7 +541,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
      * Begin querying the model on a given connection.
      *
      * @param  string|null  $connection
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public static function on($connection = null)
     {
@@ -583,10 +582,12 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
      * Begin querying a model with eager loading.
      *
      * @param  array|string  $relations
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public static function with($relations)
     {
+        //dd(is_string($relations) ? func_get_args() : $relations);
+        var_dump("execution 1");
         return static::query()->with(
             is_string($relations) ? func_get_args() : $relations
         );
@@ -1024,14 +1025,14 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
         // clause to only update this model. Otherwise, we'll just insert them.
         if ($this->exists) {
             $saved = $this->isDirty() ?
-                        $this->performUpdate($query) : true;
+                        $this->performUpdateExtended($query) : true;
         }
 
         // If the model is brand new, we'll insert it into our database and set the
         // ID attribute on the model to the value of the newly inserted row's ID
         // which is typically an auto-increment value managed by the database.
         else {
-            $saved = $this->performInsert($query);
+            $saved = $this->performInsertExtended($query);
 
             if (! $this->getConnectionName() &&
                 $connection = $query->getConnection()) {
@@ -1084,10 +1085,11 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Perform a model update operation.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \App\Http\Extends\BuilderExtended  $query
      * @return bool
      */
-    protected function performUpdate(\Illuminate\Database\Eloquent\Builder $query)
+
+    protected function performUpdateExtended(\App\Http\Extends\BuilderExtended $query)
     {
         // If the updating event returns false, we will cancel the update operation so
         // developers can hook Validation systems into their models and cancel this
@@ -1122,8 +1124,8 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Set the keys for a select query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \App\Http\Extends\BuilderExtended  $query
+     * @return \App\Http\Extends\BuilderExtended
      */
     protected function setKeysForSelectQuery($query)
     {
@@ -1145,8 +1147,8 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Set the keys for a save update query.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \App\Http\Extends\BuilderExtended  $query
+     * @return \App\Http\Extends\BuilderExtended
      */
     protected function setKeysForSaveQuery($query)
     {
@@ -1168,10 +1170,10 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Perform a model insert operation.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \App\Http\Extends\BuilderExtended  $query
      * @return bool
      */
-    protected function performInsert(\Illuminate\Database\Eloquent\Builder $query)
+     protected function performInsertExtended(\App\Http\Extends\BuilderExtended $query)
     {
         if ($this->fireModelEvent('creating') === false) {
             return false;
@@ -1190,7 +1192,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
         $attributes = $this->getAttributesForInsert();
 
         if ($this->getIncrementing()) {
-            $this->insertAndSetId($query, $attributes);
+            $this->insertAndSetIdExtended($query, $attributes);
         }
 
         // If the table isn't incrementing we'll simply insert these attributes as they
@@ -1219,13 +1221,27 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Insert the given attributes and set the ID on the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \App\Http\Extends\BuilderExtended  $query
      * @param  array  $attributes
      * @return void
      */
-    protected function insertAndSetId(\Illuminate\Database\Eloquent\Builder $query, $attributes)
+    // protected function insertAndSetId(\Illuminate\Database\Eloquent\Builder $query, $attributes)
+    // {
+    //     var_dump("test");
+    //     $id = $query->insertGetId($attributes, $keyName = $this->getKeyName());
+
+    //     $this->setAttribute($keyName, $id);
+    // }
+
+    protected function insertAndSetIdExtended(\App\Http\Extends\BuilderExtended $query, $attributes)
     {
-        var_dump("test");
+        $obj = [];
+        foreach ($attributes as $key => $value){
+            $obj[Str::snake($key)] = $value;
+        }
+
+        $attributes = $obj;
+
         $id = $query->insertGetId($attributes, $keyName = $this->getKeyName());
 
         $this->setAttribute($keyName, $id);
@@ -1355,7 +1371,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Begin querying the model.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public static function query()
     {
@@ -1365,7 +1381,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Get a new query builder for the model's table.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public function newQuery()
     {
@@ -1375,7 +1391,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Get a new query builder that doesn't have any global scopes or eager loading.
      *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \App\Http\Extends\BuilderExtended|static
      */
     public function newModelQuery()
     {
@@ -1387,7 +1403,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Get a new query builder with no relationships loaded.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public function newQueryWithoutRelationships()
     {
@@ -1397,8 +1413,8 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Register the global scopes for this builder instance.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param  \App\Http\Extends\BuilderExtended  $builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public function registerGlobalScopes($builder)
     {
@@ -1412,7 +1428,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
     /**
      * Get a new query builder that doesn't have any global scopes.
      *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \App\Http\Extends\BuilderExtended|static
      */
     public function newQueryWithoutScopes()
     {
@@ -1425,7 +1441,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
      * Get a new query instance without a given scope.
      *
      * @param  \Illuminate\Database\Eloquent\Scope|string  $scope
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public function newQueryWithoutScope($scope)
     {
@@ -1436,7 +1452,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
      * Get a new query to restore one or more models by their queueable IDs.
      *
      * @param  array|int  $ids
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \App\Http\Extends\BuilderExtended
      */
     public function newQueryForRestoration($ids)
     {
@@ -1449,11 +1465,11 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
      * Create a new Eloquent query builder for the model.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @return \App\Http\Extends\BuilderExtended|static
      */
     public function newEloquentBuilder($query)
     {
-        return new \Illuminate\Database\Eloquent\Builder($query);
+        return new \App\Http\Extends\BuilderExtended($query);
     }
 
     /**
@@ -1838,7 +1854,7 @@ abstract class ExtendedModel Extends Model implements Arrayable, ArrayAccess, Ca
      */
     public function getKey()
     {
-        var_dump($this->getKeyName());
+        // var_dump($this->getKeyName());
 
         return $this->getAttribute($this->getKeyName());
     }

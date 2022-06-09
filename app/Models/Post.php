@@ -2,44 +2,44 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Post extends Model
+class Post extends ExtendedModel
 {
     use HasFactory;
     use SoftDeletes;
-    static $STATUS_PUBLISH = 'PUBLISH';
-    static $STATUS_DRAFT = 'DRAFT';
+    public static $STATUS_PUBLISH = 'PUBLISH';
+    public static $STATUS_DRAFT = 'DRAFT';
     protected $fillable = [
         'message',
         'url',
         'status',
         'publishedAt',
-        'video_title',
+        'videoTitle',
         'isScheduled',
-        'created_by',
+        'createdBy',
         'deleted',
     ];
 
     public function accounts()
     {
-        return $this->belongsToMany(Account::class, 'account_posts', 'post_id');
+        return $this->belongsToMany(Account::class, 'account_posts', 'postId');
     }
 
-    public function PostMedia()
+    public function post_media()
     {
-        return $this->hasMany(PostMedia::class);
+        return $this->hasMany(PostMedia::class , 'post_id');
     }
 
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id');
+        return $this->belongsToMany(Tag::class, 'post_tags', 'postId');
     }
 
     public function creator()
     {
-        return $this->belongsTo(Users::class, 'created_by');
+        return $this->belongsTo(Users::class, 'createdBy');
     }
 }

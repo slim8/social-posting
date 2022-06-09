@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('provider_tokens', function (Blueprint $table) {
             $table->id();
-            $table->datetime('expiryDate');
-            $table->text('longLifeToken');
+            $table->datetime('expiry_date');
+            $table->text('long_life_token');
             $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
