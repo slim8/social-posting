@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from 'src/app/features/facebook-social/services/facebook-social.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { AccountsService } from '../../services/accounts.service';
 
@@ -26,7 +27,8 @@ export class AccountsManagementComponent implements OnInit {
     constructor(private accountsService: AccountsService,
         private service: FacebookSocialService,
         private formBuilder: FormBuilder,
-        private modal: NzModalService) { }
+        private modal: NzModalService,
+        private sharedModule: SharedModule) { }
 
     ngOnInit(): void {
         this.validateForm = this.formBuilder.group({
@@ -34,6 +36,14 @@ export class AccountsManagementComponent implements OnInit {
         });
         this.getConnectedAccounts();
     }
+
+    preventMessage(msg: any) {
+
+        if (msg) {
+            this.sharedModule.createMessage('error', msg);
+        }
+    }
+
 
     loginWithFacebook() {
         this.service
@@ -44,14 +54,25 @@ export class AccountsManagementComponent implements OnInit {
                     accessToken: res.authResponse.accessToken,
                     id: res.authResponse.userID,
                 };
-                this.getConnectedAccounts();
                 this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
                     accessToken: this.user.accessToken,
                     id: this.user.id,
                 }).subscribe((response: any) => {
                     this.listpages = response.pages;
                     this.getConnectedAccounts();
-                    this.showModal();
+
+                    if (this.listpages) {
+
+                        if (this.listpages.length > 0) {
+                            this.showModal();
+                        } else {
+                            this.preventMessage(response.message);
+                        }
+                    } else {
+                        this.preventMessage(response.message);
+                    }
+
+
                 });
             })
             .catch(() => console.error('error'));
@@ -76,12 +97,12 @@ export class AccountsManagementComponent implements OnInit {
             );
 
             this.service.manageFacebookPages(
-                    sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
-                    {
-                        pages: selectedobject,
-                        user: this.user.id
-                    }
-                )
+                sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+                {
+                    pages: selectedobject,
+                    user: this.user.id
+                }
+            )
                 .subscribe((response: any) => {
                     console.log(response);
                 });
@@ -140,16 +161,16 @@ export class AccountsManagementComponent implements OnInit {
     }
 
 
-    showDisconnectConfirm( id : any): void {
+    showDisconnectConfirm(id: any): void {
         this.modal.confirm({
-          nzTitle: 'Do you really want to disconnect this account?',
-          nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
-          nzOkText: 'Yes',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          nzOnOk: () => this.disconnect(id),
-          nzCancelText: 'No',
-          nzOnCancel: () => console.log('Cancel')
+            nzTitle: 'Do you really want to disconnect this account?',
+            nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => this.disconnect(id),
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel')
         });
-      }
+    }
 }

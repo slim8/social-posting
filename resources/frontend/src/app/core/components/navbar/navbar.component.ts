@@ -31,7 +31,6 @@ export class NavbarComponent implements OnInit {
     }
 
     resetMenu(e: any) {
-        console.log(e.target);
         let menu = document.getElementById("loggedMenu") as HTMLElement
         if (!e.target.classList.contains("user-menu-toggle")) {
             menu.classList.remove("is-open")
