@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Socials\FacebookController;
@@ -65,3 +66,4 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
 
 Route::post('/forget-password', [ForgotPasswordController::class,'postEmail']);
 Route::post('/reset-password', [ForgotPasswordController::class,'updatePassword']);
+Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
