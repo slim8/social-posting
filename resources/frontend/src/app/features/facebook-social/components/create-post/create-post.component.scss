@@ -168,6 +168,8 @@ cdk-virtual-scroll-viewport {
                                             font-family: 'Roboto', sans-serif;
 
                                             > .m-post-content {
+                                                width: 100%;
+                                                overflow: hidden;
 
                                                 > .m-post {
                                                     width: 100%;
