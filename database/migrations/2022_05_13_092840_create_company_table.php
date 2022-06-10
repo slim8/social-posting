@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('adress');
-            $table->string('phoneNumber');
+            $table->string('phone_number');
             $table->string('email');
             $table->string('website');
             $table->foreignId('plan_id')->constrained();
             $table->timestamps();
+            $table->boolean('is_admin');
+
         });
     }
 

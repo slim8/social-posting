@@ -19,8 +19,8 @@ return new class extends Migration
             $table->enum('priority',['high','medium','low','urgent']);
             $table->boolean('seen');
             $table->string('url');
-            $table->dateTime('seenDate');
-            $table->foreignId('targetUser')->references('id')->on('users')->onDelete('cascade');
+            $table->dateTime('seen_date');
+            $table->foreignId('target_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

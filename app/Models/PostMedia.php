@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class PostMedia extends Model
+class PostMedia extends ExtendedModel
 {
     use HasFactory;
 
     protected $fillable = [
         'url',
         'type',
-        'post_id',
+        'postId',
     ];
 
-    public function post(){
+    public function post()
+    {
         $this->belongsTo(Post::class);
     }
 }

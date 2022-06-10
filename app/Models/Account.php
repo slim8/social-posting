@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Account extends Model
+class Account extends ExtendedModel
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $hidden = ['pivot'];
+
+    public static $STATUS_DISCONNECTED = 'DISCONNECTED';
 
     protected $fillable = [
         'name',
@@ -19,29 +23,34 @@ class Account extends Model
         'scoope',
         'authorities',
         'link',
-        'company_id',
+        'companyId',
         'uid',
         'profilePicture',
         'category',
         'providerType',
         'accessToken',
-        'related_account_id',
-        'provider_token_id',
-        'related_Uid',
+        'relatedAccountId',
+        'providerTokenId',
+        'relatedUid',
     ];
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id');
+        return $this->belongsTo(Company::class, 'companyId');
     }
 
     public function posts()
     {
-        return $this->belongsToMany(Post::class, 'account_posts' , 'post_id');
+        return $this->belongsToMany(Post::class, 'accountPosts', 'postId');
     }
 
     public function related_account()
     {
-        return $this->belongsTo(Account::class, 'related_account_id');
+        return $this->belongsTo(Account::class, 'relatedAccountId');
+    }
+
+    public function providerToken()
+    {
+        return $this->belongsTo(ProviderToken::class, 'providerTokenId');
     }
 }

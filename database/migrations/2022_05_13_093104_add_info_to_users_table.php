@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->string('firstName');
-            $table->string('lastName');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('status');
-            $table->boolean('isSubscriber');
-            $table->boolean('autoRefresh');
+            $table->boolean('is_subscriber');
+            $table->boolean('auto_refresh');
             $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
@@ -33,10 +33,10 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('firstName');
-            $table->dropColumn('lastName');
+            $table->dropColumn('first_name');
+            $table->dropColumn('last_name');
             $table->dropColumn('status');
-            $table->dropColumn('isSubscriber');
+            $table->dropColumn('is_subscriber');
             $table->dropForeign(['company_id']);
         });
     }

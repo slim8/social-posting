@@ -1,0 +1,61 @@
+<nz-page-header nzTitle="Connected facebook accounts"></nz-page-header>
+<nz-page-header-subtitle>Manage your connected accounts</nz-page-header-subtitle>
+<div class="m-add-account">
+    <div *ngIf="connectedAccounts.length == 0" class="m-add-btn" (click)="loginWithFacebook()">
+        <i nz-icon nzType="plus" nzTheme="outline"></i>
+        connect account
+    </div>
+    <div *ngIf="connectedAccounts.length > 0" class="m-add-btn" (click)="loginWithFacebook()">
+        <i nz-icon nzType="plus" nzTheme="outline"></i>
+        add pages or connect account
+    </div>
+</div>
+<div class="m-accounts">
+    <div class="m-account-card"  *ngFor="let account of connectedAccounts">
+        <!--
+            account.mustBeRefreshed
+            account.profileName
+            account.provider
+            account.providerId
+            account.tokenExpireOn
+            account.userName
+         -->
+        <div class="m-menu-header" [ngClass]="{'disconnected' : !account.isConnected}">
+            <div class="m-user-image">
+                <nz-avatar *ngIf="account.isConnected" [nzSize]="64" nzIcon="user"></nz-avatar>
+                <i *ngIf="!account.isConnected" nz-icon nzType="disconnect" nzTheme="outline"></i>
+            </div>
+            <div class="m-user-info">
+                <div class="m-user-name" [ngClass]="{'disconnected' : !account.isConnected}">{{account.profileName}}</div>
+                <div class="m-user-mail"><i nz-icon nzType="facebook" nzTheme="outline"></i>&nbsp;&nbsp;{{account.provider}}</div>
+            </div>
+            <div class="m-profile-btn" [ngClass]="{'disconnected' : !account.isConnected}">
+                <i nz-icon nzType="profile" nzTheme="outline"></i> profile
+            </div>
+            <div class="m-profile-btn" [ngClass]="{'disconnected' : !account.isConnected}">
+                <i nz-icon nzType="menu" nzTheme="outline"></i>
+            </div>
+            <div *ngIf="account.isConnected" (click)="showDisconnectConfirm(account.providerId)" class="m-profile-btn">
+                <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
+            </div>
+            <div *ngIf="!account.isConnected" (click)="loginWithFacebook()"class="m-profile-btn reconnect">
+                <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
+            </div>
+        </div>
+    </div>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="onSubmit()">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateForm">
+            <tr *ngFor="let page of listpages">
+            <td>
+                <label>
+                <input  type="checkbox" [value]="page.pageId" (change)="onCheckChange($event)">
+                {{page.pageName}}
+                </label>
+            </td>
+            </tr>
+        </form>
+    </ng-container>
+</nz-modal>

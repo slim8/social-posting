@@ -4,6 +4,8 @@ namespace App\Http\Controllers\functions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\MailTrait;
+use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ExempleController extends Controller

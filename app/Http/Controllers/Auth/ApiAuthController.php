@@ -45,29 +45,31 @@ class ApiAuthController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'companyName' => 'required|string|max:255',
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'adress' => 'string|max:255',
-            'website' => 'string|max:255',
-            'email' => 'required|string|email|max:255|unique:users|unique:companies',
-            'phoneNumber' => 'required|string|max:255|unique:companies',
-            'isSubscriber' => '',
-        ], [
-            'companyName.required' => 'This is a required message for company name',
-        ]);
-        if ($validator->fails()) {
-            return response(['errors' => $validator->errors()->all()], 422);
-        }
+        // $validator = Validator::make($request->all(), [
+        //     'companyName' => 'required|string|max:255',
+        //     'firstName' => 'required|string|max:255',
+        //     'lastName' => 'required|string|max:255',
+        //     'adress' => 'string|max:255',
+        //     'website' => 'string|max:255',
+        //     'email' => 'required|string|email|max:255|unique:users|unique:companies',
+        //     'phoneNumber' => 'required|string|max:255|unique:companies',
+        //     'isSubscriber' => '',
+        // ], [
+        //     'companyName.required' => 'This is a required message for company name',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response(['errors' => $validator->errors()->all()], 422);
+        // }
+
+
         $company = Company::create([
             'name' => $request->companyName,
             'email' => $request->email,
             'phoneNumber' => $request->phoneNumber,
             'adress' => $request->adress,
             'website' => $request->website,
-            'plan_id' => '1',
-            'is_admin' => false,
+            'planId' => '1',
+            'isAdmin' => false,
         ]);
         $password = str::random(10);
         $user = User::create([
@@ -77,14 +79,14 @@ class ApiAuthController extends Controller
             'email' => $request->email,
             'status' => 1,
             'isSubscriber' => $request->isSubscriber,
-            'company_id' => $company->id,
+            'companyId' => $company->id,
             'password' => hash::make($password),
             'autoRefresh' => 1,
         ]);
 
         $user->attachRole('companyadmin');
 
-        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
+        // MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
 
         return response()->json([
             'success' => true,
@@ -116,7 +118,7 @@ class ApiAuthController extends Controller
             'email' => $request->email,
             'status' => 1,
             'isSubscriber' => $request->isSubscriber,
-            'company_id' => $actualCompanyId,
+            'companyId' => $actualCompanyId,
             'password' => hash::make($request->password),
         ]);
 

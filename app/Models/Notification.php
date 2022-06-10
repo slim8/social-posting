@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class Notification extends ExtendedModel
 {
     use HasFactory;
 
@@ -21,6 +21,6 @@ class Notification extends Model
 
     public function targetUser()
     {
-        return $this->belongsTo(User::class,'targetUser');
+        return $this->belongsTo(User::class, 'targetUser');
     }
 }

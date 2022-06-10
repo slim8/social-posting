@@ -2,6 +2,32 @@ nz-select {
     width: 100%;
 }
 
+.view-mentions {
+    display: none!important;
+}
+
+.m-success {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background-color: #80808038;
+
+    >.m-success-result {
+        background-color: white;
+        box-shadow: 0 0 60px 79px white;
+    }
+
+    &.is-hidden  {
+        display: none;
+    }
+}
+
 .m-page-img {
     height: 19px;
 }
@@ -121,136 +147,331 @@ cdk-virtual-scroll-viewport {
                         
                             > .m-tab-content {
                                 height: 100%;
-                                padding: 71px 74px;
+                                padding: 45px 0;
                                 background-color: #D9D9D9;
                         
                                 >.m-content {
-                        
-                                    >.m-instagram {
-                                        height: 541.9677124023438px;
-                                        width: 371px;
-                                        background-color: rgb(0, 0, 0);
-                                        margin: auto;
-                                        >.m-insta-header {
-                                            display: flex;
-                                            flex-direction: row;
-                                            align-items: center;
-                                    
-                                            >.m-image {
-                                                padding: 10px;
-                                                >img {
-                                                    width: 50px;
-                                                    height: 50px;
-                                                }
-                                            }
-                                    
-                                            >.m-title {
-                                                margin-left: 3px;
-                                                width: 114px;
-                                                height: 12px;
-                                                background: linear-gradient(-45deg, #c0c0c0, #616161, #d8d8d8, #727171);
-                                                background-size: 500% 100%;
-                                                animation: gradient 1s ease infinite;
-                                            }
-                                    
-                                            @keyframes gradient {
-                                                0% {
-                                                    background-position: 0% 50%;
-                                                }
-                                                100% {
-                                                    background-position: 100% 50%;
-                                                }
-                                            }
-                                        }
-                                    
-                                        >.m-post {
-                                            width: 100%;
-                                            min-height: 320px;
-                                            display: flex;
-                                            align-items: center;
-                                            background-color: #979797;
-                                            height: fit-content;
+                                    > .m-instagram-device {
+                                        width:100%;
+                                        max-width: 360px;
+                                        height: fit-content;
+                                        margin: 1em auto;
 
-                                            > img {
+                                        > .m-instagram {
+                                            width: 100%;
+                                            height: 100%;
+                                            background-color: #fff;
+                                            display: flex;
+                                            justify-content: flex-start;
+                                            align-items: flex-start;
+                                            flex-direction: column;
+                                            font-family: 'Roboto', sans-serif;
+
+                                            > .m-post-content {
                                                 width: 100%;
-                                                max-height: 359px;
-                                            }
-                                        }
-                                    
-                                        >.m-insta-buttons {
-                                            width: 100%;
-                                            height: 38px;
-                                            display: flex;
-                                            flex-direction: row;
-                                            justify-content: space-between;
-                                    
-                                            >.m-btn-left {
-                                                display: flex;
-                                                flex-direction: row;
-                                                align-items: center;
-                                                margin-left: 10px;
-                                                >.m-heart {
-                                                    width: 23px;
-                                                    height: 23px;
-                                                    background-image: url('../../../../../assets/img/svgs/heart.svg');
-                                                    background-repeat: no-repeat;
-                                                    filter: invert(1);
-                                                    background-position: center;
-                                                    margin: 8px 5px;
+                                                overflow: hidden;
 
-                                                    &.liked {
-                                                        filter: invert(0);
-                                                        background-image: url('../../../../../assets/img/svgs/liked.svg');
-                                                        animation: like 0.3s;
+                                                > .m-post {
+                                                    width: 100%;
+                                                    margin-bottom: 1em;
 
-                                                        @keyframes like {
-                                                            0% {
-                                                                transform: scale(0.9);
+                                                    &:last-child {
+
+                                                    }
+
+                                                    > .m-post-header {
+                                                        width: 100%;
+                                                        min-height: 60px;
+                                                        display: flex;
+                                                        justify-content: flex-start;
+                                                        align-items: center;
+                                                        padding: .4em;
+
+                                                        >.m-user-thumb {
+                                                            width: 30px;
+                                                            min-width: 30px;
+                                                            height: 30px;
+                                                            border-radius: 50%;
+                                                            border: 2px solid deeppink;
+                                                        }
+
+                                                        >.m-user-details {
+                                                            font-size: .95em;
+                                                            line-height: 1em;
+                                                            flex-grow: 1;
+                                                            padding: 0 .5em;
+
+                                                            >span, strong {
+                                                                display: block;
                                                             }
-                                                            40% {
-                                                                transform: scale(1.18);
+                                                        }
+
+                                                        >.m-post-menu {
+                                                            min-width: 40px;
+
+                                                            >.m-menu {
+                                                                display: inline-block;
+                                                                width: 24px;
+                                                                height: 24px;
+                                                                background-size: 270px 235px;
+                                                                background-position: -50px -186px;
+                                                                background-image: url(https://storage.googleapis.com/mkts/insta-sprite.png);
                                                             }
-                                                            95% {
-                                                                transform: scale(0.98);
+                                                        }
+                                                    }
+
+                                                    > .m-post-footer {
+
+                                                        > .m-buttons {
+                                                            width: 100%;
+                                                            padding: .4em 1em;
+                                                            display: flex;
+                                                            justify-content: flex-start;
+                                                            align-items: center;
+
+                                                            >.m-post-btn {
+                                                                user-select: none;
+                                                                cursor: pointer;
+                                                                text-align: center;
+                                                                min-width: 40px;
+
+                                                                > span {
+                                                                    display: inline-block;
+                                                                    width: 24px;
+                                                                    height: 24px;
+                                                                    background-image: url(https://storage.googleapis.com/mkts/insta-sprite.png);
+                                                                }
+
+                                                                >.like {
+                                                                    background-size: 270px 235px;
+                                                                    background-position: -25px -161px;
+                                                                }
+                                                                >.is-liked {
+                                                                    background-size: 270px 235px;
+                                                                    background-position: 0px -161px;
+                                                                }
+
+                                                                >.comn {
+                                                                    background-size: 270px 235px;
+                                                                    background-position: -142px -103px;
+                                                                }
+
+                                                                >.save {
+                                                                    background-size: 270px 235px;
+                                                                    background-position: -221px -150px;
+                                                                }
                                                             }
-                                                            100% {
-                                                                transform: scale(1);
+
+                                                            >.m-spacer {
+                                                                flex-grow: 1;
+                                                            }
+                                                        }
+
+                                                        > .m-likes {
+                                                            display: flex;
+                                                            justify-content: flex-start;
+                                                            align-items: center;
+                                                            padding: .4em 1em;
+                                                            font-size: .95em;
+
+                                                            >.m-user-like {
+                                                                display: inline-block;
+                                                                width: 20px;
+                                                                height: 20px;
+                                                                border-radius: 50%;
+                                                                margin-right: .5em;
+                                                            }
+
+                                                            > strong {
+                                                                margin: 0 .3em;
+                                                            }
+                                                        }
+
+                                                        > .m-time {
+                                                            text-transform: uppercase;
+                                                            display: block;
+                                                            padding: 0 1em;
+                                                            color: #c0c0c0;
+                                                            font-size: .75em;
+                                                        }
+                                                    }
+
+                                                    > #postView {
+
+                                                        >.view-mentions {
+                                                            display: none !important;
+                                                        }
+
+                                                        > .tooltip{
+                                                            user-select: none;
+                                                            display: none;
+                                                            background: #000;
+                                                            border-radius: 6px;
+                                                            bottom: 135%;
+                                                            font-size: 16px;
+                                                            color: #fff;
+                                                            width: 94px;
+                                                            height: 35px;
+                                                            opacity: 1;
+                                                            padding: 4px 4px;
+                                                            position: absolute;
+                                                            text-align: center;
+                                                            transform: translateX(-50%);
+                                                            left: 50%;
+
+                                                            &::before {
+                                                                content: '';
+                                                                border-color: transparent transparent #000 transparent;
+                                                                border-style: solid;
+                                                                border-width: 10px;
+                                                                left: 42%;
+                                                                position: absolute;
+                                                                top: -49%;
+                                                            }
+
+                                                            &.is-shown {
+                                                                z-index: 3;
+                                                                display: block !important;
+                                                            }
+                                                        }
+
+                                                        position: relative;
+
+                                                        > .m-post-photo {
+                                                            width: 100%;
+                                                        }
+
+                                                        > .m-input-tag {
+                                                            position: absolute;
+                                                            bottom: -30px;
+                                                            left: 0;
+                                                            border: none;
+                                                            display: none;
+                                                            width: 100%;
+
+                                                            &.is-shown {
+                                                                z-index: 3;
+                                                                display: block !important;
                                                             }
                                                         }
                                                     }
                                                 }
-                                                >.m-comment {
-                                                    width: 25px;
-                                                    height: 25px;
-                                                    background-image: url('../../../../../assets/img/svgs/comment.svg');
-                                                    background-repeat: no-repeat;
-                                                    filter: invert(1);
-                                                    background-position: center;
-                                                    transform: rotateY(180deg);
-                                                    margin: 8px 5px;
-                                                }
-                                                >.m-send {
-                                                    width: 25px;
-                                                    height: 25px;
-                                                    background-image: url('../../../../../assets/img/svgs/send.svg');
-                                                    background-repeat: no-repeat;
-                                                    filter: invert(1);
-                                                    background-position: center;
-                                                    margin: 8px 5px;
+                                            }
+                                        }
+                                    }
+
+                                    >.m-facebook {
+                                        > .m-container {
+                                            display: flex;
+                                            flex-direction: column;
+                                            margin: auto;
+                                            width: 502px;
+                                            
+                                            border: 1px solid #ced0d4;
+                                            border-radius: 5px;
+                                            background-color: #fff;
+                                            box-sizing: border-box;
+
+                                            > .m-headline {
+                                                display: flex;
+                                                align-items: flex-start;
+                                                justify-content: flex-start;
+                                                padding: 12px 12px 0;
+                                                margin-bottom: 11px;
+
+                                                > .headline__image {
+                                                    border-radius: 50%;
+                                                    height: 40px;
+                                                    width: 40px;
+                                                    margin-right: 8px;
+                                                } 
+
+                                                > .m-column {
+                                                    display: flex;
+                                                    flex-direction: column;
+
+                                                    > .headline__title {
+                                                        color: #365899;
+                                                        font-size: 14px;
+                                                        font-weight: bold;
+                                                        letter-spacing: -0.24px;
+                                                        line-height: 19.32px;
+                                                        word-wrap: break-word;
+                                                        margin: 0 0 2px;
+                                                    }
+
+                                                    > .headline__subtitle {
+                                                        color: #90949c;
+                                                        font-size: 12px;
+                                                        letter-spacing: -0.24px;
+                                                        line-height: 16.08px;
+                                                        margin: 0;
+
+                                                        > .headline__world {
+                                                            height: 12px;
+                                                            width: 12px;
+                                                        }
+                                                    }
                                                 }
                                             }
-                                            >.m-btn-right {
-                                                >.m-bookmark {
-                                                    width: 25px;
-                                                    height: 25px;
-                                                    background-image: url('../../../../../assets/img/svgs/bookmark2.svg');
-                                                    background-repeat: no-repeat;
-                                                    filter: invert(1);
-                                                    background-position: center;
-                                                    margin: 8px 14px;
+
+                                            > .m-content {
+                                                margin: 7px 12px; 
+
+                                                > .m-text--small {
+                                                    margin: 0;
+                                                    font-size: 14px;
+                                                    line-height: 19.32px;
                                                 }
                                             }
-                                    
+
+                                            > .m-footer {
+                                                display: flex;
+                                                border-top: 1px solid #e1e2e3;
+                                                padding: 4px 12px;
+
+                                                >.m-action {
+                                                    > a {
+                                                        color: #7F7F7F;
+                                                    }
+
+                                                    > div {
+                                                        display: inline-block;
+
+                                                        > p:hover {
+                                                            text-decoration: underline;
+                                                        }
+
+                                                        &:nth-child(n + 2) {
+                                                            margin-left: 20px;
+                                                        }
+                                                    }
+
+                                                    > .like, .share, .comment {
+                                                        img {
+                                                            display: inline-block;
+                                                            width: 18px;
+                                                            vertical-align: text-bottom;
+                                                        }
+                                                        a {
+                                                            color: #90949c;
+                                                            display: -webkit-box;
+                                                        }
+                                                    }
+
+                                                    > .share, .comment {
+                                                        img {
+                                                            opacity: 0.2;
+                                                        }
+                                                    }
+
+                                                    > .like {
+                                                        a {
+                                                            color: #0084ff;
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -302,137 +523,5 @@ cdk-virtual-scroll-viewport {
         height: 100%;
         padding: 21px;
         background-color: #D9D9D9;
-
-        >.m-content {
-
-            >.m-instagram {
-                height: 541.9677124023438px;
-                width: 371px;
-                background-color: rgb(0, 0, 0);
-                margin: auto;
-                >.m-insta-header {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-            
-                    >.m-image {
-                        padding: 10px;
-                        >img {
-                            width: 50px;
-                            height: 50px;
-                        }
-                    }
-            
-                    >.m-title {
-                        margin-left: 3px;
-                        width: 114px;
-                        height: 12px;
-                        background: linear-gradient(-45deg, #c0c0c0, #616161, #d8d8d8, #727171);
-                        background-size: 500% 100%;
-                        animation: gradient 1s ease infinite;
-                    }
-            
-                    @keyframes gradient {
-                        0% {
-                            background-position: 0% 50%;
-                        }
-                        100% {
-                            background-position: 100% 50%;
-                        }
-                    }
-                }
-            
-                >.m-post {
-                    width: 100%;
-                    min-height: 320px;
-                    display: flex;
-                    align-items: center;
-                    background-color: #979797;
-                    height: fit-content;
-
-                    > img {
-                        width: 100%;
-                        max-height: 359px;
-                    }
-                }
-            
-                >.m-insta-buttons {
-                    width: 100%;
-                    height: 38px;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-            
-                    >.m-btn-left {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        margin-left: 10px;
-                        >.m-heart {
-                            width: 23px;
-                            height: 23px;
-                            background-image: url('../../../../../assets/img/svgs/heart.svg');
-                            background-repeat: no-repeat;
-                            filter: invert(1);
-                            background-position: center;
-                            margin: 8px 5px;
-
-                            &.liked {
-                                filter: invert(0);
-                                background-image: url('../../../../../assets/img/svgs/liked.svg');
-                                animation: like 0.3s;
-
-                                @keyframes like {
-                                    0% {
-                                        transform: scale(0.9);
-                                    }
-                                    40% {
-                                        transform: scale(1.18);
-                                    }
-                                    95% {
-                                        transform: scale(0.98);
-                                    }
-                                    100% {
-                                        transform: scale(1);
-                                    }
-                                }
-                            }
-                        }
-                        >.m-comment {
-                            width: 25px;
-                            height: 25px;
-                            background-image: url('../../../../../assets/img/svgs/comment.svg');
-                            background-repeat: no-repeat;
-                            filter: invert(1);
-                            background-position: center;
-                            transform: rotateY(180deg);
-                            margin: 8px 5px;
-                        }
-                        >.m-send {
-                            width: 25px;
-                            height: 25px;
-                            background-image: url('../../../../../assets/img/svgs/send.svg');
-                            background-repeat: no-repeat;
-                            filter: invert(1);
-                            background-position: center;
-                            margin: 8px 5px;
-                        }
-                    }
-
-                    >.m-btn-right {
-                        >.m-bookmark {
-                            width: 25px;
-                            height: 25px;
-                            background-image: url('../../../../../assets/img/svgs/bookmark2.svg');
-                            background-repeat: no-repeat;
-                            filter: invert(1);
-                            background-position: center;
-                            margin: 8px 14px;
-                        }
-                    }
-            
-                }
-            }
-        }
     }
 }

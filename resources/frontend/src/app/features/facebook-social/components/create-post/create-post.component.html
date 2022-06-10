@@ -1,4 +1,16 @@
 <div class="m-loading-screen"></div>
+<div id="successDialog" class="m-success is-hidden">
+    <nz-result class="m-success-result"
+          nzStatus="success"
+          nzTitle="Your post has been submitted successfully! "
+          nzSubTitle="Thank you for using mgo360 SHARE"
+        >
+        <div nz-result-extra>
+            <button (click)="resetSuccess()" nz-button>OK</button>
+        </div>
+    </nz-result>
+</div>
+
 <div class="mod-create-post">
     <div class="m-container">
         <div class="m-post-form">
@@ -46,12 +58,12 @@
                             <nz-form-control [nzSpan]="24">
                                 <div>
                                     <nz-input-group nzSearch>
-                                        <input type="text" nz-input placeholder="input search text" />
+                                        <input type="text" [(ngModel)]="url1" nz-input placeholder="input search text" />
                                     </nz-input-group>
                                     <br >
-                                    <div *ngFor="let item of urlLinks">
+                                    <div *ngFor="let item of urlLinks; let index = index;">
                                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                                            <input type="text" [id]="item" nz-input placeholder="input search text" />
+                                            <input type="text" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index]" />
                                         </nz-input-group>
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)"><i nz-icon nzType="delete"></i></button>
@@ -66,6 +78,7 @@
                             <nz-form-control [nzSpan]="24">
                                 <div class="clearfix">
                                     <nz-upload
+                                    nzAction="http://posting.local/api/uploadfile"
                                     nzListType="picture-card"
                                     [(nzFileList)]="fileList"
                                     [nzShowButton]="fileList.length < 8"
@@ -103,8 +116,9 @@
                         </nz-select>
                     </nz-form-control>
                     <br>
-                    <nz-form-control [nzXs]="{ span: 24, offset: 0 }" [nzSm]="{offset: 18 }">
-                      <button id="btn-submit" nz-button (click)="submitForm()"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
+                    <nz-form-control [nzXs]="{ span: 10, offset: 3 }" [nzSm]="{offset: 14 }">
+                        <button id="btn-save" nz-button (click)="submitForm('DRAFT')"><div>Save</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
+                        <button id="btn-submit" nz-button (click)="submitForm('PUBLISH')"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
                     </nz-form-control>
 
             </div>
@@ -123,34 +137,107 @@
                             </ul>
                             <div class="m-tab-content">
                                 <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
-                                    <div class="m-instagram">
-                                        <div class="m-insta-header">
-                                            <div class="m-image">
-                                                <img src="../../../../../assets/img/instapic.jpg" />
-                                            </div>
-                                            <div class="m-title">
-                                                
-                                            </div>
-                                        </div>
-                                        <div class="m-post">
-                                            <img id="post-image" src="">
-                                        </div>
-                                        <div class="m-insta-buttons">
-                                            <div class="m-btn-left">
-                                                <div class="m-heart" (click)="like($event)"></div>
-                                                <div class="m-comment"></div>
-                                                <div class="m-send"></div>
-                                            </div>
-                                            <div class="m-btn-right">
-                                                <div class="m-bookmark"></div>
-                                            </div>
+
+                                    <div class="m-instagram-device">
+                                        <div class="m-instagram">
+                                            <main class="m-post-content">
+
+                                                <div class="m-post">
+                                                    <div class="m-post-header">
+                                                        <img class="m-user-thumb" src="../../../../../assets/img/instapic.jpg" alt="Walter">
+                                                        <div class="m-user-details">
+                                                            <strong class="m-name">My page</strong>
+                                                            <span class="m-location">location</span>
+                                                        </div>
+                                                        <div class="m-post-menu">
+                                                            <span class="m-menu">&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                    <div id="postView">
+
+                                                        <!-- <div id="tooltip" class="tooltip">who's this?</div>
+
+                                                        <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect()">
+                                                            <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
+                                                        </nz-mention>
+
+                                                        <img (dblclick)="tag($event)" (click)="viewMentions()" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" > -->
+                                                        <app-carousel></app-carousel>
+                                                    </div>
+                                                    <div class="m-post-footer">
+                                                        <br>
+                                                        <div class="m-buttons">
+                                                            <div class="m-post-btn"><span (click)="liked($event)" class="like">&nbsp;</span></div>
+                                                            <div class="m-post-btn"><span class="comn">&nbsp;</span></div>
+                                                            <div class="m-spacer">&nbsp;</div>
+                                                            <div class="m-post-btn"><span class="save">&nbsp;</span></div>
+                                                        </div>
+                                
+                                                        <div class="m-likes" *ngIf="isliked">
+                                                            <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
+                                                            <strong>1 like</strong>
+                                                        </div>
+                                                        <br>
+                                                        <span class="m-time">à l'instant</span>
+
+                                                    </div>
+                                                </div>
+
+                                            </main>
                                         </div>
                                     </div>
+
+                                    <!-- <app-instagram-preview></app-instagram-preview> -->
                                 </div>
 
                                 <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
                                     <div class="m-facebook">
-                                        test
+                                        <div class="m-container">
+                                            <div class="m-headline">
+                                              <img class="headline__image" src="../../../../../assets/img/instapic.jpg">
+                                              <div class="m-column">
+                                                <p class="headline__title">
+                                                  My page
+                                                </p>
+                                                <p class="headline__subtitle">
+                                                  Published by MGO360 SHARE · à l'instant · <img class="headline__world" src="https://www.facebook.com/rsrc.php/v3/yD/r/-ZGO_vK2ube.png">
+                                              </div>
+                                            </div>
+                                            <div class="m-content">
+                                              <p class="m-text--small">Statut</p>
+                                            </div>
+                                            <div class="m-content">
+                                              <img id="fp" alt="post facebook" class="m-image" src="">
+                                            </div>
+                                            <div class="m-footer">
+                                                <div class="m-action">
+                                                    <div class="like">
+                                                      <a href="#">
+                                                        <img src="https://1.bp.blogspot.com/-qns_lZPjg0I/VWY2dO1HN-I/AAAAAAAACVA/akLTMY7RJSk/s1600/Thumbs-up-facebook-icon-small.png" alt="thumbs up" />
+                                                        <p>Like</p>
+                                                      </a>
+                                                    </div>
+                                              
+                                                    <div class="comment">
+                                                      <a href="#">
+                                                        <img src="../../../../../assets/img/svgs/comment-facebook.svg" />
+                                                        <p>Comment</p>
+                                                      </a>
+                                                    </div>
+                                              
+                                                    <div class="share">
+                                                      <a href="#">
+                                                        <img src="http://download.seaicons.com/icons/icons8/windows-8/512/Arrows-Redo-icon.png" alt="" />
+                                                        <p>
+                                                          Share
+                                                        </p>
+                                                      </a>
+                                                    </div>
+                                              
+                                                  </div>
+                                                <div class="footer__dropdown"></div>
+                                            </div>
+                                          </div>
                                     </div>
                                 </div>
                             </div>

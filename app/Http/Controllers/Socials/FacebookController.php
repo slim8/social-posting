@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\ProviderToken;
@@ -16,6 +17,7 @@ class FacebookController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
+    use FacebookService;
 
     protected $instagramController;
 
@@ -29,7 +31,8 @@ class FacebookController extends Controller
         $responseObject = [];
         $response = Http::post(env('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
         $responseObject['name'] = $response->json('name');
-        return  $responseObject;
+
+        return $responseObject;
     }
 
     /**
@@ -37,7 +40,7 @@ class FacebookController extends Controller
      */
     public function updateOrReturnProviderIdUser($adminId, $longLifeToken, $accountUserId)
     {
-        $account = UserTrait::getUniqueProviderTokenByProvider($accountUserId);
+        $account = UserTrait::getUniqueProviderTokenByProvider($accountUserId, 'facebook', $adminId);
 
         $personalInformation = $this->getFacebookPersonalInformations($longLifeToken);
 
@@ -51,12 +54,12 @@ class FacebookController extends Controller
                 [
                     'expiryDate' => date('Y-m-d', strtotime('+60 days')),
                     'longLifeToken' => $longLifeToken,
-                    'created_by' => $adminId,
+                    'createdBy' => $adminId,
                     'accountUserId' => $accountUserId,
                     'provider' => 'facebook',
-                    'profile_picture' => 'picture file',
-                    'profile_name' => $personalInformation['name'] ? $personalInformation['name'] : '',
-                    'user_name' => '',
+                    'profilePicture' => 'picture file',
+                    'profileName' => $personalInformation['name'] ? $personalInformation['name'] : '',
+                    'userName' => '',
                 ]);
 
             return $provider->id;
@@ -66,12 +69,13 @@ class FacebookController extends Controller
     /**
      * Generate Long Life Token.
      */
-    public function generateLongLifeToken($tokenKey, string $facebookUserId = '')
+    public function generateLongLifeToken($tokenKey, string $facebookUserId = '', int $userId = null)
     {
+        $userObj = $userId ? $userId : UserTrait::getCurrentAdminId();
         $facebookAppKey = env('FACEBOOK_APP_ID');
         $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
         $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
-        $providerId = $this->updateOrReturnProviderIdUser(UserTrait::getCurrentAdminId(), $response->json('access_token'), $facebookUserId);
+        $providerId = $this->updateOrReturnProviderIdUser($userObj, $response->json('access_token'), $facebookUserId);
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
         $providerObject->token = $response->json('access_token');
@@ -212,11 +216,9 @@ class FacebookController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Facebook Page Found', ], 201);
+                return RequestsTrait::processResponse(false, ['message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
@@ -224,19 +226,9 @@ class FacebookController extends Controller
     }
 
     /**
-     * Get facebook page picture from Facebook ID.
-     */
-    public function getPagePicture($pageId)
-    {
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
-
-        return $response->json('data')['url'];
-    }
-
-    /**
      * Save Facebook List of pages after autorization.
      */
-    public function savePage($facebookPage , $userUid)
+    public function savePage($facebookPage, $userUid)
     {
         $actualCompanyId = UserTrait::getCompanyId();
 
@@ -246,7 +238,7 @@ class FacebookController extends Controller
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];
 
-        $page = Account::where('uid', $id)->where('company_id', $actualCompanyId)->first();
+        $page = Account::where('uid', $id)->where('companyId', $actualCompanyId)->first();
 
         if (!$page) {
             Account::create([
@@ -257,18 +249,18 @@ class FacebookController extends Controller
                         'scoope' => '',
                         'authorities' => '',
                         'link' => '',
-                        'company_id' => $actualCompanyId,
+                        'companyId' => $actualCompanyId,
                         'uid' => $id,
                         'profilePicture' => $pageFacebookPageLink,
                         'category' => $category,
                         'providerType' => 'page',
                         'accessToken' => $pageToken,
-                        'provider_token_id' => UserTrait::getUniqueProviderTokenByProvider($userUid),
+                        'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
                     ]);
         }
     }
 
-    public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0)
+    public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0, int $checkWithCompany = null)
     {
         $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
@@ -276,20 +268,29 @@ class FacebookController extends Controller
 
         $jsonPageList = $response->json('data');
 
-        $AllPages = [];
+        $AllPages = []; // Used to return Only Non Exist Pages
+        $SelectedPages = []; // Used to return all Selected Pages
 
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {
                 $id = $facebookPage['id'];
-                $pageFacebookPageLink = $this->getPagePicture($id);
+                $pageFacebookPageLink = FacebookService::getPagePicture($id);
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
 
-                $checkIfExist = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
+                $checkIfExist = Account::where('uid', $id);
 
+                if (!$checkWithCompany) {
+                    $checkIfExist = $checkIfExist->where('company_id', UserTrait::getCompanyId());
+                }
+
+                $checkIfExist = $checkIfExist->first();
+
+                $pageArraySelected = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                $SelectedPages[] = $pageArraySelected;
                 if (!$checkIfExist) {
-                    $AllPages[] = ['pageId' => $id, 'type' => 'page', 'provider' => 'facebook', 'pagePictureUrl' => $pageFacebookPageLink, 'pageToken' => $pageToken, 'category' => $category,  'pageName' => $name];
+                    $AllPages[] = $pageArraySelected;
                 }
 
                 if ($getInstagramAccount) {
@@ -297,16 +298,24 @@ class FacebookController extends Controller
                     if ($businessAccountId !== false) {
                         $instagramAccount = $this->instagramController->getInstagramInformationFromBID($businessAccountId, $pageToken);
 
-                        $checkIfExist = Account::where('uid', $businessAccountId)->where('company_id', UserTrait::getCompanyId())->first();
-                        if (!$checkIfExist) {
-                            $AllPages[] = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                        $checkIfExist = Account::where('uid', $businessAccountId);
+
+                        if (!$checkWithCompany) {
+                            $checkIfExist = $checkIfExist->where('company_id', UserTrait::getCompanyId());
                         }
+
+                        $checkIfExist = $checkIfExist->first();
+                        $instagramSelected = ['type' => 'page', 'provider' => 'instagram', 'accessToken' => $pageToken, 'pageId' => $businessAccountId, 'relatedAccountId' => $id, 'accountPictureUrl' => isset($instagramAccount['profile_picture_url']) ? $instagramAccount['profile_picture_url'] : false,  'pageName' => $instagramAccount['name']];
+                        if (!$checkIfExist) {
+                            $AllPages[] = $instagramSelected;
+                        }
+                        $SelectedPages[] = $instagramSelected;
                     }
                 }
             }
         }
 
-        return $AllPages;
+        return ['AllPages' => $AllPages, 'SelectedPages' => $SelectedPages];
     }
 
     public function getPagesAccountInterne()
@@ -335,11 +344,9 @@ class FacebookController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return response()->json(['success' => true,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
         } else {
-            return response()->json(['success' => false,
-        'pages' => $AllPages, ], 201);
+            return RequestsTrait::processResponse(false);
         }
     }
 }

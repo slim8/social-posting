@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class Company extends ExtendedModel
 {
     use HasFactory;
 
@@ -22,8 +23,8 @@ class Company extends Model
         'phoneNumber',
         'email',
         'website',
-        'plan_id',
-        'is_admin',
+        'planId',
+        'isAdmin',
     ];
 
     public function users()

@@ -28,9 +28,9 @@ class AdminSeeder extends Seeder
 
         PlanProvider::create([
             'limit' => '1000',
-        'remaining' => '1000',
-        'provider' => 'facebook',
-        'plan_id' => $plan->id,
+            'remaining' => '1000',
+            'provider' => 'facebook',
+            'planId' => $plan->id,
         ]);
 
         $company = Company::create([
@@ -39,8 +39,8 @@ class AdminSeeder extends Seeder
             'phoneNumber' => '000000000',
             'adress' => 'Adresse',
             'website' => 'Website',
-            'plan_id' => $plan->id,
-            'is_admin' => true,
+            'planId' => $plan->id,
+            'isAdmin' => true,
         ]);
 
         $user = User::create([
@@ -50,7 +50,7 @@ class AdminSeeder extends Seeder
             'email' => 'ali.softtodo@gmail.com',
             'status' => 1,
             'isSubscriber' => 1,
-            'company_id' => $company->id,
+            'companyId' => $company->id,
             'password' => hash::make('Soft1to2do'),
             'autoRefresh' => 1,
         ]);

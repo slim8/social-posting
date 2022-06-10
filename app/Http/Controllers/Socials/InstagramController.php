@@ -245,7 +245,7 @@ class InstagramController extends Controller
 
         $relatedUid = $instagramAccount['relatedAccountId'];
 
-        $page = Account::where('uid', $id)->where('company_id', UserTrait::getCompanyId())->first();
+        $page = Account::where('uid', $id)->where('companyId', UserTrait::getCompanyId())->first();
 
         if (!$page) {
             Account::create([
@@ -256,15 +256,15 @@ class InstagramController extends Controller
                         'scoope' => '',
                         'authorities' => '',
                         'link' => '',
-                        'company_id' => UserTrait::getCompanyId(),
+                        'companyId' => UserTrait::getCompanyId(),
                         'uid' => $id,
                         'profilePicture' => $pageinstagramAccountLink,
                         'category' => 'NA',
                         'providerType' => 'page',
                         'accessToken' => $token,
-                        'related_account_id' => $relatedAccountId,
-                        'provider_token_id' => UserTrait::getUniqueProviderTokenByProvider($userUid),
-                        'related_Uid' => $relatedUid,
+                        'relatedAccountId' => $relatedAccountId,
+                        'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
+                        'relatedUid' => $relatedUid,
                     ]);
         }
     }

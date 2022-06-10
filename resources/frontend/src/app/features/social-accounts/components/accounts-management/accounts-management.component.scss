@@ -1,0 +1,129 @@
+nz-page-header-subtitle {
+    padding-left: 24px;
+}
+.m-add-account {
+    padding: 24px;
+    > .m-add-btn {
+        padding-right: 10px;
+        cursor: pointer;
+        width: fit-content;
+        height: 50px;
+        justify-content: center;
+        display: flex;
+        border: 1px solid white;
+        align-items: center;
+        font-weight: 500;
+
+        i {
+            padding: 10px;
+        }
+
+        &:hover {
+            border: 1px solid rgb(224, 224, 224);
+        }
+    }
+}
+
+.m-accounts {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+
+    >.m-account-card {
+        width: 300px;
+
+        >.m-menu-header {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            border-bottom :1px solid #e9e9e9;
+            padding: 5px;
+            &.disconnected {
+                background-color: #ededed;
+            }
+
+            > .m-user-image {
+                > i {
+                    font-size: 41px;
+                    padding: 21px;
+                }
+
+                > img {
+                    margin: 10px;
+                    padding: 2px;
+                    width: 75px;
+                    border-radius: 50%;
+                    border: 2px solid #4d88be;
+                }
+        
+                >nz-avatar {
+                    margin: 15px;
+                }
+            }
+        
+            > .m-user-info {
+                padding-top: 20px;
+                >.m-user-name {
+                    &.disconnected {
+                        color: grey;
+                    }
+                    user-select: none;
+                    height: 32px;
+                    font-size: 25px;
+                    line-height: 30px;
+                }
+        
+                >.m-user-mail {
+                    font-size: 16px;
+                    color: grey;
+                    line-height: 30px;
+                }
+            }
+        
+            > .m-profile-btn {
+                width: 30%;
+                height: 29px;
+                color: #969696;
+                margin: 5px auto 10px;
+                border: 1px solid rgb(255, 255, 255);
+                text-align: center;
+                line-height: 23px;
+                cursor: pointer;
+
+                &.reconnect {
+                    color: black;
+                    animation: infinite color 0.9s;
+
+                    @keyframes color {
+                        0% {
+                            color: black;
+                        } 
+                        50% {
+                            color: rgb(63, 63, 63);
+                        }
+                        100% {
+                            color: black;
+                        }
+                    }
+                }
+
+                &.disconnected {
+                    text-decoration: line-through;
+                    cursor: not-allowed;
+                }
+        
+                &:hover {
+                    transition: 0.2s all;
+                    color: #3a426b;
+                    &.disconnected {
+                        color: #969696;
+                    }
+                }
+            }
+        }
+    }
+}

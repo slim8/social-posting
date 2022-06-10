@@ -29,22 +29,32 @@ trait RequestsTrait
     {
         $AllPages = [];
 
-        foreach (DB::table('accounts')->where('company_id', UserTrait::getCompanyId())->where('status', 1)->orderBy('id')->lazy() as $account) {
+
+        foreach (Account::where('companyId', UserTrait::getCompanyId())->where('status', 1)->orderBy('id')->lazy() as $account) {
             $id = $account->id;
             $uid = $account->uid;
             $provider = $account->provider;
             $pageProfilePicture = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
-            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider];
+            $isConnected = ($account->accessToken == Account::$STATUS_DISCONNECTED) ? 0 : 1; // Check if Account has token (Is Connected)
+            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider, 'isConnected' => $isConnected];
         }
 
         return $AllPages;
     }
 
-    public static function findAccountByUid($value, string $key = 'uid')
+    public static function findAccountByUid($value, string $key = 'uid' , int $onlyConnected = 0)
     {
-        $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId())->first();
+        $account = Account::where($key, $value)->where('companyId', UserTrait::getCompanyId());
+
+        // Check if the Account is Connected
+
+        if($onlyConnected){
+            $account = $account->where('status' , 1);
+        }
+
+        $account = $account->first();
 
         return $account;
     }
@@ -70,6 +80,17 @@ trait RequestsTrait
 
     public static function formatTags($tag)
     {
-        return str_replace(' ','_',$tag);
+        return str_replace(' ', '_', $tag);
+    }
+
+    /**
+     * Function to Process Json Response
+     */
+    public static function processResponse($sucess, array $object = [])
+    {
+
+        $object['success'] = $sucess;
+
+        return response()->json($object, $sucess ? 201 : 401);
     }
 }

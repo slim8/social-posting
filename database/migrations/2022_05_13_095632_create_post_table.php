@@ -18,11 +18,13 @@ return new class extends Migration
             $table->text('message');
             $table->string('url');
             $table->string('status');
-            $table->boolean('isScheduled');
-            $table->dateTime('publishedAt')->nullable();
-            $table->foreignId('account_id')->constrained();
+            $table->boolean('is_scheduled');
+            $table->dateTime('published_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->string('video_title')->nullable();
+
         });
     }
 
