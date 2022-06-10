@@ -363,6 +363,76 @@ class GeneralSocialController extends Controller
         }
     }
 
+    /**
+     * Get Posts By Account Id.
+     */
+    public function getPostsByAccountId(Request $request, $id)
+    {
+        $account = RequestsTrait::findAccountByUid($id, 'id');
+
+        if ($account) {
+            $res = Post::whereHas('accounts', function ($query) use ($id) {
+                $query->where('accounts.id', $id);
+            })->with('PostMedia')->get();
+            if (count($res) > 0) {
+                $response['status'] = true;
+                $response['posts'] = $res;
+            } else {
+                $response['status'] = false;
+                $response['errorMessage'] = 'This Account has not any POSTS';
+            }
+        } else {
+            $response['status'] = false;
+            $response['errorMessage'] = 'No Account found with id '.$id;
+        }
+
+        return response()->json($response, 201);
+    }
+
+    public function getConnectedAccounts(Request $request)
+    {
+        $response = [];
+        $userId = UserTrait::getCurrentAdminId();
+        $accounts = ProviderToken::where('created_by', $userId)->get();
+        foreach ($accounts as $account) {
+            $now = strtotime(date('Y-m-d'));
+
+            $expiry = strtotime('-5 days', strtotime($account->expiryDate));
+            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === 'DISCONNECTED') ? false : true]);
+        }
+
+        if ($response) {
+            return RequestsTrait::processResponse(true, ['accounts' => $response]);
+        } else {
+            return RequestsTrait::processResponse(false, ['message' => 'No account autorized']);
+        }
+    }
+
+    /**
+     * Get All posts By Criteria.
+     */
+    public function getPosts(Request $request)
+    {
+        $companyId = UserTrait::getCompanyId();
+        dd(Post::whereHas('accounts', function ($query) use ($companyId) {
+            $query->where('accounts.company_id', $companyId);
+        })->with('PostMedia')->get());
+        $companyId = UserTrait::getCompanyId();
+        $response = Post::whereHas('accounts', function ($query) use ($companyId) {
+            $query->where('accounts.company_id', $companyId);
+        })->with('PostMedia');
+
+        if ($request->status) {
+            $response = $response->where('status', $request->status);
+        }
+        $response = $response->get();
+
+        if ($response) {
+            return RequestsTrait::processResponse(true, ['posts' => $response]);
+        } else {
+            return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
+        }
+    }
 
     public function deleteAccount(Request $request)
     {
