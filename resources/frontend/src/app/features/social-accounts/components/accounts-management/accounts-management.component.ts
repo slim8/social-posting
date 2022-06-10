@@ -50,6 +50,7 @@ export class AccountsManagementComponent implements OnInit {
                     id: this.user.id,
                 }).subscribe((response: any) => {
                     this.listpages = response.pages;
+                    this.getConnectedAccounts();
                     this.showModal();
                 });
             })
