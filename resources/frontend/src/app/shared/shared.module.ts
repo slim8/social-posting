@@ -6,7 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @NgModule({
-    declarations: [],
+    declarations: [
+    ],
     exports: [
         DemoNgZorroAntdModule,
         IconsProviderModule,

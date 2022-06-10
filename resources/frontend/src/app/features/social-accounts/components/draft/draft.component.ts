@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PostService } from '../../services/post.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { PostService } from '../../services/post.service';
 export class DraftComponent implements OnInit {
 
     posts : any[] = [];
-    constructor(private postService: PostService) { }
+    constructor(private postService: PostService, private router : Router) { }
 
     ngOnInit(): void {
         this.getPosts();
@@ -27,5 +28,9 @@ export class DraftComponent implements OnInit {
                 
             },
         })
+    }
+
+    edit(id : any) {
+        this.router.navigate(['/home/social-accounts/'+id+'/create-post']);
     }
 }

@@ -1,10 +1,12 @@
 <div style="margin-bottom: 50px;" *ngFor="let post of posts">
-    {{post.id}} <br>
-    {{post.message}} <br>
-    {{post.url}} <br>
-    <div *ngIf="post.post_media">
-        <div *ngFor="let image of post.post_media">
-            <img style="width: 100px;" src="{{image.url}}" />
+    <div (click)="edit(post.id)">
+        {{post.id}} <br>
+        {{post.message}} <br>
+        {{post.url}} <br>
+        <div *ngIf="post.post_media">
+            <div *ngFor="let image of post.post_media">
+                <img style="width: 100px;" src="{{image.url}}" />
+            </div>
         </div>
     </div>
 </div>
