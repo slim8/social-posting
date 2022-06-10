@@ -9,7 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 })
 export class NavbarComponent implements OnInit {
 
-    userInfo :any ='';
+    userInfo: any = '';
     @Input() isCollapsed: boolean | undefined;
     @Output() newCollapseEvent = new EventEmitter<boolean>();
 
@@ -30,10 +30,10 @@ export class NavbarComponent implements OnInit {
         menu.classList.toggle("is-open")
     }
 
-    resetMenu(e:any)  {
-        let menuBtn = document.getElementById("loggedin") as HTMLElement
+    resetMenu(e: any) {
+        console.log(e.target);
         let menu = document.getElementById("loggedMenu") as HTMLElement
-        if(!e.path?.includes(menuBtn) && !e.path?.includes(menu)) {
+        if (!e.target.classList.contains("user-menu-toggle")) {
             menu.classList.remove("is-open")
         }
     }
