@@ -66,4 +66,5 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
 
 Route::post('/forget-password', [ForgotPasswordController::class,'postEmail']);
 Route::post('/reset-password', [ForgotPasswordController::class,'updatePassword']);
+Route::post('/change-password', [ProfileController::class,'changePassword']);
 Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
