@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\RoutingController;
@@ -60,3 +61,7 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
     Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
 });
+
+
+Route::post('/forget-password', [ForgotPasswordController::class,'postEmail']);
+Route::post('/reset-password', [ForgotPasswordController::class,'updatePassword']);
