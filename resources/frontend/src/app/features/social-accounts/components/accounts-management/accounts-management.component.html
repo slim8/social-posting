@@ -1,7 +1,7 @@
 <nz-page-header nzTitle="Connected facebook accounts"></nz-page-header>
 <nz-page-header-subtitle>Manage your connected accounts</nz-page-header-subtitle>
 <div class="m-add-account">
-    <div *ngIf="connectedAccounts.length < 0" class="m-add-btn" (click)="loginWithFacebook()">
+    <div *ngIf="connectedAccounts.length == 0" class="m-add-btn" (click)="loginWithFacebook()">
         <i nz-icon nzType="plus" nzTheme="outline"></i>
         connect account
     </div>
@@ -12,7 +12,7 @@
 </div>
 <div class="m-accounts">
     <div class="m-account-card"  *ngFor="let account of connectedAccounts">
-        <!-- 
+        <!--
             account.mustBeRefreshed
             account.profileName
             account.provider
@@ -38,7 +38,7 @@
             <div *ngIf="account.isConnected" (click)="showDisconnectConfirm(account.providerId)" class="m-profile-btn">
                 <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
             </div>
-            <div *ngIf="!account.isConnected" (click)="loginWithFacebook()" class="m-profile-btn reconnect">
+            <div *ngIf="!account.isConnected" (click)="loginWithFacebook()"class="m-profile-btn reconnect">
                 <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
             </div>
         </div>

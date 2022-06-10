@@ -17,10 +17,15 @@ class UtilitiesController extends Controller
         $responseObject = new \stdClass();
 
         foreach ($accountIds as $singleAccountId) {
-            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id');
+            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id' , 1);
+            if($account){
+                array_push($providersType, $account->providerType);
+                array_push($providersName, $account->provider);
+            } else {
+                $responseObject->status = false;
+                $responseObject->message = 'Can not post with disconnected account';
+            }
 
-            array_push($providersType, $account->providerType);
-            array_push($providersName, $account->provider);
         }
         $responseObject->status = true;
         $isFacebookPage = (in_array('facebook', $providersName)) && (in_array('page', $providersType));

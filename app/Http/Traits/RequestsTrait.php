@@ -36,16 +36,24 @@ trait RequestsTrait
             $pageProfilePicture = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
-            $isConnected = ($account->accessToken == 'DISCONNECTED') ? 0 : 1; // Check if Account has token (Is Connected)
+            $isConnected = ($account->accessToken == Account::$STATUS_DISCONNECTED) ? 0 : 1; // Check if Account has token (Is Connected)
             $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider, 'isConnected' => $isConnected];
         }
 
         return $AllPages;
     }
 
-    public static function findAccountByUid($value, string $key = 'uid')
+    public static function findAccountByUid($value, string $key = 'uid' , int $onlyConnected = 0)
     {
-        $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId())->first();
+        $account = Account::where($key, $value)->where('company_id', UserTrait::getCompanyId());
+
+        // Check if the Account is Connected
+
+        if($onlyConnected){
+            $account = $account->where('status' , 1);
+        }
+
+        $account = $account->first();
 
         return $account;
     }
