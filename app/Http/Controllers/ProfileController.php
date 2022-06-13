@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\UserTrait;
 use App\Models\User;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -76,11 +78,16 @@ class ProfileController extends Controller
     public function changePassword(Request $request)
     {
         //
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             'id' => 'required|exists:users',
+            'currentPassword' => 'required|string|min:6',
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required',
         ]);
+
+        if ($validation->fails()) {
+            return Response()->json($validation->errors() , 422);
+        }
 
         return User::where('id', $request->id)->update(['password' => Hash::make($request->password)]) ;
     }
