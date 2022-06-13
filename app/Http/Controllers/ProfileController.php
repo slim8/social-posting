@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\UserTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    use UserTrait;
     /**
      * Display a listing of the resource.
      *
@@ -35,10 +37,10 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id = null)
     {
         //
-        return User::findOrFail($id);
+        return $id ?  User::findOrFail($id) : UserTrait::getUserObject() ;
     }
 
     /**

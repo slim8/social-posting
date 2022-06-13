@@ -15,7 +15,6 @@
         "start:swagger": "php artisan lrd:generate",
         "start:migrate": "php artisan migrate --seed",
         "deploy": "git pull && composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --prod && node ./build.js && php artisan migrate"
-
     },
     "dependencies": {
         "@angular/animations": "~13.2.0",

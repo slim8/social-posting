@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
@@ -28,14 +29,19 @@ use Illuminate\Support\Facades\Route;
 $redirect = new RedirectIfAuthenticated();
 $request = new Request();
 
-// ALL commented Routes will be deleted after Some verifications ...
-
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
     Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
+    Route::post('/forget-password', [ForgotPasswordController::class,'forgetPassword']);
+    // Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
+
+    Route::post('/reset-password', [ForgotPasswordController::class,'resetPassword']);
+    Route::post('/change-password', [ProfileController::class,'changePassword']);
+    // Route::get('/profile/{id}', [ProfileController::class,'show']);
+    // Route::post('/profile/{id}', [ProfileController::class,'update']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -46,6 +52,8 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
     Route::post('/account/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
+
+     // Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
@@ -56,15 +64,12 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::post('/uploadfile', [ExempleController::class, 'uploadfile'])->name('uploadfile.api');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('get-admin-companies.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
     Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-admin-companies.api');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('get-admin-companies.api');
 });
-
-
-Route::post('/forget-password', [ForgotPasswordController::class,'postEmail']);
-Route::post('/reset-password', [ForgotPasswordController::class,'updatePassword']);
-Route::post('/change-password', [ProfileController::class,'changePassword']);
-Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);

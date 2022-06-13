@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Password;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\RequestsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -14,8 +15,12 @@ use App\Mail\ForgetPassword;
 
 class ForgotPasswordController extends Controller
 {
+    use RequestsTrait;
 
-    public function postEmail(Request $request)
+    /**
+     * Forget Password Function [Send link via mail]
+     */
+    public function forgetPassword(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users',
@@ -26,18 +31,17 @@ class ForgotPasswordController extends Controller
         DB::table('password_resets')->insert(
             ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
         );
-       // dd($request->email);
-
+       
         Mail::to($request->email)->send(new ForgetPassword(['title' => 'Forgot password' , 'body' => $token]));
-        //     '', ['token' => $token], function($message) use($request){
-        //     $message->;
-        //     $message->subject('Reset Password Notification');
-        // });
 
-        return response()->json(['token' => $token ],200);
+        // return RequestsTrait::processResponse(true);
+        return RequestsTrait::processResponse(true , ['token' => $token ]);
     }
 
-    public function updatePassword(Request $request)
+    /**
+     * reset Password Function 
+     */
+    public function resetPassword(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users',
@@ -51,13 +55,14 @@ class ForgotPasswordController extends Controller
                             ->first();
 
         if(!$updatePassword)
-            return back()->withInput()->with('error', 'Invalid token!');
+            return RequestsTrait::processResponse(false,['message' => 'Inavlid Token']);
 
         $user = User::where('email', $request->email)
                     ->update(['password' => Hash::make($request->password)]);
 
         DB::table('password_resets')->where(['email'=> $request->email])->delete();
 
-        return $user;
+        return RequestsTrait::processResponse(true , ['message' => "Your password has been changed , you can now logged in"]);
+        
     }
 }

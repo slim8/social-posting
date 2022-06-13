@@ -32,6 +32,14 @@ trait UserTrait
     }
 
     /**
+     * Get Current user Id.
+     */
+    public static function getCurrentId()
+    {
+        return Auth::user()->id;
+    }
+
+    /**
      * Get Current TokenProvider Id.
      */
     public static function getCurrentProviderId()
