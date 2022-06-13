@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { sharedConstants } from '../../../shared/sharedConstants'
+import { sharedConstants } from '../sharedConstants'
 
 @Injectable({
     providedIn: 'root'

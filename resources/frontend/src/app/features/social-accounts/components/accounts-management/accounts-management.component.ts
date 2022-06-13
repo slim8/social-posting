@@ -76,12 +76,12 @@ export class AccountsManagementComponent implements OnInit {
             );
 
             this.service.manageFacebookPages(
-                    sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
-                    {
-                        pages: selectedobject,
-                        user: this.user.id
-                    }
-                )
+                sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+                {
+                    pages: selectedobject,
+                    user: this.user.id
+                }
+            )
                 .subscribe((response: any) => {
                     console.log(response);
                 });
@@ -128,28 +128,31 @@ export class AccountsManagementComponent implements OnInit {
     getConnectedAccounts() {
         this.accountsService.getConnectedAccounts().subscribe({
             next: (response: any) => {
+                console.log('response');
+                console.log(response);
                 this.connectedAccounts = response.accounts;
             },
             error: err => {
                 console.log(err)
             },
             complete: () => {
+                console.log('connected ');
                 console.log(this.connectedAccounts);
             }
         })
     }
 
 
-    showDisconnectConfirm( id : any): void {
+    showDisconnectConfirm(id: any): void {
         this.modal.confirm({
-          nzTitle: 'Do you really want to disconnect this account?',
-          nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
-          nzOkText: 'Yes',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          nzOnOk: () => this.disconnect(id),
-          nzCancelText: 'No',
-          nzOnCancel: () => console.log('Cancel')
+            nzTitle: 'Do you really want to disconnect this account?',
+            nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => this.disconnect(id),
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel')
         });
-      }
+    }
 }
