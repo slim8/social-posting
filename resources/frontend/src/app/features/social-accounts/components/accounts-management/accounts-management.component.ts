@@ -13,7 +13,7 @@ import { AccountsService } from '../../services/accounts.service';
     styleUrls: ['./accounts-management.component.scss']
 })
 export class AccountsManagementComponent implements OnInit {
-
+    isLoading: boolean = false;
     connectedAccounts: any = []
     private user = {
         accessToken: '',
@@ -49,6 +49,7 @@ export class AccountsManagementComponent implements OnInit {
         this.service
             .loginWithFacebook()
             .then((res: LoginResponse) => {
+                this.isLoading = true;
                 this.user = {
                     ...this.user,
                     accessToken: res.authResponse.accessToken,
@@ -60,6 +61,7 @@ export class AccountsManagementComponent implements OnInit {
                 }).subscribe((response: any) => {
                     this.listpages = response.pages;
                     this.getConnectedAccounts();
+                    this.isLoading = false;
 
                     if (this.listpages) {
 
@@ -104,7 +106,7 @@ export class AccountsManagementComponent implements OnInit {
                 }
             )
                 .subscribe((response: any) => {
-                    console.log(response);
+                    this.sharedModule.createMessage('success', 'Success!');
                 });
 
             this.validateForm = this.formBuilder.group({
