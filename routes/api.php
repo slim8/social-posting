@@ -14,6 +14,7 @@ use App\Http\Controllers\Socials\GeneralSocialController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,12 @@ use Illuminate\Support\Facades\Route;
 $redirect = new RedirectIfAuthenticated();
 $request = new Request();
 
+Route::get('/test',function(){
+    return Auth::user();
+});
+
+Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
+
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
@@ -36,7 +43,6 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
     Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
     Route::post('/forget-password', [ForgotPasswordController::class,'forgetPassword']);
-    // Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
 
     Route::post('/reset-password', [ForgotPasswordController::class,'resetPassword']);
     Route::post('/change-password', [ProfileController::class,'changePassword']);

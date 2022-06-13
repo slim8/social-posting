@@ -36,9 +36,12 @@
                     <div class="m-user-name">{{userInfo.data.fullName}}</div>
                     <div class="m-user-mail">{{userInfo.data.email}}</div>
                 </div>
-                <div class="m-profile-btn">
+                <a routerLink="/home/user/profile" class="m-profile-btn">
                     profile
-                </div>
+                </a>
+            </div>
+            <div class="m-menu-items">
+                <a routerLink="/">Change password</a>
             </div>
             <div class="m-menu-items">
                 <a routerLink="/auth/login">log out</a>
