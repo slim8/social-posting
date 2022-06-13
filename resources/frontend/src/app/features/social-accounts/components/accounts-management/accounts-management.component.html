@@ -1,14 +1,14 @@
 <nz-page-header nzTitle="Connected facebook accounts"></nz-page-header>
 <nz-page-header-subtitle>Manage your connected accounts</nz-page-header-subtitle>
 <div class="m-add-account">
-    <div *ngIf="connectedAccounts.length == 0" class="m-add-btn" (click)="loginWithFacebook()">
+    <button *ngIf="connectedAccounts.length == 0" class="m-add-btn" nz-button [nzLoading]="isLoading" (ngDisabled)="isLoading" (click)="loginWithFacebook()">
         <i nz-icon nzType="plus" nzTheme="outline"></i>
         connect account
-    </div>
-    <div *ngIf="connectedAccounts.length > 0" class="m-add-btn" (click)="loginWithFacebook()">
+    </button>
+    <button *ngIf="connectedAccounts.length > 0" class="m-add-btn" nz-button [nzLoading]="isLoading" (ngDisabled)="isLoading" (click)="loginWithFacebook()">
         <i nz-icon nzType="plus" nzTheme="outline"></i>
         add pages or connect account
-    </div>
+    </button>
 </div>
 <div class="m-accounts">
     <div class="m-account-card"  *ngFor="let account of connectedAccounts">
