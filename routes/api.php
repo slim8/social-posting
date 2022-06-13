@@ -44,13 +44,13 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
     Route::post('/account/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
-    Route::get('/account/refresh-token/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
+    Route::post('/account/refresh-token/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
     Route::get('/check-logged-in', [ApiAuthController::class, 'checkLoggedIn'])->name('check-logged-in-api');
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
-    Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
+    Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api'); // For Managment Account
     Route::get('/accounts/get-posts/{id}', [PostController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
     Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');

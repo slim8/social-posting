@@ -197,7 +197,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    urlLinks: any = [];
+    urlLinks: any[] = [{ url: "" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     inputVisible = false;
@@ -234,11 +234,11 @@ export class CreatePostComponent implements OnInit, OnChanges {
         private messageService: NzMessageService,
         private fb: FormBuilder,
         private activatedRoute: ActivatedRoute,
+        private elRef: ElementRef
     ) { }
 
     ngOnInit(): void {
         this.getPages();
-        document.addEventListener('click', this.resetPostView);
 
         const mentioned = document.querySelector('.mentioned');
 
@@ -252,27 +252,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-    }
 
-    resetPostView(e: any) {
-        let instaPost = document.getElementById('instagramPost') as HTMLElement;
-        let tagPerson = document.getElementById('tagPerson') as HTMLElement;
-        let input = document.getElementsByClassName(
-            'm-input-tag'
-        )[0] as HTMLElement;
-        let tagOption = document.getElementsByClassName('tag-option');
-        let tooltip = document.getElementById('tooltip') as HTMLElement;
-        if (
-            !e.path?.includes(instaPost) &&
-            !e.path?.includes(tagPerson) &&
-            !e.path?.includes(tagOption) &&
-            !e.path?.includes(tooltip)
-        ) {
-            input?.classList.remove('is-shown');
-            tooltip?.classList.remove('is-shown');
-            instaPost?.setAttribute('style', 'filter: none;');
-        }
     }
 
     getPages() {
@@ -311,7 +291,8 @@ export class CreatePostComponent implements OnInit, OnChanges {
 
         if (this.urlLinks.length > 0) {
             this.urlLinks.forEach((url: any) => {
-                formData.append('images[]', url);
+                formData.append('images[]', url.url);
+                // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
             });
         }
 
@@ -438,14 +419,15 @@ export class CreatePostComponent implements OnInit, OnChanges {
     }
 
     addLink() {
-        this.urlLinks.push(this.urlLinks[this.urlLinksIndex]);
         this.urlLinksIndex++;
+        this.urlLinks[this.urlLinksIndex] = { url: '' };
     }
 
     removeLink(index: number) {
         this.urlLinks.forEach((element: any, i: any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
+                this.urlLinksIndex--;
             }
         });
     }
@@ -461,167 +443,8 @@ export class CreatePostComponent implements OnInit, OnChanges {
         successDialog?.classList.add('is-hidden');
     }
 
-    tag(event: any) {
-        this.imageHeight = event.path[0].clientHeight;
-        this.imageWidth = event.path[0].clientWidth;
-        this.inputValue2 = '@';
-        let post = document.getElementsByClassName(
-            'm-post-photo'
-        )[0] as HTMLElement;
-        let input = document.getElementsByClassName(
-            'm-input-tag'
-        )[0] as HTMLElement;
-        let tooltip = document.getElementById('tooltip') as HTMLElement;
-        this.posX = event.offsetX;
-        this.posY = event.offsetY + 20;
-
-        input?.classList.add('is-shown');
-        tooltip?.classList.add('is-shown');
-        tooltip?.setAttribute(
-            'style',
-            'top: ' + this.posY + 'px;left: ' + this.posX + 'px;'
-        );
-        post?.setAttribute('style', 'filter: brightness(0.5);');
-        input.focus();
-    }
-
-    onChange(value: string): void {
-        console.log(value);
-    }
-
-    onSelect(): void {
-        let tooltip = document.createElement('div');
-        let mentioned = document.querySelector('.mentioned');
-        tooltip.setAttribute('data-index', this.mentionIndex.toString());
-        tooltip.setAttribute('class', 'mentioned');
-        let close = document.createElement('div');
-        let imagetop = this.posY;
-        let imageleft = this.posX;
-        let mention = {
-            username: '',
-            x: 0,
-            y: 0,
-        };
-
-        mention.username = this.inputValue2;
-        mention.x = Math.round((this.posX / this.imageWidth) * 100) / 100;
-        mention.y = Math.round((this.posY / this.imageHeight) * 100) / 100;
-        this.mentions.push(mention);
-        console.log(this.mentions);
-
-        mentioned?.addEventListener('click', this.edit);
-
-        close.classList.add('m-close');
-        close.innerHTML = 'x';
-        close?.setAttribute('style', 'padding:0 4px 0 10px;');
-        tooltip.innerHTML = this.inputValue2;
-        document.getElementById('postView')?.appendChild(tooltip);
-        tooltip.appendChild(close);
-        tooltip?.setAttribute(
-            'style',
-            'top: ' +
-            this.posY +
-            'px;left: ' +
-            this.posX +
-            'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-        );
-
-        let tooltipwidth = tooltip.offsetWidth;
-        let tooltipheight = tooltip.offsetHeight;
-
-        //check left + bottom offset
-        if (
-            this.posX - tooltipwidth / 2 < 0 &&
-            this.posY + tooltipheight > this.imageHeight
-        ) {
-            imageleft += tooltipwidth / 2 - this.posX;
-            imagetop -= imagetop - this.imageHeight + tooltipheight;
-            tooltip?.setAttribute(
-                'style',
-                'top: ' +
-                imagetop +
-                'px;left: ' +
-                imageleft +
-                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-            );
-        }
-        //check right + bottom offset
-        else if (
-            this.posX + tooltipwidth / 2 > this.imageWidth &&
-            this.posY + tooltipheight > this.imageHeight
-        ) {
-            imageleft -= tooltipwidth / 2 + (this.posX - this.imageWidth);
-            imagetop -= imagetop - this.imageHeight + tooltipheight;
-            tooltip?.setAttribute(
-                'style',
-                'top: ' +
-                imagetop +
-                'px;left: ' +
-                imageleft +
-                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-            );
-        }
-        //check left offset
-        else if (this.posX - tooltipwidth / 2 < 0) {
-            imageleft += tooltipwidth / 2 - this.posX;
-            tooltip?.setAttribute(
-                'style',
-                'top: ' +
-                this.posY +
-                'px;left: ' +
-                imageleft +
-                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-            );
-        }
-        //check bottom offset
-        else if (this.posY + tooltipheight > this.imageHeight) {
-            imagetop -= imagetop - this.imageHeight + tooltipheight;
-            tooltip?.setAttribute(
-                'style',
-                'top: ' +
-                imagetop +
-                'px;left: ' +
-                this.posX +
-                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-            );
-        }
-        //check right offset
-        else if (this.posX + tooltipwidth / 2 > this.imageWidth) {
-            imageleft -= tooltipwidth / 2 + (this.posX - this.imageWidth);
-            tooltip?.setAttribute(
-                'style',
-                'top: ' +
-                this.posY +
-                'px;left: ' +
-                imageleft +
-                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-            );
-        }
-
-        this.mentionIndex++;
-    }
-
     edit() {
         alert('hello');
-    }
-
-    viewMentions() {
-        console.log('view mentions');
-        this.bool = !this.bool;
-        let mentions = Array.from(document.getElementsByClassName('mentioned'));
-        console.log(mentions);
-        mentions.forEach((element: any) => {
-            if (this.bool) {
-                element.style.opacity = '0';
-                setTimeout(() => {
-                    element.style.display = 'none!important';
-                }, 300);
-            }
-            if (!this.bool) {
-                element.style.display = 'block!important';
-                element.style.opacity = '0.3';
-            }
-        });
     }
 
     test() {
@@ -640,5 +463,9 @@ export class CreatePostComponent implements OnInit, OnChanges {
             this.tags.push(t.name);
         })
         this.message = this.postdata.post.message;
+    }
+
+    typing(event: any) {
+        console.log(event);
     }
 }

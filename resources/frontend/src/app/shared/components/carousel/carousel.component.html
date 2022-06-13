@@ -1,25 +1,22 @@
-<div class="carousel" data-carousel>
-    <button class="carousel-button prev" id="prev" data-carousel-button="prev"><img src="../../../../assets/img/svgs/left-arrow.svg"></button>
-    <button class="carousel-button next" id="next" data-carousel-button="next"><img src="../../../../assets/img/svgs/right-arrow.svg"></button>
+<div class="m-carousel" id="carousel" data-carousel>
+    <img class="m-no-image" src="../../../../assets/img/no-image.png" alt="no-image"/>
+    <button class="m-carousel-button m-prev" id="prev" data-carousel-button="prev"><img src="../../../../assets/img/svgs/left-arrow.svg"></button>
+    <button class="m-carousel-button m-next" id="next" data-carousel-button="next"><img src="../../../../assets/img/svgs/right-arrow.svg"></button>
+    <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect()">
+        <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
+    </nz-mention>
+    <div id="tooltip" class="m-tooltip">who's this?</div>
     <ul id="data-slides" data-slides>
-        <li class="slide active" data-active>
-            <img id="first" src="../../../../../assets/img/no-image.jpg" alt="image #1">
+        <li *ngFor="let item of urlImages; let index = index;" class="m-slide active" data-active>
+            <!-- <img (dblclick)="tag($event)" (click)="viewMentions()" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" > -->
+            <img  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()" src="{{item}}" alt="image #2">
         </li>
-        <!-- <li class="slide">
-            <img src="https://static.remove.bg/remove-bg-web/669d7b10b2296142983fac5a5243789bd1838d00/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg" alt="image #2">
-        </li>
-         <li class="slide">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrKHPsvNDJHY9tWpkHrfkfo8Dkf0LvZU3Hdg&usqp=CAU" alt="image #3">
-        </li>
-        <li class="slide">
-            <img src="https://www.researchgate.net/profile/Hanhe-Lin/publication/344400221/figure/fig1/AS:940579932348417@1601263139233/SAN-and-Tarsier-on-the-baboon-image-from-Set-14-The-image-generated-by-SAN-is-visibly.ppm" alt="image #4">
-        </li> -->
     </ul>
-    
-    <ul class="m-dots">
-        <li style="filter: opacity(1);"><img src="../../../../assets/img/svgs/dot.svg" alt="#image1"></li>
-        <!-- <li><img src="../../../../assets/img/svgs/dot.svg" alt="#image2"></li>
-        <li><img src="../../../../assets/img/svgs/dot.svg" alt="#image3"></li>
-        <li><img src="../../../../assets/img/svgs/dot.svg" alt="#image4"></li> -->
+
+    <ul id="dots" class="m-dots">
     </ul>
 </div>
+<!--
+    simulation for upload image (FTP not working)    
+    <button (click)="addimg()">add</button> 
+-->

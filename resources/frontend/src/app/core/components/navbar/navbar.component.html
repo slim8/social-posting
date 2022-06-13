@@ -12,35 +12,35 @@
             <i nz-icon nzType="shopping" nzTheme="outline"></i>
         </div>
 
-        <div id="loggedin" class="m-connected-user" (click)="menuCollapse($event)">
-            <div class="m-user-image">
+        <div id="loggedin" class="m-connected-user user-menu-toggle" (click)="menuCollapse($event)">
+            <div class="m-user-image user-menu-toggle">
                 <!-- <img src="../../../../assets/img/user.png"> -->
-                <nz-avatar [nzSize]="40" nzIcon="user"></nz-avatar>
+                <nz-avatar class="user-menu-toggle" [nzSize]="40" nzIcon="user"></nz-avatar>
             </div>
-            <div class="m-user-name">
+            <div class="m-user-name user-menu-toggle">
                 {{userInfo.data.fullName}}
             </div>
-            <div class="m-button">
-                <div class="m-menu-btn">
-                    <i nz-icon nzType="down" nzTheme="outline"></i>
+            <div class="m-button user-menu-toggle">
+                <div class="m-menu-btn user-menu-toggle">
+                    <i nz-icon nzType="down" class="user-menu-toggle" nzTheme="outline"></i>
                 </div>
             </div>
         </div>
-        <div id="loggedMenu" class="m-menu">
-            <div class="m-menu-header">
-                <div class="m-user-image">
+        <div id="loggedMenu" class="m-menu user-menu-toggle">
+            <div class="m-menu-header user-menu-toggle">
+                <div class="m-user-image user-menu-toggle">
                     <!-- <img src="../../../../assets/img/user.png"> -->
-                    <nz-avatar [nzSize]="64" nzIcon="user"></nz-avatar>
+                    <nz-avatar class="user-menu-toggle" [nzSize]="64" nzIcon="user"></nz-avatar>
                 </div>
-                <div class="m-user-info">
-                    <div class="m-user-name">{{userInfo.data.fullName}}</div>
-                    <div class="m-user-mail">{{userInfo.data.email}}</div>
+                <div class="m-user-info user-menu-toggle">
+                    <div class="m-user-name user-menu-toggle">{{userInfo.data.fullName}}</div>
+                    <div class="m-user-mail user-menu-toggle">{{userInfo.data.email}}</div>
                 </div>
                 <div class="m-profile-btn">
                     profile
                 </div>
             </div>
-            <div class="m-menu-items">
+            <div class="m-menu-items user-menu-toggle">
                 <a routerLink="/auth/login">log out</a>
             </div>
         </div>

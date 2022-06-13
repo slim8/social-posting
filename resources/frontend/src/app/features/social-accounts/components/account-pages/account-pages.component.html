@@ -3,7 +3,7 @@
         <div class="m-title">Facebook pages</div>
         <div class="m-facebook-pages" >
             <div class="m-page" *ngFor="let page of facebookPages">
-                <nz-card (click)="getPostsBypageId(page.id)" style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                <nz-card style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
                     <nz-card-meta
                         nzTitle="{{page.pageName}}"
                         nzDescription="{{page.category}}"
@@ -14,13 +14,20 @@
                     <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
                 </ng-template>
                 <ng-template #actionSetting>
-                    <i  nz-icon nzType="facebook" nzTheme="outline"></i>{{page.provider}}
+                    <div (click)="getPostsBypageId(page.id)">
+                        <i nz-icon nzType="facebook" nzTheme="outline"></i> {{page.provider}}
+                    </div>
                 </ng-template>
                 <ng-template #actionEdit>
                     <i nz-icon nzType="edit"></i>
                 </ng-template>
                 <ng-template #actionEllipsis>
-                    <i nz-icon nzType="ellipsis"></i>
+                    <div *ngIf="page.isConnected" (click)="disconnectPage($event,page.id)" class="m-profile-btn">
+                        <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
+                    </div>
+                    <div *ngIf="!page.isConnected" (click)="reconnectPage($event,page.id)" class="m-profile-btn reconnect">
+                        <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -31,7 +38,7 @@
         <div class="m-instagram-pages" >
             <div class="m-page" *ngFor="let page of instaPages">
         
-                <nz-card (click)="getPostsBypageId(page.id)" style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                <nz-card style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
                     <nz-card-meta
                         nzTitle="{{page.pageName}}"
                         nzDescription="{{page.category}}"
@@ -42,13 +49,20 @@
                     <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
                 </ng-template>
                 <ng-template #actionSetting>
-                    <i nz-icon nzType="instagram" zTheme="outline"></i>{{page.provider}}
+                    <div (click)="getPostsBypageId(page.id)">
+                        <i nz-icon nzType="instagram" zTheme="outline"></i> {{page.provider}}
+                    </div>
                 </ng-template>
                 <ng-template #actionEdit>
                     <i nz-icon nzType="edit"></i>
                 </ng-template>
                 <ng-template #actionEllipsis>
-                    <i nz-icon nzType="ellipsis"></i>
+                    <div *ngIf="page.isConnected" (click)="disconnectPage($event,page.id)" class="m-profile-btn">
+                        <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
+                    </div>
+                    <div *ngIf="!page.isConnected" (click)="reconnectPage($event,page.id)" class="m-profile-btn reconnect">
+                        <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
+                    </div>
                 </ng-template>
             </div>
             

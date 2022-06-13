@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from 'src/app/features/facebook-social/services/facebook-social.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { AccountsService } from '../../services/accounts.service';
 
@@ -12,7 +13,7 @@ import { AccountsService } from '../../services/accounts.service';
     styleUrls: ['./accounts-management.component.scss']
 })
 export class AccountsManagementComponent implements OnInit {
-
+    isLoading: boolean = false;
     connectedAccounts: any = []
     private user = {
         accessToken: '',
@@ -26,7 +27,8 @@ export class AccountsManagementComponent implements OnInit {
     constructor(private accountsService: AccountsService,
         private service: FacebookSocialService,
         private formBuilder: FormBuilder,
-        private modal: NzModalService) { }
+        private modal: NzModalService,
+        private sharedModule: SharedModule) { }
 
     ngOnInit(): void {
         this.validateForm = this.formBuilder.group({
@@ -35,23 +37,44 @@ export class AccountsManagementComponent implements OnInit {
         this.getConnectedAccounts();
     }
 
+    preventMessage(msg: any) {
+
+        if (msg) {
+            this.sharedModule.createMessage('error', msg);
+        }
+    }
+
+
     loginWithFacebook() {
         this.service
             .loginWithFacebook()
             .then((res: LoginResponse) => {
+                this.isLoading = true;
                 this.user = {
                     ...this.user,
                     accessToken: res.authResponse.accessToken,
                     id: res.authResponse.userID,
                 };
-                this.getConnectedAccounts();
                 this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
                     accessToken: this.user.accessToken,
                     id: this.user.id,
                 }).subscribe((response: any) => {
                     this.listpages = response.pages;
                     this.getConnectedAccounts();
-                    this.showModal();
+                    this.isLoading = false;
+
+                    if (this.listpages) {
+
+                        if (this.listpages.length > 0) {
+                            this.showModal();
+                        } else {
+                            this.preventMessage(response.message);
+                        }
+                    } else {
+                        this.preventMessage(response.message);
+                    }
+
+
                 });
             })
             .catch(() => console.error('error'));
@@ -83,7 +106,7 @@ export class AccountsManagementComponent implements OnInit {
                 }
             )
                 .subscribe((response: any) => {
-                    console.log(response);
+                    this.sharedModule.createMessage('success', 'Success!');
                 });
 
             this.validateForm = this.formBuilder.group({

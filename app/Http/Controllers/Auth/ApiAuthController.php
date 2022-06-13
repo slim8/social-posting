@@ -97,7 +97,7 @@ class ApiAuthController extends Controller
 
     public function registerUser(Request $request)
     {
-        $actualCompanyId = Auth::user()->company_id;
+        $actualCompanyId = Auth::user()->companyId;
 
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
