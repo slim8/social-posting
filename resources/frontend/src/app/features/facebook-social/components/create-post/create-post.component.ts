@@ -234,6 +234,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
         private messageService: NzMessageService,
         private fb: FormBuilder,
         private activatedRoute: ActivatedRoute,
+        private elRef: ElementRef
     ) { }
 
     ngOnInit(): void {
@@ -252,7 +253,8 @@ export class CreatePostComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
+        console.log("test");
+        this.elRef.nativeElement.querySelector('.m-image').addEventListener('click', this.tag);
     }
 
     resetPostView(e: any) {
@@ -641,4 +643,18 @@ export class CreatePostComponent implements OnInit, OnChanges {
         })
         this.message = this.postdata.post.message;
     }
+
+    addimg() {
+        // <img (dblclick)="tag($event)"  src="https://static.remove.bg/remove-bg-web/669d7b10b2296142983fac5a5243789bd1838d00/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg" alt="image #2">
+        let carousel = document.getElementById('data-slides');
+        let li = document.createElement('li');
+        li.classList.add('m-slide');
+        let img = document.createElement('img');
+        img.classList.add('m-image');
+        img.setAttribute('src', 'https://static.remove.bg/remove-bg-web/669d7b10b2296142983fac5a5243789bd1838d00/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg');
+        img.setAttribute("style", "width: 360px;display: block;height: 100%;object-fit: cover;object-position: center;");
+        li.appendChild(img);
+        carousel?.appendChild(li);
+    }
+
 }
