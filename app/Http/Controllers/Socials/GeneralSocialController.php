@@ -321,7 +321,7 @@ class GeneralSocialController extends Controller
         if ($facebookResponse['AllPages']) {
             return RequestsTrait::processResponse(true, ['pages' => $facebookResponse['AllPages']]);
         } else {
-            return RequestsTrait::processResponse(false);
+            return RequestsTrait::processResponse(true , ['message' => 'No unauthorized accounts found']);
         }
     }
 

@@ -197,7 +197,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    urlLinks: any = [];
+    urlLinks: any[] = [{ url: "" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     inputVisible = false;
@@ -311,7 +311,8 @@ export class CreatePostComponent implements OnInit, OnChanges {
 
         if (this.urlLinks.length > 0) {
             this.urlLinks.forEach((url: any) => {
-                formData.append('images[]', url);
+                formData.append('images[]', url.url);
+                // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
             });
         }
 
@@ -438,14 +439,15 @@ export class CreatePostComponent implements OnInit, OnChanges {
     }
 
     addLink() {
-        this.urlLinks.push(this.urlLinks[this.urlLinksIndex]);
         this.urlLinksIndex++;
+        this.urlLinks[this.urlLinksIndex] = { url: '' };
     }
 
     removeLink(index: number) {
         this.urlLinks.forEach((element: any, i: any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
+                this.urlLinksIndex--;
             }
         });
     }
@@ -640,5 +642,9 @@ export class CreatePostComponent implements OnInit, OnChanges {
             this.tags.push(t.name);
         })
         this.message = this.postdata.post.message;
+    }
+
+    typing(event: any) {
+        console.log(event);
     }
 }
