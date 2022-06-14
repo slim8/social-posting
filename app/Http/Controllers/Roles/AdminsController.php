@@ -75,10 +75,17 @@ class AdminsController extends Controller
      */
     public function getAllUsers()
     {
-        $users = UserTrait::getUserObject()->hasRole('companyadmin') ? User::where('companyId', UserTrait::getCompanyId())->where('id', 'not like', UserTrait::getCurrentAdminId())->get() : $this->getUsers();
+        $users = [];
+        $usersObject = UserTrait::getUserObject()->hasRole('companyadmin') ? User::where('companyId', UserTrait::getCompanyId())->where('id', 'not like', UserTrait::getCurrentAdminId())->get() : $this->getUsers();
 
-        if (!$users) {
+        if (!$usersObject) {
             return RequestsTrait::processResponse(false, ['users' => [], 'message' => 'No User Found']);
+        }
+
+        // Return accounts for all user
+        foreach ($usersObject as $user) {
+            $user->accounts = UserTrait::getAccountsLinkedToUser($user->id);
+            $users[] = $user;
         }
 
         return RequestsTrait::processResponse(true, ['users' => $users]);
