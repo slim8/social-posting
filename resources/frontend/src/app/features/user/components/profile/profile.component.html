@@ -1,0 +1,31 @@
+<div class="main-container" *ngIf="profile">
+    <div class="left-sidebar">
+        <div class="inner">
+            <div class="user-profile">
+                <div class="user-image">
+                    <nz-avatar [nzSize]="80" nzIcon="user"></nz-avatar>
+                </div>
+                <div class="user-info">
+                    <p class="user-name">{{ profile.firstName }} {{ profile.lastName }} </p>
+                    <p class="user-title">{{ profile.name }}</p>
+                    <p class="user-location">
+                         <!-- Malta -->
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="main-content">
+        <ul>
+            <li> <span class="label">email :</span>  {{ profile.email }} <i nz-icon nzType="check" nzTheme="outline" *ngIf="profile.emailVerifiedAt" ></i> </li>
+            <li> <span class="label">company :</span> {{ profile.company }} </li>
+            <li> <span class="label">last modified :</span> {{ profile.updatedAt }} </li>
+            <li> <span class="label">created :</span> {{ profile.createdAt }} </li>
+        </ul>
+        <button nz-button nzType="primary" nzShape="round" (click)="toEditPage()">
+            <i nz-icon nzType="edit" nzTheme="outline"></i>
+            Edit
+        </button>
+    </div>
+</div>

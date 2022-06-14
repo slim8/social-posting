@@ -18,7 +18,8 @@
                 <nz-avatar class="user-menu-toggle" [nzSize]="40" nzIcon="user"></nz-avatar>
             </div>
             <div class="m-user-name user-menu-toggle">
-                {{userInfo.data.fullName}}
+                {{userInfo.firstName}} {{userInfo.lastName}}
+
             </div>
             <div class="m-button user-menu-toggle">
                 <div class="m-menu-btn user-menu-toggle">
@@ -33,12 +34,15 @@
                     <nz-avatar class="user-menu-toggle" [nzSize]="64" nzIcon="user"></nz-avatar>
                 </div>
                 <div class="m-user-info user-menu-toggle">
-                    <div class="m-user-name user-menu-toggle">{{userInfo.data.fullName}}</div>
-                    <div class="m-user-mail user-menu-toggle">{{userInfo.data.email}}</div>
+                    <div class="m-user-name user-menu-toggle">{{userInfo.firstName}} {{userInfo.lastName}}</div>
+                    <div class="m-user-mail user-menu-toggle">{{userInfo.email}}</div>
                 </div>
-                <div class="m-profile-btn">
+                <a routerLink="/home/user/profile" class="m-profile-btn">
                     profile
-                </div>
+                </a>
+            </div>
+            <div class="m-menu-items">
+                <a routerLink="/home/user/change-password">Change password</a>
             </div>
             <div class="m-menu-items user-menu-toggle">
                 <a routerLink="/auth/login">log out</a>

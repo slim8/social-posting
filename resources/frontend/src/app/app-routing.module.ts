@@ -3,13 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './features/auth/services/auth.guard';
 
 const routes: Routes = [
-    { path: 'home', loadChildren: () => import('./core/core.module').then(m => m.CoreModule), canActivate: [AuthGuard] },
-    { path: 'auth', loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule) },
-    { path: 'social-accounts', loadChildren: () => import('./features/social-accounts/social-accounts.module').then(m => m.SocialAccountsModule) },
-    { path: '', pathMatch: 'full', redirectTo: 'home' },
-    { path: '**', pathMatch: 'full', redirectTo: 'home' },
-    // { path: '', component: MainComponent },
-    // { path: 'facebook', loadChildren: () => import('./features/facebook.module').then(m => m.WelcomeModule) }
+  { path: '', pathMatch: 'full', redirectTo: '/home' },
+  { path: 'home', loadChildren: () => import('./core/core.module').then(m => m.CoreModule), canActivate: [AuthGuard] },
+  { path: 'auth', loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule) },
+  { path: 'social-accounts', loadChildren: () => import('./features/social-accounts/social-accounts.module').then(m => m.SocialAccountsModule) },
+  { path: 'user', loadChildren: () => import('./features/user/user.module').then(m => m.UserModule) },
+  { path: '', pathMatch: 'full', redirectTo: 'home' },
+  { path: '**', pathMatch: 'full', redirectTo: 'home' },
+  // { path: '', component: MainComponent },
+  // { path: 'facebook', loadChildren: () => import('./features/facebook.module').then(m => m.WelcomeModule) }
+
 ];
 
 @NgModule({
