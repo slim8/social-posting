@@ -56,6 +56,11 @@ class Account extends ExtendedModel
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
+    }
+
+    public function permissionUsers()
+    {
+        return $this->hasMany(UsersAccounts::class);
     }
 }

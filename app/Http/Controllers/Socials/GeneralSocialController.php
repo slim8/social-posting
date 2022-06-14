@@ -14,6 +14,7 @@ use App\Models\PostMedia;
 use App\Models\PostTag;
 use App\Models\ProviderToken;
 use App\Models\Tag;
+use App\Models\UsersAccounts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -75,15 +76,16 @@ class GeneralSocialController extends Controller
 
         $validator = $this->utilitiesController->postValidator($request->accountIds, $images, $videos);
 
-
         if (!$validator->status) {
             return RequestsTrait::processResponse(false, ['message' => $validator->message]);
         }
 
         foreach ($request->accountIds as $singleAccountId) {
             $account = RequestsTrait::findAccountByUid($singleAccountId, 'id', 1);
+            // $accounPermission To check if User Has permission to post to Account
+            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentAdminId(), $singleAccountId) ? true : false;
 
-            if ($account) {
+            if ($account && $accounPermission) {
                 $InstagramController = new InstagramController();
                 $accountProvider = $account->provider;
                 $postResponse = [];
@@ -173,7 +175,7 @@ class GeneralSocialController extends Controller
                     $errorLog[] = $postResponse['message'];
                 }
             } else {
-                $errorLog[] = 'Cannot find a connected account for ID '.$singleAccountId;
+                $errorLog[] = 'Cannot find a connected account Or permissions denied for ID  '.$singleAccountId;
             }
         }
 
@@ -321,7 +323,7 @@ class GeneralSocialController extends Controller
         if ($facebookResponse['AllPages']) {
             return RequestsTrait::processResponse(true, ['pages' => $facebookResponse['AllPages']]);
         } else {
-            return RequestsTrait::processResponse(true , ['message' => 'No unauthorized accounts found']);
+            return RequestsTrait::processResponse(true, ['message' => 'No unauthorized accounts found']);
         }
     }
 
