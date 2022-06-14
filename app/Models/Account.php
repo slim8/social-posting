@@ -53,4 +53,14 @@ class Account extends ExtendedModel
     {
         return $this->belongsTo(ProviderToken::class, 'providerTokenId');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function permissionUsers()
+    {
+        return $this->hasMany(UsersAccounts::class);
+    }
 }

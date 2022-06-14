@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProviderTokenController;
+use App\Http\Controllers\Roles\CompanyAdminsController;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\GeneralSocialController;
@@ -45,6 +46,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
     Route::post('/account/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
     Route::post('/account/refresh-token/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
+    Route::post('/managment/add-permissions', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {

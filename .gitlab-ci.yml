@@ -1,0 +1,5 @@
+job1:
+  script: "npm run deploy"
+  only:
+    - developp
+    - master

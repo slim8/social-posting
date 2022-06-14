@@ -66,4 +66,9 @@ class User extends ExtendedUser
     {
         return $this->hasMany(Notification::class);
     }
+
+    public function accounts()
+    {
+        return $this->belongsToMany(Account::class);
+    }
 }
