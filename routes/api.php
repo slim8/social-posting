@@ -5,8 +5,8 @@ use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProviderTokenController;
+use App\Http\Controllers\Roles\AdminsController;
 use App\Http\Controllers\Roles\CompanyAdminsController;
-use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\GeneralSocialController;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -48,6 +48,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/account/refresh-token/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
     Route::post('/managment/add-permissions', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
     Route::post('/managment/remove-permissions', [CompanyAdminsController::class, 'removeAccountFromUser'])->name('remove-permissions.api');
+    Route::get('/managment/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
@@ -61,6 +62,6 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
-    Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
-    Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
+    Route::get('/admin/companies', [AdminsController::class, 'getAllCompanies'])->name('get-admin-companies.api');
+    Route::get('/admin/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
 });
