@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class UsersAccounts extends Model
+class UsersAccounts extends ExtendedModel
 {
     use HasFactory;
 
