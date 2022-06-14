@@ -161,6 +161,7 @@ class ApiAuthController extends Controller
                             'id' => $user['id'],
                             'fullName' => $user['firstName'] . ' ' . $user['lastName'],
                             'email' => $user['email'],
+                            'roles' => $this->userRepository->getCurrentRoles($user),
                         ],
                     ];
 

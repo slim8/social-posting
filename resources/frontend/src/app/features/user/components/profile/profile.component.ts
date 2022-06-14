@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/features/auth/services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -10,24 +11,25 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class ProfileComponent implements OnInit {
   
-  constructor(private profileService: ProfileService , private jwtService: JwtHelperService) { }
+  constructor(private profileService: ProfileService , private jwtService: JwtHelperService , private router: Router ) { }
 
   profile:any = null;
 
   ngOnInit(): void {
 
-    this.profileService.getProfileDetails(this.jwtService.decodeToken().data.id).subscribe({
-      next: (event: any) => {
-          console.log('event' , event);  
+    this.profileService.getProfileDetails().subscribe({
+      next: (event: any) => {  
           this.profile = event ;  
       },
       error: err => {
-        console.log('err' , err);
       },
       complete: () => {
-        console.log('complete');
       }
     })
+  }
+
+  toEditPage(){
+    this.router.navigate(['/home/user/edit-profile']);
   }
 
 }

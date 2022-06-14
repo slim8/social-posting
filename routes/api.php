@@ -14,7 +14,6 @@ use App\Http\Controllers\Socials\GeneralSocialController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +29,6 @@ use Illuminate\Support\Facades\Auth;
 $redirect = new RedirectIfAuthenticated();
 $request = new Request();
 
-Route::get('/test',function(){
-    return Auth::user();
-});
-
-Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
-
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
@@ -43,11 +36,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
     Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
     Route::post('/forget-password', [ForgotPasswordController::class,'forgetPassword']);
-
     Route::post('/reset-password', [ForgotPasswordController::class,'resetPassword']);
-    Route::post('/change-password', [ProfileController::class,'changePassword']);
-    // Route::get('/profile/{id}', [ProfileController::class,'show']);
-    // Route::post('/profile/{id}', [ProfileController::class,'update']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -58,8 +47,6 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
     Route::post('/account/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
-
-     // Route::apiResource('profile', ProfileController::class)->only(['show' , 'update']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
@@ -70,12 +57,16 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::post('/uploadfile', [ExempleController::class, 'uploadfile'])->name('uploadfile.api');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('get-admin-companies.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
     Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
-    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-admin-companies.api');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('get-admin-companies.api');
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
+});
+
+Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('get-profile.api');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
+    Route::post('/change-password', [ProfileController::class,'changePassword']);
 });

@@ -45,20 +45,16 @@ export class ChangePasswordComponent implements OnInit {
     console.log(this.currentPassword , this.newPassword , this.passwordConfirmation );
     let data = {
       password : this.newPassword,
-      password_confirmation : this.passwordConfirmation, 
-      id : this.jwtService.decodeToken().data.id , 
+      passwordConfirmation : this.passwordConfirmation, 
       currentPassword : this.currentPassword ,
     };
     this.profileService.saveNewPassword(data).subscribe({
       next: (event: any) => {
-          console.log('event' , event);  
       },
       error: err => {
-        console.log('err' , err , err.error);
         this.error = err.error;
       },
       complete: () => {
-        console.log('complete');
         this.router.navigate(['/home/user/profile']);
       }
     })

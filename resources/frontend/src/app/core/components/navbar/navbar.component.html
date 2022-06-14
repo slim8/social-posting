@@ -18,7 +18,7 @@
                 <nz-avatar [nzSize]="40" nzIcon="user"></nz-avatar>
             </div>
             <div class="m-user-name">
-                {{userInfo.data.fullName}}
+                {{userInfo.firstName}} {{userInfo.lastName}}
             </div>
             <div class="m-button">
                 <div class="m-menu-btn">
@@ -33,8 +33,8 @@
                     <nz-avatar [nzSize]="64" nzIcon="user"></nz-avatar>
                 </div>
                 <div class="m-user-info">
-                    <div class="m-user-name">{{userInfo.data.fullName}}</div>
-                    <div class="m-user-mail">{{userInfo.data.email}}</div>
+                    <div class="m-user-name">{{userInfo.firstName}} {{userInfo.lastName}}</div>
+                    <div class="m-user-mail">{{userInfo.email}}</div>
                 </div>
                 <a routerLink="/home/user/profile" class="m-profile-btn">
                     profile
