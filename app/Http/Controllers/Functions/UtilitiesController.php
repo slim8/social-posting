@@ -110,7 +110,7 @@ class UtilitiesController extends Controller
     {
         foreach ($accountIds as $accountId){
             // TODO -> Add check with ProviderToken
-            $account = Account::where('id', $accountId)->where('company_id', UserTrait::getCompanyId())->first();
+            $account = Account::where('id', $accountId)->where('CompanyId', UserTrait::getCompanyId())->first();
             if(!$account){
                 return false;
             }
@@ -120,6 +120,9 @@ class UtilitiesController extends Controller
     }
 
 
+    /**
+     * Check if user is linked to Actual Company
+     */
     public function checkIfUsersAreLinkedToActualCompany($users)
     {
         foreach ($users as $user){

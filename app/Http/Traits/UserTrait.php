@@ -94,7 +94,7 @@ trait UserTrait
      */
     public static function isUserLinkedToActualCompany($user)
     {
-        $account = User::where('company_id', UserTrait::getCompanyId())->where('id', $user)->first();
+        $account = User::where('companyId', UserTrait::getCompanyId())->where('id', $user)->first();
 
         if (!$account) {
             return false;
@@ -106,8 +106,8 @@ trait UserTrait
     public static function setPermissionaccountToUser($userId, $accountId)
     {
         UsersAccounts::create([
-            'account_id' => $accountId,
-            'user_id' => $userId,
+            'accountId' => $accountId,
+            'userId' => $userId,
         ]);
     }
 }
