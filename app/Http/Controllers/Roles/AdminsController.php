@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\repositories\CompanyRepository;
 use App\Http\Controllers\repositories\PlanRepository;
 use App\Http\Controllers\repositories\UserRepository;
+use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\UserTrait;
 use App\Models\Company;
 use App\Models\User;
 
 class AdminsController extends Controller
 {
+    use RequestsTrait;
+    use UserTrait;
+
     protected $companyRepository;
     protected $planRepository;
     protected $userRepository;
@@ -49,6 +54,33 @@ class AdminsController extends Controller
 
     public function getCompanies()
     {
-        return Company::where('is_admin', 'not like', '1')->get();
+        return Company::where('isAdmin', 'not like', '1')->get();
+    }
+
+    /**
+     * Get all companies.
+     */
+    public function getAllCompanies()
+    {
+        $companies = $this->getCompanies();
+        if (!$companies) {
+            return RequestsTrait::processResponse(false, ['companies' => [], 'message' => 'No company Found']);
+        }
+
+        return RequestsTrait::processResponse(true, ['companies' => $companies]);
+    }
+
+    /**
+     * Return All users (For Admin or Admin Company).
+     */
+    public function getAllUsers()
+    {
+        $users = UserTrait::getUserObject()->hasRole('companyadmin') ? User::where('companyId', UserTrait::getCompanyId())->where('id', 'not like', UserTrait::getCurrentAdminId())->get() : $this->getUsers();
+
+        if (!$users) {
+            return RequestsTrait::processResponse(false, ['users' => [], 'message' => 'No User Found']);
+        }
+
+        return RequestsTrait::processResponse(true, ['users' => $users]);
     }
 }
