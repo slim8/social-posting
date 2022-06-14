@@ -61,12 +61,12 @@ class ProviderTokenController extends Controller
     {
         $response = [];
         $userId = UserTrait::getCurrentAdminId();
-        $accounts = ProviderToken::where('created_by', $userId)->get();
+        $accounts = ProviderToken::where('createdBy', $userId)->get();
         foreach ($accounts as $account) {
             $now = strtotime(date('Y-m-d'));
 
             $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profile_name, 'userName' => $account->user_name, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === Account::$STATUS_DISCONNECTED) ? false : true]);
+            array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profileName, 'userName' => $account->userName, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === Account::$STATUS_DISCONNECTED) ? false : true]);
         }
 
         if ($response) {
@@ -76,19 +76,38 @@ class ProviderTokenController extends Controller
         }
     }
 
-    public function refreshToken(Request $request)
+    /**
+     * Refresh Token By Account Id.
+     */
+    public function refreshTokenForAccount($providerAcount, $now)
     {
-        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%'.Account::$STATUS_DISCONNECTED.'%')->where('provider', 'facebook')->get();
+        $expiry = strtotime('-3 days', strtotime($providerAcount->expiryDate));
+
+        if ($expiry == $now) {
+            $tokenKey = $this->facebookController->generateLongLifeToken($providerAcount->longLifeToken, $providerAcount->accountUserId, $providerAcount->createdBy)->token;
+            $facebookResponse = $this->facebookController->getAccountPagesAccount($providerAcount->accountUserId, $tokenKey, 1, 1);
+            FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerAcount->id, 1);
+        }
+    }
+
+    /**
+     * Refresh Token. GET without parameters for refresh token all Active Users
+     * OR
+     * POST /accounts/refreshToken/{FacebookUserId} to refresh token only connected User
+     */
+    public function refreshToken(Request $request, int $accountId = null)
+    {
+        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%'.Account::$STATUS_DISCONNECTED.'%')->where('provider', 'facebook');
+
+        if ($accountId) {
+            $providerAcounts = $providerAcounts->where('createdBy', UserTrait::getCurrentAdminId())->where('accountUserId', $accountId);
+        }
+        $providerAcounts = $providerAcounts->get();
+
         if ($providerAcounts) {
             $now = strtotime(date('Y-m-d'));
             foreach ($providerAcounts as $providerAcount) {
-                $expiry = strtotime('-3 days', strtotime($providerAcount->expiryDate));
-
-                if ($expiry == $now) {
-                    $tokenKey = $this->facebookController->generateLongLifeToken($providerAcount->longLifeToken, $providerAcount->accountUserId, $providerAcount->created_by)->token;
-                    $facebookResponse = $this->facebookController->getAccountPagesAccount($providerAcount->accountUserId, $tokenKey, 1, 1);
-                    FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerAcount->id, 1);
-                }
+                $this->refreshTokenForAccount($providerAcount, $now); // Function To Refresh Token
             }
         }
 

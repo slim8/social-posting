@@ -11,6 +11,7 @@ const routes: Routes = [
     { path: 'pages', component: AccountPagesComponent },
     { path: 'accounts-management', component: AccountsManagementComponent },
     { path: 'create-post', component: CreatePostComponent },
+    { path: ':id/create-post', component: CreatePostComponent },
     { path: 'draft', component: DraftComponent },
     { path: 'pages', component: AccountPagesComponent },
 ];

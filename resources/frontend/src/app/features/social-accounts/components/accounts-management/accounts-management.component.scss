@@ -24,6 +24,7 @@ nz-page-header-subtitle {
     }
 }
 
+.m-accounts > .m-empty-items,
 .m-accounts {
     padding: 16px 24px;
     display: flex;
@@ -32,15 +33,20 @@ nz-page-header-subtitle {
     justify-content: flex-start;
     align-items: center;
     gap: 40px;
+    > .m-empty-items {
+        padding: 0;
+    }
 
-    >.m-account-card {
+    > .m-empty-items > .m-account-card,
+    > .m-account-card {
         width: 300px;
+        transition: all linear 0.5s;
 
-        >.m-menu-header {
+        > .m-menu-header {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            border-bottom :1px solid #e9e9e9;
+            border: 1px solid #e9e9e9;
             padding: 5px;
             &.disconnected {
                 background-color: #ededed;
@@ -52,6 +58,11 @@ nz-page-header-subtitle {
                     padding: 21px;
                 }
 
+                > .ant-skeleton-element {
+                    margin: 10px;
+                    padding: 2px;
+                    width: 75px;
+                }
                 > img {
                     margin: 10px;
                     padding: 2px;
@@ -59,15 +70,15 @@ nz-page-header-subtitle {
                     border-radius: 50%;
                     border: 2px solid #4d88be;
                 }
-        
-                >nz-avatar {
+
+                > nz-avatar {
                     margin: 15px;
                 }
             }
-        
+
             > .m-user-info {
                 padding-top: 20px;
-                >.m-user-name {
+                > .m-user-name {
                     &.disconnected {
                         color: grey;
                     }
@@ -76,15 +87,17 @@ nz-page-header-subtitle {
                     font-size: 25px;
                     line-height: 30px;
                 }
-        
-                >.m-user-mail {
+
+                > .m-user-mail {
                     font-size: 16px;
                     color: grey;
                     line-height: 30px;
                 }
             }
-        
+
             > .m-profile-btn {
+                display: flex;
+                align-items: center;
                 width: 30%;
                 height: 29px;
                 color: #969696;
@@ -101,7 +114,7 @@ nz-page-header-subtitle {
                     @keyframes color {
                         0% {
                             color: black;
-                        } 
+                        }
                         50% {
                             color: rgb(63, 63, 63);
                         }
@@ -115,7 +128,7 @@ nz-page-header-subtitle {
                     text-decoration: line-through;
                     cursor: not-allowed;
                 }
-        
+
                 &:hover {
                     transition: 0.2s all;
                     color: #3a426b;

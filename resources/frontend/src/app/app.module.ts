@@ -12,8 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconsProviderModule } from './shared/icons-provider.module';
 import { DemoNgZorroAntdModule } from './shared/ng-zorro-antd.module';
 import { Observable } from 'rxjs';
-import { Token } from '@angular/compiler';
-import { TokenInterceptorService } from './features/facebook-social/services/token-interceptor.service'
+import { TokenInterceptorService } from './shared/services/token-interceptor.service'
 import { JwtModule } from '@auth0/angular-jwt';
 import { sharedConstants } from './shared/sharedConstants';
 

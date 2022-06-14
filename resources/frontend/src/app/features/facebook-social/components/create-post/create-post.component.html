@@ -57,16 +57,13 @@
                             <nz-form-label [nzSpan]="4" nzFor="url">Picture URL</nz-form-label>
                             <nz-form-control [nzSpan]="24">
                                 <div>
-                                    <nz-input-group nzSearch>
-                                        <input type="text" [(ngModel)]="url1" nz-input placeholder="input search text" />
-                                    </nz-input-group>
                                     <br >
                                     <div *ngFor="let item of urlLinks; let index = index;">
                                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                                            <input type="text" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index]" />
+                                            <input type="text" id="testinput" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index].url" />
                                         </nz-input-group>
                                         <ng-template #suffixIconButton>
-                                            <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)"><i nz-icon nzType="delete"></i></button>
+                                            <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)" *ngIf="index > 0"><i nz-icon nzType="delete"></i></button>
                                         </ng-template>
                                         <br/><br/> 
                                     </div> 
@@ -154,13 +151,15 @@
                                                         </div>
                                                     </div>
                                                     <div id="postView">
-                                                        <div id="tooltip" class="tooltip">who's this?</div>
+
+                                                        <!-- <div id="tooltip" class="tooltip">who's this?</div>
 
                                                         <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect()">
                                                             <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
                                                         </nz-mention>
 
-                                                        <img (dblclick)="tag($event)" (click)="viewMentions()" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" >
+                                                        <img (dblclick)="tag($event)" (click)="viewMentions()" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" > -->
+                                                        <app-carousel></app-carousel>
                                                     </div>
                                                     <div class="m-post-footer">
                                                         <br>

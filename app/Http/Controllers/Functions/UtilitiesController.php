@@ -4,11 +4,14 @@ namespace App\Http\Controllers\functions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\UserTrait;
+use App\Models\Account;
 use Illuminate\Support\Facades\Storage;
 
 class UtilitiesController extends Controller
 {
     use RequestsTrait;
+    use UserTrait;
 
     public function postValidator($accountIds, $images, $videos)
     {
@@ -17,15 +20,14 @@ class UtilitiesController extends Controller
         $responseObject = new \stdClass();
 
         foreach ($accountIds as $singleAccountId) {
-            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id' , 1);
-            if($account){
+            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id', 1);
+            if ($account) {
                 array_push($providersType, $account->providerType);
                 array_push($providersName, $account->provider);
             } else {
                 $responseObject->status = false;
                 $responseObject->message = 'Can not post with disconnected account';
             }
-
         }
         $responseObject->status = true;
         $isFacebookPage = (in_array('facebook', $providersName)) && (in_array('page', $providersType));
@@ -91,6 +93,9 @@ class UtilitiesController extends Controller
         return $type;
     }
 
+    /**
+     * Return Difference between two dates.
+     */
     public function differenceBetweenDates($dateTwo, $dateOne = null)
     {
         if (!$dateOne) {
@@ -102,5 +107,33 @@ class UtilitiesController extends Controller
         $days = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
 
         return $months.' months and '.$days.' days';
+    }
+
+    public function checkIfAccountLinkedToCurrentAdmin($accountIds)
+    {
+        foreach ($accountIds as $accountId) {
+            // TODO -> Add check with ProviderToken
+            $account = Account::where('id', $accountId)->where('CompanyId', UserTrait::getCompanyId())->first();
+            if (!$account) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if user is linked to Actual Company.
+     */
+    public function checkIfUsersAreLinkedToActualCompany($users)
+    {
+        foreach ($users as $user) {
+            $account = UserTrait::isUserLinkedToActualCompany($user);
+            if (!$account) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

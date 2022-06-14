@@ -10,7 +10,7 @@ import { Router, Event, NavigationEnd} from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
-    userInfo :any ='';
+    userInfo: any = '';
     @Input() isCollapsed: boolean | undefined;
     @Output() newCollapseEvent = new EventEmitter<boolean>();
 
@@ -51,10 +51,9 @@ export class NavbarComponent implements OnInit {
         menu.classList.toggle("is-open")
     }
 
-    resetMenu(e:any)  {
-        let menuBtn = document.getElementById("loggedin") as HTMLElement
+    resetMenu(e: any) {
         let menu = document.getElementById("loggedMenu") as HTMLElement
-        if(!e.path?.includes(menuBtn) && !e.path?.includes(menu)) {
+        if (!e.target.classList.contains("user-menu-toggle")) {
             menu.classList.remove("is-open")
         }
     }
