@@ -19,6 +19,9 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     styleUrls: ['./create-post.component.scss'],
 })
 export class CreatePostComponent implements OnInit {
+    //refresh instagram component
+    refresh: boolean = false;
+
     postdata = {
         "post": {
             "id": 41,
@@ -417,6 +420,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     removeLink(index: number) {
+        this.refreshCarousel();
         this.urlLinks.forEach((element: any, i: any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
@@ -458,9 +462,11 @@ export class CreatePostComponent implements OnInit {
         this.message = this.postdata.post.message;
     }
 
-    changeUrl() {
-
+    refreshCarousel() {
+        // waiting for better solution
+        this.refresh = true;
+        setTimeout(() => {
+            this.refresh = false;
+        }, 0.1)
     }
-
-
 }

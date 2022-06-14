@@ -5,10 +5,10 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange } from
     templateUrl: './carousel.component.html',
     styleUrls: ['./carousel.component.scss']
 })
-export class CarouselComponent implements OnInit, OnChanges {
+export class CarouselComponent implements  OnChanges {
     //preview images variable
     @Input() urlLinks: any[] = [{ url: "" }];
-
+    
     //tags variables.
     displaMentions: boolean = false;
     taggedImage: any;
@@ -33,11 +33,8 @@ export class CarouselComponent implements OnInit, OnChanges {
     nbrSlides: any = 1;
     constructor() { }
 
-    ngOnInit(): void {
-        document.addEventListener('click', this.resetPostView);
-    }
-
     ngOnChanges(changes: SimpleChanges) {
+        document.addEventListener('click', this.resetPostView);
         this.nbrSlides = changes['urlLinks'].currentValue.length;
         this.urlLinks = changes['urlLinks'].currentValue;
         setTimeout(() => {

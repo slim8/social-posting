@@ -60,7 +60,7 @@
                                     <br >
                                     <div *ngFor="let item of urlLinks; let index = index;">
                                         <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                                            <input type="text" (ngModelChange)="changeUrl()" id="testinput" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index].url" />
+                                            <input type="text" (ngModelChange)="refreshCarousel()" id="testinput" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index].url" />
                                         </nz-input-group>
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)" *ngIf="index > 0"><i nz-icon nzType="delete"></i></button>
@@ -151,7 +151,7 @@
                                                         </div>
                                                     </div>
                                                     <div id="postView">
-                                                        <app-carousel [urlLinks]="urlLinks"></app-carousel>
+                                                        <app-carousel *ngIf="!refresh" [urlLinks]="urlLinks"></app-carousel>
                                                     </div>
                                                     <div class="m-post-footer">
                                                         <br>
