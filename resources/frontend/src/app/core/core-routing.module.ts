@@ -14,6 +14,7 @@ const routes: Routes = [
             { path: 'facebook', loadChildren: () => import('../features/facebook-social/facebook-social.module').then(m => m.FacebookSocialModule) },
             { path: 'user', loadChildren: () => import('../features/user/user.module').then(m => m.UserModule) },
             { path: 'social-accounts', loadChildren: () => import('../features/social-accounts/social-accounts.module').then(m => m.SocialAccountsModule) },
+            { path: 'management', loadChildren: () => import('../features/management/management.module').then(m => m.ManagementModule) },
             { path: '**', pathMatch: 'full', redirectTo: '/home' },
         ],
     },
