@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange } from '@angular/core';
 
 @Component({
     selector: 'app-carousel',
     templateUrl: './carousel.component.html',
     styleUrls: ['./carousel.component.scss']
 })
-export class CarouselComponent implements OnInit {
+export class CarouselComponent implements OnInit, OnChanges {
     //preview images variable
-    urlImages: string[] = [];
+    @Input() urlLinks: any[] = [{ url: "" }];
 
     //tags variables.
     displaMentions: boolean = false;
@@ -35,11 +35,16 @@ export class CarouselComponent implements OnInit {
 
     ngOnInit(): void {
         document.addEventListener('click', this.resetPostView);
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.nbrSlides = changes['urlLinks'].currentValue.length;
+        this.urlLinks = changes['urlLinks'].currentValue;
         setTimeout(() => {
-            this.initCarouselDots();
+            this.refreshDots();
             this.initCarousel();
-        }
-            , 200);
+            this.initCarouselDots();
+        }, 200);
     }
 
     initCarouselDots() {
@@ -316,24 +321,13 @@ export class CarouselComponent implements OnInit {
         input.focus();
     }
 
-    // addimg() {
-    //     let url = "https://static.remove.bg/remove-bg-web/669d7b10b2296142983fac5a5243789bd1838d00/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg";
-    //     this.urlImages.push(url);
-    //     this.nbrSlides = document.querySelector("[data-slides]")?.children.length;
-
-    //     this.refreshDots();
-    //     this.initCarouselDots();
-    //     this.initCarouselNextButton();
-    // }
-
     resetPostView(e: any) {
         let instaPost = document.getElementById('carousel') as HTMLElement;
         let tagPerson = document.getElementById('tagPerson') as HTMLElement;
         let Slides = document.getElementById('data-slides') as HTMLElement;
-        let images = Array.from(Slides.children);
-        let input = document.getElementsByClassName(
-            'm-input-tag'
-        )[0] as HTMLElement;
+        let images: any[] = [];
+        if (Slides != null) { images = Array.from(Slides?.children) };
+        let input = document.getElementsByClassName('m-input-tag')[0] as HTMLElement;
         let tagOption = document.getElementsByClassName('tag-option');
         let tooltip = document.getElementById('tooltip') as HTMLElement;
         if (
@@ -344,9 +338,10 @@ export class CarouselComponent implements OnInit {
         ) {
             input?.classList.remove('is-shown');
             tooltip?.classList.remove('is-shown');
-            images.forEach(element => {
-                element.children[0].setAttribute('style','filter: brightness(1);')
+            images?.forEach(element => {
+                element?.children[0]?.setAttribute('style', 'filter: brightness(1);')
             });
         }
+
     }
 }

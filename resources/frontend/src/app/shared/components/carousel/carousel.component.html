@@ -7,16 +7,11 @@
     </nz-mention>
     <div id="tooltip" class="m-tooltip">who's this?</div>
     <ul id="data-slides" data-slides>
-        <li *ngFor="let item of urlImages; let index = index;" class="m-slide active" data-active>
-            <!-- <img (dblclick)="tag($event)" (click)="viewMentions()" class="m-post-photo" id="instagramPost" src="../../../../../assets/img/no-image.jpg" alt="post" > -->
-            <img  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()" src="{{item}}" alt="image #2">
+        <li *ngFor="let item of urlLinks; let index = index;" class="m-slide active" data-active>
+            <img *ngIf="item.url"  class="m-image" (dblclick)="tag($event)"  src="{{item.url}}" alt="image #{{index}}">
         </li>
     </ul>
 
     <ul id="dots" class="m-dots">
     </ul>
 </div>
-<!--
-    simulation for upload image (FTP not working)    
-    <button (click)="addimg()">add</button> 
--->
