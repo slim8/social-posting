@@ -1,20 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzSkeletonInputSize } from 'ng-zorro-antd/skeleton';
 import { LoginResponse } from 'ngx-facebook';
 import { FacebookSocialService } from 'src/app/features/facebook-social/services/facebook-social.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { AccountsService } from '../../services/accounts.service';
-
+import { AccountsManagementAnimations } from 'src/app/shared/animations/accounts-management-animations';
 @Component({
     selector: 'app-accounts-management',
     templateUrl: './accounts-management.component.html',
-    styleUrls: ['./accounts-management.component.scss']
+    styleUrls: ['./accounts-management.component.scss'],
+    animations: [AccountsManagementAnimations]
 })
 export class AccountsManagementComponent implements OnInit {
+    isWaiting: boolean = false;
     isLoading: boolean = false;
-    connectedAccounts: any = []
+    connectedAccounts: any = [];
+    elementActive = true;
+    elementSize: NzSkeletonInputSize = 'small';
     private user = {
         accessToken: '',
         id: '',
@@ -46,10 +51,11 @@ export class AccountsManagementComponent implements OnInit {
 
 
     loginWithFacebook() {
+        this.isWaiting = true;
+
         this.service
             .loginWithFacebook()
             .then((res: LoginResponse) => {
-                this.isLoading = true;
                 this.user = {
                     ...this.user,
                     accessToken: res.authResponse.accessToken,
@@ -61,7 +67,7 @@ export class AccountsManagementComponent implements OnInit {
                 }).subscribe((response: any) => {
                     this.listpages = response.pages;
                     this.getConnectedAccounts();
-                    this.isLoading = false;
+                    this.isWaiting = false;
 
                     if (this.listpages) {
 
@@ -77,7 +83,10 @@ export class AccountsManagementComponent implements OnInit {
 
                 });
             })
-            .catch(() => console.error('error'));
+            .catch(() => console.error('error'))
+            .finally(() => {
+                this.isWaiting = false;
+            });
     }
 
     showModal(): void {
@@ -149,20 +158,24 @@ export class AccountsManagementComponent implements OnInit {
     }
 
     getConnectedAccounts() {
-        this.accountsService.getConnectedAccounts().subscribe({
-            next: (response: any) => {
-                console.log('response');
-                console.log(response);
-                this.connectedAccounts = response.accounts;
-            },
-            error: err => {
-                console.log(err)
-            },
-            complete: () => {
-                console.log('connected ');
-                console.log(this.connectedAccounts);
-            }
-        })
+        this.isWaiting = true;
+        this.isLoading = true;
+
+        setTimeout(() => {
+            this.accountsService.getConnectedAccounts().subscribe({
+                next: (response: any) => {
+                    this.connectedAccounts = response.accounts;
+                },
+                error: (err) => {
+                    console.error(err);
+                },
+                complete: () => {
+                    this.isWaiting = false;
+                    this.isLoading = false;
+                }
+            })
+        }, 2000);
+
     }
 
 

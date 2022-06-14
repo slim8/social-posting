@@ -3,51 +3,51 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '../../services/auth.service';
 import { Router } from "@angular/router"
 interface success {
-  message: String;
-  token: String;
+    message: String;
+    token: String;
 }
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
 })
 
 export class LoginComponent implements OnInit {
-  isLoading = false;
-  credentials = {
-    email: 'a.werghemmi@mgo360.net',
-    password: 'Y6mO05ztCD',
-  };
-  passwordVisible = false;
-  password?: string;
-  constructor(
-    private service: AuthService,
-    private message: NzMessageService,
-    private router: Router
-  ) { }
+    isLoading = false;
+    credentials = {
+        email: 'a.werghemmi@mgo360.net',
+        password: 'qVyOu6Npnt',
+    };
+    passwordVisible = false;
+    password?: string;
+    constructor(
+        private service: AuthService,
+        private message: NzMessageService,
+        private router: Router
+    ) { }
 
-  ngOnInit(): void {
-    localStorage.removeItem('token');
-  }
+    ngOnInit(): void {
+        localStorage.removeItem('token');
+    }
 
-  login() {
-    this.isLoading = true;
-    this.service.login(this.credentials).subscribe(
-      (success: any) => {
-        this.createMessage('success', 'login succeed !');
-        localStorage.setItem('token', success.token);
-        this.router.navigate(['/home']);
-      },
-      (error) => {
-        this.createMessage('error', error.error.message);
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
-  }
+    login() {
+        this.isLoading = true;
+        this.service.login(this.credentials).subscribe(
+            (success: any) => {
+                this.createMessage('success', 'login succeed !');
+                localStorage.setItem('token', success.token);
+                this.router.navigate(['/home']);
+            },
+            (error) => {
+                this.createMessage('error', error.error.message);
+            },
+            () => {
+                this.isLoading = false;
+            }
+        );
+    }
 
-  createMessage(type: string, message: any): void {
-    this.message.create(type, ` ${message}`);
-  }
+    createMessage(type: string, message: any): void {
+        this.message.create(type, ` ${message}`);
+    }
 }

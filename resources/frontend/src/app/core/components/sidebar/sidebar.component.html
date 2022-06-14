@@ -1,59 +1,69 @@
+<div class="mod-sidebar">
+  <div class="m-wrapper"></div>
+</div>
+
 <div class="sidebar-logo">
-  <a href="https://ng.ant.design/"
-     target="_blank">
-    <img src="/assets/img/svgs/mgo360-logo.svg"
-         alt="logo" />
+  <a href="https://ng.ant.design/" target="_blank">
+    <img src="/assets/img/svgs/mgo360-logo.svg" alt="logo" />
     <!-- <h1>Ant Design Of Angular</h1> -->
   </a>
 </div>
-<ul nz-menu
-    nzTheme="dark"
-    nzMode="inline"
-    [nzInlineCollapsed]="isCollapsed">
-  <li nz-submenu
-      nzOpen
-      nzTitle="Dashboard"
-      nzIcon="dashboard">
+<ul
+  nz-menu
+  nzTheme="dark"
+  nzMode="inline"
+  [nzInlineCollapsed]="isCollapsed"
+  class="m-menu"
+>
+  <li nz-submenu nzOpen nzTitle="Dashboard" nzIcon="dashboard">
     <ul>
       <li nz-menu-item>
-        <a routerLink="/home">Home</a>
+        <i nz-icon nzType="home" nzTheme="outline"></i>
+        <a routerLink="/home">&nbsp;&nbsp;Home</a>
       </li>
       <!-- <li nz-menu-item>
         <a routerLink="/home/welcome">Welcome</a>
       </li> -->
       <li nz-menu-item>
-        <a routerLink="/home/facebook">Meta</a>
+        <i nz-icon nzType="info-circle" nzTheme="outline"></i>
+        <a routerLink="/home/facebook">&nbsp;&nbsp;Meta</a>
       </li>
     </ul>
   </li>
-  <li nz-submenu
-      nzOpen
-      nzTitle="Social Accounts"
-      nzIcon="global">
+  <li
+    nz-submenu
+    nzOpen
+    nzTitle="Social Accounts"
+    nzIcon="global"
+    nzSize="large"
+  >
     <ul>
-        <li nz-menu-item
-            nzMatchRouter>
-            <a routerLink="/home/social-accounts/accounts-management">Accounts management</a>
-        </li>
-        <li nz-menu-item
-            nzMatchRouter>
-            <a routerLink="/home/social-accounts/pages">Approved pages</a>
-        </li>
-        <li nz-menu-item
-            nzMatchRouter>
-            <i nz-icon nzType="plus"></i>
-            <a routerLink="/home/social-accounts/create-post">&nbsp;&nbsp;Create post</a>
-        </li>
-        <li nz-menu-item
-            nzMatchRouter>
-            <a routerLink="/home/social-accounts/draft">Draft</a>
-        </li>
+      <li nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="group" nzTheme="outline"></i>
+        <a routerLink="/home/social-accounts/accounts-management"
+          >&nbsp;&nbsp;Accounts management</a
+        >
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="schedule"></i>
+        <a routerLink="/home/social-accounts/pages"
+          >&nbsp;&nbsp;Approved pages</a
+        >
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="plus"></i>
+        <a routerLink="/home/social-accounts/create-post"
+          >&nbsp;&nbsp;Create post</a
+        >
+      </li>
+      <li nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="delete" nzTheme="outline"></i>
+        <a routerLink="/home/social-accounts/draft">&nbsp;&nbsp;Draft</a>
+      </li>
     </ul>
   </li>
-  <li nz-menu-item
-
-      routerLink="/auth/login">
-        <i nz-icon nzType="logout"></i>
-        <span>LogOut</span>
-    </li>
+  <li nz-menu-item routerLink="/auth/login">
+    <i nz-icon nzType="logout"></i>
+    <span>LogOut</span>
+  </li>
 </ul>
