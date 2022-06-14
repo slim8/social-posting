@@ -103,11 +103,22 @@ trait UserTrait
         return $account;
     }
 
+    /**
+     * Give Account permission To user
+     */
     public static function setPermissionaccountToUser($userId, $accountId)
     {
         UsersAccounts::create([
             'accountId' => $accountId,
             'userId' => $userId,
         ]);
+    }
+
+    /**
+     * Remove Account Permission from User
+     */
+    public static function removePermissionaccountFromUser($userId, $accountId)
+    {
+        UsersAccounts::where('accountId' , $accountId)->where('userId' , $userId)->delete();
     }
 }
