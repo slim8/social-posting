@@ -9,15 +9,14 @@ class UsersAccounts extends Model
 {
     use HasFactory;
 
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'account_id',
+        'userId',
+        'accountId',
     ];
 
     public function accounts()
@@ -30,7 +29,7 @@ class UsersAccounts extends Model
         return $this->hasMany(User::class);
     }
 
-    public static function hasAccountPermission($userId,$accountId)
+    public static function hasAccountPermission($userId, $accountId)
     {
         return UsersAccounts::where('account_id', $accountId)->where('user_id', $userId)->count();
     }
