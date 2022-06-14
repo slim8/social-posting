@@ -31,6 +31,6 @@ class UsersAccounts extends ExtendedModel
 
     public static function hasAccountPermission($userId, $accountId)
     {
-        return UsersAccounts::where('account_id', $accountId)->where('user_id', $userId)->count();
+        return UsersAccounts::where('accountId', $accountId)->where('userId', $userId)->count();
     }
 }

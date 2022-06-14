@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Roles;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\User;
 use App\Models\UsersAccounts;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class CompanyAdminsController extends Controller
 {
     use UserTrait;
+    use RequestsTrait;
     protected $utilitiesController;
 
     public function __construct()
@@ -48,13 +50,11 @@ class CompanyAdminsController extends Controller
         $users = $request->users;
 
         if (!$this->utilitiesController->checkIfAccountLinkedToCurrentAdmin($accounts)) {
-            return response()->json(['success' => false,
-        'message' => 'One or more accounts are not linked to this admin', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'One or more accounts are not linked to this admin']);
         }
 
         if (!$this->utilitiesController->checkIfUsersAreLinkedToActualCompany($users)) {
-            return response()->json(['success' => false,
-        'message' => 'One or more users are not linked to this company', ], 201);
+            return RequestsTrait::processResponse(false, ['message' => 'One or more users are not linked to this company']);
         }
 
         foreach ($accounts as $account) {
@@ -65,6 +65,6 @@ class CompanyAdminsController extends Controller
             }
         }
 
-        return response()->json(['success' => true], 201);
+        return RequestsTrait::processResponse(true);
     }
 }
