@@ -3,6 +3,8 @@
 namespace App\Http\Traits;
 
 use App\Models\ProviderToken;
+use App\Models\User;
+use App\Models\UsersAccounts;
 use Illuminate\Support\Facades\Auth;
 
 trait UserTrait
@@ -85,5 +87,27 @@ trait UserTrait
         }
 
         return $account;
+    }
+
+    /**
+     * Get Current Provider Object.
+     */
+    public static function isUserLinkedToActualCompany($user)
+    {
+        $account = User::where('company_id', UserTrait::getCompanyId())->where('id', $user)->first();
+
+        if (!$account) {
+            return false;
+        }
+
+        return $account;
+    }
+
+    public static function setPermissionaccountToUser($userId, $accountId)
+    {
+        UsersAccounts::create([
+            'account_id' => $accountId,
+            'user_id' => $userId,
+        ]);
     }
 }

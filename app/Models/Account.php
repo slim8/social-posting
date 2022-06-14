@@ -53,4 +53,9 @@ class Account extends ExtendedModel
     {
         return $this->belongsTo(ProviderToken::class, 'providerTokenId');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

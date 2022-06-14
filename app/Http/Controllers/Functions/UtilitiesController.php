@@ -4,11 +4,14 @@ namespace App\Http\Controllers\functions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\UserTrait;
+use App\Models\Account;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
 
 class UtilitiesController extends Controller
 {
-    use RequestsTrait;
+    use RequestsTrait , UserTrait;
 
     public function postValidator($accountIds, $images, $videos)
     {
@@ -102,5 +105,30 @@ class UtilitiesController extends Controller
         $days = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
 
         return $months.' months and '.$days.' days';
+    }
+    public function checkIfAccountLinkedToCurrentAdmin($accountIds)
+    {
+        foreach ($accountIds as $accountId){
+            // TODO -> Add check with ProviderToken
+            $account = Account::where('id', $accountId)->where('company_id', UserTrait::getCompanyId())->first();
+            if(!$account){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    public function checkIfUsersAreLinkedToActualCompany($users)
+    {
+        foreach ($users as $user){
+            $account = UserTrait::isUserLinkedToActualCompany($user);
+            if(!$account){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
