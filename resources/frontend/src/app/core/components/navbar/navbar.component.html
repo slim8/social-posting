@@ -1,53 +1,85 @@
 <nz-header>
   <div class="app-header">
-    <span class="header-trigger"
-          (click)="collapse()">
-      <i class="trigger"
-         nz-icon
-         [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+    <span class="header-trigger" (click)="collapse()">
+      <i
+        class="trigger"
+        nz-icon
+        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+      ></i>
     </span>
     <div class="m-loggedin">
-        <div routerLink="/home/premium" class="m-premium">
-            <div>Go premium!</div>
-            <i nz-icon nzType="shopping" nzTheme="outline"></i>
+      <div routerLink="/home/premium" class="m-premium">
+        <div i18n="Go premium|Title for the go premium link@@goPremium">
+          Go premium!
         </div>
+        <i nz-icon nzType="shopping" nzTheme="outline"></i>
+      </div>
 
-        <div id="loggedin" class="m-connected-user user-menu-toggle" (click)="menuCollapse($event)">
-            <div class="m-user-image user-menu-toggle">
-                <!-- <img src="../../../../assets/img/user.png"> -->
-                <nz-avatar class="user-menu-toggle" [nzSize]="40" nzIcon="user"></nz-avatar>
-            </div>
+      <div
+        id="loggedin"
+        class="m-connected-user user-menu-toggle"
+        (click)="menuCollapse($event)"
+      >
+        <div class="m-user-image user-menu-toggle">
+          <nz-avatar
+            class="user-menu-toggle"
+            [nzSize]="40"
+            nzIcon="user"
+          ></nz-avatar>
+        </div>
+        <div class="m-user-name user-menu-toggle">
+          {{ userInfo.firstName }} {{ userInfo.lastName }}
+        </div>
+        <div class="m-button user-menu-toggle">
+          <div class="m-menu-btn user-menu-toggle">
+            <i
+              nz-icon
+              nzType="down"
+              class="user-menu-toggle"
+              nzTheme="outline"
+            ></i>
+          </div>
+        </div>
+      </div>
+      <div id="loggedMenu" class="m-menu user-menu-toggle">
+        <div class="m-menu-header user-menu-toggle">
+          <div class="m-user-image user-menu-toggle">
+            <nz-avatar
+              class="user-menu-toggle"
+              [nzSize]="64"
+              nzIcon="user"
+            ></nz-avatar>
+          </div>
+          <div class="m-user-info user-menu-toggle">
             <div class="m-user-name user-menu-toggle">
-                {{userInfo.firstName}} {{userInfo.lastName}}
-
+              {{ userInfo.firstName }} {{ userInfo.lastName }}
             </div>
-            <div class="m-button user-menu-toggle">
-                <div class="m-menu-btn user-menu-toggle">
-                    <i nz-icon nzType="down" class="user-menu-toggle" nzTheme="outline"></i>
-                </div>
-            </div>
+            <div class="m-user-mail user-menu-toggle">{{ userInfo.email }}</div>
+          </div>
+          <a
+            routerLink="/home/user/profile"
+            class="m-profile-btn"
+            i18n="Profile|Title for the prfile link@@profile"
+          >
+            profile
+          </a>
         </div>
-        <div id="loggedMenu" class="m-menu user-menu-toggle">
-            <div class="m-menu-header user-menu-toggle">
-                <div class="m-user-image user-menu-toggle">
-                    <!-- <img src="../../../../assets/img/user.png"> -->
-                    <nz-avatar class="user-menu-toggle" [nzSize]="64" nzIcon="user"></nz-avatar>
-                </div>
-                <div class="m-user-info user-menu-toggle">
-                    <div class="m-user-name user-menu-toggle">{{userInfo.firstName}} {{userInfo.lastName}}</div>
-                    <div class="m-user-mail user-menu-toggle">{{userInfo.email}}</div>
-                </div>
-                <a routerLink="/home/user/profile" class="m-profile-btn">
-                    profile
-                </a>
-            </div>
-            <div class="m-menu-items">
-                <a routerLink="/home/user/change-password">Change password</a>
-            </div>
-            <div class="m-menu-items user-menu-toggle">
-                <a routerLink="/auth/login">log out</a>
-            </div>
+        <div class="m-menu-items">
+          <a
+            routerLink="/home/user/change-password"
+            i18n="
+              Change Password|Title for the change password form@@changePassword"
+            >Change password</a
+          >
         </div>
+        <div class="m-menu-items user-menu-toggle">
+          <a
+            routerLink="/auth/login"
+            i18n="Logout|Title for the logout action@@logout"
+            >logout</a
+          >
+        </div>
+      </div>
     </div>
   </div>
 </nz-header>
