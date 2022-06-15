@@ -38,7 +38,7 @@ class TestUserSeeder extends Seeder
 
         $company = Company::create([
             'name' => 'MGO',
-            'email' => 'maher.boughdiri@softtodo.com',
+            'email' => 'mboughdiri@softtodo.com',
             'phoneNumber' => '000000000',
             'adress' => 'Adresse',
             'website' => 'Website',
@@ -59,5 +59,19 @@ class TestUserSeeder extends Seeder
         ]);
 
         $user->attachRole('admin');
+
+        $user = User::create([
+            'firstName' => 'maher',
+            'lastName' => 'boughdiri',
+            'name' => 'MGO',
+            'email' => 'mboughdiri@softtodo.com',
+            'status' => 1,
+            'isSubscriber' => 1,
+            'companyId' => $company->id,
+            'password' => hash::make('12345678'),
+            'autoRefresh' => 1,
+        ]);
+
+        $user->attachRole('companyadmin');
     }
 }

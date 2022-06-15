@@ -1,0 +1,43 @@
+.m-form {
+    width : 50%;
+    @media screen and (max-width : 1000px){
+        width : 100%;
+    }
+    >.m-form-group{
+        margin : 20px;
+        text-transform: uppercase;
+        font-weight: 500;
+        >div.m-form-input{
+            display : flex;
+            justify-content:center;
+            align-items: center;
+            background-color: #d9d9d9 ;
+            border-radius: 5px;
+            padding: 3px;
+            >i{
+                padding: 10px ;
+                cursor: pointer;
+            }
+        }
+        >div.m-form-input-password{
+            display : flex;
+            justify-content:center;
+            align-items: center;
+            background-color: #d9d9d9 ;
+            border-radius: 5px;
+            padding: 3px;
+            >i{
+                padding: 10px ;
+                cursor: pointer;
+            }
+        }
+        >.error {
+            color : red;
+            padding: 5px 0;
+        }
+    }
+
+    >button{
+        margin : 20px;
+    }
+}

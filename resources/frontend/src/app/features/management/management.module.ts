@@ -5,11 +5,13 @@ import { CommonModule } from '@angular/common';
 
 import { ManagementRoutingModule } from './management-routing.module';
 import { UsersListComponent } from './components/users-list/users-list.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 
 @NgModule({
   declarations: [
-    UsersListComponent
+    UsersListComponent,
+    CreateUserComponent
   ],
   imports: [
     CommonModule,

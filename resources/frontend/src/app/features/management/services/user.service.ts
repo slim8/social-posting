@@ -1,3 +1,5 @@
+import { sharedConstants } from './../../../shared/sharedConstants';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,5 +7,14 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  getUsersList() {
+    return this.http.get(sharedConstants.API_ENDPOINT+ '/managment/users' );
+  }
+
+  createUser(data : any) {
+    return this.http.post(sharedConstants.API_ENDPOINT+ '/register-user',data );
+  }
+
 }
