@@ -19,6 +19,19 @@
       "root": "",
       "sourceRoot": "resources/frontend/src",
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "fr": {
+            "translation": "resources/frontend/src/locale/messages.fr.xlf",
+            "baseHref": ""
+          },
+          "de": {
+            "translation": "resources/frontend/src/locale/messages.de.xlf",
+            "baseHref": "" 
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -76,7 +89,17 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
-            }
+            },
+            "fr": {
+                "localize": ["fr"],
+                "outputPath": "/assets/angular/fr/",
+                "i18nMissingTranslation": "error"
+              },
+              "de": {
+                "localize": ["de"],
+                "outputPath": "/assets/angular/de/",
+                "i18nMissingTranslation": "error"
+              }
           },
           "defaultConfiguration": "production"
         },
@@ -88,7 +111,13 @@
             },
             "development": {
               "browserTarget": "example:build:development"
-            }
+            },
+            "fr": {
+                "browserTarget": "example:build:fr"
+              },
+              "de": {
+                "browserTarget": "example:build:de"
+              }
           },
           "defaultConfiguration": "development"
         },

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="goPremium" datatype="html">
+        <source> Go premium! </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/navbar/navbar.component.html</context>
+          <context context-type="linenumber">12,14</context>
+        </context-group>
+        <note priority="1" from="description">Title for the go premium link</note>
+        <note priority="1" from="meaning">Go premium</note>
+      </trans-unit>
+      <trans-unit id="profile" datatype="html">
+        <source> profile </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/navbar/navbar.component.html</context>
+          <context context-type="linenumber">63,65</context>
+        </context-group>
+        <note priority="1" from="description">Title for the prfile link</note>
+        <note priority="1" from="meaning">Profile</note>
+      </trans-unit>
+      <trans-unit id="changePassword" datatype="html">
+        <source>Change password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/navbar/navbar.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <note priority="1" from="description">Title for the change password form</note>
+        <note priority="1" from="meaning">Change Password</note>
+      </trans-unit>
+      <trans-unit id="logout" datatype="html">
+        <source>log out</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/navbar/navbar.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+        <note priority="1" from="description">Title for the logout action</note>
+        <note priority="1" from="meaning">Logout</note>
+      </trans-unit>
+      <trans-unit id="9084885127601930456" datatype="html">
+        <source>logo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="home" datatype="html">
+        <source>  Home</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <note priority="1" from="description">Title for the home page link</note>
+        <note priority="1" from="meaning">Home</note>
+      </trans-unit>
+      <trans-unit id="accountsManagement" datatype="html">
+        <source>  Accounts management</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <note priority="1" from="description">Title for the accounts management feature</note>
+        <note priority="1" from="meaning">Accounts Management</note>
+      </trans-unit>
+      <trans-unit id="2232592536279341516" datatype="html">
+        <source>  Approved pages</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="createPost" datatype="html">
+        <source>  Create post</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <note priority="1" from="description">Title for the create post form</note>
+        <note priority="1" from="meaning">Create Post</note>
+      </trans-unit>
+      <trans-unit id="draftsList" datatype="html">
+        <source>  Draft</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <note priority="1" from="description">Title for the drafts list action</note>
+        <note priority="1" from="meaning">Draft List</note>
+      </trans-unit>
+      <trans-unit id="840692109692540367" datatype="html">
+        <source>Sign In</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2298515639080024094" datatype="html">
+        <source> Please enter your credantials </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">9,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4476224839121490369" datatype="html">
+        <source> Sign In </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">61,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="354372175658025153" datatype="html">
+        <source>FirstName</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2063920705743351386" datatype="html">
+        <source>LastName</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8194554728555410336" datatype="html">
+        <source>Phone Number</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1890300073702152532" datatype="html">
+        <source>E-mail</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8582094599044450665" datatype="html">
+        <source>Adress</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6765071518635771784" datatype="html">
+        <source>Company Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5481284030283031915" datatype="html">
+        <source>Website</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3301086086650990787" datatype="html">
+        <source>Register</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
