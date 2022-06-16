@@ -6,7 +6,9 @@ use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
+use App\Models\Hashtag;
 use App\Models\Post;
+use App\Models\PostHashtag;
 use App\Models\PostMedia;
 use App\Models\PostTag;
 use App\Models\Tag;
@@ -64,9 +66,9 @@ class PostController extends Controller
     public function getHashTagByPostOrAccountId($id)
     {
         $tags = [];
-        $postTags = PostTag::where('accountPostId', $id)->get();
+        $postTags = PostHashtag::where('accountPostId', $id)->get();
         foreach ($postTags as $postTag) {
-            $tags[] = Tag::where('id', $postTag->tagId)->first('name');
+            $tags[] = Hashtag::where('id', $postTag->tagId)->first('name');
         }
 
         return $tags;

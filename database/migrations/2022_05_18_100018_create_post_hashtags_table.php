@@ -12,10 +12,10 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('post_tags', function (Blueprint $table) {
+        Schema::create('post_hashtags', function (Blueprint $table) {
             $table->id();
             $table->foreignId('account_post_id')->constrained();
-            $table->foreignId('tag_id')->constrained();
+            $table->foreignId('hashtag_id')->constrained();
             $table->timestamps();
         });
     }

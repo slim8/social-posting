@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Http\Extends\ExtendedModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Tag extends ExtendedModel
+class Hashtag extends ExtendedModel
 {
     use HasFactory;
 
@@ -17,6 +17,6 @@ class Tag extends ExtendedModel
 
     public function posts()
     {
-        return $this->belongsToMany(Post::class)->using(PostTag::class);
+        return $this->belongsToMany(Post::class)->using(PostHashtag::class);
     }
 }

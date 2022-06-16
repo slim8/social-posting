@@ -9,7 +9,9 @@ use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
+use App\Models\Hashtag;
 use App\Models\Post;
+use App\Models\PostHashtag;
 use App\Models\PostMedia;
 use App\Models\PostTag;
 use App\Models\ProviderToken;
@@ -87,15 +89,23 @@ class GeneralSocialController extends Controller
             // $accounPermission To check if User Has permission to post to Account
             $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentAdminId(), $post['accountId']) ? true : false;
 
+
             if ($account && $accounPermission) {
+                if($requestPostId){
+                    // Delete All Saved Account Posts and hashtags
+                    PostHashtag::where('accountPostId', $account->id)->delete();
+                    AccountPost::where('postId', $requestPostId)->delete();
+                }
+
                 $InstagramController = new InstagramController();
                 $accountProvider = $account->provider;
                 $postResponse = [];
+
+
                 if ($inc == 0) {
                     $postObject = [
                         'url' => 'url',
                         'message' => $request->message,
-                        // 'videoTitle' => $request->videoTitle ? $request->videoTitle : '',
                         'status' => $request->status,
                         'publishedAt' => Carbon::now(),
                         'createdBy' => UserTrait::getCurrentAdminId(),
@@ -107,10 +117,8 @@ class GeneralSocialController extends Controller
                         $postId = Post::where('id', $requestPostId)->update($postObject);
                         $postId = Post::where('id', $requestPostId)->first();
 
-                        // Delete All Saved Account Posts , Post tags and Post Media
-                        PostTag::where('postId', $postId->id)->delete();
+                        // Delete All Saved Post Media
                         PostMedia::where('postId', $postId->id)->delete();
-                        AccountPost::where('postId', $postId->id)->delete();
                     }
 
                     if ($images) {
@@ -168,13 +176,17 @@ class GeneralSocialController extends Controller
 
                     if ($post['hashtags']) {
                         foreach ($post['hashtags'] as $hashtag) {
-                            $tagId = Tag::create([
+                            $hashtagId = Hashtag::where('name' , $hashtag)->first();
+
+                            if (!$hashtagId){
+                                $hashtagId = Tag::create([
                                 'name' => RequestsTrait::formatTags($hashtag),
                             ]);
+                            }
 
                             PostTag::create([
                                 'postId' => 1,
-                                'tagId' => $tagId->id,
+                                'hashtagId' => $hashtagId->id,
                                 'accountPostId' =>  $accountPost->id,
                             ]);
                         }

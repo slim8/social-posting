@@ -1,5 +1,33 @@
 job1:
-  script: "npm run deploy"
+  script: "git pull"
+  only:
+    - developp
+    - master
+#job2:
+#  script: "composer install"
+#  only:
+#    - developp
+#    - master
+#job3:
+#  script: "npm install"
+#  only:
+#    - developp
+#    - master
+
+job4:
+  script:
+    - php artisan config:clear
+    - php artisan cache:clear
+    - php artisan storage:link
+    - php artisan migrate
+  only:
+    - developp
+    - master
+
+job5:
+  script:
+    - ng build --prod
+    - node ./build.js
   only:
     - developp
     - master
