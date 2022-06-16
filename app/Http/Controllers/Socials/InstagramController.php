@@ -332,11 +332,9 @@ class InstagramController extends Controller
                 }
             }
 
-            return response()->json(['success' => true,
-            'pages' => $businessAccounts, ], 201);
+            return RequestsTrait::processResponse(true , ['pages' => $businessAccounts]);
         } else {
-            return response()->json(['success' => false,
-            'pages' => $businessAccounts, ], 201);
+            return RequestsTrait::processResponse(false , ['pages' => $businessAccounts]);
         }
     }
 }
