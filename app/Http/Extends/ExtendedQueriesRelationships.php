@@ -34,7 +34,6 @@ trait ExtendedQueriesRelationships
 
         if (is_string($relation)) {
             if (str_contains($relation, '.')) {
-               // var_dump($this->hasNested($relation, $operator, $count, $boolean, $callback));
                 return $this->hasNested($relation, $operator, $count, $boolean, $callback);
             }
 
@@ -229,7 +228,6 @@ trait ExtendedQueriesRelationships
                             return $callback($query, $type);
                         };
                     }
-
                     $query->where($this->qualifyColumn($relation->getMorphType()), '=', (new $type)->getMorphClass())
                                 ->whereHas($belongsTo, $callback, $operator, $count);
                 });
@@ -366,7 +364,6 @@ trait ExtendedQueriesRelationships
      */
     public function whereRelation($relation, $column, $operator = null, $value = null)
     {
-        // dd('whereRelation');
         return $this->whereHas($relation, function ($query) use ($column, $operator, $value) {
             $query->where($column, $operator, $value);
         });

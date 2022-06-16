@@ -26,11 +26,14 @@ trait RequestsTrait
         return $AllPages;
     }
 
-    public static function getAllAccountsFromDB()
+    public static function getAllAccountsFromDB(int $accountId = null)
     {
         $AllPages = [];
         $accountObject = Account::where('companyId', UserTrait::getCompanyId());
 
+        if ($accountId) {
+            $accountObject = $accountObject->where('id', $accountId);
+        }
         if (!UserTrait::getUserObject()->hasRole('companyadmin')) {
             $accountObject = $accountObject->where('status', 1);
             $userId = UserTrait::getCurrentAdminId();

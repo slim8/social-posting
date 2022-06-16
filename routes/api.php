@@ -47,8 +47,8 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
     Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
-    Route::post('/account/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
-    Route::post('/account/refresh-token/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
+    Route::post('/accounts/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
+    Route::post('/accounts/token/refresh/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
     Route::post('/managment/add-permissions', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
     Route::post('/managment/remove-permissions', [CompanyAdminsController::class, 'removeAccountFromUser'])->name('remove-permissions.api');
     Route::get('/managment/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
@@ -57,8 +57,9 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
     Route::get('/check-logged-in', [ApiAuthController::class, 'checkLoggedIn'])->name('check-logged-in-api');
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
-    Route::get('/load-accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api'); // For Managment Account
-    Route::get('/accounts/get-posts/{id}', [PostController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
+    Route::get('/accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api'); // For Managment Account
+    Route::get('/accounts/{accountId}', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
+    Route::get('/accounts/{id}/posts', [PostController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
     Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::post('/uploadfile', [ExempleController::class, 'uploadfile'])->name('uploadfile.api');

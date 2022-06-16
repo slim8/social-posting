@@ -167,7 +167,9 @@ export class AccountsManagementComponent implements OnInit {
                     this.connectedAccounts = response.accounts;
                 },
                 error: (err) => {
-                    console.error(err);
+                  this.connectedAccounts = [];
+                  this.isWaiting = false;
+                  this.isLoading = false;
                 },
                 complete: () => {
                     this.isWaiting = false;

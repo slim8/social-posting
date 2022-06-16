@@ -18,11 +18,11 @@ export class AccountsService {
     }
 
     disconnectPageById(id: string) {
-        return this.http.post(sharedConstants.API_ENDPOINT + '/account/status/0/' + id, {});
+        return this.http.post(sharedConstants.API_ENDPOINT + '/accounts/status/0/' + id, {});
     }
 
     reconnectPageById(id: string) {
-        return this.http.post(sharedConstants.API_ENDPOINT + '/account/status/1/' + id, {});
+        return this.http.post(sharedConstants.API_ENDPOINT + '/accounts/status/1/' + id, {});
     }
 
 }

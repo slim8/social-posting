@@ -268,9 +268,25 @@ export class CreatePostComponent implements OnInit {
         let successDialog = document.getElementById('successDialog');
         let spinning = document.getElementsByClassName('m-loading-spin')[0];
         const formData: FormData = new FormData();
+        let post: any = {
+          message : "",
+          hashtags : [],
+          mentions : [],
+          accountId : "",
+          videoTitle : ""
+        }
+
+        // let post: any = []
 
         this.tagValue.forEach((accountId: any) => {
-            formData.append('accountIds[]', accountId);
+          post.message=this.message;
+          post.hashtags=this.tags;
+          post.mentions=this.mentions;
+          post.accountId=accountId;
+          post.videoTitle="this is video title";
+
+          console.log(JSON.stringify(post));
+          formData.append('posts[]', JSON.stringify(post));
         });
 
         if (this.tags.length > 0) {

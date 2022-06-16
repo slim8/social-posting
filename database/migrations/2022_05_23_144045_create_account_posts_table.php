@@ -19,6 +19,10 @@ return new class() extends Migration {
             $table->string('post_id_provider');
             $table->string('url');
             $table->timestamps();
+            $table->string('message')->nullable();
+            $table->string('video_title')->nullable();
+            $table->string('source')->nullable();
+            $table->string('thumbnail_ressource')->nullable();
         });
     }
 

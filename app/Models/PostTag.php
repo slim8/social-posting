@@ -10,8 +10,9 @@ class PostTag extends ExtendedModel
     use HasFactory;
 
     protected $fillable = [
-        'postId',
+        'accountPostId',
         'tagId',
+        'postId',
     ];
 
     public function post()
