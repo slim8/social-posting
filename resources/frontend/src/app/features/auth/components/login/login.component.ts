@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
             (success: any) => {
                 this.createMessage('success', 'login succeed !');
                 localStorage.setItem('token', success.token);
-                this.router.navigate(['/home']);
+                this.router.navigate(['/application/dashboard']);
             },
             (error) => {
                 this.createMessage('error', error.error.message);

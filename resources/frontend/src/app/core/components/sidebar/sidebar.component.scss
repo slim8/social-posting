@@ -1,20 +1,26 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_project/_mixins-fonts.scss';
+@import '../../../../assets/sass/_project/_mixins-mk.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+
+
 .mod-sidebar {
-   
-
     > .m-wrapper {
-
-        > .m-logo {
-            position: relative;
-            height: 64px;
-            padding-left: 24px;
-            overflow: hidden;
-            line-height: 64px;
-            background: #001529;
-            transition: all 0.3s;
-        }
-
         > .m-menu {
-            
+            background-color: $color-media-dark-grey;
+            > .m-item {
+                padding: 10px;
+                > .m-icon {
+                    @extend %padding-icons;
+                    width: 20px;
+                    height: 20px;
+                }
+
+                > .m-label {
+                    @include textstyle-size-14();
+                    color: $color-base-0;
+                }
+            }
         }
     }
 }
