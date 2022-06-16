@@ -168,16 +168,8 @@ class GeneralSocialController extends Controller
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
                     $postProviderId = (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse;
 
-                    // Get Media Url
-
-                    if (POST::$STATUS_DRAFT == $statusPost){
-                        $url = 'DRAFT';
-                    } else if($postResponse['status']){
-                        $url = $postResponse['url'];
-                    }
-
                     $accountPost = AccountPost::create([
-                        'url' => $url,
+                        'url' => POST::$STATUS_DRAFT == $statusPost ? 'DRAFT' :  $postResponse['url'],
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
