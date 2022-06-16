@@ -67,4 +67,43 @@ class CompanyAdminsController extends Controller
 
         return RequestsTrait::processResponse(true);
     }
+
+
+/**
+     * Remove Account Pages/Group From User.
+     */
+    public function removeAccountFromUser(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'accounts' => 'required',
+            'users' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+
+        $accounts = $request->accounts;
+        $users = $request->users;
+
+        if (!$this->utilitiesController->checkIfAccountLinkedToCurrentAdmin($accounts)) {
+            return RequestsTrait::processResponse(false, ['message' => 'One or more accounts are not linked to this admin']);
+        }
+
+        if (!$this->utilitiesController->checkIfUsersAreLinkedToActualCompany($users)) {
+            return RequestsTrait::processResponse(false, ['message' => 'One or more users are not linked to this company']);
+        }
+
+        foreach ($accounts as $account) {
+            foreach ($users as $user) {
+                if (UsersAccounts::hasAccountPermission($user, $account)) {
+                    UserTrait::removePermissionaccountFromUser($user, $account);
+                }
+            }
+        }
+
+        return RequestsTrait::processResponse(true);
+    }
+
+
 }

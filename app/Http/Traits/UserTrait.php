@@ -58,7 +58,7 @@ trait UserTrait
     /**
      * Get Current TokenProvider Id. By User ID.
      */
-    public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook' , int $userId = null)
+    public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook', int $userId = null)
     {
         $account = ProviderToken::where('createdBy', $userId ? $userId : UserTrait::getCurrentAdminId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
 
@@ -111,11 +111,50 @@ trait UserTrait
         return $account;
     }
 
+    /**
+     * Give Account permission To user.
+     */
     public static function setPermissionaccountToUser($userId, $accountId)
     {
         UsersAccounts::create([
             'accountId' => $accountId,
             'userId' => $userId,
         ]);
+    }
+
+    /**
+     * Remove Account Permission from User.
+     */
+    public static function removePermissionaccountFromUser($userId, $accountId)
+    {
+        UsersAccounts::where('accountId', $accountId)->where('userId', $userId)->delete();
+    }
+
+    /**
+     * Get Users who has permissions of Specific Account.
+     */
+    public static function getUsersLinkedToAccounts($accountId)
+    {
+        $users = [];
+        $usersAccounts = UsersAccounts::where('accountId', $accountId)->get();
+        foreach ($usersAccounts as $usersAccount) {
+            $users[] = $usersAccount->userId;
+        }
+
+        return $users;
+    }
+
+    /**
+     * Get Accounts linked to Specific User.
+     */
+    public static function getAccountsLinkedToUser($userId)
+    {
+        $accounts = [];
+        $usersAccounts = UsersAccounts::where('userId', $userId)->get();
+        foreach ($usersAccounts as $usersAccount) {
+            $accounts[] = $usersAccount->accountId;
+        }
+
+        return $accounts;
     }
 }

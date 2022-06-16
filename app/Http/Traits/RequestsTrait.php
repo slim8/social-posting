@@ -48,6 +48,10 @@ trait RequestsTrait
             $name = $account->name;
             $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false];
 
+            if (UserTrait::getUserObject()->hasRole('companyadmin')) {
+                $pageContent['users'] = UserTrait::getUsersLinkedToAccounts($id);
+            }
+
             // Check and return only Accounts related to user (If User Connected is not Company admin)
             if (UserTrait::getUserObject()->hasRole('companyadmin')) {
                 $AllPages[] = $pageContent;

@@ -382,8 +382,4 @@ class GeneralSocialController extends Controller
         }
     }
 
-    public function deleteAccount(Request $request)
-    {
-        // code...
-    }
 }
