@@ -162,7 +162,6 @@ class GeneralSocialController extends Controller
                     $BusinessIG = $account->uid;
                     $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
-
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos) : POST::$STATUS_DRAFT;
                 }
 
