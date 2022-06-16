@@ -23,8 +23,6 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->foreignId('created_by')->references('id')->on('users')->onDelete('cascade');
-            $table->string('video_title')->nullable();
-
         });
     }
 

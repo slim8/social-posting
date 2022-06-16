@@ -36,7 +36,7 @@ trait RequestsTrait
         }
         if (!UserTrait::getUserObject()->hasRole('companyadmin')) {
             $accountObject = $accountObject->where('status', 1);
-            $userId = UserTrait::getCurrentAdminId();
+            $userId = UserTrait::getCurrentId();
         }
 
         foreach ($accountObject->orderBy('id')->lazy() as $account) {

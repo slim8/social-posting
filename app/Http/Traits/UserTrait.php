@@ -25,13 +25,6 @@ trait UserTrait
         return Auth::user()->companyId;
     }
 
-    /**
-     * Get Current user Id.
-     */
-    public static function getCurrentAdminId()
-    {
-        return Auth::user()->id;
-    }
 
     /**
      * Get Current user Id.
@@ -46,7 +39,7 @@ trait UserTrait
      */
     public static function getCurrentProviderId()
     {
-        $account = ProviderToken::where('created_by', UserTrait::getCurrentAdminId())->first();
+        $account = ProviderToken::where('created_by', UserTrait::getCurrentId())->first();
 
         if (!$account) {
             return false;
@@ -60,7 +53,7 @@ trait UserTrait
      */
     public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook', int $userId = null)
     {
-        $account = ProviderToken::where('createdBy', $userId ? $userId : UserTrait::getCurrentAdminId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
+        $account = ProviderToken::where('createdBy', $userId ? $userId : UserTrait::getCurrentId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
 
         if (!$account) {
             return false;
@@ -74,7 +67,7 @@ trait UserTrait
      */
     public static function getCurrentProviderObject()
     {
-        $account = ProviderToken::where('createdBy', UserTrait::getCurrentAdminId())->first();
+        $account = ProviderToken::where('createdBy', UserTrait::getCurrentId())->first();
 
         if (!$account) {
             return false;
@@ -88,7 +81,7 @@ trait UserTrait
      */
     public static function getProviderTByProviderUID($uid)
     {
-        $account = ProviderToken::where('createdBy', UserTrait::getCurrentAdminId())->where('accountUserId', $uid)->first();
+        $account = ProviderToken::where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $uid)->first();
 
         if (!$account) {
             return false;
