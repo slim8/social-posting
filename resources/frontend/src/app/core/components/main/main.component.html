@@ -1,16 +1,21 @@
-<nz-layout class="app-layout">
-  <nz-sider class="menu-sidebar"
-            nzCollapsible
-            nzWidth="256px"
-            nzBreakpoint="md"
-            [(nzCollapsed)]="isCollapsed"
-            [nzTrigger]="null">
-    <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>
-  </nz-sider>
+<nz-layout class="mod-page-layout">
+  <app-navbar
+    [isCollapsed]="isCollapsed"
+    (newCollapseEvent)="isCollapsed = !isCollapsed"
+  >
+  </app-navbar>
+
   <nz-layout>
-    <app-navbar [isCollapsed]="isCollapsed"
-                (newCollapseEvent)="isCollapsed = !isCollapsed">
-    </app-navbar>
+    <nz-sider
+      class="menu-sidebar"
+      nzCollapsible
+      nzWidth="256px"
+      nzBreakpoint="md"
+      [(nzCollapsed)]="isCollapsed"
+      [nzTrigger]="null"
+    >
+      <app-sidebar [isCollapsed]="isCollapsed"></app-sidebar>
+    </nz-sider>
 
     <nz-content>
       <div class="inner-content">
@@ -18,4 +23,5 @@
       </div>
     </nz-content>
   </nz-layout>
+  <app-footer> </app-footer>
 </nz-layout>
