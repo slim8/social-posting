@@ -35,7 +35,7 @@ class Post extends ExtendedModel
 
     public function post_tags()
     {
-        return $this->belongsToMany(Tag::class, 'post_tags', 'postId');
+        return $this->belongsToMany(Hashtag::class, 'post_tags', 'postId');
     }
 
     public function creator()
