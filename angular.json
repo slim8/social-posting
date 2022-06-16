@@ -19,6 +19,19 @@
             "root": "",
             "sourceRoot": "resources/frontend/src",
             "prefix": "app",
+            "i18n": {
+                "sourceLocale": "en-US",
+                "locales": {
+                    "fr": {
+                        "translation": "resources/frontend/src/locale/messages.fr.xlf",
+                        "baseHref": ""
+                    },
+                    "de": {
+                        "translation": "resources/frontend/src/locale/messages.de.xlf",
+                        "baseHref": ""
+                    }
+                }
+            },
             "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
@@ -40,11 +53,9 @@
                         ],
                         "styles": [
                             "resources/frontend/src/theme.less",
-                            "resources/frontend/src/styles.scss",
-                            "resources/frontend/src/sass/_common.scss"
+                            "resources/frontend/src/styles.scss"
                         ],
-                        "scripts": [
-                        ]
+                        "scripts": []
                     },
                     "configurations": {
                         "production": {
@@ -77,6 +88,20 @@
                             "extractLicenses": false,
                             "sourceMap": true,
                             "namedChunks": true
+                        },
+                        "fr": {
+                            "localize": [
+                                "fr"
+                            ],
+                            "outputPath": "/assets/angular/fr/",
+                            "i18nMissingTranslation": "error"
+                        },
+                        "de": {
+                            "localize": [
+                                "de"
+                            ],
+                            "outputPath": "/assets/angular/de/",
+                            "i18nMissingTranslation": "error"
                         }
                     },
                     "defaultConfiguration": "production"
@@ -89,6 +114,12 @@
                         },
                         "development": {
                             "browserTarget": "example:build:development"
+                        },
+                        "fr": {
+                            "browserTarget": "example:build:fr"
+                        },
+                        "de": {
+                            "browserTarget": "example:build:de"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -112,7 +143,8 @@
                             "resources/frontend/src/assets"
                         ],
                         "styles": [
-                            "resources/frontend/src/styles.scss"
+                            "resources/frontend/src/styles.scss",
+                            "resources/frontend/src/sass/_common.scss"
                         ],
                         "scripts": []
                     }
