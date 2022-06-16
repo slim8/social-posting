@@ -15,15 +15,24 @@ class AccountPost extends ExtendedModel
         'url',
         'postIdProvider',
         'accountId',
+        'message',
+        'videoTitle',
+        'source',
+        'thumbnailRessource'
     ];
 
     public function account()
     {
-        return $this->belongsTo(Account::class);
+         return $this->hasMany(Account::class , 'id' , 'account_id');
+    }
+
+    public function accounts()
+    {
+         return $this->hasMany(Account::class , 'id' , 'accountId');
     }
 
     public function post()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class , 'postId');
     }
 }
