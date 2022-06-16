@@ -168,12 +168,15 @@ class GeneralSocialController extends Controller
 
                     if ($post['hashtags']) {
                         foreach ($post['hashtags'] as $hashtag) {
-                            $tagId = Tag::create([
-                                'name' => RequestsTrait::formatTags($hashtag),
-                            ]);
+                            $tagId = Tag::where('name' ,$hashtag)->first('id');
+
+                            if(!$tagId){
+                                $tagId = Tag::create([
+                                    'name' => RequestsTrait::formatTags($hashtag),
+                                ]);
+                            }
 
                             PostTag::create([
-                                'postId' => 1,
                                 'tagId' => $tagId->id,
                                 'accountPostId' =>  $accountPost->id,
                             ]);

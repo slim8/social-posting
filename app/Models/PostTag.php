@@ -12,7 +12,6 @@ class PostTag extends ExtendedModel
     protected $fillable = [
         'accountPostId',
         'tagId',
-        'postId',
     ];
 
     public function post()
