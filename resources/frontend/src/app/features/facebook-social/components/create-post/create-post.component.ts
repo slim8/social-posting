@@ -1,16 +1,12 @@
-import { HttpEventType } from '@angular/common/http';
-import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
+import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
-        console.log('image')
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
@@ -22,7 +18,10 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.scss'],
 })
-export class CreatePostComponent implements OnInit, OnChanges {
+export class CreatePostComponent implements OnInit {
+    //refresh instagram component
+    refresh: boolean = false;
+
     postdata = {
         "post": {
             "id": 41,
@@ -190,6 +189,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
         "success": true
     };
     url1 = '';
+    urlImages: string[] = [];
     bool: boolean = false;
     imageWidth = 0;
     imageHeight = 0;
@@ -197,7 +197,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    urlLinks: any[] = [{ url: "" }];
+    @Input() urlLinks: any[] = [{ url: "" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     inputVisible = false;
@@ -228,18 +228,18 @@ export class CreatePostComponent implements OnInit, OnChanges {
     postId = null;
 
     constructor(
-        private router: Router,
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
-        private messageService: NzMessageService,
-        private fb: FormBuilder,
         private activatedRoute: ActivatedRoute,
-        private elRef: ElementRef
     ) { }
 
     ngOnInit(): void {
         this.getPages();
-
+        // setTimeout(() => {
+        //     this.urlLinks = [{ url: "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" },
+        //     { url: "https://media.istockphoto.com/photos/mountain-landscape-picture-id517188688?k=20&m=517188688&s=612x612&w=0&h=i38qBm2P-6V4vZVEaMy_TaTEaoCMkYhvLCysE7yJQ5Q=" },
+        //     { url: "https://media.istockphoto.com/photos/mountain-landscape-picture-id517188688?k=20&m=517188688&s=612x612&w=0&h=i38qBm2P-6V4vZVEaMy_TaTEaoCMkYhvLCysE7yJQ5Q=" }]
+        // }, 5000);
         const mentioned = document.querySelector('.mentioned');
 
         mentioned?.addEventListener('click', this.edit);
@@ -249,10 +249,6 @@ export class CreatePostComponent implements OnInit, OnChanges {
                 this.prepareform()
             }
         }
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-
     }
 
     getPages() {
@@ -272,9 +268,25 @@ export class CreatePostComponent implements OnInit, OnChanges {
         let successDialog = document.getElementById('successDialog');
         let spinning = document.getElementsByClassName('m-loading-spin')[0];
         const formData: FormData = new FormData();
+        let post: any = {
+          message : "",
+          hashtags : [],
+          mentions : [],
+          accountId : "",
+          videoTitle : ""
+        }
+
+        // let post: any = []
 
         this.tagValue.forEach((accountId: any) => {
-            formData.append('accountIds[]', accountId);
+          post.message=this.message;
+          post.hashtags=this.tags;
+          post.mentions=this.mentions;
+          post.accountId=accountId;
+          post.videoTitle="this is video title";
+
+          console.log(JSON.stringify(post));
+          formData.append('posts[]', JSON.stringify(post));
         });
 
         if (this.tags.length > 0) {
@@ -313,7 +325,6 @@ export class CreatePostComponent implements OnInit, OnChanges {
                     btnSubmit?.classList.add('m-btn-submit');
                 },
                 error: (err) => {
-                    console.log(err);
                     if (err.error.errors) {
                         err.error.errors.forEach((error: any) => {
                             this.shared.createMessage('error', error);
@@ -345,6 +356,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
         }
     }
 
+    //Images preview from upload file 
     handlePreview = async (file: NzUploadFile): Promise<void> => {
         if (!file.url && !file['preview']) {
             file['preview'] = await getBase64(file.originFileObj!);
@@ -354,12 +366,12 @@ export class CreatePostComponent implements OnInit, OnChanges {
         this.previewVisible = true;
     };
 
+    //upload files changes
     handleChange(event: any): void {
         let instagramPost = document.getElementById(
             'instagramPost'
         ) as HTMLImageElement;
         // let facebookPost = document.getElementById('fp') as HTMLImageElement;
-        // console.log(facebookPost);
         if (event.type == 'success') {
             this.selectedFile = event.fileList;
             this.fileList.forEach((file: any, index) => {
@@ -424,6 +436,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
     }
 
     removeLink(index: number) {
+        this.refreshCarousel();
         this.urlLinks.forEach((element: any, i: any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
@@ -448,7 +461,7 @@ export class CreatePostComponent implements OnInit, OnChanges {
     }
 
     test() {
-        console.log(this.url1);
+
     }
 
     prepareform() {
@@ -465,7 +478,11 @@ export class CreatePostComponent implements OnInit, OnChanges {
         this.message = this.postdata.post.message;
     }
 
-    typing(event: any) {
-        console.log(event);
+    refreshCarousel() {
+        // waiting for better solution
+        this.refresh = true;
+        setTimeout(() => {
+            this.refresh = false;
+        }, 0.1)
     }
 }

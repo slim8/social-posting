@@ -1,0 +1,73 @@
+@import '../_project/_config.scss';
+@import '../_project/_mixins-fonts.scss';
+@import '../_global/_mixins.scss';
+// ==========================================================================
+// BASE STYLES
+// ==========================================================================
+
+h1 {
+    @include textstyle-size-40();
+}
+
+h5 {
+    @include textstyle-size-14();
+}
+
+h6 {
+    @include textstyle-size-12();
+}
+
+p {
+    @include textstyle-size-12();
+}
+
+// Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+img,
+audio,
+canvas,
+video {
+    vertical-align: middle;
+}
+
+// Remove default fieldset styles.
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+figure {
+    margin: 0;
+    padding: 0;
+}
+
+//Buttons & anchors
+.m-button {
+    padding: 11px 18px 13px 21px;
+    color: $color-base-0;
+    border: none;
+    cursor: pointer;
+    @include textstyle-size-12();
+
+    > i {
+        margin-right: 12px;
+        color: $color-base-0;
+    }
+
+    &.is-primary {
+        background-color: $color-media-primary-orange;
+    }
+
+    &.is-secondary {
+        background-color: $color-media-secondary-button;
+    }
+
+    &.is-disabled {
+        background-color: $color-media-light-grey;
+    }
+}
+
+// Sidenav 
+.ant-layout-sider {
+    background-color: $color-media-dark-grey;
+}

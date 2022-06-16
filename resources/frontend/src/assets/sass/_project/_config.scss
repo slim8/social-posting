@@ -1,0 +1,42 @@
+$breakpoints: (
+    mobilebig: 'only screen and (min-width: #{em(500px)})',
+    tablet: 'only screen and (min-width: #{em(768px)})',
+    desktop: 'print, only screen and (min-width: #{em(1025px)})',
+    l: 'print, only screen and (min-width: #{em(1200px)})',
+    ml: 'print, only screen and (min-width: #{em(1440px)})',
+    xl: 'print, only screen and (min-width: #{em(1600px)})',
+    xxl: 'print, only screen and (min-width: #{em(1840px)})', // 1840
+    print: 'print',
+);
+
+
+$color-base-100: #000;
+$color-base-0: #fff;
+$color-base-90: #333;
+$color-base-80: #4d4d4d;
+$color-base-70: #666;
+$color-base-50: #999;
+$color-base-30: #ccc;
+$color-base-25: #d8d8d8;
+$color-base-20: #dbdbdb;
+$color-base-15: #ededed;
+$color-base-10: #e9eaec;
+$color-primary: #F3C5D1;
+$color-primary-90: #A6D1E0;
+$color-primary-80: #C87712;
+$color-primary-70: #D4E0C3;
+$color-pink-quiz: #E93E87;
+$color-yellow-quiz: #FFD332;
+$color-green-quiz: #4DB163;
+$color-purple-quiz: #553380;
+$color-white: $color-base-0;
+$color-black: $color-base-100;
+$color-media-black: #000;
+$color-media-dark-grey: #757575;
+$color-media-light-grey: #D5D5D5;
+$color-media-lighter-grey: #F3F3F3;
+$color-media-primary-orange: #FF8D69;
+$color-media-background-light-grey: #E2E2E2;
+$color-media-background-lighter-grey: #EBEBEB;
+$color-media-black-opacity-half: #00000080;
+$color-media-secondary-button: #0000004D;

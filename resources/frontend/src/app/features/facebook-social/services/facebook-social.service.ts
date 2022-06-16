@@ -59,7 +59,7 @@ export class FacebookSocialService {
     }
 
     getCurrentApprovedFBPages() {
-        const url = sharedConstants.API_ENDPOINT + '/load-accounts';
+        const url = sharedConstants.API_ENDPOINT + '/accounts';
 
         return this.http.get(url);
     }
@@ -86,8 +86,8 @@ export class FacebookSocialService {
         })
     }
 
-  getPostsBypageId(pageId: any){
-    return this.http.get(sharedConstants.API_ENDPOINT+"/accounts/get-posts/"+pageId);
-  }
+    getPostsBypageId(pageId: any) {
+        return this.http.get(sharedConstants.API_ENDPOINT + "/accounts/" + pageId + "/posts");
+    }
 
 }

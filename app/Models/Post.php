@@ -28,14 +28,14 @@ class Post extends ExtendedModel
         return $this->belongsToMany(Account::class, 'account_posts', 'postId');
     }
 
-    public function post_media()
+    public function postMedia()
     {
         return $this->hasMany(PostMedia::class , 'postId');
     }
 
     public function post_tags()
     {
-        return $this->belongsToMany(Tag::class, 'post_tags', 'postId');
+        return $this->belongsToMany(Hashtag::class, 'post_tags', 'postId');
     }
 
     public function creator()
