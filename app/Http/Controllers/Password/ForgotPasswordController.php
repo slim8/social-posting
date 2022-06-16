@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User; 
 use Illuminate\Support\Str ;
 use App\Mail\ForgetPassword;
+use Illuminate\Support\Facades\Validator;
+
 
 class ForgotPasswordController extends Controller
 {
@@ -43,12 +45,20 @@ class ForgotPasswordController extends Controller
      */
     public function resetPassword(Request $request)
     {
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             'email' => 'required|email|exists:users',
-            'password' => 'required|string|min:6|confirmed',
-            'password_confirmation' => 'required',
-
+            'password' => 'required|string|min:6',
+            'passwordConfirmation' => 'required|string|min:6',
+            'token' => 'required|string',
         ]);
+
+        if ($validation->fails()) {
+            return Response()->json($validation->errors() , 422);
+        }
+
+        if($request->password !== $request->passwordConfirmation){
+            return RequestsTrait::processResponse(false , ['passwordConfirmation' => ['Password did not match']]);
+        }
 
         $updatePassword = DB::table('password_resets')
                             ->where(['email' => $request->email, 'token' => $request->token])
