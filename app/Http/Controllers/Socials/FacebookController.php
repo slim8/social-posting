@@ -192,6 +192,7 @@ class FacebookController extends Controller
         if ($response->getStatusCode() == 200) {
             $responseObject['status'] = true;
             $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+            $responseObject['url'] = env('FACEBOOK_ROOT_LINK').$responseObject['id'];
         } else {
             $responseObject['status'] = false;
             $responseObject['message'] = 'to be defined';
