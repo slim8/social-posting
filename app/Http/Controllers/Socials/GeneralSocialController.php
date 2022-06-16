@@ -13,7 +13,6 @@ use App\Models\Hashtag;
 use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
-use App\Models\PostTag;
 use App\Models\ProviderToken;
 use App\Models\UsersAccounts;
 use Carbon\Carbon;
@@ -173,11 +172,12 @@ class GeneralSocialController extends Controller
 
                     if ($post['hashtags']) {
                         foreach ($post['hashtags'] as $hashtag) {
+                            $hashtag = RequestsTrait::formatTags($hashtag);
                             $hashtagId = Hashtag::where('name', $hashtag)->first();
 
                             if (!$hashtagId) {
                                 $hashtagId = Hashtag::create([
-                                'name' => RequestsTrait::formatTags($hashtag),
+                                'name' => $hashtag,
                                 ]);
                             }
 
