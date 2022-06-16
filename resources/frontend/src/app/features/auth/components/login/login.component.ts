@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
             },
             (error) => {
                 this.createMessage('error', error.error.message);
+                this.isLoading = false;
             },
             () => {
                 this.isLoading = false;
