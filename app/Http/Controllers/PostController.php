@@ -25,13 +25,23 @@ class PostController extends Controller
         $account = RequestsTrait::findAccountByUid($id, 'id', 1);
 
         if ($account) {
-            $res = Post::whereHas('accounts', function ($query) use ($id) {
+            $posts = [];
+            $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
-            })->with('PostMedia')->with('tags:name')->get();
+            })->with('accounts')->get();
 
-            if (count($res) > 0) {
+            foreach ($accountPosts as $accountPost) {
+                $accountPost->provider = $accountPost->accounts[0]->provider;
+                unset($accountPost->accounts);
+                $accountPost->postMedia = PostMedia::where('postId', $accountPost->id)->get();
+                $accountPost->post = Post::where('id', $accountPost->postId)->first();
+                $accountPost->hashtags = $this->getHashTagByPostOrAccountId($accountPost->id);
+                $posts[] = $accountPost;
+            }
+
+            if (count($accountPosts) > 0) {
                 $response['status'] = true;
-                $response['posts'] = $res;
+                $response['posts'] = $posts;
             } else {
                 $response['status'] = false;
                 $response['errorMessage'] = 'This Account has not any POSTS';
@@ -44,14 +54,14 @@ class PostController extends Controller
         if ($response['status']) {
             return RequestsTrait::processResponse(true, ['posts' => $response['posts']]);
         } else {
-            return RequestsTrait::processResponse(false, ['message' => $response['posts']]);
+            return RequestsTrait::processResponse(false, ['message' => $response['errorMessage']]);
         }
     }
 
     /**
-     * Return tags by Account Post ID
+     * Return tags by Account Post ID.
      */
-    public function getTagByPostOrAccountId($id)
+    public function getHashTagByPostOrAccountId($id)
     {
         $tags = [];
         $postTags = PostTag::where('accountPostId', $id)->get();
@@ -106,7 +116,7 @@ class PostController extends Controller
             if ($filterByAccounts) {
                 $postContent->provider = $postContent->accounts[0]->provider;
                 unset($postContent->accounts);
-                $postContent->tags = $this->getTagByPostOrAccountId($postContent->id);
+                $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
             } else {
                 $subPosts = [];
                 $subPosts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
@@ -114,7 +124,7 @@ class PostController extends Controller
 
                 foreach ($subPosts as $subPost) {
                     $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
-                    $subPost->tags = $this->getTagByPostOrAccountId($subPost->id);
+                    $subPost->hashtags = $this->getHashTagByPostOrAccountId($subPost->id);
                     $subPosts[] = $subPost;
                 }
                 $postContent->subPosts = $subPosts;

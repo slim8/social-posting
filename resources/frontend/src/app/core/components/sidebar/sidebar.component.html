@@ -1,11 +1,109 @@
 <div class="mod-sidebar">
-  <div class="m-wrapper"></div>
-</div>
+  <div class="m-wrapper">
+    <ul
+      nz-menu
+      nzTheme="dark"
+      nzMode="inline"
+      [nzInlineCollapsed]="isCollapsed"
+      class="m-menu"
+    >
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/dashboard.svg"
+          alt="dashboard icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./dashboard"
+          i18n="Dashboard|Title for the Dashboard page link@@dashboard"
+          class="m-label"
+          >Dashboard</a
+        >
+      </li>
 
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/profile.svg"
+          alt="profile icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./accounts"
+          i18n="Accounts|Title for the Accounts page link@@accounts"
+          class="m-label"
+          >Accounts</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/folder.svg"
+          alt="drafts icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./drafts"
+          i18n="Drafts|Title for the Drafts page link@@drafts"
+          class="m-label"
+          >Drafts</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/edit.svg"
+          alt="edit icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./create-post"
+          i18n="Create Post|Title for the Create Post form@@createPost"
+          class="m-label"
+          >Create Post</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/album.svg"
+          alt="album icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./my-album"
+          i18n="My Album|Title for the Album page@@myAlbum"
+          class="m-label"
+          >My Album</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/send.svg"
+          alt="send icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./published-posts"
+          i18n="
+            Published Posts|Title for the Published Posts page@@publishedPosts"
+          class="m-label"
+          >Published Posts</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- 
 <div class="sidebar-logo">
   <a href="https://ng.ant.design/" target="_blank">
-    <img src="/assets/img/svgs/mgo360-logo.svg" alt="logo" />
-    <!-- <h1>Ant Design Of Angular</h1> -->
+    <img i18n-alt src="/assets/img/svgs/mgo360-logo.svg" alt="logo" />
   </a>
 </div>
 <ul
@@ -19,14 +117,9 @@
     <ul>
       <li nz-menu-item>
         <i nz-icon nzType="home" nzTheme="outline"></i>
-        <a routerLink="/home">&nbsp;&nbsp;Home</a>
-      </li>
-      <!-- <li nz-menu-item>
-        <a routerLink="/home/welcome">Welcome</a>
-      </li> -->
-      <li nz-menu-item>
-        <i nz-icon nzType="info-circle" nzTheme="outline"></i>
-        <a routerLink="/home/facebook">&nbsp;&nbsp;Meta</a>
+        <a routerLink="/home" i18n="Home|Title for the home page link@@home"
+          >&nbsp;&nbsp;Home</a
+        >
       </li>
     </ul>
   </li>
@@ -40,30 +133,43 @@
     <ul>
       <li nz-menu-item nzMatchRouter>
         <i nz-icon nzType="group" nzTheme="outline"></i>
-        <a routerLink="/home/social-accounts/accounts-management"
+        <a
+          routerLink="/home/social-accounts/accounts-management"
+          i18n="
+            Accounts Management|Title for the accounts management
+            feature@@accountsManagement"
           >&nbsp;&nbsp;Accounts management</a
         >
       </li>
       <li nz-menu-item nzMatchRouter>
         <i nz-icon nzType="schedule"></i>
-        <a routerLink="/home/social-accounts/pages"
+        <a
+          routerLink="/home/social-accounts/pages"
+          i18n
+          i18n="Approved Pages|Title for the approved pages list@@approvedList"
           >&nbsp;&nbsp;Approved pages</a
         >
       </li>
       <li nz-menu-item nzMatchRouter>
         <i nz-icon nzType="plus"></i>
-        <a routerLink="/home/social-accounts/create-post"
+        <a
+          routerLink="/home/social-accounts/create-post"
+          i18n="Create Post|Title for the create post form@@createPost"
           >&nbsp;&nbsp;Create post</a
         >
       </li>
       <li nz-menu-item nzMatchRouter>
         <i nz-icon nzType="delete" nzTheme="outline"></i>
-        <a routerLink="/home/social-accounts/draft">&nbsp;&nbsp;Draft</a>
+        <a
+          routerLink="/home/social-accounts/draft"
+          i18n="Draft List|Title for the drafts list action@@draftsList"
+          >&nbsp;&nbsp;Draft</a
+        >
       </li>
     </ul>
   </li>
   <li nz-menu-item routerLink="/auth/login">
     <i nz-icon nzType="logout"></i>
-    <span>LogOut</span>
+    <span i18n="Logout|Title for the logout action@@logout">LogOut</span>
   </li>
-</ul>
+</ul> -->
