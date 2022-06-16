@@ -1,5 +1,8 @@
 @import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_project/_mixins-fonts.scss';
 @import '../../../../assets/sass/_project/_mixins-mk.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+
 
 .mod-sidebar {
     > .m-wrapper {
@@ -9,11 +12,13 @@
                 padding: 10px;
                 > .m-icon {
                     @extend %padding-icons;
+                    width: 20px;
+                    height: 20px;
                 }
 
                 > .m-label {
-                    padding-left: 10px;
-                    color: wheat;
+                    @include textstyle-size-14();
+                    color: $color-base-0;
                 }
             }
         }
