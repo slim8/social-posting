@@ -18,7 +18,7 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
     ManagementRoutingModule,
     DemoNgZorroAntdModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule ,
   ]
 })
 export class ManagementModule { }

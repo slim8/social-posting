@@ -13,8 +13,20 @@ export class UserService {
     return this.http.get(sharedConstants.API_ENDPOINT+ '/managment/users' );
   }
 
+  getPagesList() {
+    return this.http.get(sharedConstants.API_ENDPOINT+ '/load-accounts' );
+  }
+
   createUser(data : any) {
     return this.http.post(sharedConstants.API_ENDPOINT+ '/register-user',data );
+  }
+
+  addPermission(data : any) {
+    return this.http.post(sharedConstants.API_ENDPOINT+ '/managment/permissions/add',data );
+  }
+
+  removePermission(data : any) {
+    return this.http.post(sharedConstants.API_ENDPOINT+ '/managment/permissions/remove',data );
   }
 
 }
