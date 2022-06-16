@@ -27,7 +27,7 @@ class AccountController extends Controller
             return RequestsTrait::processResponse(false, ['message' => 'Please choose a valid account ID']);
         }
 
-        $userId = UserTrait::getCurrentAdminId();
+        $userId = UserTrait::getCurrentId();
 
         $account = Account::where('id', $accountId)->whereHas('providerToken', function ($query) use ($userId) {
             $query->where('provider_tokens.created_by', $userId);

@@ -9,11 +9,11 @@ use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
+use App\Models\Hashtag;
 use App\Models\Post;
+use App\Models\PostHashtag;
 use App\Models\PostMedia;
-use App\Models\PostTag;
 use App\Models\ProviderToken;
-use App\Models\Tag;
 use App\Models\UsersAccounts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -75,30 +75,43 @@ class GeneralSocialController extends Controller
             }
         }
 
-        // Post validator will be updated
-        // $validator = $this->utilitiesController->postValidator($request->accountIds, $images, $videos);
+        // Generate Array with AccountIds to test
+        $postIds = [];
+        foreach ($request->posts as $postJson) {
+            $post = json_decode($postJson, true);
+            $postIds[] = $post['accountId'];
+        }
 
-        // if (!$validator->status) {
-        //     return RequestsTrait::processResponse(false, ['message' => $validator->message]);
-        // }
+        // Post validator will be updated
+        $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
+
+        if (!$validator->status) {
+            return RequestsTrait::processResponse(false, ['message' => $validator->message]);
+        }
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
-            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentAdminId(), $post['accountId']) ? true : false;
+            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $post['accountId']) ? true : false;
 
             if ($account && $accounPermission) {
+                if ($requestPostId) {
+                    // Delete All Saved Account Posts and hashtags
+                    PostHashtag::where('accountPostId', $account->id)->delete();
+                    AccountPost::where('postId', $requestPostId)->delete();
+                }
+
                 $InstagramController = new InstagramController();
                 $accountProvider = $account->provider;
                 $postResponse = [];
+
                 if ($inc == 0) {
                     $postObject = [
                         'url' => 'url',
                         'message' => $request->message,
-                        // 'videoTitle' => $request->videoTitle ? $request->videoTitle : '',
                         'status' => $request->status,
                         'publishedAt' => Carbon::now(),
-                        'createdBy' => UserTrait::getCurrentAdminId(),
+                        'createdBy' => UserTrait::getCurrentId(),
                         'isScheduled' => 0,
                     ];
                     if (!$requestPostId) {
@@ -107,10 +120,8 @@ class GeneralSocialController extends Controller
                         $postId = Post::where('id', $requestPostId)->update($postObject);
                         $postId = Post::where('id', $requestPostId)->first();
 
-                        // Delete All Saved Account Posts , Post tags and Post Media
-                        PostTag::where('postId', $postId->id)->delete();
+                        // Delete All Saved Post Media
                         PostMedia::where('postId', $postId->id)->delete();
-                        AccountPost::where('postId', $postId->id)->delete();
                     }
 
                     if ($images) {
@@ -155,30 +166,32 @@ class GeneralSocialController extends Controller
                 }
 
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
+                    $postProviderId = (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse;
                     $accountPost = AccountPost::create([
-                        'url' => '',
+                        'url' => $statusPost == POST::$STATUS_DRAFT ? 'DRAFT' : ($accountProvider == 'facebook' ? env('FACEBOOK_ROOT_LINK').$postProviderId : ''),
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
                         'source' => 'To BE DEFINED', // To DO
                         'thumbnailRessource' => 'To BE DEFINED', // TO DO
                         'accountId' => $post['accountId'],
-                        'postIdProvider' => (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse,
+                        'postIdProvider' => $postProviderId,
                     ]);
 
                     if ($post['hashtags']) {
                         foreach ($post['hashtags'] as $hashtag) {
-                            $tagId = Tag::where('name' ,$hashtag)->first('id');
+                            $hashtag = RequestsTrait::formatTags($hashtag);
+                            $hashtagId = Hashtag::where('name', $hashtag)->first();
 
-                            if(!$tagId){
-                                $tagId = Tag::create([
-                                    'name' => RequestsTrait::formatTags($hashtag),
+                            if (!$hashtagId) {
+                                $hashtagId = Hashtag::create([
+                                'name' => $hashtag,
                                 ]);
                             }
 
-                            PostTag::create([
-                                'tagId' => $tagId->id,
-                                'accountPostId' =>  $accountPost->id,
+                            PostHashtag::create([
+                                'hashtagId' => $hashtagId->id,
+                                'accountPostId' => $accountPost->id,
                             ]);
                         }
                     }
@@ -283,13 +296,13 @@ class GeneralSocialController extends Controller
 
     public function getAllAccountsByCompanyId(int $accountId = null)
     {
-        return $this->getSavedAccountsFromDataBaseByCompanyId(1 , $accountId = $accountId);
+        return $this->getSavedAccountsFromDataBaseByCompanyId(1, $accountId = $accountId);
     }
 
     /**
      * Return saved accounts from data base.
      */
-    public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0 , int $accountId = null)
+    public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0, int $accountId = null)
     {
         $AllPages = RequestsTrait::getAllAccountsFromDB($accountId);
 
@@ -319,7 +332,7 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
-        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
+        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
@@ -372,5 +385,4 @@ class GeneralSocialController extends Controller
             return RequestsTrait::processResponse(false, ['message' => 'No page autorized']);
         }
     }
-
 }

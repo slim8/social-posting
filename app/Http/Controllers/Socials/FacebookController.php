@@ -71,7 +71,7 @@ class FacebookController extends Controller
      */
     public function generateLongLifeToken($tokenKey, string $facebookUserId = '', int $userId = null)
     {
-        $userObj = $userId ? $userId : UserTrait::getCurrentAdminId();
+        $userObj = $userId ? $userId : UserTrait::getCurrentId();
         $facebookAppKey = env('FACEBOOK_APP_ID');
         $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
         $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
