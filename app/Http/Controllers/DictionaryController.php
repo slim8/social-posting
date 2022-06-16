@@ -18,7 +18,6 @@ class DictionaryController extends Controller
      */
     public function index()
     {
-        //
         return RequestsTrait::processResponse(true , ['dictionay' => Dictionary::all()]);
     }
 
@@ -35,13 +34,14 @@ class DictionaryController extends Controller
             'key' => 'required',
             'value' => 'required',
         ]);
-
-        $validation->sometimes('key', 'required|integer', function($input) {
-            return $input->type_id == 3;
-        });
+            
 
         if($validation->fails()){
             return RequestsTrait::processResponse(false , [ "error" => $validation->errors()]);
+        }
+
+        if(!$this->dictionaryValidate($request)){
+            return RequestsTrait::processResponse(false , [ "error" => [ "key" => [ "key lang exist ." ], "lang" => [ "key lang exist."] ]]);
         }
 
         Dictionary::create([
@@ -49,6 +49,7 @@ class DictionaryController extends Controller
             'value' => $request->value,
             'lang' => $request->lang,
         ]);
+
         return RequestsTrait::processResponse(true);
     }
 
@@ -60,10 +61,19 @@ class DictionaryController extends Controller
      */
     public function show(Request $request , $key)
     {
-        //
-        $lang = $request->lang ? $request->lang : '%%';
-        $element = Dictionary::where('key',$key)->where('lang','like',$lang)->first();
-        return RequestsTrait::processResponse(true , [ "dictionary" => $element]);
+
+        $dictionary = Dictionary::where('key',$key);
+        
+        if($request->lang){
+            $dictionary = $dictionary->where('lang' , $request->lang);
+        }
+        $dictionary = $dictionary->first();
+
+        if(!$dictionary){
+            return RequestsTrait::processResponse(false, ['message' => 'This key with provided Lang not found']);
+        }
+
+        return RequestsTrait::processResponse(true , [ "dictionary" => $dictionary]);
     }
 
     /**
@@ -75,7 +85,6 @@ class DictionaryController extends Controller
      */
     public function update(Request $request, $key)
     {
-        //
         $validation = Validator::make($request->all(), [
             'value' => 'required',
         ]);
@@ -84,7 +93,11 @@ class DictionaryController extends Controller
             return RequestsTrait::processResponse(false , ["error" => $validation->errors()]);
         }
 
-        Dictionary::where('key','like',$key)->update([
+        if(!$this->dictionaryValidate($request)){
+            return RequestsTrait::processResponse(false , [ "error" => [ "key" => [ "key lang exist ." ], "lang" => [ "key lang exist."] ]]);
+        }
+
+        Dictionary::where('key',$key)->update([
             'value' => $request->value,
             'lang' => $request->lang,
         ]);
@@ -100,8 +113,16 @@ class DictionaryController extends Controller
      */
     public function destroy($key)
     {
-        //
-        Dictionary::where('key','like',$key)->delete();
+        Dictionary::where('key',$key)->delete();
         return RequestsTrait::processResponse(true);
+    }
+
+    public function dictionaryValidate($request){
+        $row = Dictionary::where('lang',$request->lang)->where('key',$request->key)->first();
+        if($row){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

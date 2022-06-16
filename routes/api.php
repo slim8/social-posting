@@ -40,7 +40,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
     Route::post('/forget-password', [ForgotPasswordController::class,'forgetPassword']);
     Route::post('/reset-password', [ForgotPasswordController::class,'resetPassword']);
-    Route::apiResource('/dictionary', DictionaryController::class);
+    Route::apiResource('/dictionary', DictionaryController::class)->only(['index' ,'show']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -71,6 +71,7 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/companies', [RoutingController::class, 'getAllCompanies'])->name('get-admin-companies.api');
     Route::get('/admin/users', [RoutingController::class, 'getAllAdminsUsers'])->name('get-admin-users.api');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
+    Route::apiResource('/dictionary', DictionaryController::class)->except(['index' ,'show']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {
