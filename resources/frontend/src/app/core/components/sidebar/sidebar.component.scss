@@ -1,9 +1,14 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_project/_mixins-mk.scss';
+
 .mod-sidebar {
     > .m-wrapper {
         > .m-menu {
+            background-color: $color-media-dark-grey;
             > .m-item {
                 padding: 10px;
                 > .m-icon {
+                    @extend %padding-icons;
                 }
 
                 > .m-label {
