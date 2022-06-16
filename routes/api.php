@@ -52,8 +52,8 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
     Route::post('/accounts/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
     Route::post('/accounts/token/refresh/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
-    Route::post('/managment/add-permissions', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
-    Route::post('/managment/remove-permissions', [CompanyAdminsController::class, 'removeAccountFromUser'])->name('remove-permissions.api');
+    Route::post('/managment/permissions/add', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
+    Route::post('/managment/permissions/remove', [CompanyAdminsController::class, 'removeAccountFromUser'])->name('remove-permissions.api');
     Route::get('/managment/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
 });
 
@@ -72,7 +72,7 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/companies', [AdminsController::class, 'getAllCompanies'])->name('get-admin-companies.api');
     Route::get('/admin/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
-    Route::apiResource('/dictionary', DictionaryController::class)->except(['index' ,'show']);
+    Route::apiResource('/dictionary', DictionaryController::class);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {

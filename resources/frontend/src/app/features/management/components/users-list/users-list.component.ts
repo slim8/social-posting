@@ -109,7 +109,7 @@ export class UsersListComponent implements OnInit {
   }
 
   navigateToCreateUser(){
-    this.router.navigate(['/home/management/create-user']);
+    this.router.navigate(['/application/management/create-user']);
   }
 
   showModal(): void {

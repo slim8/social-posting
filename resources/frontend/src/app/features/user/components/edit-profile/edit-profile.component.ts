@@ -52,7 +52,7 @@ export class EditProfileComponent implements OnInit {
     };
     this.profileService.saveProfile(data).subscribe({
       next: (event: any) => {
-          this.router.navigate(['/home/user/profile']);
+          this.router.navigate(['/application/user/profile']);
         },
       error: err => {
         this.error = err.error;

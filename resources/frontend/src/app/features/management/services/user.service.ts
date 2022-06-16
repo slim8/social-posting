@@ -14,7 +14,7 @@ export class UserService {
   }
 
   getPagesList() {
-    return this.http.get(sharedConstants.API_ENDPOINT+ '/load-accounts' );
+    return this.http.get(sharedConstants.API_ENDPOINT+ '/accounts' );
   }
 
   createUser(data : any) {
