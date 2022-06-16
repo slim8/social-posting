@@ -75,12 +75,19 @@ class GeneralSocialController extends Controller
             }
         }
 
-        // Post validator will be updated
-        // $validator = $this->utilitiesController->postValidator($request->accountIds, $images, $videos);
+        // Generate Array with AccountIds to test
+        $postIds = [];
+        foreach ($request->posts as $postJson) {
+            $post = json_decode($postJson, true);
+            $postIds[] = $post['accountId'];
+        }
 
-        // if (!$validator->status) {
-        //     return RequestsTrait::processResponse(false, ['message' => $validator->message]);
-        // }
+        // Post validator will be updated
+         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
+
+        if (!$validator->status) {
+            return RequestsTrait::processResponse(false, ['message' => $validator->message]);
+        }
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
