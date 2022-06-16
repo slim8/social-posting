@@ -181,7 +181,7 @@ class GeneralSocialController extends Controller
                                 ]);
                             }
 
-                            PostTag::create([
+                            PostHashtag::create([
                                 'hashtagId' => $hashtagId->id,
                                 'accountPostId' => $accountPost->id,
                             ]);

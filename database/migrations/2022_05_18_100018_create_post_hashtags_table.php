@@ -14,7 +14,7 @@ return new class() extends Migration {
     {
         Schema::create('post_hashtags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_post_id')->constrained();
+            $table->string('account_post_id');
             $table->foreignId('hashtag_id')->constrained();
             $table->timestamps();
         });
