@@ -1,107 +1,24 @@
+@import '../_project/_config.scss';
+@import '../_project/_mixins-fonts.scss';
+@import '../_global/_mixins.scss';
 // ==========================================================================
 // BASE STYLES
 // ==========================================================================
 
-html,
-body,
-label,
-input,
-button,
-select,
-textarea,
-svg,
-p,
-a,
-dl,
-ol,
-ul,
-menu,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    @include textstyle-standard();
-    color: $color-standard;
-    margin: 0;
-    padding: 0;
-}
-
 h1 {
-    @include textstyle-size-90();
+    @include textstyle-size-40();
 }
 
-h2 {
-    @include textstyle-size-70();
+h5 {
+    @include textstyle-size-14();
 }
 
-h3 {
-    @include textstyle-size-70();
+h6 {
+    @include textstyle-size-12();
 }
 
-html {
-    height: 100%;
-    overflow-y: scroll; // hier bei html wg magnificpopup
-    overflow-x: hidden;
-    // http://www.paulirish.com/2012/box-sizing-border-box-ftw/
-    box-sizing: border-box;
-    font-size: 100%; // default 16px
-    scroll-behavior: smooth;
-
-    &.no-scroll {
-        overflow-y: hidden;
-    }
-}
-
-body {
-    min-width: 320px;
-    background-color: $color-bg;
-    // -webkit-tap-highlight-color: transparent;
-    margin: 0;
-    padding: 0;
-    // verhindert verticals scrolling smartphone
-    .is-ichwillfair &{
-        overflow-x: hidden;
-    }
-}
-
-b,
-strong {
-    font-weight: 700;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-}
-
-ul {
-    list-style: none;
-}
-
-// Remove text-shadow in selection highlight: h5bp.com/i
-// These selection declarations have to be separate.
-// Customize the background color to match your design.
-::-moz-selection {
-    text-shadow: none;
-    background: $color-selection;
-}
-
-::selection {
-    text-shadow: none;
-    background: $color-selection;
-}
-
-// A better looking default horizontal rule
-hr {
-    display: block;
-    height: 1px;
-    border: none;
-    border-top: 1px solid $color-standard;
-    margin: 1em 0;
-    padding: 0;
+p {
+    @include textstyle-size-12();
 }
 
 // Remove the gap between images and the bottom of their containers: h5bp.com/i/440
@@ -124,12 +41,33 @@ figure {
     padding: 0;
 }
 
-img {
-    @extend %img;
+//Buttons & anchors
+.m-button {
+    padding: 11px 18px 13px 21px;
+    color: $color-base-0;
+    border: none;
+    cursor: pointer;
+    @include textstyle-size-12();
+
+    > i {
+        margin-right: 12px;
+        color: $color-base-0;
+    }
+
+    &.is-primary {
+        background-color: $color-media-primary-orange;
+    }
+
+    &.is-secondary {
+        background-color: $color-media-secondary-button;
+    }
+
+    &.is-disabled {
+        background-color: $color-media-light-grey;
+    }
 }
 
-a,
-button {
-    display: block;
-    @extend %focus;
+// Sidenav 
+.ant-layout-sider {
+    background-color: $color-media-dark-grey;
 }
