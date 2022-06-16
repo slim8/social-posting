@@ -51,7 +51,7 @@ class PostController extends Controller
     /**
      * Return tags by Account Post ID
      */
-    public function getTagByPostOrAccountId($id)
+    public function getHshTagByPostOrAccountId($id)
     {
         $tags = [];
         $postTags = PostTag::where('accountPostId', $id)->get();
@@ -106,7 +106,7 @@ class PostController extends Controller
             if ($filterByAccounts) {
                 $postContent->provider = $postContent->accounts[0]->provider;
                 unset($postContent->accounts);
-                $postContent->tags = $this->getTagByPostOrAccountId($postContent->id);
+                $postContent->hashtags = $this->getHshTagByPostOrAccountId($postContent->id);
             } else {
                 $subPosts = [];
                 $subPosts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
@@ -114,7 +114,7 @@ class PostController extends Controller
 
                 foreach ($subPosts as $subPost) {
                     $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
-                    $subPost->tags = $this->getTagByPostOrAccountId($subPost->id);
+                    $subPost->hashtags = $this->getHshTagByPostOrAccountId($subPost->id);
                     $subPosts[] = $subPost;
                 }
                 $postContent->subPosts = $subPosts;
