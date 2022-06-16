@@ -15,7 +15,6 @@ use App\Models\PostHashtag;
 use App\Models\PostMedia;
 use App\Models\PostTag;
 use App\Models\ProviderToken;
-use App\Models\Tag;
 use App\Models\UsersAccounts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -87,11 +86,10 @@ class GeneralSocialController extends Controller
             $post = json_decode($postJson, true);
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
-            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentAdminId(), $post['accountId']) ? true : false;
-
+            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $post['accountId']) ? true : false;
 
             if ($account && $accounPermission) {
-                if($requestPostId){
+                if ($requestPostId) {
                     // Delete All Saved Account Posts and hashtags
                     PostHashtag::where('accountPostId', $account->id)->delete();
                     AccountPost::where('postId', $requestPostId)->delete();
@@ -101,14 +99,13 @@ class GeneralSocialController extends Controller
                 $accountProvider = $account->provider;
                 $postResponse = [];
 
-
                 if ($inc == 0) {
                     $postObject = [
                         'url' => 'url',
                         'message' => $request->message,
                         'status' => $request->status,
                         'publishedAt' => Carbon::now(),
-                        'createdBy' => UserTrait::getCurrentAdminId(),
+                        'createdBy' => UserTrait::getCurrentId(),
                         'isScheduled' => 0,
                     ];
                     if (!$requestPostId) {
@@ -176,17 +173,17 @@ class GeneralSocialController extends Controller
 
                     if ($post['hashtags']) {
                         foreach ($post['hashtags'] as $hashtag) {
-                            $hashtagId = Hashtag::where('name' , $hashtag)->first();
+                            $hashtagId = Hashtag::where('name', $hashtag)->first();
 
-                            if (!$hashtagId){
-                                $hashtagId = Tag::create([
+                            if (!$hashtagId) {
+                                $hashtagId = Hashtag::create([
                                 'name' => RequestsTrait::formatTags($hashtag),
                                 ]);
                             }
 
                             PostTag::create([
                                 'hashtagId' => $hashtagId->id,
-                                'accountPostId' =>  $accountPost->id,
+                                'accountPostId' => $accountPost->id,
                             ]);
                         }
                     }
@@ -291,13 +288,13 @@ class GeneralSocialController extends Controller
 
     public function getAllAccountsByCompanyId(int $accountId = null)
     {
-        return $this->getSavedAccountsFromDataBaseByCompanyId(1 , $accountId = $accountId);
+        return $this->getSavedAccountsFromDataBaseByCompanyId(1, $accountId = $accountId);
     }
 
     /**
      * Return saved accounts from data base.
      */
-    public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0 , int $accountId = null)
+    public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0, int $accountId = null)
     {
         $AllPages = RequestsTrait::getAllAccountsFromDB($accountId);
 
@@ -327,7 +324,7 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
-        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', UserTrait::getCurrentAdminId())->where('accountUserId', $facebookUserId)->first();
+        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
@@ -380,5 +377,4 @@ class GeneralSocialController extends Controller
             return RequestsTrait::processResponse(false, ['message' => 'No page autorized']);
         }
     }
-
 }

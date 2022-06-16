@@ -60,7 +60,7 @@ class ProviderTokenController extends Controller
     public function getConnectedAccounts(Request $request)
     {
         $response = [];
-        $userId = UserTrait::getCurrentAdminId();
+        $userId = UserTrait::getCurrentId();
         $accounts = ProviderToken::where('createdBy', $userId)->get();
         foreach ($accounts as $account) {
             $now = strtotime(date('Y-m-d'));
@@ -100,7 +100,7 @@ class ProviderTokenController extends Controller
         $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%'.Account::$STATUS_DISCONNECTED.'%')->where('provider', 'facebook');
 
         if ($accountId) {
-            $providerAcounts = $providerAcounts->where('createdBy', UserTrait::getCurrentAdminId())->where('accountUserId', $accountId);
+            $providerAcounts = $providerAcounts->where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $accountId);
         }
         $providerAcounts = $providerAcounts->get();
 
