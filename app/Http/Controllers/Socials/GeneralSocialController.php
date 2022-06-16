@@ -83,7 +83,7 @@ class GeneralSocialController extends Controller
         }
 
         // Post validator will be updated
-         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
+        $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
 
         if (!$validator->status) {
             return RequestsTrait::processResponse(false, ['message' => $validator->message]);
@@ -166,15 +166,16 @@ class GeneralSocialController extends Controller
                 }
 
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
+                    $postProviderId = (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse;
                     $accountPost = AccountPost::create([
-                        'url' => '',
+                        'url' => $statusPost == POST::$STATUS_DRAFT ? 'DRAFT' : ($accountProvider == 'facebook' ? env('FACEBOOK_ROOT_LINK').$postProviderId : ''),
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
                         'source' => 'To BE DEFINED', // To DO
                         'thumbnailRessource' => 'To BE DEFINED', // TO DO
                         'accountId' => $post['accountId'],
-                        'postIdProvider' => (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse,
+                        'postIdProvider' => $postProviderId,
                     ]);
 
                     if ($post['hashtags']) {
