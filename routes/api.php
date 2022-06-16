@@ -3,6 +3,8 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Dictionary;
+use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
@@ -38,6 +40,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
     Route::post('/forget-password', [ForgotPasswordController::class,'forgetPassword']);
     Route::post('/reset-password', [ForgotPasswordController::class,'resetPassword']);
+    Route::apiResource('/dictionary', DictionaryController::class);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -75,3 +78,5 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], f
     Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
     Route::post('/change-password', [ProfileController::class,'changePassword']);
 });
+
+
