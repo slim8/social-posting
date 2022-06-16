@@ -181,11 +181,10 @@ class GeneralSocialController extends Controller
                             if (!$hashtagId){
                                 $hashtagId = Tag::create([
                                 'name' => RequestsTrait::formatTags($hashtag),
-                            ]);
+                                ]);
                             }
 
                             PostTag::create([
-                                'postId' => 1,
                                 'hashtagId' => $hashtagId->id,
                                 'accountPostId' =>  $accountPost->id,
                             ]);
