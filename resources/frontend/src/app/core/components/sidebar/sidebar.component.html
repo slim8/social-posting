@@ -1,7 +1,106 @@
 <div class="mod-sidebar">
-  <div class="m-wrapper"></div>
-</div>
+  <div class="m-wrapper">
+    <ul
+      nz-menu
+      nzTheme="dark"
+      nzMode="inline"
+      [nzInlineCollapsed]="isCollapsed"
+      class="m-menu"
+    >
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/dashboard.svg"
+          alt="dashboard icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./dashboard"
+          i18n="Dashboard|Title for the Dashboard page link@@dashboard"
+          class="m-label"
+          >Dashboard</a
+        >
+      </li>
 
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/profile.svg"
+          alt="profile icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./accounts"
+          i18n="Accounts|Title for the Accounts page link@@accounts"
+          class="m-label"
+          >Accounts</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/folder.svg"
+          alt="drafts icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./drafts"
+          i18n="Drafts|Title for the Drafts page link@@drafts"
+          class="m-label"
+          >Drafts</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/edit.svg"
+          alt="edit icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./create-post"
+          i18n="Create Post|Title for the Create Post form@@createPost"
+          class="m-label"
+          >Create Post</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/album.svg"
+          alt="album icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./my-album"
+          i18n="My Album|Title for the Album page@@myAlbum"
+          class="m-label"
+          >My Album</a
+        >
+      </li>
+
+      <li class="m-item">
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/send.svg"
+          alt="send icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./published-posts"
+          i18n="
+            Published Posts|Title for the Published Posts page@@publishedPosts"
+          class="m-label"
+          >Published Posts</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- 
 <div class="sidebar-logo">
   <a href="https://ng.ant.design/" target="_blank">
     <img i18n-alt src="/assets/img/svgs/mgo360-logo.svg" alt="logo" />
@@ -18,7 +117,9 @@
     <ul>
       <li nz-menu-item>
         <i nz-icon nzType="home" nzTheme="outline"></i>
-        <a routerLink="/home" i18n="Home|Title for the home page link@@home">&nbsp;&nbsp;Home</a>
+        <a routerLink="/home" i18n="Home|Title for the home page link@@home"
+          >&nbsp;&nbsp;Home</a
+        >
       </li>
     </ul>
   </li>
@@ -34,7 +135,9 @@
         <i nz-icon nzType="group" nzTheme="outline"></i>
         <a
           routerLink="/home/social-accounts/accounts-management"
-          i18n="Accounts Management|Title for the accounts management feature@@accountsManagement"
+          i18n="
+            Accounts Management|Title for the accounts management
+            feature@@accountsManagement"
           >&nbsp;&nbsp;Accounts management</a
         >
       </li>
@@ -69,4 +172,4 @@
     <i nz-icon nzType="logout"></i>
     <span i18n="Logout|Title for the logout action@@logout">LogOut</span>
   </li>
-</ul>
+</ul> -->

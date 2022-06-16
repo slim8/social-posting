@@ -1,20 +1,16 @@
 .mod-sidebar {
-   
-
     > .m-wrapper {
-
-        > .m-logo {
-            position: relative;
-            height: 64px;
-            padding-left: 24px;
-            overflow: hidden;
-            line-height: 64px;
-            background: #001529;
-            transition: all 0.3s;
-        }
-
         > .m-menu {
-            
+            > .m-item {
+                padding: 10px;
+                > .m-icon {
+                }
+
+                > .m-label {
+                    padding-left: 10px;
+                    color: wheat;
+                }
+            }
         }
     }
 }
