@@ -87,21 +87,35 @@ class InstagramController extends Controller
     }
 
     /**
+     * Generate publication Public URL
+     */
+    public function genPublicUrl($mediaId , $object)
+    {
+
+        $parameter = RequestsTrait::prepareParameters(['access_token' => $object['access_token'] , 'fields' => 'shortcode']);
+        $response = Http::get(env('FACEBOOK_ENDPOINT').$mediaId.'?'.$parameter);
+        if ($response->json('shortcode')) {
+            return env('INSTAGRAM_ROOT_LINK').$response->json('shortcode');
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Generate Container of instagram carrousel.
      */
     public function publishContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
 
-        // sleep(30);
-
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
-        // dd($response->json());
         if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
+            $responseObject['url'] = $this->genPublicUrl($response->json('id') , $object);
         } else {
             $responseObject['status'] = false;
+            $responseObject['url'] = '';
             $responseObject['message'] = $response->json('error') ? $response->json('error')['error_user_msg'] : 'to be defined';
         }
 

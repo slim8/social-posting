@@ -154,6 +154,7 @@ class GeneralSocialController extends Controller
                     $obj['access_token'] = $account->accessToken;
 
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $post['hashtags'], $videos, $post['videoTitle']) : POST::$STATUS_DRAFT;
+
                 } elseif ($accountProvider == 'instagram') {
                     if ($message) {
                         $obj['caption'] = $message;
@@ -161,14 +162,14 @@ class GeneralSocialController extends Controller
                     $BusinessIG = $account->uid;
                     $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
                     $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
-
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos) : POST::$STATUS_DRAFT;
                 }
 
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
                     $postProviderId = (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse;
+
                     $accountPost = AccountPost::create([
-                        'url' => $statusPost == POST::$STATUS_DRAFT ? 'DRAFT' : ($accountProvider == 'facebook' ? env('FACEBOOK_ROOT_LINK').$postProviderId : ''),
+                        'url' => POST::$STATUS_DRAFT == $statusPost ? 'DRAFT' :  $postResponse['url'],
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
