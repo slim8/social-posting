@@ -68,6 +68,7 @@
     nzTitle="Users Management"
     nzIcon="user-switch"
     nzSize="large"
+    *ngIf="checkRole('companyadmin')"
   >
      <ul>
       <li nz-menu-item nzMatchRouter>
@@ -76,12 +77,6 @@
           >&nbsp;&nbsp;Users list</a
         >
       </li>
-     <!-- <li nz-menu-item nzMatchRouter>
-        <i nz-icon nzType="schedule"></i>
-        <a routerLink="/home/social-accounts/pages"
-          >&nbsp;&nbsp;Approved pages</a
-        >
-      </li> -->
     </ul> 
   </li>
   <li nz-menu-item routerLink="/auth/login">
