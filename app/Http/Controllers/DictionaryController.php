@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\RequestsTrait;
 use App\Models\Dictionary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +19,8 @@ class DictionaryController extends Controller
      */
     public function index()
     {
-        return RequestsTrait::processResponse(true , ['dictionary' => Dictionary::all()]);
+        //  return RequestsTrait::processResponse(true , ['dictionary' => collect(Dictionary::all())->groupBy('key')]);
+         return RequestsTrait::processResponse(true , ['dictionary' => Dictionary::all()]);
     }
 
     /**
@@ -34,7 +36,6 @@ class DictionaryController extends Controller
             'key' => 'required|',
             'value' => 'required|',
         ]);
-            
 
         if($validation->fails()){
             return RequestsTrait::processResponse(false , [ "error" => $validation->errors()]);
@@ -45,7 +46,7 @@ class DictionaryController extends Controller
         }
 
         Dictionary::create([
-            'key' => strtoupper($request->key),
+            'key' => strtoupper(str_replace(' ','_',trim($request->key))),
             'value' => $request->value,
             'lang' => strtolower($request->lang),
         ]);
@@ -118,6 +119,9 @@ class DictionaryController extends Controller
         return RequestsTrait::processResponse(true);
     }
 
+    /**
+     * Validate if request is valid
+     */
     public function dictionaryValidate($request){
         $row = Dictionary::where('lang',$request->lang)->where('key',$request->key)->first();
         if($row && $request->id != $row->id){
