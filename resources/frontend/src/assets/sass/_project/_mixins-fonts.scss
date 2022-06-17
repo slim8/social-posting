@@ -1,6 +1,8 @@
 // Fonts mixins
 // START: fontfamilys
 // primary
+@import 'fonts.scss';
+
 @mixin fontfamily-primary {
     font-family: 'Open Sans';
     // medium as default weight

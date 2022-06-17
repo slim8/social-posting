@@ -1,15 +1,11 @@
 <nz-layout class="mod-page-layout">
-  <app-navbar
-    [isCollapsed]="isCollapsed"
-    (newCollapseEvent)="isCollapsed = !isCollapsed"
-  >
-  </app-navbar>
+  <app-navbar></app-navbar>
 
   <nz-layout>
     <nz-sider
       class="menu-sidebar"
       nzCollapsible
-      nzWidth="226px"
+      nzWidth="85px"
       nzBreakpoint="md"
       [(nzCollapsed)]="isCollapsed"
       [nzTrigger]="null"

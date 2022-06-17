@@ -23,7 +23,7 @@ nz-content {
 
 .inner-content {
     padding: 24px;
-    background: #fff;
+    background: transparent;
     height: 100%;
     overflow-y: scroll;
 }
@@ -34,7 +34,7 @@ nz-content {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #ffffff;
+    background: transparent;
 }
 
 /* Handle */
