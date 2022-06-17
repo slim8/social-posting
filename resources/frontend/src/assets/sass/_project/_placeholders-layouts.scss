@@ -1,0 +1,30 @@
+// Sidenav 
+.ant-layout-sider {
+    background-color: $color-media-dark-grey;
+    transition: 0.2s all;
+
+    &.is-active {
+        flex: 0 0 226px!important;
+        max-width: 226px!important;
+        min-width: 226px!important;
+        width: 226px!important;
+    }
+}
+
+// Header navbar
+
+nz-header {
+    padding: 0;
+    width: 100%;
+    z-index: 2;
+}
+
+.m-home {
+    > i {
+        > svg {
+            > path {
+                fill: $color-base-0;
+            }
+        }
+    }
+}

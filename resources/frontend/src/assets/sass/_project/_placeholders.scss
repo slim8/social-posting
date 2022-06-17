@@ -1,0 +1,49 @@
+.m-icon {
+    position: relative;
+    padding: 20px;
+
+    &.dashboard, &.send, &.profile {
+        > i {
+            font-size: 21px;
+            >svg {
+                >path {
+                    fill: $color-base-0;
+                    stroke: transparent;
+                }
+            }
+        }
+    }
+
+    &.folder, &.album, &.edit {
+        i {
+            svg {
+                >path {
+                    stroke: $color-base-0;
+                    fill: transparent;
+                }
+            }
+        }
+    }
+
+    &.is-selected {
+        &.dashboard, &.send, &.profile {
+            i {
+                svg {
+                    >path {
+                        fill: $color-media-primary-orange!important;
+                    }
+                }
+            }
+        }
+
+        &.folder, &.album, &.edit {
+            i {
+                svg {
+                    >path {
+                        stroke: $color-media-primary-orange!important;
+                    }
+                }
+            }
+        }
+    }
+}
