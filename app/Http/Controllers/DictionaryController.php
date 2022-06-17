@@ -17,10 +17,15 @@ class DictionaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //  return RequestsTrait::processResponse(true , ['dictionary' => collect(Dictionary::all())->groupBy('key')]);
-         return RequestsTrait::processResponse(true , ['dictionary' => Dictionary::all()]);
+        $filter = $request->filter ? "%".$request->filter."%" : "%%";
+
+        // return RequestsTrait::processResponse(true , [
+        //     'dictionary' => collect(Dictionary::where('key','Like',$filter)->orWhere('value','Like',$filter)->orWhere('lang','Like',$filter)->get())->groupBy('key')
+        // ]);
+
+        return RequestsTrait::processResponse(true , ['dictionary' => Dictionary::where('key','Like',$filter)->orWhere('value','Like',$filter)->orWhere('lang','Like',$filter)->get()]);
     }
 
     /**
@@ -60,15 +65,10 @@ class DictionaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request , $key)
+    public function show( $lang , $key)
     {
 
-        $dictionary = Dictionary::where('key',$key);
-        
-        if($request->lang){
-            $dictionary = $dictionary->where('lang' , $request->lang);
-        }
-        $dictionary = $dictionary->first();
+        $dictionary = Dictionary::where('key',$key)->where('lang',$lang)->first();
 
         if(!$dictionary){
             return RequestsTrait::processResponse(false, ['message' => 'This key with provided Lang not found']);
