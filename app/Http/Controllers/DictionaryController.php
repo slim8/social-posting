@@ -29,7 +29,7 @@ class DictionaryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
         $validation = Validator::make($request->all(), [
             'key' => 'required|',
             'value' => 'required|',
@@ -47,7 +47,7 @@ class DictionaryController extends Controller
         Dictionary::create([
             'key' => strtoupper($request->key),
             'value' => $request->value,
-            'lang' => $request->lang,
+            'lang' => strtolower($request->lang),
         ]);
 
         return RequestsTrait::processResponse(true);
@@ -99,7 +99,7 @@ class DictionaryController extends Controller
 
         Dictionary::where('id',$id)->update([
             'value' => $request->value,
-            'lang' => $request->lang,
+            'lang' => strtolower($request->lang),
         ]);
 
         return RequestsTrait::processResponse(true);
@@ -114,6 +114,7 @@ class DictionaryController extends Controller
     public function destroy($id)
     {
         Dictionary::where('id',$id)->delete();
+
         return RequestsTrait::processResponse(true);
     }
 
@@ -121,8 +122,8 @@ class DictionaryController extends Controller
         $row = Dictionary::where('lang',$request->lang)->where('key',$request->key)->first();
         if($row && $request->id != $row->id){
             return false;
-        }else{
-            return true;
         }
+        
+        return true;
     }
 }

@@ -7,6 +7,17 @@
                 background: rgba(0, 0, 0, 0.3);
                 color: #fff;
                 border-color: rgba(0, 0, 0, 0.3);
+                &:hover{
+                    background: rgba(0, 0, 0, 0.4);
+                    border-color: rgba(0, 0, 0, 0.6);
+                }
+            }
+
+            &.m-default-button{
+                &:hover{
+                    color: rgba(0, 0, 0, 0.5);
+                    border-color: rgba(0, 0, 0, 0.3); 
+                }
             }
         }
         

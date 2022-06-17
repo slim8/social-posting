@@ -9,8 +9,8 @@ export class DictionariesService {
 
   constructor(private http: HttpClient) {}
 
-  getDictionariesList() {
-    return this.http.get(sharedConstants.API_ENDPOINT+ '/dictionary' );
+  getDictionariesList(params : any = []) {
+    return this.http.get(sharedConstants.API_ENDPOINT+ '/dictionary',{params} );
   }
 
   addDictionary(data : any) {
