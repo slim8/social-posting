@@ -150,7 +150,7 @@ class PostController extends Controller
                 if ($postContent->provider == 'facebook') {
                     $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
                 } elseif ($postContent->provider == 'instagram') {
-                    $postContent->stats = [];
+                    $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
                 }
             }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -348,5 +349,39 @@ class InstagramController extends Controller
         $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
 
         return $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+    }
+
+    /**
+     * Get Statistics of Instgram Publication.
+     */
+    public function getStatisticsByPost($accountPostId)
+    {
+        $obj = [];
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=engagement,impressions,saved');
+        $response = $request->json('data');
+
+        // Start Fetching Statistics
+        foreach ($response as $statsData) {
+            // Start Fetching Engagments ==> Likes + Comments
+            if ($statsData['name'] == 'engagement') {
+                $obj['engagement'] = $statsData['values'][0]['value'];
+            }
+
+            // Start Fetching Impressions
+            if ($statsData['name'] == 'impressions') {
+                $obj['impressions'] = $statsData['values'][0]['value'];
+            }
+
+            // Start Fetching Saved
+            if ($statsData['name'] == 'saved') {
+                $obj['saves'] = $statsData['values'][0]['value'];
+            }
+            // End Fetching Likes
+        }
+
+        return $obj;
     }
 }
