@@ -2,3 +2,20 @@
 @import 'assets/sass/_project/_config.scss';
 @import 'assets/sass/_project/_placeholders.scss';
 @import 'assets/sass/_project/placeholders-layouts';
+
+.m-alert {
+    .mod-dashboard & {
+        > .ant-alert-info {
+            background-color: $color-base-0;
+            border: 0;
+
+            > .ant-alert-content {
+                > .ant-alert-message {
+                }
+
+                > .ant-alert-description {
+                }
+            }
+        }
+    }
+}
