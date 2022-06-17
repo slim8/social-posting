@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Socials\FacebookController;
+use App\Http\Controllers\Socials\InstagramController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
@@ -16,6 +18,18 @@ class PostController extends Controller
 {
     use UserTrait;
     use RequestsTrait;
+
+    protected $facebookController;
+    protected $instagramController;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->facebookController = new FacebookController();
+        $this->instagramController = new InstagramController();
+    }
 
     /**
      * Get Posts By Account Id.
@@ -81,6 +95,7 @@ class PostController extends Controller
         // filterBy is used to filter Posts using AcountsPosts
         $filterByAccounts = $request->filterBy === 'AccountsPosts' ? true : false;
 
+        $getStat = ($request->getStat == true && $filterByAccounts) ? true : false;
         // If FilterBy Accounts then Get POsts using AccountPost else Get Posts Normally
         $postRequest = $filterByAccounts ? AccountPost::whereHas('account', function ($query) use ($companyId) {
             $query->where('accounts.companyId', $companyId);
@@ -129,6 +144,14 @@ class PostController extends Controller
                     $subPosts[] = $subPost;
                 }
                 $postContent->subPosts = $subPosts;
+            }
+
+            if ($getStat) {
+                if ($postContent->provider == 'facebook') {
+                    $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
+                } elseif ($postContent->provider == 'instagram') {
+                    $postContent->stats = [];
+                }
             }
 
             if ($postId) {

@@ -87,12 +87,11 @@ class InstagramController extends Controller
     }
 
     /**
-     * Generate publication Public URL
+     * Generate publication Public URL.
      */
-    public function genPublicUrl($mediaId , $object)
+    public function genPublicUrl($mediaId, $object)
     {
-
-        $parameter = RequestsTrait::prepareParameters(['access_token' => $object['access_token'] , 'fields' => 'shortcode']);
+        $parameter = RequestsTrait::prepareParameters(['access_token' => $object['access_token'], 'fields' => 'shortcode']);
         $response = Http::get(env('FACEBOOK_ENDPOINT').$mediaId.'?'.$parameter);
         if ($response->json('shortcode')) {
             return env('INSTAGRAM_ROOT_LINK').$response->json('shortcode');
@@ -112,7 +111,7 @@ class InstagramController extends Controller
         if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
-            $responseObject['url'] = $this->genPublicUrl($response->json('id') , $object);
+            $responseObject['url'] = $this->genPublicUrl($response->json('id'), $object);
         } else {
             $responseObject['status'] = false;
             $responseObject['url'] = '';
@@ -145,6 +144,7 @@ class InstagramController extends Controller
     {
         $parameter = RequestsTrait::prepareParameters($object);
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+
         return $response->json('id');
     }
 
@@ -235,11 +235,9 @@ class InstagramController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Instagram Found', ], 201);
+                return RequestsTrait::processResponse(false, ['message' => 'No Instagram Found']);
             }
         } else {
             return $AllPages;
@@ -249,7 +247,7 @@ class InstagramController extends Controller
     /**
      * Save Instagram Accounts.
      */
-    public function saveInstagramAccount($instagramAccount , $userUid)
+    public function saveInstagramAccount($instagramAccount, $userUid)
     {
         $id = $instagramAccount['pageId'];
         $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
@@ -312,6 +310,9 @@ class InstagramController extends Controller
         }
     }
 
+    /**
+     * Get Instgram account List.
+     */
     public function getAccountsList(Request $request)
     {
         $facebookController = new FacebookController();
@@ -332,9 +333,20 @@ class InstagramController extends Controller
                 }
             }
 
-            return RequestsTrait::processResponse(true , ['pages' => $businessAccounts]);
+            return RequestsTrait::processResponse(true, ['pages' => $businessAccounts]);
         } else {
-            return RequestsTrait::processResponse(false , ['pages' => $businessAccounts]);
+            return RequestsTrait::processResponse(false, ['pages' => $businessAccounts]);
         }
+    }
+
+    /**
+     * Get Instagram Access Token.
+     */
+    public function getAccessToken($id)
+    {
+        $account = Account::where('id', $id)->first();
+        $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
+
+        return $IgAccount ? $IgAccount->accessToken : $account->accessToken;
     }
 }

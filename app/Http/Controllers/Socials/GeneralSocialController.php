@@ -76,9 +76,8 @@ class GeneralSocialController extends Controller
         }
 
         // Add Images And video Cleaner
-        $images = $this->utilitiesController->cleanMediaArray($images , 'image');
-        $videos = $this->utilitiesController->cleanMediaArray($videos , 'image');
-
+        $images = $this->utilitiesController->cleanMediaArray($images, 'image');
+        $videos = $this->utilitiesController->cleanMediaArray($videos, 'image');
 
         // Generate Array with AccountIds to test
         $postIds = [];
@@ -159,14 +158,12 @@ class GeneralSocialController extends Controller
                     $obj['access_token'] = $account->accessToken;
 
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $post['hashtags'], $videos, $post['videoTitle']) : POST::$STATUS_DRAFT;
-
                 } elseif ($accountProvider == 'instagram') {
                     if ($message) {
                         $obj['caption'] = $message;
                     }
                     $BusinessIG = $account->uid;
-                    $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
-                    $obj['access_token'] = $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+                    $obj['access_token'] = $this->instagramController->getInstagramAccessToken($account->id);
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos) : POST::$STATUS_DRAFT;
                 }
 
@@ -174,7 +171,7 @@ class GeneralSocialController extends Controller
                     $postProviderId = (gettype($postResponse) == 'array' && $postResponse['id']) ? $postResponse['id'] : $postResponse;
 
                     $accountPost = AccountPost::create([
-                        'url' => POST::$STATUS_DRAFT == $statusPost ? 'DRAFT' :  $postResponse['url'],
+                        'url' => POST::$STATUS_DRAFT == $statusPost ? 'DRAFT' : $postResponse['url'],
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',

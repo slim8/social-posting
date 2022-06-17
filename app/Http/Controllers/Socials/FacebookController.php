@@ -7,6 +7,7 @@ use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -349,5 +350,46 @@ class FacebookController extends Controller
         } else {
             return RequestsTrait::processResponse(false);
         }
+    }
+
+    /**
+     * Get Facebook Access Token.
+     */
+
+    /**
+     * Get Instagram Access Token.
+     */
+    public function getAccessToken($id)
+    {
+        return Account::where('id', $id)->first()->accessToken;
+    }
+
+    /**
+     * Get Statistics of Facebook Publication.
+     */
+    public function getStatisticsByPost($accountPostId)
+    {
+        $obj = [];
+        $likes = 0;
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$this->getAccessToken($acountPost->accountId).'&metric=post_reactions_by_type_total');
+        $response = $request->json('data');
+
+        // Start Fetching Statistics
+        foreach ($response as $statsData) {
+            // Start Fetching Likes
+            if ($statsData['name'] == 'post_reactions_by_type_total') {
+                foreach ($statsData['values'][0]['value'] as $key => $value) {
+                    $value = (int) $value;
+                    $likes = $likes + $value;
+                }
+            }
+            // End Fetching Likes
+        }
+
+        // End fetching Statistics
+        $obj['likes'] = $likes;
+
+        return $obj;
     }
 }
