@@ -365,6 +365,17 @@ class FacebookController extends Controller
     }
 
     /**
+     * Get Comment Count On Object.
+     */
+    public function commentCount($postIdProvider, $accessToken)
+    {
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
+        $response = $request->json('summary');
+
+        return $response['total_count'];
+    }
+
+    /**
      * Get Statistics of Facebook Publication.
      */
     public function getStatisticsByPost($accountPostId)
@@ -372,7 +383,9 @@ class FacebookController extends Controller
         $obj = [];
         $likes = 0;
         $acountPost = AccountPost::where('id', $accountPostId)->first();
-        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$this->getAccessToken($acountPost->accountId).'&metric=post_reactions_by_type_total');
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
         $response = $request->json('data');
 
         // Start Fetching Statistics
@@ -389,6 +402,8 @@ class FacebookController extends Controller
 
         // End fetching Statistics
         $obj['likes'] = $likes;
+        // Get Comment Count
+        $obj['comments'] = $this->commentCount($postIdProvider, $accessToken);
 
         return $obj;
     }
