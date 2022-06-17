@@ -1,10 +1,27 @@
 <div class="mod-dashboard">
   <div class="m-wrapper">
     <div class="m-title">
-      <h1 i18n="Dashboard Title|Title for the Dashboard Page@@dashboardTitle">Social Media Publisher</h1>
+      <h1 i18n="Dashboard Title|Title for the Dashboard Page@@dashboardTitle">
+        Social Media Publisher
+      </h1>
     </div>
-    <div class="m-left-column"></div>
 
-    <div class="m-right-column"></div>
+    <div nz-row [nzGutter]="16" class="m-container">
+      <div nz-col nzSpan="16" class="m-left-column">
+        <nz-alert
+          class="m-alert"
+          nztype="info"
+          nzCloseable
+          nzMessage="Success Text"
+          nzDescription="Warning Text Warning Text Warning Text Warning Text Warning Text Warning Text Warning Text"
+        ></nz-alert>
+      </div>
+      <div nz-col nzSpan="8" class="m-right-column">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Distinctio
+        soluta, sint inventore ipsa odio omnis est possimus assumenda magnam,
+        laboriosam perferendis at voluptates maiores rerum voluptatum. Quo hic
+        doloribus vel.
+      </div>
+    </div>
   </div>
 </div>

@@ -1,6 +1,9 @@
 // Fonts mixins
 // START: fontfamilys
 // primary
+
+@import 'fonts.scss';
+
 @mixin fontfamily-primary {
     font-family: 'Open Sans';
     // medium as default weight
@@ -61,5 +64,81 @@
     @include mq(desktop) {
         @include font-size(24px);
         @include line-height(28/24);
+    }
+}
+
+@mixin textstyle-size-12 {
+    @include fontfamily-primary;
+    @include font-size(12px);
+    @include line-height(14/12);
+}
+
+@mixin textstyle-size-40 {
+    @include fontfamily-primary;
+    @include font-size(40px);
+    @include line-height(48/40);
+    @include mq(desktop) {
+        @include font-size(40px);
+        @include line-height(48/40);
+    }
+}
+
+@mixin textstyle-size-20 {
+    @include fontfamily-primary;
+    @include font-size(20px);
+    @include line-height(24/20);
+    @include mq(desktop) {
+        @include font-size(20px);
+        @include line-height(24/20);
+    }
+}
+
+@mixin textstyle-size-16-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(16px);
+    @include line-height(18/16);
+    @include mq(desktop) {
+        @include font-size(16px);
+        @include line-height(18/16);
+    }
+}
+
+@mixin textstyle-size-16 {
+    @include fontfamily-primary;
+    @include font-size(16px);
+    @include line-height(18/16);
+    @include mq(desktop) {
+        @include font-size(16px);
+        @include line-height(18/16);
+    }
+}
+
+@mixin textstyle-size-14 {
+    @include fontfamily-primary;
+    @include font-size(14px);
+    @include line-height(16/14);
+    @include mq(desktop) {
+        @include font-size(14px);
+        @include line-height(16/14);
+    }
+}
+
+@mixin textstyle-size-12 {
+    @include fontfamily-primary;
+    @include font-size(12px);
+    @include line-height(16/12);
+    @include mq(desktop) {
+        @include font-size(12px);
+        @include line-height(16/12);
+    }
+}
+
+@mixin textstyle-size-12-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(12px);
+    @include line-height(16/12);
+    @include mq(desktop) {
+        @include font-size(12px);
+        @include line-height(16/12);
     }
 }

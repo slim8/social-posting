@@ -1,9 +1,15 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_project/_mixins-fonts.scss';
+@import '../../../../assets/sass/_project/_mixins-mk.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+
 .mod-sidebar {
     > .m-wrapper {
         > .m-menu {
             > .m-item {
                 padding: 10px;
                 > .m-icon {
+                    @extend %padding-icons;
                 }
 
                 > .m-label {

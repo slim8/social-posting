@@ -1,2 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-   @import 'assets/sass/_project/_config.scss';
+
+@import 'assets/sass/_project/_config.scss';
+@import 'assets/sass/_project/base.scss';
+
+.m-alert {
+    .mod-dashboard & {
+        > .ant-alert-info {
+            background-color: $color-base-0;
+            border: 0;
+
+            > .ant-alert-content {
+                > .ant-alert-message {
+                }
+
+                > .ant-alert-description {
+                }
+            }
+        }
+    }
+}

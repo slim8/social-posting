@@ -1,12 +1,19 @@
+@import '../../../assets/sass/_project/_config.scss';
+
 .mod-dashboard {
     > .m-wrapper {
         > .m-title {
         }
 
-        > .m-left-column {
-        }
+        > .m-container {
+            > .m-left-column {
+                > .m-alert {
+                    background-color: $color-base-0;
+                }
+            }
 
-        > .m-right-column {
+            > .m-right-column {
+            }
         }
     }
 }
