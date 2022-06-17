@@ -4,6 +4,20 @@ div {
         margin : 0 0 20px 0;
         >button{
             margin : 0 0 0 20px;
+            &.m-primary-button{
+                background: rgba(0, 0, 0, 0.3);
+                color: #fff;
+                border-color: rgba(0, 0, 0, 0.3);
+                &:hover{
+                    background: rgba(0, 0, 0, 0.4);
+                    border-color: rgba(0, 0, 0, 0.6);
+                }
+                &[Disabled]{
+                    background: rgba(0, 0, 0, 0.1);
+                    color: #fff;
+                    border-color: rgba(0, 0, 0, 0.15);
+                }
+            }
         }
     }
 } 

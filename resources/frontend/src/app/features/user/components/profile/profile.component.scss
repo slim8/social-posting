@@ -130,6 +130,15 @@ body {
     > button{
         width: fit-content;
         margin: 40px 0 0 40px;
+        &.m-primary-button{
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border-color: rgba(0, 0, 0, 0.3);
+            &:hover{
+                background: rgba(0, 0, 0, 0.4);
+                border-color: rgba(0, 0, 0, 0.6);
+            }
+        }
     }
     }
 }
