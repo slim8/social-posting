@@ -66,7 +66,7 @@ class PostController extends Controller
         $tags = [];
         $postTags = PostHashtag::where('accountPostId', $id)->get();
         foreach ($postTags as $postTag) {
-            $tags[] = Hashtag::where('id', $postTag->tagId)->first('name');
+            $tags[] = Hashtag::where('id', $postTag->hashtagId)->first('name');
         }
 
         return $tags;
@@ -124,6 +124,7 @@ class PostController extends Controller
 
                 foreach ($subPosts as $subPost) {
                     $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
+
                     $subPost->hashtags = $this->getHashTagByPostOrAccountId($subPost->id);
                     $subPosts[] = $subPost;
                 }
