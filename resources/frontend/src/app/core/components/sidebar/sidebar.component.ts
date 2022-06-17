@@ -1,3 +1,4 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,16 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
   @Input () isCollapsed: boolean | undefined;
-  constructor() { }
+  roles : any = null ;
+
+  constructor(private jwtService: JwtHelperService ) { }
 
   ngOnInit(): void {
+    this.roles = this.jwtService.decodeToken().data.roles;
+  }
+
+  checkRole(role: any): void {
+    return this.roles.includes(role);
   }
 
 }

@@ -52,10 +52,11 @@ export class ChangePasswordComponent implements OnInit {
       next: (event: any) => {
       },
       error: err => {
+        
         this.error = err.error;
       },
       complete: () => {
-        this.router.navigate(['/home/user/profile']);
+        this.router.navigate(['/application/user/profile']);
       }
     })
   }

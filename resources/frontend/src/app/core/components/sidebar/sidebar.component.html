@@ -97,6 +97,39 @@
           >Published Posts</a
         >
       </li>
+
+      <li class="m-item" *ngIf="checkRole('companyadmin')" >
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/send.svg"
+          alt="send icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="./management/users-list"
+          i18n="
+          Managment Users|Title for the Managment Users@@ManagmentUsers"
+          class="m-label"
+          >Managment Users</a
+        >
+      </li>
+
+      <li class="m-item" *ngIf="checkRole('admin')" >
+        <img
+          i18n-alt
+          src="/assets/img/svgs/icons/send.svg"
+          alt="send icon"
+          class="m-icon"
+        />
+        <a
+          routerLink="/application/administration/dictionaries"
+          i18n="
+          Dictionaries|Title for the Dictionaries@@Dictionaries"
+          class="m-label"
+          >Dictionaries</a
+        >
+      </li>
+
     </ul>
   </div>
 </div>
@@ -167,6 +200,23 @@
         >
       </li>
     </ul>
+  </li>
+  <li
+    nz-submenu
+    nzOpen
+    nzTitle="Users Management"
+    nzIcon="user-switch"
+    nzSize="large"
+    *ngIf="checkRole('companyadmin')"
+  >
+     <ul>
+      <li nz-menu-item nzMatchRouter>
+        <i nz-icon nzType="ordered-list" nzTheme="outline"></i>
+        <a routerLink="/home/management/users-list"
+          >&nbsp;&nbsp;Users list</a
+        >
+      </li>
+    </ul> 
   </li>
   <li nz-menu-item routerLink="/auth/login">
     <i nz-icon nzType="logout"></i>

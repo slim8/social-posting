@@ -13,4 +13,7 @@ export class sharedConstants {
     public static HTTP_APPLICATION='Content-Type';
     public static HTTP_APP_JSON='application/json';
     public static HTTP_MULTI_DATAFORM='multipart/form-data';
+    public static FRENSH_LUANGUAGE = 'FR';
+    public static ENGLISH_LUANGUAGE = 'EN';
+    public static DEUTSCH_LUANGUAGE = 'DE';
 }
