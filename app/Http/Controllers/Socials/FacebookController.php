@@ -365,6 +365,21 @@ class FacebookController extends Controller
     }
 
     /**
+     * Get Share Count On Object.
+     */
+    public function shareCount($postIdProvider, $accessToken)
+    {
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$postIdProvider.'?access_token='.$accessToken.'&fields=shares');
+        $response = $request->json('shares');
+
+        if (!$response) {
+            return 0;
+        }
+
+        return $response['count'];
+    }
+
+    /**
      * Get Comment Count On Object.
      */
     public function commentCount($postIdProvider, $accessToken)
@@ -404,6 +419,8 @@ class FacebookController extends Controller
         $obj['likes'] = $likes;
         // Get Comment Count
         $obj['comments'] = $this->commentCount($postIdProvider, $accessToken);
+        // Get Share Count
+        $obj['shares'] = $this->shareCount($postIdProvider, $accessToken);
 
         return $obj;
     }
