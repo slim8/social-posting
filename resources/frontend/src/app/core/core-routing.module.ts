@@ -21,7 +21,8 @@ const routes: Routes = [
             { path: 'user', loadChildren: () => import('../features/user/user.module').then(m => m.UserModule) },
             { path: 'social-accounts', loadChildren: () => import('../features/social-accounts/social-accounts.module').then(m => m.SocialAccountsModule) },
             { path: 'management', loadChildren: () => import('../features/management/management.module').then(m => m.ManagementModule) },
-            { path: '**', pathMatch: 'full', redirectTo: '/home' },
+            { path: 'administration', loadChildren: () => import('../features/administration/administration.module').then(m => m.AdministrationModule) },
+            // { path: '**', pathMatch: 'full', redirectTo: '/home' },
         ],
     },
 

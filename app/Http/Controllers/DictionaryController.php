@@ -18,7 +18,7 @@ class DictionaryController extends Controller
      */
     public function index()
     {
-        return RequestsTrait::processResponse(true , ['dictionay' => Dictionary::all()]);
+        return RequestsTrait::processResponse(true , ['dictionary' => Dictionary::all()]);
     }
 
     /**
@@ -31,8 +31,8 @@ class DictionaryController extends Controller
     {
         //
         $validation = Validator::make($request->all(), [
-            'key' => 'required',
-            'value' => 'required',
+            'key' => 'required|',
+            'value' => 'required|',
         ]);
             
 
@@ -41,7 +41,7 @@ class DictionaryController extends Controller
         }
 
         if(!$this->dictionaryValidate($request)){
-            return RequestsTrait::processResponse(false , [ "error" => [ "key" => [ "key lang exist ." ], "lang" => [ "key lang exist."] ]]);
+            return RequestsTrait::processResponse(false , [ "error" => [ "key" => [ "key with this lang exist ." ], "lang" => [ "lang with this key  exist."] ]]);
         }
 
         Dictionary::create([
@@ -83,7 +83,7 @@ class DictionaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $key)
+    public function update(Request $request, $id)
     {
         $validation = Validator::make($request->all(), [
             'value' => 'required',
@@ -97,7 +97,7 @@ class DictionaryController extends Controller
             return RequestsTrait::processResponse(false , [ "error" => [ "key" => [ "key lang exist ." ], "lang" => [ "key lang exist."] ]]);
         }
 
-        Dictionary::where('key',$key)->update([
+        Dictionary::where('id',$id)->update([
             'value' => $request->value,
             'lang' => $request->lang,
         ]);
@@ -111,15 +111,15 @@ class DictionaryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($key)
+    public function destroy($id)
     {
-        Dictionary::where('key',$key)->delete();
+        Dictionary::where('id',$id)->delete();
         return RequestsTrait::processResponse(true);
     }
 
     public function dictionaryValidate($request){
         $row = Dictionary::where('lang',$request->lang)->where('key',$request->key)->first();
-        if($row){
+        if($row && $request->id != $row->id){
             return false;
         }else{
             return true;
