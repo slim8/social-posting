@@ -75,6 +75,11 @@ class GeneralSocialController extends Controller
             }
         }
 
+        // Add Images And video Cleaner
+        $images = $this->utilitiesController->cleanMediaArray($images , 'image');
+        $videos = $this->utilitiesController->cleanMediaArray($videos , 'image');
+
+
         // Generate Array with AccountIds to test
         $postIds = [];
         foreach ($request->posts as $postJson) {
