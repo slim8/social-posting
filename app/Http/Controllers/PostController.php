@@ -42,7 +42,7 @@ class PostController extends Controller
             $posts = [];
             $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
-            })->with('accounts')->get();
+            })->with('accounts')->orderby('id','DESC')->get();
 
             foreach ($accountPosts as $accountPost) {
                 $accountPost->provider = $accountPost->accounts[0]->provider;
@@ -51,6 +51,13 @@ class PostController extends Controller
                 $accountPost->post = Post::where('id', $accountPost->postId)->first();
                 $accountPost->hashtags = $this->getHashTagByPostOrAccountId($accountPost->id);
                 $posts[] = $accountPost;
+
+                // get stats about post
+                if ($accountPost->provider == 'facebook') {
+                    $accountPost->stats = $this->facebookController->getStatisticsByPost($accountPost->id);
+                } elseif ($accountPost->provider == 'instagram') {
+                    $accountPost->stats = $this->instagramController->getStatisticsByPost($accountPost->id);
+                }
             }
 
             if (count($accountPosts) > 0) {
