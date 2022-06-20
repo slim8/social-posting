@@ -1,10 +1,298 @@
 <div class="mod-dashboard">
   <div class="m-wrapper">
     <div class="m-title">
-      <h1 i18n="Dashboard Title|Title for the Dashboard Page@@dashboardTitle">Social Media Publisher</h1>
+      <h1 i18n="Dashboard Title|Title for the Dashboard Page@@dashboardTitle">
+        Social Media Publisher
+      </h1>
     </div>
-    <div class="m-left-column"></div>
 
-    <div class="m-right-column"></div>
+    <div class="m-dashboard-container">
+        <div class="m-left-col">
+            <div class="m-alert-container">
+                <div class="m-alert">
+                    <div class="m-close-icon">
+                        <img src="../../../assets/img/close.png" alt="close">
+                    </div>
+                    <div class="m-alert-title">
+                        Herzlich Willkommen 
+                        im Social Media Publisher
+                    </div>
+                    <div class="m-alert-text">
+                        Dank des neuen Social Media Publishers können Sie ganz einfach Ihre Social Media Kanäle verknüpfen und Beiträge gestalten und direkt veröffentlichen.
+                    </div>
+                </div>
+            </div>
+            <div class="m-posts-history">
+                <div class="m-history-header">
+                    <div class="m-message">
+                        Meine Beiträge
+                    </div>
+                    <div class="m-note">
+                        Alle Beiträge ansehen
+                    </div>
+                </div>
+                <div *ngIf="listOfPages == ''" class="m-login">
+                    <span class="m-login-icon">
+                        <i nz-icon nzType="ng-zorro:add"></i>
+                    </span>
+                    <div class="m-message-info">
+                        <h4>Noch keine Beiträge vorhanden. </h4>
+                        <p>Verknüpfe Deine Social Media Kanäle mit der mediafactory, 
+                        um Beiträge zu gestalten und direkt zu veröffenltichen.</p>
+                    </div>
+                    <div class="m-login-button">
+                        <button (click)="loginWithFacebook()" class="m-button is-primary"><span><i nz-icon nzType="ng-zorro:add"></i></span>Konto verknüpfen</button>
+                    </div>
+                </div>
+
+                <div *ngIf="listOfPages != ''" class="m-history">
+                    <div class="m-history-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="m-media-preview">
+                                        <div class="m-media-small">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" alt="">
+                                            <div class="m-provider-logo">
+                                                <img src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="m-page-info">
+                                        <div class="m-page">Testpost Detlef</div>
+                                        <div class="m-date">24.05.2022, 14:05</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-like-count">367</div>
+                                        <div class="m-text">erreichte Personen</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-share-count">58</div>
+                                        <div class="m-text">Gefällt mir-Angaben</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-comment-count">8</div>
+                                        <div class="m-text">Kommentare</div>
+                                    </td>
+                                    <td class="m-action">
+                                        <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</button>
+                                    </td>
+                                </tr>
+                                  
+                                <tr>
+                                    <td class="m-media-preview">
+                                        <div class="m-media-small">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" alt="">
+                                            <div class="m-provider-logo">
+                                                <img src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="m-page-info">
+                                        <div class="m-page">Testpost Detlef</div>
+                                        <div class="m-date">24.05.2022, 14:05</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-like-count">367</div>
+                                        <div class="m-text">erreichte Personen</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-share-count">58</div>
+                                        <div class="m-text">Gefällt mir-Angaben</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-comment-count">8</div>
+                                        <div class="m-text">Kommentare</div>
+                                    </td>
+                                    <td class="m-action">
+                                        <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="m-media-preview">
+                                        <div class="m-media-small">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" alt="">
+                                            <div class="m-provider-logo">
+                                                <img src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="m-page-info">
+                                        <div class="m-page">Testpost Detlef</div>
+                                        <div class="m-date">24.05.2022, 14:05</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-like-count">367</div>
+                                        <div class="m-text">erreichte Personen</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-share-count">58</div>
+                                        <div class="m-text">Gefällt mir-Angaben</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-comment-count">8</div>
+                                        <div class="m-text">Kommentare</div>
+                                    </td>
+                                    <td class="m-action">
+                                        <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="m-media-preview">
+                                        <div class="m-media-small">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" alt="">
+                                            <div class="m-provider-logo">
+                                                <img src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="m-page-info">
+                                        <div class="m-page">Testpost Detlef</div>
+                                        <div class="m-date">24.05.2022, 14:05</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-like-count">367</div>
+                                        <div class="m-text">erreichte Personen</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-share-count">58</div>
+                                        <div class="m-text">Gefällt mir-Angaben</div>
+                                    </td>
+                                    <td class="m-stats">
+                                        <div class="m-comment-count">8</div>
+                                        <div class="m-text">Kommentare</div>
+                                    </td>
+                                    <td class="m-action">
+                                        <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="m-create-post">
+                <button class="m-button" [ngClass]="{'is-primary': listOfPages != '', 'is-disabled' : listOfPages == ''}"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Beitrag erstellen</button>
+            </div>
+        </div>
+        <div class="m-right-col">
+            <div class="m-buttons">
+                <button class="m-button" [ngClass]="{'is-primary': listOfPages != '', 'is-disabled' : listOfPages == ''}"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Beitrag erstellen</button>
+                <button class="m-button is-secondary"><span><i nz-icon nzType="ng-zorro:profile"></i></span> Verknüpfte Konten</button>
+            </div>
+            <div class="m-news">
+                <div class="m-news-header">
+                    <div class="m-title">Neuigkeiten des Social Media Publishers</div>
+                    <div class="m-text">Neue Features, Updates und Ankündigungen findest Du hier.</div>
+                </div>
+                <div class="m-notes">
+                    <ul>
+                        <li>
+                            <p>Beiträge auf <strong>mehreren Plattformen gleichzeitig</strong> veröffentlichen. <a href="#">Jetzt ansehen.</a> </p>
+                        </li>
+                        <li>
+                            <p> Du kannst jetzt Beiträge für die <strong> Zukunft planen</strong> und in den Kalender einplanen. Zur Kalenderansicht.</p>
+                        </li>
+                        <li>
+                            <p>Beiträge auf <strong>mehreren Plattformen gleichzeitig</strong> veröffentlichen. <a href="#">Jetzt ansehen.</a> </p>
+                        </li>
+                        <li>
+                            <p>
+                                Du kannst jetzt Beiträge für die <strong> Zukunft planen </strong> und in den Kalender einplanen. 
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <a class="m-see-more" href="">Mehr lesen</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- <nz-modal
+    [(nzVisible)]="isVisible"
+    nzTitle="Please select you accounts"
+    (nzOnCancel)="handleCancel()"
+    (nzOnOk)="onSubmit()"
+    >
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateForm">
+        <tr *ngFor="let page of listpages">
+            <td>
+            <label>
+                <input
+                type="checkbox"
+                [value]="page.pageId"
+                (change)="onCheckChange($event)"
+                />
+
+                <nz-avatar
+                nzIcon="user"
+                [nzSrc]="page.pagePictureUrl"
+                style="margin: 0 10px"
+                ></nz-avatar>
+
+                {{ page.pageName }}
+            </label>
+            </td>
+        </tr>
+        </form>
+    </ng-container>
+    </nz-modal> -->
+
+    <div class="m-modal-pages">
+        <div (click)="closeModal()" class="m-close-icon">
+            <img src="../../../assets/img/close.png" alt="close">
+        </div>
+        <div class="m-modal-header">
+            <div class="m-title">Instagram & Business Seiten hinzufügen</div>
+            <div class="m-text">Wähle deine verbundenen Business Konten und Facebook Seiten aus, die du mit der mediafactory verknüpfen möchtest.</div>
+            <div *ngIf="this.currentUser != ''" class="m-list-title">Mit <strong>accountname.test</strong> verknüpfte Konten:</div>
+        
+        </div>
+
+        <form class="m-form-pages" nz-form [formGroup]="validateForm">
+            <tr *ngFor="let page of listpages">
+                <td>
+                    <label>
+                        <input
+                        class="m-checkbox"
+                        type="checkbox"
+                        [value]="page.pageId"
+                        (change)="onCheckChange($event)"
+                        />
+
+                        <nz-avatar
+                        nzIcon="user"
+                        [nzSrc]="page.pagePictureUrl"
+                        style="margin: 8px 26px;width: 36px; height: 36px;"
+                        ></nz-avatar>
+        
+                        {{ page.pageName }}
+                    </label>
+                </td>
+            </tr>
+        </form>
+        <div class="m-submit-button">
+            <button (click)="onSubmit()" class="m-button is-primary">Verknüpfen</button>
+        </div>
+    </div>
+
+    <div class="m-success-modal">
+        <div (click)="closeSuccessModal()" class="m-close-icon">
+            <img src="../../../assets/img/close.png" alt="close">
+        </div>
+        <div class="m-success">
+            <img src="../../../assets/img/Group.png" alt="refreshing">
+            <div class="m-success-title">
+                <img src="../../../assets/img/Check.png" alt="success">
+                Erfolgreich angemeldet.
+            </div>
+            <p>Du wirst gleich weitergeleitet, um deine verknüpften Seiten
+                dem mediafactory Social Media Publisher hinzuzufügen.</p>
+        </div>
+    </div>
+
   </div>
 </div>

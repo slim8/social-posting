@@ -4,71 +4,61 @@
 @import '../../../../assets/sass/_global/_mixins.scss';
 
 
-.mod-sidebar {
-    > .m-wrapper {
-        > .m-menu {
-            background-color: $color-media-dark-grey;
-            > .m-item {
-                padding: 10px;
-                > .m-icon {
-                    @extend %padding-icons;
-                    width: 20px;
-                    height: 20px;
+// todo
+.m-wrapper {
+    > .m-menu {
+        background-color: $color-media-dark-grey;
+        padding-top: 10px;
+        
+        > .m-item {
+            padding: 0 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            overflow: hidden;
+
+            > .m-icon {
+                position: relative;
+                padding: 20px;
+
+                > i {
+                    font-size: 21px;
+                    >svg {
+                        >path {
+                            fill: $color-base-0;
+                        }
+                    }
                 }
 
-                > .m-label {
+                &.is-selected {
+                    i {
+                        svg {
+                            >path {
+                                fill: $color-media-primary-orange!important;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .m-label {
+                user-select: none;
+                opacity: 0;
+                font-size: 0;
+                color: $color-base-0;
+                transition: 0.2s all;
+                position: relative;
+
+                .is-active & {
+                    opacity: 1;
                     @include textstyle-size-14();
-                    color: $color-base-0;
                 }
+
+                &.is-selected {
+                    color: $color-media-primary-orange;
+                }
+
             }
-        }
-    }
-}
-
-.menu-sidebar {
-    position: relative;
-    z-index: 10;
-    min-height: 100vh;
-    box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
-}
-
-.sidebar-logo {
-    position: relative;
-    height: 64px;
-    padding-left: 24px;
-    overflow: hidden;
-    line-height: 64px;
-    background: #001529;
-    transition: all 0.3s;
-}
-
-.sidebar-logo img {
-    display: inline-block;
-    max-width: 95%;
-    max-height: 50px;
-    vertical-align: middle;
-}
-
-.sidebar-logo h1 {
-    display: inline-block;
-    margin: 0 0 0 20px;
-    color: #fff;
-    font-weight: 600;
-    font-size: 14px;
-    font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
-    vertical-align: middle;
-}
-
-.ant-menu-inline.ant-menu-root .ant-menu-submenu-title > * {
-    font-size: large;
-}
-
-.ant-menu-inline {
-    &.ant-menu-root {
-        .ant-menu-submenu-title {
-            * {
-                font-size: large;
-            }
-        }
-    }
+        }   
+    } 
 }

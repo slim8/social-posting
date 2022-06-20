@@ -1,34 +1,14 @@
 <nz-header class="mod-header">
   <div class="m-wrapper">
-    <span class="header-trigger" (click)="collapse()">
-      <i
-        class="trigger"
-        nz-icon
-        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-      ></i>
-    </span>
-    <div class="m-loggedin">
-      <div routerLink="/home/premium" class="m-premium">
-        <div i18n="Go premium|Title for the go premium link@@goPremium">
-          Go premium!
+    <div class="m-header-container">
+        <div class="m-logo">
+            <div class="m-button is-primary">Logo</div>
         </div>
-        <i nz-icon nzType="shopping" nzTheme="outline"></i>
-      </div>
-
-      <div
-        id="loggedin"
-        class="m-connected-user user-menu-toggle"
-        (click)="menuCollapse($event)"
-      >
-        <div class="m-user-image user-menu-toggle">
-          <nz-avatar
-            class="user-menu-toggle"
-            [nzSize]="40"
-            nzIcon="user"
-          ></nz-avatar>
+        <div class="m-home">
+            <i nz-icon nzType="ng-zorro:home"></i>
         </div>
-        <div class="m-user-name user-menu-toggle">
-          {{ userInfo.firstName }} {{ userInfo.lastName }}
+        <div class="m-title">
+            <h5>Mediafactory</h5>
         </div>
         <div class="m-button user-menu-toggle">
           <div class="m-menu-btn user-menu-toggle">
@@ -81,5 +61,5 @@
         </div>
       </div>
     </div>
-  </div>
+
 </nz-header>
