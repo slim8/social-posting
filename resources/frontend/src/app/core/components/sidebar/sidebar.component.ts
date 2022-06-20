@@ -27,7 +27,6 @@ export class SidebarComponent implements OnInit {
 
     ngOnInit(): void {
         const sideNav = document.querySelector('.mod-sidebar')?.parentElement?.parentElement;
-        console.log(sideNav);
         const sideNavMenu = document.querySelector('.mod-sidebar');
         sideNav?.addEventListener('mouseover', this.openSidenav);
         sideNav?.addEventListener('mouseleave', this.closeSidenav);

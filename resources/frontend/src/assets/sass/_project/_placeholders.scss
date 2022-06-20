@@ -47,3 +47,25 @@
         }
     }
 }
+
+.m-button {
+    > span {
+        > i {
+            > svg {
+                fill: transparent;
+            }
+        }
+    }
+}
+
+.m-login-icon {
+    > i {
+        font-size: 60px;
+        > svg {
+            > path {
+                fill: $color-media-background-light-grey;
+                stroke: $color-media-background-light-grey;
+            }
+        }
+    }
+}
