@@ -7,6 +7,7 @@ use App\Http\Controllers\functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -87,21 +88,34 @@ class InstagramController extends Controller
     }
 
     /**
+     * Generate publication Public URL.
+     */
+    public function genPublicUrl($mediaId, $object)
+    {
+        $parameter = RequestsTrait::prepareParameters(['access_token' => $object['access_token'], 'fields' => 'shortcode']);
+        $response = Http::get(env('FACEBOOK_ENDPOINT').$mediaId.'?'.$parameter);
+        if ($response->json('shortcode')) {
+            return env('INSTAGRAM_ROOT_LINK').$response->json('shortcode');
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Generate Container of instagram carrousel.
      */
     public function publishContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
 
-        // sleep(30);
-
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
-        // dd($response->json());
         if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
+            $responseObject['url'] = $this->genPublicUrl($response->json('id'), $object);
         } else {
             $responseObject['status'] = false;
+            $responseObject['url'] = '';
             $responseObject['message'] = $response->json('error') ? $response->json('error')['error_user_msg'] : 'to be defined';
         }
 
@@ -131,6 +145,7 @@ class InstagramController extends Controller
     {
         $parameter = RequestsTrait::prepareParameters($object);
         $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+
         return $response->json('id');
     }
 
@@ -221,11 +236,9 @@ class InstagramController extends Controller
 
         if ($returnJson) {
             if ($AllPages) {
-                return response()->json(['success' => true,
-            'pages' => $AllPages, ], 201);
+                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
             } else {
-                return response()->json(['success' => false,
-            'message' => 'No Instagram Found', ], 201);
+                return RequestsTrait::processResponse(false, ['message' => 'No Instagram Found']);
             }
         } else {
             return $AllPages;
@@ -235,7 +248,7 @@ class InstagramController extends Controller
     /**
      * Save Instagram Accounts.
      */
-    public function saveInstagramAccount($instagramAccount , $userUid)
+    public function saveInstagramAccount($instagramAccount, $userUid)
     {
         $id = $instagramAccount['pageId'];
         $relatedAccountId = RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId']) ? RequestsTrait::findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
@@ -298,6 +311,9 @@ class InstagramController extends Controller
         }
     }
 
+    /**
+     * Get Instgram account List.
+     */
     public function getAccountsList(Request $request)
     {
         $facebookController = new FacebookController();
@@ -318,11 +334,54 @@ class InstagramController extends Controller
                 }
             }
 
-            return response()->json(['success' => true,
-            'pages' => $businessAccounts, ], 201);
+            return RequestsTrait::processResponse(true, ['pages' => $businessAccounts]);
         } else {
-            return response()->json(['success' => false,
-            'pages' => $businessAccounts, ], 201);
+            return RequestsTrait::processResponse(false, ['pages' => $businessAccounts]);
         }
+    }
+
+    /**
+     * Get Instagram Access Token.
+     */
+    public function getAccessToken($id)
+    {
+        $account = Account::where('id', $id)->first();
+        $IgAccount = RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') ? RequestsTrait::findAccountByUid($account->relatedAccountId, 'id') : null;
+
+        return $IgAccount ? $IgAccount->accessToken : $account->accessToken;
+    }
+
+    /**
+     * Get Statistics of Instgram Publication.
+     */
+    public function getStatisticsByPost($accountPostId)
+    {
+        $obj = [];
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=engagement,impressions,saved');
+        $response = $request->json('data');
+
+        // Start Fetching Statistics
+        foreach ($response as $statsData) {
+            // Start Fetching Engagments ==> Likes + Comments
+            if ($statsData['name'] == 'engagement') {
+                $obj['engagement'] = $statsData['values'][0]['value'];
+            }
+
+            // Start Fetching Impressions
+            if ($statsData['name'] == 'impressions') {
+                $obj['impressions'] = $statsData['values'][0]['value'];
+            }
+
+            // Start Fetching Saved
+            if ($statsData['name'] == 'saved') {
+                $obj['saves'] = $statsData['values'][0]['value'];
+            }
+            // End Fetching Likes
+        }
+
+        return $obj;
     }
 }

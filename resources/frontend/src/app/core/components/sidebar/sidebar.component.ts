@@ -1,3 +1,4 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzIconService } from 'ng-zorro-antd/icon';
 
@@ -16,7 +17,10 @@ const sendIcon = '<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xm
 
 export class SidebarComponent implements OnInit {
     @Input() isCollapsed: boolean | undefined;
-    constructor(private iconService: NzIconService) {
+    roles: any = null;
+
+    constructor(private iconService: NzIconService,
+        private jwtService: JwtHelperService) {
         this.iconService.addIconLiteral('ng-zorro:dashboard', dashboardIcon);
         this.iconService.addIconLiteral('ng-zorro:profile', profileIcon);
         this.iconService.addIconLiteral('ng-zorro:folder', folderIcon);
@@ -26,11 +30,16 @@ export class SidebarComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.roles = this.jwtService.decodeToken().data.roles;
         const sideNav = document.querySelector('.mod-sidebar')?.parentElement?.parentElement;
         const sideNavMenu = document.querySelector('.mod-sidebar');
         sideNav?.addEventListener('mouseover', this.openSidenav);
         sideNav?.addEventListener('mouseleave', this.closeSidenav);
         sideNavMenu?.addEventListener('click', this.toggleActiveItem);
+    }
+
+    checkRole(role: any): void {
+        return this.roles.includes(role);
     }
 
     openSidenav() {

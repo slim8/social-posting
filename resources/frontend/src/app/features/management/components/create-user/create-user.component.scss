@@ -21,6 +21,17 @@
                 cursor: pointer;
             }
         }
+        >div.m-form-input-password{
+            display : flex;
+            justify-content:center;
+            align-items: center;
+            border: 0.5px solid rgba(0, 0, 0, 0.5);
+            margin: 10px 0 0 0;
+            >i{
+                padding: 10px ;
+                cursor: pointer;
+            }
+        }
         >.error {
             color : red;
             padding: 5px 0;

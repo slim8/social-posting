@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\repositories\UserRepository;
 use App\Http\Traits\MailTrait;
+use App\Http\Traits\RequestsTrait;
 use App\Models\Company;
-// use App\Models\User as ModelsUser;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 class ApiAuthController extends Controller
 {
     use MailTrait;
+    use RequestsTrait;
 
     protected $userRepository;
 
@@ -61,7 +62,6 @@ class ApiAuthController extends Controller
         //     return response(['errors' => $validator->errors()->all()], 422);
         // }
 
-
         $company = Company::create([
             'name' => $request->companyName,
             'email' => $request->email,
@@ -86,13 +86,10 @@ class ApiAuthController extends Controller
 
         $user->attachRole('companyadmin');
 
-        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
+        // MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
 
-        return response()->json([
-            'success' => true,
-            'password' => $password,
-            'message' => trans('message.company_created_sucess') . $request->email,
-        ], 201);
+        return RequestsTrait::processResponse(true, ['password' => $password,
+        'message' => trans('message.company_created_sucess').$request->email, ]);
     }
 
     public function registerUser(Request $request)
@@ -102,19 +99,20 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'password' => 'required|string|min:6',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
             'isSubscriber' => '',
         ], [
             'companyName.required' => 'This is a required message for company name',
         ]);
         if ($validator->fails()) {
-            return response(['errors' => $validator->errors()->all()], 422);
+            return response($validator->errors(), 422);
         }
 
         $user = User::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
-            'name' => $request->firstName . ' ' . $request->lastName,
+            'name' => $request->firstName.' '.$request->lastName,
             'email' => $request->email,
             'status' => 1,
             'isSubscriber' => $request->isSubscriber,
@@ -125,10 +123,8 @@ class ApiAuthController extends Controller
 
         $user->attachRole('user');
 
-        return response()->json([
-            'success' => true,
-            'message' => trans('message.user_created_suceess') . $request->email,
-        ], 201);
+        return RequestsTrait::processResponse(true, ['success' => true,
+        'message' => trans('message.user_created_suceess').$request->email, ]);
     }
 
     public function login(Request $request)
@@ -160,7 +156,7 @@ class ApiAuthController extends Controller
                         'exp' => $expire_claim,
                         'data' => [
                             'id' => $user['id'],
-                            'fullName' => $user['firstName'] . ' ' . $user['lastName'],
+                            'fullName' => $user['firstName'].' '.$user['lastName'],
                             'email' => $user['email'],
                             'roles' => $this->userRepository->getCurrentRoles($user),
                         ],
@@ -168,13 +164,10 @@ class ApiAuthController extends Controller
 
                     $jwt = JWT::encode($token, $secret_key, env('JWT_HASH_ALGORITHME'));
 
-                    return response()->json([
-                        'message' => trans('message.sucess_login'),
-                        'token' => $jwt,
-                        'expireAt' => $expire_claim,
-                        'success' => true,
-                        'roles' => $this->userRepository->getCurrentRoles($user),
-                    ], 200);
+                    return RequestsTrait::processResponse(true, ['message' => trans('message.sucess_login'),
+                            'token' => $jwt,
+                            'expireAt' => $expire_claim,
+                            'roles' => $this->userRepository->getCurrentRoles($user), ]);
                 } else {
                     $response = ['message' => trans('message.password_mismatch'), 'status' => false];
 
