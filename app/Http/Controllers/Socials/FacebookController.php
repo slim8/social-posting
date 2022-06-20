@@ -7,6 +7,7 @@ use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
+use App\Models\AccountPost;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -349,5 +350,78 @@ class FacebookController extends Controller
         } else {
             return RequestsTrait::processResponse(false);
         }
+    }
+
+    /**
+     * Get Facebook Access Token.
+     */
+
+    /**
+     * Get Instagram Access Token.
+     */
+    public function getAccessToken($id)
+    {
+        return Account::where('id', $id)->first()->accessToken;
+    }
+
+    /**
+     * Get Share Count On Object.
+     */
+    public function shareCount($postIdProvider, $accessToken)
+    {
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$postIdProvider.'?access_token='.$accessToken.'&fields=shares');
+        $response = $request->json('shares');
+
+        if (!$response) {
+            return 0;
+        }
+
+        return $response['count'];
+    }
+
+    /**
+     * Get Comment Count On Object.
+     */
+    public function commentCount($postIdProvider, $accessToken)
+    {
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
+        $response = $request->json('summary');
+
+        return $response['total_count'];
+    }
+
+    /**
+     * Get Statistics of Facebook Publication.
+     */
+    public function getStatisticsByPost($accountPostId)
+    {
+        $obj = [];
+        $likes = 0;
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
+        $response = $request->json('data');
+
+        // Start Fetching Statistics
+        foreach ($response as $statsData) {
+            // Start Fetching Likes
+            if ($statsData['name'] == 'post_reactions_by_type_total') {
+                foreach ($statsData['values'][0]['value'] as $key => $value) {
+                    $value = (int) $value;
+                    $likes = $likes + $value;
+                }
+            }
+            // End Fetching Likes
+        }
+
+        // End fetching Statistics
+        $obj['likes'] = $likes;
+        // Get Comment Count
+        $obj['comments'] = $this->commentCount($postIdProvider, $accessToken);
+        // Get Share Count
+        $obj['shares'] = $this->shareCount($postIdProvider, $accessToken);
+
+        return $obj;
     }
 }

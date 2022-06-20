@@ -13,6 +13,9 @@ class UtilitiesController extends Controller
     use RequestsTrait;
     use UserTrait;
 
+    /**
+     * Validate Post (check if Eg Post without media to instagram Or Video + Images on se same post to facebook page).
+     */
     public function postValidator($accountIds, $images, $videos)
     {
         $providersType = [];
@@ -50,6 +53,9 @@ class UtilitiesController extends Controller
         return $responseObject;
     }
 
+    /**
+     * Upload file to FTP.
+     */
     public function uploadFileToFtp($image, $type)
     {
         $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images' : 'others', $image);
@@ -57,6 +63,9 @@ class UtilitiesController extends Controller
         return env('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
     }
 
+    /**
+     * Start Local Image Upload.
+     */
     public function uploadLocalImage($file, $type)
     {
         $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
@@ -64,6 +73,9 @@ class UtilitiesController extends Controller
         return env('APP_URL').'/'.$object;
     }
 
+    /**
+     * Check type of file and start upload workflow.
+     */
     public function uploadFile($file)
     {
         $fileObject = new \stdClass();
@@ -109,6 +121,9 @@ class UtilitiesController extends Controller
         return $months.' months and '.$days.' days';
     }
 
+    /**
+     * Check if account sent is linked to current connected admin.
+     */
     public function checkIfAccountLinkedToCurrentAdmin($accountIds)
     {
         foreach ($accountIds as $accountId) {
@@ -135,5 +150,23 @@ class UtilitiesController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * Clean Media Array.
+     */
+    public function cleanMediaArray($array, $type)
+    {
+        $newArray = [];
+
+        if ($array) {
+            foreach ($array as $element) {
+                if ($element) {
+                    $newArray[] = $element;
+                }
+            }
+        }
+
+        return $newArray;
     }
 }

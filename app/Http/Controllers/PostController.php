@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Socials\FacebookController;
+use App\Http\Controllers\Socials\InstagramController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
@@ -17,6 +19,18 @@ class PostController extends Controller
     use UserTrait;
     use RequestsTrait;
 
+    protected $facebookController;
+    protected $instagramController;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->facebookController = new FacebookController();
+        $this->instagramController = new InstagramController();
+    }
+
     /**
      * Get Posts By Account Id.
      */
@@ -28,7 +42,7 @@ class PostController extends Controller
             $posts = [];
             $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
-            })->with('accounts')->get();
+            })->with('accounts')->orderby('id','DESC')->get();
 
             foreach ($accountPosts as $accountPost) {
                 $accountPost->provider = $accountPost->accounts[0]->provider;
@@ -37,6 +51,13 @@ class PostController extends Controller
                 $accountPost->post = Post::where('id', $accountPost->postId)->first();
                 $accountPost->hashtags = $this->getHashTagByPostOrAccountId($accountPost->id);
                 $posts[] = $accountPost;
+
+                // get stats about post
+                if ($accountPost->provider == 'facebook') {
+                    $accountPost->stats = $this->facebookController->getStatisticsByPost($accountPost->id);
+                } elseif ($accountPost->provider == 'instagram') {
+                    $accountPost->stats = $this->instagramController->getStatisticsByPost($accountPost->id);
+                }
             }
 
             if (count($accountPosts) > 0) {
@@ -66,7 +87,7 @@ class PostController extends Controller
         $tags = [];
         $postTags = PostHashtag::where('accountPostId', $id)->get();
         foreach ($postTags as $postTag) {
-            $tags[] = Hashtag::where('id', $postTag->tagId)->first('name');
+            $tags[] = Hashtag::where('id', $postTag->hashtagId)->first('name');
         }
 
         return $tags;
@@ -81,6 +102,7 @@ class PostController extends Controller
         // filterBy is used to filter Posts using AcountsPosts
         $filterByAccounts = $request->filterBy === 'AccountsPosts' ? true : false;
 
+        $getStat = ($request->getStat == true && $filterByAccounts) ? true : false;
         // If FilterBy Accounts then Get POsts using AccountPost else Get Posts Normally
         $postRequest = $filterByAccounts ? AccountPost::whereHas('account', function ($query) use ($companyId) {
             $query->where('accounts.companyId', $companyId);
@@ -124,10 +146,19 @@ class PostController extends Controller
 
                 foreach ($subPosts as $subPost) {
                     $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
+
                     $subPost->hashtags = $this->getHashTagByPostOrAccountId($subPost->id);
                     $subPosts[] = $subPost;
                 }
                 $postContent->subPosts = $subPosts;
+            }
+
+            if ($getStat) {
+                if ($postContent->provider == 'facebook') {
+                    $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
+                } elseif ($postContent->provider == 'instagram') {
+                    $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
+                }
             }
 
             if ($postId) {
