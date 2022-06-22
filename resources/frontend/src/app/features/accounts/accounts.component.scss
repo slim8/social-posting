@@ -29,7 +29,8 @@
 
         > .m-accounts-container {
             position: relative;
-            height: calc(100% - 118px);
+            height: calc(100vh - 258px);
+            overflow: auto;
 
             > .m-loading {
                 position: absolute;
@@ -77,6 +78,12 @@
             }
 
             > .m-connected-accounts {
+
+                > h2 {
+                    padding: 20px 55px;
+                    color: $color-media-black-opacity-half;
+                    margin: 0;
+                }
 
                 > .m-account-container {
                     position: relative;

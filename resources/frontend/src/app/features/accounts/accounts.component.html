@@ -26,6 +26,8 @@
             </div>
 
             <div *ngIf="!isLoading && connectedAccounts != ''" class="m-connected-accounts">
+                <h2>Personnal Accounts</h2>
+
                 <div *ngFor="let account of connectedAccounts" class="m-account-container">
                     <div class="m-media-small">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" alt="">
@@ -35,6 +37,38 @@
                     </div>
                     <div class="m-page-info">
                         <div class="m-page">{{account.profileName}}</div>
+                        <div class="m-date">hinzugefügt am 23.04.22</div>
+                        <div class="m-followers">Follower: <strong> 4967</strong></div>
+                    </div>
+                    <div class="m-alert">
+                        <img src="../../../assets/img/exclamation.png" alt="">
+                    </div>
+                    <div class="m-action">
+                        <button class="m-button is-primary"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Zum Beitrag</button>
+                        <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:pencil"></i></span> Daten ändern</button>
+                    </div>
+                    <button class="m-icon-button"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
+                </div>
+            </div>
+
+            <div *ngIf="!isLoading && listOfPages != ''" class="m-connected-accounts">
+                <h2>Connected Social Media Accounts</h2>
+                <!-- category: "Science et technologie"
+                id: 21
+                isConnected: true
+                pageId: "100683432659619"
+                pageName: "Test api"
+                pagePictureUrl: "https://scontent.ftun1-2.fna.fbcdn.net/v/t39.30808-1/281098725_100683475992948_5314342680384228185_n.png?stp=cp0_dst-png_p50x50&_nc_cat=106&ccb=1-7&_nc_sid=dbb9e7&_nc_ohc=iUcTpp4RovUAX_785sX&_nc_ht=scontent.ftun1-2.fna&edm=AOf6bZoEAAAA&oh=00_AT-DPQKONMTH2_waKCZFqSWMAzS9UfeF-zOcwLX29_sYdw&oe=62B6FFA9"
+                provider: "facebook" -->
+                <div *ngFor="let page of listOfPages" class="m-account-container">
+                    <div class="m-media-small">
+                        <img src="{{page.pagePictureUrl}}" alt="">
+                        <div class="m-provider-logo">
+                            <img src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                        </div>
+                    </div>
+                    <div class="m-page-info">
+                        <div class="m-page">{{page.pageName}}</div>
                         <div class="m-date">hinzugefügt am 23.04.22</div>
                         <div class="m-followers">Follower: <strong> 4967</strong></div>
                     </div>
