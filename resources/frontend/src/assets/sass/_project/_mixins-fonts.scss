@@ -1,6 +1,8 @@
 // Fonts mixins
 // START: fontfamilys
 // primary
+@import 'fonts.scss';
+
 @mixin fontfamily-primary {
     font-family: 'Open Sans';
     // medium as default weight
@@ -93,20 +95,20 @@
 @mixin textstyle-size-16-bold {
     @include fontfamily-primary-bold;
     @include font-size(16px);
-    @include line-height(18/16);
+    @include line-height(21/16);
     @include mq(desktop) {
         @include font-size(16px);
-        @include line-height(18/16);
+        @include line-height(21/16);
     }
 }
 
 @mixin textstyle-size-16 {
     @include fontfamily-primary;
     @include font-size(16px);
-    @include line-height(18/16);
+    @include line-height(22/16);
     @include mq(desktop) {
         @include font-size(16px);
-        @include line-height(18/16);
+        @include line-height(22/16);
     }
 }
 
@@ -120,22 +122,52 @@
     }
 }
 
+@mixin textstyle-size-14-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(14px);
+    @include line-height(16/14);
+    @include mq(desktop) {
+        @include font-size(14px);
+        @include line-height(16/14);
+    }
+}
+
 @mixin textstyle-size-12 {
     @include fontfamily-primary;
     @include font-size(12px);
-    @include line-height(16/12);
+    @include line-height(17/12);
     @include mq(desktop) {
         @include font-size(12px);
-        @include line-height(16/12);
+        @include line-height(17/12);
     }
 }
 
 @mixin textstyle-size-12-bold {
     @include fontfamily-primary-bold;
     @include font-size(12px);
-    @include line-height(16/12);
+    @include line-height(17/12);
     @include mq(desktop) {
         @include font-size(12px);
-        @include line-height(16/12);
+        @include line-height(17/12);
+    }
+}
+
+@mixin textstyle-size-10 {
+    @include fontfamily-primary;
+    @include font-size(10px);
+    @include line-height(14/10);
+    @include mq(desktop) {
+        @include font-size(10px);
+        @include line-height(14/10);
+    }
+}
+
+@mixin textstyle-size-10-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(10px);
+    @include line-height(14/10);
+    @include mq(desktop) {
+        @include font-size(10px);
+        @include line-height(14/10);
     }
 }

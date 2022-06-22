@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   }
 
   toEditPage(){
-    this.router.navigate(['/home/user/edit-profile']);
+    this.router.navigate(['/application/user/edit-profile']);
   }
 
 }

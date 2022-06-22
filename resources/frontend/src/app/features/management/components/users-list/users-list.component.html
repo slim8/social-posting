@@ -1,0 +1,91 @@
+<div class="">
+    <div class="button-container">
+    <button nz-button nzType="primary" (click)="showModal()" [disabled]="setOfCheckedId.size === 0" class="m-primary-button">
+        <i nz-icon nzType="edit"></i>
+        Set Permissions 
+    </button>
+
+    <button nz-button nzType="primary" (click)="navigateToCreateUser()" class="m-primary-button" >
+        <i nz-icon nzType="edit"></i>
+        Add User
+    </button>
+    </div>
+<nz-table #nzTable [nzData]="listOfUsers" nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th nzWidth="60px"></th>
+        <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of nzTable.data">
+        <tr>
+          <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
+          <td
+            [nzChecked]="setOfCheckedId.has(data.id)"
+            [nzDisabled]="data.disabled"
+            (nzCheckedChange)="onItemChecked(data.id, $event)"
+          ></td>
+          <td>{{ data.firstName }}</td>
+          <td>{{ data.lastName }}</td>
+          <td>{{ data.email }}</td>
+        </tr>
+        <tr [nzExpand]="expandSet.has(data.id)">
+          <div class="m-table-detail-row">status : {{ data.status ? 'active' : 'not active' }}</div>
+          <div class="m-table-detail-row">{{ data.subscribe ? 'subscribe' : 'not subscribe' }}</div>
+          <div class="m-table-detail-row">{{ data.emailVerifiedAt ? 'email verified' : 'email not verified' }}</div>
+          <div class="m-table-detail-row m-permission-block">
+            <nz-tag
+              *ngFor="let tag of data.accounts; let i = index"
+              [nzMode]="'closeable'"
+              (nzOnClose)="removePermission(data.id , tag , $event)"
+              class="m-permission-tag"
+            >
+              {{ getPermissionName(tag) }}
+          </nz-tag>
+          </div>
+        </tr>
+      </ng-container>
+    </tbody>
+  </nz-table>
+  <nz-modal
+      [(nzVisible)]="isVisible"
+      (nzOnCancel)="handleCancel()"
+      [nzOkLoading]="isOkLoading"
+      [nzTitle]="modalTitle"
+      [nzContent]="modalContent"
+      [nzFooter]="modalFooter"
+    >
+      <ng-template #modalTitle>Add Permissions</ng-template>
+
+      <ng-template #modalContent>
+        <!-- <cdk-virtual-scroll-viewport itemSize="73" class="demo-infinite-container"> -->
+          <nz-list>
+            <nz-list-item *ngFor="let page of listOfPages">
+              <label nz-checkbox 
+              [nzChecked]="setOfCheckedPageId.has(page.id)"
+              (nzCheckedChange)="onItemCheckedPage(page.id, $event)"
+              ></label>
+              <nz-list-item-meta
+                nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                [nzDescription]="page.provider"
+                (click)="onItemCheckedPage(page.id, !setOfCheckedPageId.has(page.id) )"
+              >
+                <nz-list-item-meta-title>
+                  <a href="https://ng.ant.design"> {{page.pageName}}</a>
+                </nz-list-item-meta-title>
+              </nz-list-item-meta>
+            </nz-list-item>
+          </nz-list>
+        <!-- </cdk-virtual-scroll-viewport> -->
+      </ng-template>
+
+      <ng-template #modalFooter>
+        <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+        <button nz-button nzType="primary" (click)="addPermission()" [nzLoading]="isOkLoading">save</button>
+      </ng-template>
+  </nz-modal>
+</div>

@@ -99,13 +99,14 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'password' => 'required|string|min:6',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
             'isSubscriber' => '',
         ], [
             'companyName.required' => 'This is a required message for company name',
         ]);
         if ($validator->fails()) {
-            return response(['errors' => $validator->errors()->all()], 422);
+            return response($validator->errors(), 422);
         }
 
         $user = User::create([

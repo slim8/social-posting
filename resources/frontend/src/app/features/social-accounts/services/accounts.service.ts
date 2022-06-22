@@ -25,4 +25,8 @@ export class AccountsService {
         return this.http.post(sharedConstants.API_ENDPOINT + '/accounts/status/1/' + id, {});
     }
 
+    getRecentPosts(params : any = []) {
+        return this.http.get(sharedConstants.API_ENDPOINT+ '/posts', {params})
+    }
+
 }

@@ -1,0 +1,150 @@
+.m-icon {
+    position: relative;
+    padding: 20px;
+
+    &.dashboard, &.published-posts, &.accounts {
+        > i {
+            font-size: 21px;
+            >svg {
+                >path {
+                    fill: $color-base-0;
+                    stroke: transparent;
+                }
+            }
+        }
+    }
+
+    &.drafts, &.my-album, &.create-post {
+        i {
+            svg {
+                >path {
+                    stroke: $color-base-0;
+                    fill: transparent;
+                }
+            }
+        }
+    }
+
+    &.is-selected {
+        &.dashboard, &.published-posts, &.accounts {
+            i {
+                svg {
+                    >path {
+                        fill: $color-media-primary-orange!important;
+                    }
+                }
+            }
+        }
+
+        &.drafts, &.my-album, &.create-post {
+            i {
+                svg {
+                    >path {
+                        stroke: $color-media-primary-orange!important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.m-button {
+    > span {
+        > i {
+            > svg {
+                fill: transparent;
+            }
+        }
+    }
+}
+
+.m-login-icon {
+    > i {
+        font-size: 60px;
+        > svg {
+            > path {
+                fill: $color-media-background-light-grey;
+                stroke: $color-media-background-light-grey;
+
+                .m-accounts-header & {
+                    display: none;
+                    fill: $color-base-0;
+                    stroke: $color-base-0;
+                }
+            }
+        }
+    }
+}
+
+svg {
+    > path {
+        .m-accounts-header & {
+            fill: $color-base-0;
+            stroke: $color-base-0;
+        }
+    }
+}
+
+.m-loading {
+    >i {
+        >svg {
+            width: 60px;
+            height: 60px;
+        }
+    }
+}
+
+.m-alert-container {
+    &.is-closed {
+        animation: 0.3s closing;
+    }
+
+    @keyframes closing {
+        0% {
+            height: 141px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        100% {
+            height: 0;
+            opacity: 0;
+            transform: translateY(-200px);
+        }
+    }
+
+    > .m-alert {
+        position: relative;
+        .mod-dashboard & {
+            background-color: $color-base-0;
+            border: 0;
+            padding: 27px 29px;
+            height: 141px;
+    
+            > .m-alert-title {
+                width: 216px;
+                @include textstyle-size-16-bold();
+                padding-bottom: 11px;
+            }
+    
+            > .m-alert-text {
+                @include textstyle-size-16();
+            }
+    
+            > .m-close-icon {
+                position: absolute;
+                right: 19px;
+                top: 21px;
+                width: 10px;
+                height: 10px;
+                cursor: pointer;
+
+                >img {
+                    position: absolute;
+                    z-index: 9;
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+        }
+    }
+}

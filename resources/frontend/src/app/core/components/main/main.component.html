@@ -1,15 +1,11 @@
 <nz-layout class="mod-page-layout">
-  <app-navbar
-    [isCollapsed]="isCollapsed"
-    (newCollapseEvent)="isCollapsed = !isCollapsed"
-  >
-  </app-navbar>
+  <app-navbar></app-navbar>
 
   <nz-layout>
     <nz-sider
       class="menu-sidebar"
       nzCollapsible
-      nzWidth="226px"
+      nzWidth="85px"
       nzBreakpoint="md"
       [(nzCollapsed)]="isCollapsed"
       [nzTrigger]="null"
@@ -18,10 +14,8 @@
     </nz-sider>
 
     <nz-content>
-      <div class="inner-content">
-        <router-outlet></router-outlet>
-      </div>
+      <router-outlet></router-outlet>
     </nz-content>
   </nz-layout>
-  <app-footer> </app-footer>
+  <!-- <app-footer> </app-footer> -->
 </nz-layout>
