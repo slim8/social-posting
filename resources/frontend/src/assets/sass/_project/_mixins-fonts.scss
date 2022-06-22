@@ -115,20 +115,20 @@
 @mixin textstyle-size-14 {
     @include fontfamily-primary;
     @include font-size(14px);
-    @include line-height(16/14);
+    @include line-height(19.07/14);
     @include mq(desktop) {
         @include font-size(14px);
-        @include line-height(16/14);
+        @include line-height(19.07/14);
     }
 }
 
 @mixin textstyle-size-14-bold {
     @include fontfamily-primary-bold;
     @include font-size(14px);
-    @include line-height(16/14);
+    @include line-height(19.07/14);
     @include mq(desktop) {
         @include font-size(14px);
-        @include line-height(16/14);
+        @include line-height(19.07/14);
     }
 }
 
