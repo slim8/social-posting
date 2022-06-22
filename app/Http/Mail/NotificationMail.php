@@ -40,6 +40,6 @@ class NotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->view($this->template)->from(env('MAIL_FROM_ADDRESS'))->to($this->mailto)->subject($this->mailsubject);
+        return $this->view($this->template)->from(envValue('MAIL_FROM_ADDRESS'))->to($this->mailto)->subject($this->mailsubject);
     }
 }

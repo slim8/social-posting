@@ -35,7 +35,7 @@ class InstagramController extends Controller
             return $responseObject;
         }
         sleep(15);
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$creationId.'?fields=status,status_code&access_token='.$object['access_token']);
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$creationId.'?fields=status,status_code&access_token='.$object['access_token']);
 
         if ($response->json('status_code') == 'ERROR') {
             $responseObject['status'] = false;
@@ -78,7 +78,7 @@ class InstagramController extends Controller
     public function postMediaUrl($igUser, $token, $url, string $type = 'image')
     {
         $mediaParameters = $type == 'video' ? '&media_type=VIDEO&video_url=' : '&image_url=';
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.$mediaParameters.$url.'&is_carousel_item=true');
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.$mediaParameters.$url.'&is_carousel_item=true');
 
         if ($response->json('id')) {
             return $response->json('id');
@@ -93,9 +93,9 @@ class InstagramController extends Controller
     public function genPublicUrl($mediaId, $object)
     {
         $parameter = RequestsTrait::prepareParameters(['access_token' => $object['access_token'], 'fields' => 'shortcode']);
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$mediaId.'?'.$parameter);
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$mediaId.'?'.$parameter);
         if ($response->json('shortcode')) {
-            return env('INSTAGRAM_ROOT_LINK').$response->json('shortcode');
+            return envValue('INSTAGRAM_ROOT_LINK').$response->json('shortcode');
         } else {
             return false;
         }
@@ -108,7 +108,7 @@ class InstagramController extends Controller
     {
         $parameter = RequestsTrait::prepareParameters($object);
 
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
         if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
@@ -133,7 +133,7 @@ class InstagramController extends Controller
             $object['media_type'] = 'VIDEO';
         }
         $parameter = RequestsTrait::prepareParameters($object);
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
 
         return $response->json('id');
     }
@@ -144,7 +144,7 @@ class InstagramController extends Controller
     public function postContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
 
         return $response->json('id');
     }
@@ -291,7 +291,7 @@ class InstagramController extends Controller
             return false;
         }
 
-        $url = env('FACEBOOK_ENDPOINT').$businessId.'?fields=name,username,profile_picture_url,biography&access_token='.$accessToken;
+        $url = envValue('FACEBOOK_ENDPOINT').$businessId.'?fields=name,username,profile_picture_url,biography&access_token='.$accessToken;
         $response = Http::get($url);
 
         return $response->json();
@@ -302,7 +302,7 @@ class InstagramController extends Controller
      */
     public function getBusinessAccountId($pageId, $accessToken)
     {
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'?fields=instagram_business_account&access_token='.$accessToken);
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?fields=instagram_business_account&access_token='.$accessToken);
 
         if ($response->json('instagram_business_account')) {
             return $response->json('instagram_business_account')['id'];
@@ -360,7 +360,7 @@ class InstagramController extends Controller
         $acountPost = AccountPost::where('id', $accountPostId)->first();
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=engagement,impressions,saved');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=engagement,impressions,saved');
         $response = $request->json('data');
 
         // Start Fetching Statistics
