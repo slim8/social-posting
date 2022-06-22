@@ -163,7 +163,7 @@ class GeneralSocialController extends Controller
                         $obj['caption'] = $message;
                     }
                     $BusinessIG = $account->uid;
-                    $obj['access_token'] = $this->instagramController->getInstagramAccessToken($account->id);
+                    $obj['access_token'] = $this->instagramController->getAccessToken($account->id);
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos) : POST::$STATUS_DRAFT;
                 }
 

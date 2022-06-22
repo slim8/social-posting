@@ -36,4 +36,17 @@ export class SharedModule {
         this.messageService.create(type, ` ${message}`);
     }
 
+    initSideMenu(param: string = '') {
+        const links = document.querySelectorAll('.m-menu-item');
+        links.forEach((link: any) => {
+            link.parentElement.children[0].classList.remove('is-selected');
+            link.classList.remove('is-selected');
+        });
+        let activatedLink = document.getElementsByClassName(param)[0];
+        if (activatedLink) {
+            activatedLink?.parentElement?.children[0].classList.add('is-selected');
+            activatedLink?.parentElement?.children[1].classList.add('is-selected');
+        }
+    }
+
 }

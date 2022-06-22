@@ -1,0 +1,363 @@
+@import '../../../assets/sass/_project/_config.scss';
+@import '../../../assets/sass/_project/base.scss';
+
+.mod-accounts {
+    width: 100%;
+    height: 100%;
+    background-color: $color-base-0;
+
+    > .m-wrapper {
+        height: 100%;
+        > .m-accounts-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 33px 38px 38px 48px;
+            border-bottom: 1px solid $color-media-secondary-button;
+            align-items: center;
+
+            > h1 {
+                color: $color-media-black-opacity-half;
+                margin: 0;
+            }
+
+            > .m-button {
+                > span {
+                    margin-right: 12px;
+                }
+            }
+        }
+
+        > .m-accounts-container {
+            position: relative;
+            height: calc(100% - 118px);
+
+            > .m-loading {
+                position: absolute;
+                left: 50%;
+                top: 32%;
+                transform: translate3d(-50%, -50%, 0);
+            }
+            
+            > .m-login {
+                width: 500px;
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 165px 40px 40px 40px;
+
+                >.m-login-icon {
+                    // placeholders.scss
+                    margin-bottom: 29px;
+                }
+
+                > .m-message-info {
+                    text-align: center;
+                    margin-bottom: 38px;
+
+                    > h4 {
+                        @include textstyle-size-14-bold();
+                        color: $color-media-dark-grey;
+                    }
+                    > p {
+                        @include textstyle-size-14();
+                        color: $color-media-dark-grey;
+                        margin: 0;
+                    }
+                }
+
+                > .m-login-button {
+                    > .m-button {
+                        > span {
+                            margin-right: 12px;
+                        }
+                    }
+                }
+            }
+
+            > .m-connected-accounts {
+
+                > .m-account-container {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    padding: 40px 0 50px 71px;
+                    gap: 50px;
+                    border-bottom: 1px solid $color-media-secondary-button;
+
+                    > .m-media-small {
+                        width: 95px;
+                        height: 95px;
+                        position: relative;
+
+                        > img {
+                            border-radius: 50%;
+                            display: block;
+                            object-fit: cover;
+                            width: 95px;
+                            height: 95px;
+                        }
+
+                        > .m-provider-logo {
+                            position: absolute;
+                            bottom: -8px;
+                            right: -8px;
+                            >img {
+                                width: 60px;
+                                border-radius: 5px;
+                            }
+                        }
+                    }
+
+                    > .m-page-info {
+                        > .m-page {
+                            @include textstyle-size-16-bold();
+                        }
+                        > .m-date {
+                            @include textstyle-size-12();
+                            color: $color-media-black-opacity-half;
+                            margin-bottom: 19px;
+                        }
+                        > .m-followers {
+                            @include textstyle-size-12();
+                            color: $color-media-black-opacity-half;
+                        }
+                    }
+
+                    > .m-alert {
+                        >i {
+                            > svg {
+                                fill: transparent;
+                            }
+                        }
+                    }
+
+                    > .m-action {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 7px;
+                        padding-left: 90px;
+
+                        > .m-button {
+
+                            &.is-disabled {
+                                color: $color-base-100;
+                            }
+
+                            >span {
+                                margin-right: 14px;
+                            }
+                        }
+                    }
+
+                    >.m-icon-button {
+                        position: absolute;
+                        border: none;
+                        outline: none;
+                        background-color: transparent;
+                        color: $color-media-black-opacity-half;
+                        right: 80px;
+                        top: 50px;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        > .m-modal-pages {
+            display: none;
+            z-index: 19;
+            position: absolute;
+            width: 0;
+            top: 40%;
+            left: 50%;
+            transform: translate3D(-50%, -50%, 0);
+            background-color: $color-base-0;
+            box-shadow: 0 0 8px 2px $color-media-light-grey;
+            padding: 20px;
+
+            &.open {
+                display: block;
+                width: 593px;
+                animation: 0.2s openModal;
+
+                @keyframes openModal {
+                    0% {
+                        opacity: 0;
+                        width: 0;
+                        height: 0;
+                        top: 60%;
+                        left: 20%;
+                    }
+                    100% {
+                        opacity: 1;
+                        height: fit-content;
+                        width: 593px;
+                        top: 40%;
+                        left: 50%;
+                    }
+                }
+            }
+
+            // &::before {
+            //     content: '';
+            //     z-index: 18;
+            //     position: absolute;
+            //     left: -100vw;
+            //     top: -100vh;
+            //     width: 300vw;
+            //     height: 300vh;
+            //     background-color: rgba(0, 0, 0, 0.5);
+            // }
+
+            > .m-close-icon {
+                position: absolute;
+                right: 24px;
+                top: 24px;
+                height: 10px;
+                width: 10px;
+                cursor: pointer;
+
+                >img {
+                    position: absolute;
+                    z-index: 9;
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+
+            > .m-modal-header {
+                gap: 11px;
+                display: flex;
+                flex-direction: column;
+                padding: 15px 19px 0 19px;
+
+                > .m-title {
+                    @include textstyle-size-14-bold();
+                }
+
+                > .m-text {
+                    @include textstyle-size-12();
+                    margin-bottom: 32px;
+                }
+
+                > .m-list-title {
+                    @include textstyle-size-10();
+                    color: $color-media-black-opacity-half;
+                    margin-bottom: 32px;
+                }
+            }
+
+            > .m-form-pages {
+                max-height: 270px;
+                overflow: auto;
+                padding-left: 28px;
+
+                > tr {
+
+                    > td {
+
+                        > label {
+                            display: flex;
+                            align-items: center;
+
+                            > input {
+                                width: 20px;
+                                height: 20px;
+                                -webkit-appearance:none;
+                                outline: none;
+                                border: 1px solid $color-media-black-opacity-half;
+                                border-radius: 0;
+                                position: relative;
+
+                                &:checked::after {
+                                    content: '';
+                                    background-image: url('../../../assets/img/Check.jpg');
+                                    position: absolute;
+                                    background-size: 19px 19px;
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    width: 20px;
+                                    left: -1px;
+                                    top: -1px;
+                                    border: 1px solid grey;
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .m-submit-button {
+                float: right;
+            }
+        }
+
+        > .m-success-modal {
+            display: none;
+            z-index: 19;
+            position: absolute;
+            width: 595px;
+            height: 356px;
+            top: 40%;
+            left: 50%;
+            transform: translate3D(-50%, -50%, 0);
+            background-color: $color-base-0;
+            box-shadow: 0 0 8px 2px $color-media-light-grey;
+            padding: 20px;
+
+            &.open {
+                display: flex;
+            }
+
+            > .m-close-icon {
+                position: absolute;
+                right: 24px;
+                top: 24px;
+                height: 10px;
+                width: 10px;
+                cursor: pointer;
+
+                >img {
+                    position: absolute;
+                    z-index: 9;
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+
+            >.m-success {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                width: 350px;
+                margin: auto;
+                gap: 11px;
+
+                > img {
+                    width: 33px;
+                    height: 33px;
+                    margin-bottom: 17px
+                }
+
+                > .m-success-title {
+                    @include textstyle-size-14-bold();
+
+                    > img {
+                        margin-right: 18px;
+                        width: 17px;
+                    }
+                }
+
+                > p {
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
