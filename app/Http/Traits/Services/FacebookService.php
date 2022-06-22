@@ -42,4 +42,19 @@ trait FacebookService
 
         return $response->json('data')['url'];
     }
+
+    /**
+     * Get Facebook Page Info.
+     */
+    public static function getFacebookPageInfo($pageId, $accessToken)
+    {
+        $pageInfo = new \stdClass();
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?access_token='.$accessToken.'&fields=followers_count,link');
+        $responseData = $response->json();
+
+        $pageInfo->followers = $responseData['followers_count'];
+        $pageInfo->link = $responseData['link'];
+
+        return $pageInfo;
+    }
 }
