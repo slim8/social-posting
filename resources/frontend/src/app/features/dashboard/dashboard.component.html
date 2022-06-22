@@ -63,21 +63,35 @@
                                         <div class="m-page">{{post.message}}</div>
                                         <div class="m-date">{{post.createdAt}}</div>
                                     </td>
-                                    <td class="m-stats">
+                                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
                                         <div class="m-like-count">{{post.stats.likes}}</div>
                                         <div class="m-text">erreichte Personen</div>
                                     </td>
-                                    <td class="m-stats">
+                                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
                                         <div class="m-share-count">{{post.stats.shares}}</div>
                                         <div class="m-text">Gefällt mir-Angaben</div>
                                     </td>
-                                    <td class="m-stats">
+                                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
                                         <div class="m-comment-count">{{post.stats.comments}}</div>
                                         <div i18n="Comment|Comment@@Commment" class="m-text">Kommentare</div>
                                     </td>
+
+                                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                                        <div class="m-like-count">{{post.stats.engagement}}</div>
+                                        <div class="m-text">engagement</div>
+                                    </td>
+                                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                                        <div class="m-share-count">{{post.stats.saves}}</div>
+                                        <div class="m-text">saves</div>
+                                    </td>
+                                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                                        <div class="m-comment-count">{{post.stats.impressions}}</div>
+                                        <div i18n="Comment|Comment@@Commment" class="m-text">impressions</div>
+                                    </td> 
                                     <td class="m-action">
                                         <a href="{{post.url}}" target="_blank" class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</a>
                                     </td>
+
                                 </tr>
                             </tbody>
                         </table>
