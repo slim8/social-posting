@@ -87,12 +87,11 @@ return [
     |
     */
     'models' => [
-
         'role' => \App\Models\Role::class,
 
         'permission' => \App\Models\Permission::class,
 
-        /**
+        /*
          * Will be used only if the teams functionality is enabled.
          */
         'team' => \App\Models\Team::class,
@@ -107,12 +106,11 @@ return [
     |
     */
     'tables' => [
-
         'roles' => 'roles',
 
         'permissions' => 'permissions',
 
-        /**
+        /*
          * Will be used only if the teams functionality is enabled.
          */
         'teams' => 'teams',
@@ -133,22 +131,22 @@ return [
     |
     */
     'foreign_keys' => [
-        /**
+        /*
          * User foreign key on Laratrust's role_user and permission_user tables.
          */
         'user' => 'user_id',
 
-        /**
+        /*
          * Role foreign key on Laratrust's role_user and permission_role tables.
          */
         'role' => 'role_id',
 
-        /**
+        /*
          * Role foreign key on Laratrust's permission_user and permission_role tables.
          */
         'permission' => 'permission_id',
 
-        /**
+        /*
          * Role foreign key on Laratrust's role_user and permission_user tables.
          */
         'team' => 'team_id',
@@ -163,31 +161,31 @@ return [
     |
     */
     'middleware' => [
-        /**
+        /*
          * Define if the laratrust middleware are registered automatically in the service provider
          */
         'register' => true,
 
-        /**
+        /*
          * Method to be called in the middleware return case.
          * Available: abort|redirect
          */
         'handling' => 'abort',
 
-        /**
+        /*
          * Handlers for the unauthorized method in the middlewares.
          * The name of the handler must be the same as the handling.
          */
         'handlers' => [
-            /**
+            /*
              * Aborts the execution with a 403 code and allows you to provide the response text
              */
             'abort' => [
                 'code' => 403,
-                'message' => 'User does not have any of the necessary access rights.'
+                'message' => 'User does not have any of the necessary access rights.',
             ],
 
-            /**
+            /*
              * Redirects the user to the given url.
              * If you want to flash a key to the session,
              * you can do it by setting the key and the content of the message
@@ -197,10 +195,10 @@ return [
                 'url' => '/home',
                 'message' => [
                     'key' => 'error',
-                    'content' => ''
-                ]
-            ]
-        ]
+                    'content' => '',
+                ],
+            ],
+        ],
     ],
 
     'teams' => [
@@ -299,7 +297,7 @@ return [
         | These middleware will get attached onto each Laratrust panel route.
         |
         */
-        'middleware' => ['web','api'],
+        'middleware' => ['web', 'api'],
 
         /*
         |--------------------------------------------------------------------------
@@ -340,5 +338,5 @@ return [
             // The user won't be able to delete the role.
             'not_deletable' => [],
         ],
-    ]
+    ],
 ];
