@@ -54,28 +54,29 @@
                                         <div class="m-media-small">
                                             <img src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg" alt="">
                                             <div class="m-provider-logo">
-                                                <img src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                                                <img *ngIf="post.provider == 'instagram'" class="instagram" src="../../../assets/img/svgs/icons/instagram.svg" alt="">
+                                                <img *ngIf="post.provider == 'facebook'" class="facebook" src="../../../assets/img/svgs/icons/facebook.svg" alt="">
                                             </div>
                                         </div>
                                     </td>
                                     <td class="m-page-info">
-                                        <div class="m-page">Testpost Detlef</div>
-                                        <div class="m-date">24.05.2022, 14:05</div>
+                                        <div class="m-page">{{post.message}}</div>
+                                        <div class="m-date">{{post.createdAt}}</div>
                                     </td>
                                     <td class="m-stats">
-                                        <div class="m-like-count">367</div>
+                                        <div class="m-like-count">{{post.stats.likes}}</div>
                                         <div class="m-text">erreichte Personen</div>
                                     </td>
                                     <td class="m-stats">
-                                        <div class="m-share-count">58</div>
+                                        <div class="m-share-count">{{post.stats.shares}}</div>
                                         <div class="m-text">Gefällt mir-Angaben</div>
                                     </td>
                                     <td class="m-stats">
-                                        <div class="m-comment-count">8</div>
+                                        <div class="m-comment-count">{{post.stats.comments}}</div>
                                         <div i18n="Comment|Comment@@Commment" class="m-text">Kommentare</div>
                                     </td>
                                     <td class="m-action">
-                                        <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</button>
+                                        <a href="{{post.url}}" target="_blank" class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum Beitrag</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -96,7 +97,7 @@
         </div>
         <div class="m-right-col">
             <div class="m-buttons">
-                <button (change)="disableButtons()" disabled="true" routerLink="../create-post" class="m-button" [ngClass]="{'is-primary': listOfPages != '', 'is-disabled' : listOfPages == ''}"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Beitrag erstellen</button>
+                <button (change)="disableButtons()" disabled="true" routerLink="../create-post" class="m-button m-create-post" [ngClass]="{'is-primary': listOfPages != '', 'is-disabled' : listOfPages == ''}"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Beitrag erstellen</button>
                 <button class="m-button is-secondary"><span><i nz-icon nzType="ng-zorro:profile"></i></span> Verknüpfte Konten</button>
             </div>
             <div class="m-news">
