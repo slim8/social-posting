@@ -39,12 +39,11 @@ class AccountController extends Controller
 
         $account->update(['status' => $action]);
 
-        if ($action){
+        if ($action) {
             $object['message'] = 'Your account has been connected';
         } else {
             $object['message'] = 'Your account has been disconnected';
         }
-
 
         return RequestsTrait::processResponse(true, $object);
     }
