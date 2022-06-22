@@ -145,7 +145,8 @@ export class DashboardComponent implements OnInit {
             .set("getStat", true);
         this.accountsService.getRecentPosts(params).subscribe({
             next: (event: any) => {
-                this.posts = event;
+                console.log(event)
+                this.posts = event.posts;
             },
             error() {
 
