@@ -19,7 +19,8 @@ const openIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xm
 export class DashboardComponent implements OnInit {
 
     isVisible: boolean = true;
-    isLoading: boolean = false;
+    isLoadingPages: boolean = true;
+    isLoadingPosts: boolean = true;
     validateForm!: FormGroup;
     connectedAccounts: any = [];
     posts: any = [];
@@ -104,7 +105,7 @@ export class DashboardComponent implements OnInit {
     }
 
     getConnectedAccounts() {
-        this.isLoading = true;
+        this.isLoadingPages = true;
 
         setTimeout(() => {
             this.accountsService.getConnectedAccounts().subscribe({
@@ -113,10 +114,10 @@ export class DashboardComponent implements OnInit {
                 },
                 error: (err) => {
                     this.connectedAccounts = [];
-                    this.isLoading = false;
+                    this.isLoadingPages = false;
                 },
                 complete: () => {
-                    this.isLoading = false;
+                    this.isLoadingPages = false;
                 }
             })
         }, 2000);
@@ -130,6 +131,7 @@ export class DashboardComponent implements OnInit {
                 setTimeout(() => {
                     this.disableButtons();
                 }, 50)
+                this.isLoadingPages = false;
             },
             (error) => {
                 this.listOfPages = [];
@@ -147,12 +149,13 @@ export class DashboardComponent implements OnInit {
             next: (event: any) => {
                 console.log(event)
                 this.posts = event.posts;
+                this.isLoadingPosts = false;
             },
             error() {
 
             },
             complete: () => {
-
+                this.isLoadingPosts = false;
             }
         })
     }

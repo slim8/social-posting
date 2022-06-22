@@ -31,7 +31,7 @@
                         Alle Beiträge ansehen
                     </div>
                 </div>
-                <div *ngIf="listOfPages == ''" class="m-login">
+                <div *ngIf="listOfPages == '' && !isLoadingPages && !isLoadingPosts" class="m-login">
                     <span class="m-login-icon">
                         <i nz-icon nzType="ng-zorro:add"></i>
                     </span>
@@ -45,7 +45,11 @@
                     </div>
                 </div>
 
-                <div *ngIf="listOfPages != ''" class="m-history">
+                <div *ngIf="isLoadingPages || isLoadingPosts" class="m-loading">
+                    <i nz-icon nzType="loading" nzTheme="outline"></i>
+                </div>
+
+                <div *ngIf="listOfPages != '' && !isLoadingPages && !isLoadingPosts" class="m-history">
                     <div class="m-history-table">
                         <table *ngIf="posts != ''">
                             <tbody>

@@ -39,10 +39,18 @@
                 }
 
                 > .m-posts-history {
+                    position: relative;
                     min-height: 452px;
                     width: 100%;
                     height: 100%;
                     background-color: $color-base-0;
+
+                    > .m-loading {
+                        position: absolute;
+                        left: 50%;
+                        top: 40%;
+                        transform: translate3d(-50%, -50% ,0);
+                    }
 
                     > .m-history-header {
                         height: 50px;
@@ -176,6 +184,8 @@
                                             a {
                                                 @include textstyle-size-12();
                                                 display: flex;
+                                                align-items: center;
+                                                min-width: 121px;
                                                 color: $color-base-100;
                                                 padding: 7px 13px 9px;
 
