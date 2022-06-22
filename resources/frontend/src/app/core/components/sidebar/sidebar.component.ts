@@ -8,6 +8,7 @@ const folderIcon = '<svg width="20" height="16" viewBox="0 0 20 16" fill="none" 
 const editIcon = '<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 1.99997H3C1.89543 1.99997 1 2.8954 1 3.99997V16C1 17.1045 1.89543 18 3 18H15C16.1046 18 17 17.1045 17 16V9.99997M15.4142 6.41417L16.5 5.32842C17.281 4.54737 17.281 3.28104 16.5 2.5C15.7189 1.71895 14.4526 1.71895 13.6715 2.50001L12.5858 3.58575M15.4142 6.41417L9.37795 12.4505C9.09875 12.7297 8.74315 12.9201 8.35596 12.9975L5.41422 13.5858L6.00257 10.6441C6.08001 10.2569 6.27032 9.90131 6.54951 9.62211L12.5858 3.58575M15.4142 6.41417L12.5858 3.58575" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const albumIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6C3 4.34315 4.34315 3 6 3H14C15.6569 3 17 4.34315 17 6V14C17 15.6569 15.6569 17 14 17H6C4.34315 17 3 15.6569 3 14V6Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7V18C21 19.6569 19.6569 21 18 21H7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12.375L6.66789 8.70711C7.05842 8.31658 7.69158 8.31658 8.08211 8.70711L10.875 11.5M10.875 11.5L13.2304 9.1446C13.6209 8.75408 14.2541 8.75408 14.6446 9.14461L17 11.5M10.875 11.5L12.8438 13.4688" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const sendIcon = '<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 6.31372L0.744282 5.49561C0.417352 5.5978 0.182649 5.88482 0.147406 6.22553C0.112163 6.56624 0.283148 6.89522 0.58224 7.06216L1 6.31372ZM18 1L18.8155 1.26385C18.9141 0.959006 18.8345 0.624611 18.6091 0.396932C18.3837 0.169252 18.0501 0.0863045 17.7443 0.181891L18 1ZM12.5 18L11.7437 18.4034C11.9056 18.7069 12.2332 18.8842 12.5758 18.8538C12.9184 18.8234 13.2096 18.5911 13.3155 18.2638L12.5 18ZM1.25572 7.13183L18.2557 1.81811L17.7443 0.181891L0.744282 5.49561L1.25572 7.13183ZM17.1845 0.736154L11.6845 17.7362L13.3155 18.2638L18.8155 1.26385L17.1845 0.736154ZM13.2563 17.5966L9.2563 10.0966L7.7437 10.9034L11.7437 18.4034L13.2563 17.5966ZM8.91776 9.75155L1.41776 5.56527L0.58224 7.06216L8.08224 11.2484L8.91776 9.75155ZM9.10609 11.1061L18.6061 1.60609L17.3939 0.393908L7.89391 9.89391L9.10609 11.1061Z" fill="white"/></svg>';
+const pencilIcon = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.7842 6.33731L6.72307 13.3986C6.51367 13.608 6.24697 13.7507 5.95658 13.8088L3.75028 14.25L4.19154 12.0437C4.24961 11.7533 4.39235 11.4867 4.60174 11.2773L11.6629 4.21599M13.7842 6.33731L14.8449 5.27665C15.1378 4.98376 15.1378 4.50888 14.8449 4.21599L13.7842 3.15533C13.4913 2.86244 13.0165 2.86244 12.7236 3.15533L11.6629 4.21599M13.7842 6.33731L11.6629 4.21599" stroke="black" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 @Component({
     selector: 'app-sidebar',
@@ -27,6 +28,7 @@ export class SidebarComponent implements OnInit {
         this.iconService.addIconLiteral('ng-zorro:edit', editIcon);
         this.iconService.addIconLiteral('ng-zorro:album', albumIcon);
         this.iconService.addIconLiteral('ng-zorro:send', sendIcon);
+        this.iconService.addIconLiteral('ng-zorro:pencil', pencilIcon);
     }
 
     ngOnInit(): void {
@@ -70,4 +72,5 @@ export class SidebarComponent implements OnInit {
             event.target.classList.add('is-selected');
         }
     }
+
 }

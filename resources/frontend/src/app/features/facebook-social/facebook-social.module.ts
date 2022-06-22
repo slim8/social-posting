@@ -12,32 +12,31 @@ import { FacebookSocialComponent } from './facebook-social.component';
 import { FacebookModule } from 'ngx-facebook';
 import { FacebookPagesComponent } from './components/facebook-pages/facebook-pages.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
-import {  } from '../../shared/ng-zorro-antd.module'
+import { } from '../../shared/ng-zorro-antd.module'
 import { SharedModule } from 'src/app/shared/shared.module';
-import {AccountsPostsComponent} from "./components/accounts-posts/accounts-posts.component";
+import { AccountsPostsComponent } from "./components/accounts-posts/accounts-posts.component";
 import { CarouselComponent } from 'src/app/shared/components/carousel/carousel.component';
 
 
 @NgModule({
-  declarations: [
-    FacebookSocialComponent,
-    FacebookPagesComponent,
-    CreatePostComponent,
-    AccountsPostsComponent,
-    CarouselComponent
-  ],
-  imports: [
-    NzIconModule,
-    CommonModule,
-    FacebookSocialRoutingModule,
-    FacebookModule,
-    FormsModule,
-    ReactiveFormsModule,
-    DemoNgZorroAntdModule,
-    IconsProviderModule,
-    SharedModule,
-  ],
-  exports: [
-  ]
+    declarations: [
+        FacebookSocialComponent,
+        FacebookPagesComponent,
+        CreatePostComponent,
+        AccountsPostsComponent
+    ],
+    imports: [
+        NzIconModule,
+        CommonModule,
+        FacebookSocialRoutingModule,
+        FacebookModule,
+        FormsModule,
+        ReactiveFormsModule,
+        DemoNgZorroAntdModule,
+        IconsProviderModule,
+        SharedModule,
+    ],
+    exports: [
+    ]
 })
 export class FacebookSocialModule { }

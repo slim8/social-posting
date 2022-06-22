@@ -63,6 +63,7 @@ figure {
     }
 
     &.is-disabled {
+        cursor: not-allowed;
         background-color: $color-media-light-grey;
     }
 }

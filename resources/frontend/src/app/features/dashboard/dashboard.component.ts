@@ -1,5 +1,7 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { LoginResponse } from 'ngx-facebook';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -17,10 +19,10 @@ const openIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xm
 export class DashboardComponent implements OnInit {
 
     isVisible: boolean = true;
-    isWaiting: boolean = false;
     isLoading: boolean = false;
     validateForm!: FormGroup;
     connectedAccounts: any = [];
+    posts: any = [];
     listOfPages: any = [];
     user = {
         accessToken: '',
@@ -35,12 +37,17 @@ export class DashboardComponent implements OnInit {
         private service: FacebookSocialService,
         private accountsService: AccountsService,
         private sharedModule: SharedModule,
-        private formBuilder: FormBuilder) {
+        private formBuilder: FormBuilder,
+        private router: Router
+    ) {
         this.iconService.addIconLiteral('ng-zorro:add', addIcon);
         this.iconService.addIconLiteral('ng-zorro:open', openIcon);
     }
 
     ngOnInit(): void {
+        if (this.router.url.includes('dashboard')) {
+            this.sharedModule.initSideMenu('dashboard');
+        }
         this.validateForm = this.formBuilder.group({
             myChoices: new FormArray([]),
         });
@@ -48,6 +55,11 @@ export class DashboardComponent implements OnInit {
 
         closeButton?.addEventListener('click', this.closeAlert);
         this.getPages();
+        this.getRecentPosts();
+        setTimeout(() => {
+            this.disableButtons();
+        }, 50)
+
     }
 
     closeAlert(event: any) {
@@ -59,24 +71,19 @@ export class DashboardComponent implements OnInit {
     }
 
     loginWithFacebook() {
-        this.isWaiting = true;
         this.service.loginWithFacebook().then((res: LoginResponse) => {
             this.currentUser = res;
-            console.log('this.currentUser');
-            console.log(this.currentUser);
             this.user = {
                 ...this.user,
                 accessToken: res.authResponse.accessToken,
                 id: res.authResponse.userID,
             };
-            console.log(this.user);
             this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
                 this.listpages = response.pages;
                 this.getConnectedAccounts();
-                this.isWaiting = false;
                 this.showModal();
                 if (this.listpages) {
                     if (this.listpages.length > 0) {
@@ -93,12 +100,10 @@ export class DashboardComponent implements OnInit {
         })
             .catch(() => console.error('error'))
             .finally(() => {
-                this.isWaiting = false;
             });
     }
 
     getConnectedAccounts() {
-        this.isWaiting = true;
         this.isLoading = true;
 
         setTimeout(() => {
@@ -108,11 +113,9 @@ export class DashboardComponent implements OnInit {
                 },
                 error: (err) => {
                     this.connectedAccounts = [];
-                    this.isWaiting = false;
                     this.isLoading = false;
                 },
                 complete: () => {
-                    this.isWaiting = false;
                     this.isLoading = false;
                 }
             })
@@ -123,27 +126,39 @@ export class DashboardComponent implements OnInit {
     getPages() {
         this.service.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
-                console.log('pages');
-                console.log(success);
                 this.listOfPages = success.pages;
+                setTimeout(() => {
+                    this.disableButtons();
+                }, 50)
             },
             (error) => {
-                this.listOfPages = []
+                this.listOfPages = [];
             }
         );
+    }
+
+    getRecentPosts() {
+        const params = new HttpParams()
+            .set("filterBy", "AccountsPosts")
+            .set("limit", "4")
+            .set("status", "PUBLISH")
+            .set("getStat", true);
+        this.accountsService.getRecentPosts(params).subscribe({
+            next: (event: any) => {
+                this.posts = event;
+            },
+            error() {
+
+            },
+            complete: () => {
+
+            }
+        })
     }
 
     showModal(): void {
         let modal = document.querySelector('.m-modal-pages');
         modal?.classList.add('open');
-    }
-
-    handleOk(): void {
-        this.isVisible = false;
-    }
-
-    handleCancel(): void {
-        this.isVisible = false;
     }
 
     onSubmit() {
@@ -207,5 +222,16 @@ export class DashboardComponent implements OnInit {
     closeSuccessModal() {
         let modal = document.querySelector('.m-success-modal');
         modal?.classList.remove('open');
+    }
+
+    disableButtons() {
+        let disabledButtons = document.querySelectorAll('.is-disabled');
+        let activeButtons = document.querySelectorAll('.is-primary');
+        disabledButtons?.forEach((button: any) => {
+            button.setAttribute('disabled', true);
+        })
+        activeButtons?.forEach((button: any) => {
+            button.removeAttribute('disabled');
+        })
     }
 }
