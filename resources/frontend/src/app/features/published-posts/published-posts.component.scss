@@ -10,7 +10,6 @@
 
             > h1 {
                 @include textstyle-size-40();
-                color: $color-media-black-opacity-half;
                 user-select: none;
                 margin: 0;
             }
@@ -18,13 +17,19 @@
 
         > .m-container {
             display: flex;
-            flex-direction: row;
+            flex-wrap: wrap;
             gap: 12px;
             width: 100%;
-            height: calc(100% - 100px);
+            height: 75%;
             background-color: $color-base-0;
+            padding: 25px;
 
-            > .m-collapse {
+            > .m-item {
+                width: 100%;
+                padding: 20px 30px;
+            }
+
+            > hr {
                 width: 100%;
             }
         }

@@ -1,0 +1,46 @@
+<p>
+  <br />
+  <button
+    type="button"
+    class="btn btn-success"
+    (click)="collapse.toggle()"
+    [attr.aria-expanded]="!gfg"
+    aria-controls="collapseExample"
+  >
+    Click to collapse
+  </button>
+</p>
+
+<div #collapse="ngbCollapse" [(ngbCollapse)]="gfg">
+  <div class="card">
+    <div class="card-body">Angular10 ng bootstrap</div>
+  </div>
+</div>
+
+<div class="mod-collapse-item">
+  <div class="m-wrapper">
+    <div class="m-table">
+      <div class="m-container">
+        <div class="m-icon">
+          <img src="/assets/img/test-images/image.svg" alt="" />
+        </div>
+        <div class="m-image">
+          <img src="/assets/img/test-images/my-post.png" alt="" />
+        </div>
+        <div class="m-content">
+          <h6>Titel des Postings</h6>
+          accountname.test
+        </div>
+        <div class="m-status">
+          <nz-badge nzStatus="success" nzText="Success"></nz-badge>
+        </div>
+        <div class="m-date">
+          <div class="m-create-date">12.05.2022 15:30</div>
+          <br />Max Mustermann
+        </div>
+        <div class="m-collapse"></div>
+      </div>
+      <hr />
+    </div>
+  </div>
+</div>

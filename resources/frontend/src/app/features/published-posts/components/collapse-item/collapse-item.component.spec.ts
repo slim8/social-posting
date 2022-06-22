@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CollapseHeaderComponent } from './collapse-header.component';
+import { CollapseItemComponent } from './collapse-item.component';
 
-describe('CollapseHeaderComponent', () => {
-  let component: CollapseHeaderComponent;
-  let fixture: ComponentFixture<CollapseHeaderComponent>;
+describe('CollapseItemComponent', () => {
+  let component: CollapseItemComponent;
+  let fixture: ComponentFixture<CollapseItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CollapseHeaderComponent ]
+      declarations: [ CollapseItemComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CollapseHeaderComponent);
+    fixture = TestBed.createComponent(CollapseItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
