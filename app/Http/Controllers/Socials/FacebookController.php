@@ -30,7 +30,7 @@ class FacebookController extends Controller
     public function getFacebookPersonalInformations($accessToken)
     {
         $responseObject = [];
-        $response = Http::post(env('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
         $responseObject['name'] = $response->json('name');
 
         return $responseObject;
@@ -73,9 +73,9 @@ class FacebookController extends Controller
     public function generateLongLifeToken($tokenKey, string $facebookUserId = '', int $userId = null)
     {
         $userObj = $userId ? $userId : UserTrait::getCurrentId();
-        $facebookAppKey = env('FACEBOOK_APP_ID');
-        $facebookSecretKey = env('FACEBOOK_SECRET_KEY');
-        $response = Http::get(env('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
+        $facebookAppKey = envValue('FACEBOOK_APP_ID');
+        $facebookSecretKey = envValue('FACEBOOK_SECRET_KEY');
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
         $providerId = $this->updateOrReturnProviderIdUser($userObj, $response->json('access_token'), $facebookUserId);
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
@@ -127,7 +127,7 @@ class FacebookController extends Controller
     {
         $client = new Client();
 
-        $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/videos', [
+        $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/videos', [
             'form_params' => $object,
         ]);
 
@@ -144,7 +144,7 @@ class FacebookController extends Controller
 
     public function postMediaFromUrl($pageId, $token, $url)
     {
-        $response = Http::post(env('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
 
         return $response->json('id');
     }
@@ -186,14 +186,14 @@ class FacebookController extends Controller
         }
 
         $client = new Client();
-        $response = $client->request('POST', env('FACEBOOK_ENDPOINT').$pageId.'/feed', [
+        $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/feed', [
             'form_params' => $object,
         ]);
 
         if ($response->getStatusCode() == 200) {
             $responseObject['status'] = true;
             $responseObject['id'] = json_decode($response->getBody(), true)['id'];
-            $responseObject['url'] = env('FACEBOOK_ROOT_LINK').$responseObject['id'];
+            $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
         } else {
             $responseObject['status'] = false;
             $responseObject['message'] = 'to be defined';
@@ -264,7 +264,7 @@ class FacebookController extends Controller
 
     public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0, int $checkWithCompany = null)
     {
-        $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
+        $facebookUri = envValue('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
         $response = Http::get($facebookUri);
 
@@ -369,7 +369,7 @@ class FacebookController extends Controller
      */
     public function shareCount($postIdProvider, $accessToken)
     {
-        $request = Http::get(env('FACEBOOK_ENDPOINT').$postIdProvider.'?access_token='.$accessToken.'&fields=shares');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$postIdProvider.'?access_token='.$accessToken.'&fields=shares');
         $response = $request->json('shares');
 
         if (!$response) {
@@ -384,7 +384,7 @@ class FacebookController extends Controller
      */
     public function commentCount($postIdProvider, $accessToken)
     {
-        $request = Http::get(env('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
         $response = $request->json('summary');
 
         return $response['total_count'];
@@ -400,7 +400,7 @@ class FacebookController extends Controller
         $acountPost = AccountPost::where('id', $accountPostId)->first();
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-        $request = Http::get(env('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
         $response = $request->json('data');
 
         // Start Fetching Statistics

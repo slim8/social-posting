@@ -60,7 +60,7 @@ class UtilitiesController extends Controller
     {
         $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images' : 'others', $image);
 
-        return env('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
+        return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
     }
 
     /**
@@ -70,7 +70,7 @@ class UtilitiesController extends Controller
     {
         $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
 
-        return env('APP_URL').'/'.$object;
+        return envValue('APP_URL').'/'.$object;
     }
 
     /**
@@ -80,7 +80,7 @@ class UtilitiesController extends Controller
     {
         $fileObject = new \stdClass();
         $fileObject->type = $this->checkTypeOfFile($file);
-        if (env('APP_ENV') == 'local') {
+        if (envValue('APP_ENV') == 'local') {
             $fileObject->url = $this->uploadFileToFtp($file, $fileObject->type);
         } else {
             $fileObject->url = $this->uploadLocal($file, $fileObject->type);

@@ -1,10 +1,12 @@
 @import '../../../assets/sass/_project/_config.scss';
+@import '../../../assets/sass/_global/_mixins.scss';
 @import '../../../assets/sass/_project/base.scss';
 
 .mod-dashboard {
     height: 100%;
     > .m-wrapper {
         height: 100%;
+
         > .m-title {
             padding: 28px;
 
@@ -18,22 +20,37 @@
 
         > .m-dashboard-container {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             gap: 12px;
             width: 100%;
             height: calc(100% - 100px);
+            @include mq(desktop) {
+                flex-direction: row;
+            }
 
             > .m-left-col {
-                width: calc(70% - 6px);
+                width: 100%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
                 gap: 12px;
+                @include mq(desktop) {
+                    width: calc(70% - 6px);
+                }
 
                 > .m-posts-history {
+                    position: relative;
+                    min-height: 452px;
                     width: 100%;
                     height: 100%;
                     background-color: $color-base-0;
+
+                    > .m-loading {
+                        position: absolute;
+                        left: 50%;
+                        top: 40%;
+                        transform: translate3d(-50%, -50% ,0);
+                    }
 
                     > .m-history-header {
                         height: 50px;
@@ -115,6 +132,19 @@
                                                     position: absolute;
                                                     bottom: -3px;
                                                     right: -3px;
+
+                                                    >img {
+
+                                                        &.facebook {
+                                                            background-color: white;
+                                                            width: 24px;
+                                                            padding: 3px;
+                                                            margin: 0 3px 3px 0;
+                                                            right: 0;
+                                                            bottom: 0;
+                                                            box-shadow: 0 0 5px $color-media-light-grey;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -151,8 +181,11 @@
                                             display: flex;
                                             align-items: center;
 
-                                            button {
+                                            a {
                                                 @include textstyle-size-12();
+                                                display: flex;
+                                                align-items: center;
+                                                min-width: 121px;
                                                 color: $color-base-100;
                                                 padding: 7px 13px 9px;
 
@@ -205,25 +238,41 @@
             }
 
             > .m-right-col {
-                width: calc(30% - 6px);
+                width: 100%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
                 gap: 12px;
+                @include mq(desktop) {
+                    width: calc(30% - 6px);
+                }
 
                 > .m-buttons {
                     display: flex;
                     flex-wrap: wrap;
                     flex-direction: column;
                     gap: 12px;
-                    height: 141px;
+                    height: unset;
+                    @include mq(desktop) {
+                        height: 141px;
+                    }
 
                     > .m-button {
                         position: relative;
                         width: 100%;
-                        height: calc(50% - 6px);
+                        height: 100%;
                         @include textstyle-size-20();
                         text-align: center;
+                        @include mq(desktop) {
+                            height: calc(50% - 6px);
+                        }
+
+                        &.m-create-post {
+                            display: none;
+                            @include mq(desktop) {
+                                display: block;
+                            }
+                        }
 
                         > span {
                             position: absolute;
@@ -241,9 +290,12 @@
 
                 > .m-news {
                     position: relative;
-                    height: calc(100% - 150px);
+                    height: 100%;
                     width: 100%;
                     background-color: $color-base-0;
+                    @include mq(desktop) {
+                        height: calc(100% - 150px);
+                    }
 
                     > .m-news-header {
                         margin: 20px;
@@ -262,6 +314,7 @@
                         > ul {
                             list-style: none;
                             max-height: calc(100% - 140px);
+                            margin-bottom: 80px;
 
                             > li {
                                 width: 80%;

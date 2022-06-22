@@ -15,7 +15,7 @@ class CheckRoles
     public function checkIfUserLoginSuccessByJWT(string $token)
     {
         try {
-            $decoded = JWT::decode($token, new Key(env('JWT_SECRET_KEY'), env('JWT_HASH_ALGORITHME')));
+            $decoded = JWT::decode($token, new Key(envValue('JWT_SECRET_KEY'), envValue('JWT_HASH_ALGORITHME')));
 
             return $decoded->data->id;
         } catch (Exception $e) {

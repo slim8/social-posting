@@ -1,3 +1,7 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../assets/sass/_project/base.scss';
+
 .mod-page-layout {
     min-height: 100vh;
 }
@@ -18,7 +22,10 @@
 }
 
 nz-content {
-    margin: 24px 193px 24px 24px;
+    margin: 24px;
+    @include mq(l) {
+        margin: 24px 193px 24px 24px;
+    }
 }
 
 .inner-content {
