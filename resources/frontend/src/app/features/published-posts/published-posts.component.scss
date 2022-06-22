@@ -1,0 +1,32 @@
+@import '../../../assets/sass/_project/_config.scss';
+@import '../../../assets/sass/_project/base.scss';
+
+.mod-my-posts {
+    height: 100%;
+    > .m-wrapper {
+        height: 100%;
+        > .m-title {
+            padding: 28px;
+
+            > h1 {
+                @include textstyle-size-40();
+                color: $color-media-black-opacity-half;
+                user-select: none;
+                margin: 0;
+            }
+        }
+
+        > .m-container {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            width: 100%;
+            height: calc(100% - 100px);
+            background-color: $color-base-0;
+
+            > .m-collapse {
+                width: 100%;
+            }
+        }
+    }
+}

@@ -4,27 +4,28 @@ import { sharedConstants } from '../../../shared/sharedConstants';
 import { JwtHelperService } from "@auth0/angular-jwt";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient, private jwtService: JwtHelperService) { }
+    constructor(private http: HttpClient, private jwtService: JwtHelperService) { }
 
-  public login(credentials: any) {
-    return this.http.post(sharedConstants.API_ENDPOINT + '/login', credentials);
-  }
+    public login(credentials: any) {
+        return this.http.post(sharedConstants.API_ENDPOINT + '/login', credentials);
+    }
 
-  public checkLoggedIn() {
-    return this.http.get(sharedConstants.API_ENDPOINT + '/check-logged-in');
-  }
+    public checkLoggedIn() {
+        return this.http.get(sharedConstants.API_ENDPOINT + '/check-logged-in');
+    }
 
-  // return true is there is a loggen in user
-  public loggedIn(): boolean {
-    return this.jwtService.tokenGetter() !== null && !this.jwtService.isTokenExpired();
-  }
+    // return true is there is a loggen in user
+    public loggedIn(): boolean {
+        console.log(this.jwtService.decodeToken());
+        return this.jwtService.tokenGetter() !== null && !this.jwtService.isTokenExpired();
+    }
 
-  logout() {
-    localStorage.removeItem('token');
-  }
+    logout() {
+        localStorage.removeItem('token');
+    }
 
 }
