@@ -400,13 +400,6 @@ class FacebookController extends Controller
         $acountPost = AccountPost::where('id', $accountPostId)->first();
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-
-        $file = fopen('C:/xampp8/htdocs/media-posting/app/Http/Middleware/test.txt', 'a', 1);
-        // fwrite($file, 'FACEBOOK_SECRET_KEY ==>  '.envValue('FACEBOOK_SECRET_KEY')."\n");
-        // fwrite($file, 'FACEBOOK_ENDPOINT ==>  '.envValue('FACEBOOK_ENDPOINT')."\n");
-        fwrite($file, 'test ==>  '.envValue('key')."\n");
-        fclose($file);
-
         $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
         $response = $request->json('data');
 
