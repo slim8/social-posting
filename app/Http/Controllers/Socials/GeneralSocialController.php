@@ -243,7 +243,7 @@ class GeneralSocialController extends Controller
      */
     public function getAccountPagesAccount($facebookUserId, $tokenKey)
     {
-        $facebookUri = env('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
+        $facebookUri = envValue('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
         $response = Http::get($facebookUri);
 

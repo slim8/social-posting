@@ -141,12 +141,12 @@ class ApiAuthController extends Controller
             if ($user->status) {
                 if (Hash::check($request->password, $user->password)) {
                     $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                    $secret_key = env('JWT_SECRET_KEY');
-                    $issuer_claim = env('JWT_ISSUER_CLAIMER'); // this can be the servername
-                    $audience_claim = env('JWT_AUDIANCE_KLAIMER');
+                    $secret_key = envValue('JWT_SECRET_KEY');
+                    $issuer_claim = envValue('JWT_ISSUER_CLAIMER'); // this can be the servername
+                    $audience_claim = envValue('JWT_AUDIANCE_KLAIMER');
                     $issuedat_claim = time(); // issued at
                     $notbefore_claim = $issuedat_claim + 0; // not before in seconds
-                    $expiration_time_env = (int) env('JWT_EXPIRATION_TIME');
+                    $expiration_time_env = (int) envValue('JWT_EXPIRATION_TIME');
                     $expire_claim = $issuedat_claim + $expiration_time_env; // expire time in seconds
                     $token = [
                         'iss' => $issuer_claim,
@@ -162,7 +162,7 @@ class ApiAuthController extends Controller
                         ],
                     ];
 
-                    $jwt = JWT::encode($token, $secret_key, env('JWT_HASH_ALGORITHME'));
+                    $jwt = JWT::encode($token, $secret_key, envValue('JWT_HASH_ALGORITHME'));
 
                     return RequestsTrait::processResponse(true, ['message' => trans('message.sucess_login'),
                             'token' => $jwt,

@@ -4,23 +4,22 @@ namespace App\Http\Traits\Services;
 
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 trait FacebookService
 {
     use UserTrait;
 
-    public static function ReconnectOrRefrech($selectedPages , $providerTokenId , int $refrech = 0)
+    public static function ReconnectOrRefrech($selectedPages, $providerTokenId, int $refrech = 0)
     {
         if ($selectedPages) {
             foreach ($selectedPages as $page) {
                 $provider = $page['provider'];
                 if ($provider == 'facebook') {
-                    $accountModel =  Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId']);
+                    $accountModel = Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId']);
 
-                    if(!$refrech){
-                        $accountModel->where('accessToken',Account::$STATUS_DISCONNECTED);
+                    if (!$refrech) {
+                        $accountModel->where('accessToken', Account::$STATUS_DISCONNECTED);
                     }
 
                     $accountModel->update(['status' => 1, 'accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
@@ -34,14 +33,13 @@ trait FacebookService
         }
     }
 
-     /**
+    /**
      * Get facebook page picture from Facebook ID.
      */
     public static function getPagePicture($pageId)
     {
-        $response = Http::get(env('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'/picture?redirect=0');
 
         return $response->json('data')['url'];
     }
-
 }
