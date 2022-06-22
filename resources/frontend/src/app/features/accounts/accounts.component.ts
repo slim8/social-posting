@@ -43,6 +43,7 @@ export class AccountsComponent implements OnInit {
             myChoices: new FormArray([]),
         });
         this.getConnectedAccounts();
+        this.getPages();
         if (this.router.url.includes('accounts')) {
             this.sharedModule.initSideMenu('accounts');
         }
@@ -51,7 +52,8 @@ export class AccountsComponent implements OnInit {
     getPages() {
         this.service.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
-                // this.listOfPages = success.pages;
+                this.listOfPages = success.pages;
+                console.log(this.listOfPages);
             },
             (error) => {
                 this.listOfPages = [];
@@ -97,7 +99,6 @@ export class AccountsComponent implements OnInit {
         setTimeout(() => {
             this.accountsService.getConnectedAccounts().subscribe({
                 next: (response: any) => {
-                    console.log(response.accounts)
                     this.connectedAccounts = response.accounts;
                 },
                 error: (err) => {
