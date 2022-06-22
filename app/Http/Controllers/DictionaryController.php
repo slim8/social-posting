@@ -127,7 +127,7 @@ class DictionaryController extends Controller
         if($row && $request->id != $row->id){
             return false;
         }
-        
+
         return true;
     }
 }
