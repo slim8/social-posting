@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Http\Traits\Services\FacebookService;
 use App\Models\Account;
 use App\Models\UsersAccounts;
 use Illuminate\Support\Facades\DB;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 trait RequestsTrait
 {
     use UserTrait;
+    use FacebookService;
 
     public static function getSavedAccountFromDB(string $provider = 'facebook', string $providerType = 'page')
     {
@@ -46,7 +48,19 @@ trait RequestsTrait
             $pageProfilePicture = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
-            $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,  'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false];
+
+            if ($provider == 'facebook') {
+                $pageInfo = FacebookService::getFacebookPageInfo($uid, $account->accessToken);
+
+                $followers = $pageInfo->followers;
+                $link = $pageInfo->link;
+            } else {
+                $followers = null;
+                $link = null;
+            }
+            $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,
+                'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false,
+                'followers' => $followers, 'link' => $link, ];
 
             if (UserTrait::getUserObject()->hasRole('companyadmin')) {
                 $pageContent['users'] = UserTrait::getUsersLinkedToAccounts($id);
