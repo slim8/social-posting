@@ -75,7 +75,7 @@
                         <div class="m-followers">Follower: <strong> {{page.followers}}</strong></div>
                     </div>
                     <div [ngClass]="{'is-disconnected': !page.isConnected}" class="m-alert">
-                        <img src="../../../assets/img/exclamation.png" alt="">
+                        <img *ngIf="!page.isConnected" src="../../../assets/img/exclamation.png" alt="">
                     </div>
                     <div [ngClass]="{'is-disconnected': !page.isConnected}" class="m-action">
                         <button class="m-button is-primary"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Zum Beitrag</button>

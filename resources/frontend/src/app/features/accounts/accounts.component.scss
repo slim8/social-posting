@@ -174,9 +174,7 @@
                     }
 
                     > .m-alert {
-                        &.is-disconnected {
-                            filter: opacity(0.2);
-                        }
+                        width: 24px;
 
                         >i {
                             > svg {

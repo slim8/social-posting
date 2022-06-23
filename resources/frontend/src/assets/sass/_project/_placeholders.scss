@@ -77,6 +77,20 @@
 }
 
 svg {
+    .m-home & , .m-collapse-menu-button & {
+        font-size: 16px;
+    }
+
+    .m-gallery & {
+        > path {
+            stroke: $color-base-100;
+        }
+    }
+
+    .m-gallery & , .m-image & , .m-video & {
+        font-size: 15px;
+    }
+
     > path {
         .m-accounts-header & {
             fill: $color-base-0;
