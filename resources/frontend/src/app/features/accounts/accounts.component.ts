@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzIconService } from 'ng-zorro-antd/icon';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -32,6 +33,7 @@ export class AccountsComponent implements OnInit {
         private accountsService: AccountsService,
         private sharedModule: SharedModule,
         private formBuilder: FormBuilder,
+        private modal: NzModalService,
         private router: Router
     ) {
         this.iconService.addIconLiteral('ng-zorro:add', addIcon);
@@ -178,5 +180,46 @@ export class AccountsComponent implements OnInit {
         if (msg) {
             this.sharedModule.createMessage('error', msg);
         }
+    }
+
+    disconnectPage(id: any) {
+        this.accountsService.disconnectPageById(id).subscribe({
+            next: (event: any) => {
+
+            },
+            error: err => {
+
+            },
+            complete: () => {
+                this.getPages();
+            }
+        })
+    }
+
+    showDisconnectConfirm(id: any): void {
+        this.modal.confirm({
+            nzTitle: 'Do you really want to disconnect this account?',
+            nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => this.disconnectPage(id),
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel')
+        });
+    }
+
+    reconnectPage(event: any, id: any) {
+        this.accountsService.reconnectPageById(id).subscribe({
+            next: (event: any) => {
+
+            },
+            error: err => {
+
+            },
+            complete: () => {
+                this.getPages();
+            }
+        })
     }
 }
