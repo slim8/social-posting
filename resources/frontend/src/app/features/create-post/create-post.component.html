@@ -1,4 +1,4 @@
-<div class="m-loading-screen"></div>
+<!-- <div class="m-loading-screen"></div>
 <div id="successDialog" class="m-success is-hidden">
     <nz-result class="m-success-result"
           nzStatus="success"
@@ -176,7 +176,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- <app-instagram-preview></app-instagram-preview> -->
+                                     <app-instagram-preview></app-instagram-preview> 
                                 </div>
 
                                 <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
@@ -237,4 +237,237 @@
         </div>
     </div>
 </div>
+ -->
+<div class="mod-create-post">
+    <div class="m-wrapper">
+        <div class="m-header">
+            <h3>Neuer Beitrag</h3>
+        </div>
+        <div class="m-cp-container">
+            <div class="m-left-col">
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Platzierung</h4>
+                    </div>
+                    <div class="m-form-field">
+                        <nz-form-control [nzSpan]="24">
+                            <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label ><small class="m-page-item-provider">{{option.provider}}</small> - {{option.pageName}}</label></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </div>
+                </div>
 
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Medien</h4>
+                    </div>
+                    <div *ngIf="uploadImageActive" class="m-upload-image">
+                        <div class="clearfix">
+                            <nz-upload
+                            nzAction="http://posting.local/api/uploadfile"
+                            nzListType="picture-card"
+                            [(nzFileList)]="fileList"
+                            [nzShowButton]="fileList.length < 8"
+                            (nzChange)="handleChange($event)"
+                            >
+                            <div>
+                                <i nz-icon nzType="plus"></i>
+                                <div style="margin-top: 8px">Upload</div>
+                            </div>
+                            </nz-upload>
+                            <nz-modal
+                            [nzVisible]="previewVisible"
+                            [nzContent]="modalContent"
+                            [nzFooter]="null"
+                            (nzOnCancel)="previewVisible = false"
+                            >
+                            <ng-template #modalContent>
+                                <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                            </ng-template>
+                            </nz-modal>
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <div class="m-choose-media">
+                            <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:image"></i></span> Foto hinzufügen</button>
+                            <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
+                            <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Text</h4>
+                    </div>
+                    <div class="m-form-field">
+                        <textarea [(ngModel)]="message" class="m-textarea-message" nz-input placeholder="Statut"></textarea>
+                    </div>
+                </div>
+
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Hashtags</h4>
+                    </div>
+                    <div class="m-form-field">
+                        <nz-tag
+                            *ngFor="let tag of tags; let i = index"
+                            [nzMode]="'closeable'"
+                            (nzOnClose)="handleClose(tag)"
+                            >{{ sliceTagName(tag) }}</nz-tag>
+                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                            <i nz-icon nzType="plus"></i>  New tag
+                        </nz-tag>
+                        <input
+                            #inputElement
+                            nz-input
+                            nzSize="small"
+                            *ngIf="inputVisible"
+                            type="text"
+                            [(ngModel)]="inputValue"
+                            style="width: 78px;"
+                            (blur)="handleInputConfirm()"
+                            (keydown.enter)="handleInputConfirm()"
+                        />
+                    </div>
+                </div>
+
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Standort <small>- optional</small></h4>
+                    </div>
+                    <div class="m-form-field">
+                        <input nz-input placeholder="Gib einen Standort ein" class="m-location"  />
+                    </div>
+                </div>
+            </div>
+            <div class="m-mid-col is-active">
+                <div class="m-collapse-menu-button">
+                    <i class="m-sidemenu-button is-active" (click)="collapse()" nz-icon nzType="ng-zorro:menuButton"></i>
+                </div>
+                <div class="m-sidemenu is-active">
+                    <div class="m-tab">
+                        <ul>
+                            <li id="instagram-tab-title" class="is-active" (click)="tabChange1('instagram-tab-title', $event)">
+                                <span><i class="instagram"  nz-icon nzType="ng-zorro:instagram"></i></span>
+                                Instagram
+                            </li>
+                            <li id="facebook-tab-title" (click)="tabChange1('facebook-tab-title', $event)">
+                                <span><i class="facebook" nz-icon nzType="ng-zorro:facebook"></i></span>
+                                Facebook
+                            </li>
+                        </ul>
+                        <div class="m-tab-content">
+                            <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
+                                <div class="m-header">
+                                    <h3>Instagram Beitrag anpassen</h3>
+                                    <p>Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.</p>
+                                </div>
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Instagram Text</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <textarea [(ngModel)]="message" class="m-textarea-message" nz-input placeholder="Statut"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Hashtags</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <nz-tag
+                                            *ngFor="let tag of tags; let i = index"
+                                            [nzMode]="'closeable'"
+                                            (nzOnClose)="handleClose(tag)"
+                                            >{{ sliceTagName(tag) }}</nz-tag>
+                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                                            <i nz-icon nzType="plus"></i>  New tag
+                                        </nz-tag>
+                                        <input
+                                            #inputElement
+                                            nz-input
+                                            nzSize="small"
+                                            *ngIf="inputVisible"
+                                            type="text"
+                                            [(ngModel)]="inputValue"
+                                            style="width: 78px;"
+                                            (blur)="handleInputConfirm()"
+                                            (keydown.enter)="handleInputConfirm()"
+                                        />
+                                    </div>
+                                </div>
+                
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Markierung <small>- optional</small></h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
+                                <div class="m-header">
+                                    <h3>Facebook Beitrag anpassen</h3>
+                                    <p>Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.</p>
+                                </div>
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Facebook Text</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <textarea [(ngModel)]="message" class="m-textarea-message" nz-input placeholder="Statut"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Hashtags</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <nz-tag
+                                            *ngFor="let tag of tags; let i = index"
+                                            [nzMode]="'closeable'"
+                                            (nzOnClose)="handleClose(tag)"
+                                            >{{ sliceTagName(tag) }}</nz-tag>
+                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                                            <i nz-icon nzType="plus"></i>  New tag
+                                        </nz-tag>
+                                        <input
+                                            #inputElement
+                                            nz-input
+                                            nzSize="small"
+                                            *ngIf="inputVisible"
+                                            type="text"
+                                            [(ngModel)]="inputValue"
+                                            style="width: 78px;"
+                                            (blur)="handleInputConfirm()"
+                                            (keydown.enter)="handleInputConfirm()"
+                                        />
+                                    </div>
+                                </div>
+                
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Markierung <small>- optional</small></h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-right-col">
+
+            </div>
+        </div>
+    </div>
+</div>

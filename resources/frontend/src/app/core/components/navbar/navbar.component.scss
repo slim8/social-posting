@@ -24,6 +24,7 @@
             > .m-home {
                 > i {
                     > svg {
+                        font-size: 16px;
                         > path {
                             fill: $color-base-0;
                         }
@@ -33,6 +34,10 @@
 
             > .m-title {
                 user-select: none;
+
+                > h5 {
+                    margin: 0;
+                }
             }
         }
     }

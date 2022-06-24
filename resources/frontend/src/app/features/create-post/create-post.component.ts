@@ -21,6 +21,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 export class CreatePostComponent implements OnInit {
     //refresh instagram component
     refresh: boolean = false;
+    uploadImageActive: boolean = false;
 
     postdata = {
         "post": {
@@ -209,7 +210,7 @@ export class CreatePostComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
     previewVisible = false;
-    listOfPages: Array<{ id: number; pageName: string; pagePictureUrl: string }> =
+    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =
         [];
     size: NzSelectSizeType = 'large';
     tagValue: any[] = [];
@@ -269,24 +270,24 @@ export class CreatePostComponent implements OnInit {
         let spinning = document.getElementsByClassName('m-loading-spin')[0];
         const formData: FormData = new FormData();
         let post: any = {
-          message : "",
-          hashtags : [],
-          mentions : [],
-          accountId : "",
-          videoTitle : ""
+            message: "",
+            hashtags: [],
+            mentions: [],
+            accountId: "",
+            videoTitle: ""
         }
 
         // let post: any = []
 
         this.tagValue.forEach((accountId: any) => {
-          post.message=this.message;
-          post.hashtags=this.tags;
-          post.mentions=this.mentions;
-          post.accountId=accountId;
-          post.videoTitle="this is video title";
+            post.message = this.message;
+            post.hashtags = this.tags;
+            post.mentions = this.mentions;
+            post.accountId = accountId;
+            post.videoTitle = "this is video title";
 
-          console.log(JSON.stringify(post));
-          formData.append('posts[]', JSON.stringify(post));
+            console.log(JSON.stringify(post));
+            formData.append('posts[]', JSON.stringify(post));
         });
 
         if (this.tags.length > 0) {
@@ -484,5 +485,18 @@ export class CreatePostComponent implements OnInit {
         setTimeout(() => {
             this.refresh = false;
         }, 0.1)
+    }
+
+    collapse() {
+        let menuButton = document.querySelector('.m-sidemenu-button');
+        let menu = document.querySelector('.m-sidemenu');
+        let midCol = document.querySelector('.m-mid-col');
+        menuButton?.classList.toggle('is-active');
+        menu?.classList.toggle('is-active');
+        midCol?.classList.toggle('is-active');
+    }
+
+    collapseImageUpload() {
+        this.uploadImageActive = !this.uploadImageActive;
     }
 }
