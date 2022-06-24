@@ -1,5 +1,7 @@
+@import '../../../assets/sass/_global/_mixins.scss';
 @import '../../../assets/sass/_project/_config.scss';
 @import '../../../assets/sass/_project/base.scss';
+
 
 .mod-accounts {
     width: 100%;
@@ -91,35 +93,72 @@
                     align-items: center;
                     flex-direction: row;
                     flex-wrap: nowrap;
-                    padding: 40px 0 50px 71px;
-                    gap: 50px;
+                    padding: 20px 0 20px 20px;
+                    gap: 10px;
                     border-bottom: 1px solid $color-media-secondary-button;
+                    justify-content: unset;
+                    @include mq(tablet) {
+                        justify-content: space-around;
+                    }
+                    @include mq(desktop) {
+                        justify-content: unset;
+                        gap: 50px;
+                        padding: 40px 0 50px 71px;
+                    }
 
                     > .m-media-small {
-                        width: 95px;
-                        height: 95px;
+                        width: 60px;
+                        height: 60px;
+                        @include mq(tablet) {
+                            width: 95px;
+                            height: 95px;
+                        }
                         position: relative;
+                        &.is-disconnected {
+                            filter: opacity(0.2);
+                        }
 
                         > img {
                             border-radius: 50%;
                             display: block;
                             object-fit: cover;
-                            width: 95px;
-                            height: 95px;
+                            width: 60px;
+                            height: 60px;
+                            @include mq(tablet) {
+                                width: 95px;
+                                height: 95px;
+                            }
                         }
 
                         > .m-provider-logo {
                             position: absolute;
                             bottom: -8px;
                             right: -8px;
+
                             >img {
-                                width: 60px;
-                                border-radius: 5px;
+                                width: 30px;
+                                @include mq(tablet) {
+                                    width: 60px;
+                                }
+
+                                &.facebook {
+                                    background-color: $color-base-0;
+                                    padding: 3px;
+                                    box-shadow: 0 0 5px $color-media-light-grey;
+                                    width: 25px;
+                                    @include mq(tablet) {
+                                        width: 54px;
+                                        padding: 6px;
+                                    }
+                                }
                             }
                         }
                     }
 
                     > .m-page-info {
+                        &.is-disconnected {
+                            filter: opacity(0.2);
+                        }
                         > .m-page {
                             @include textstyle-size-16-bold();
                         }
@@ -135,6 +174,8 @@
                     }
 
                     > .m-alert {
+                        width: 24px;
+
                         >i {
                             > svg {
                                 fill: transparent;
@@ -146,7 +187,19 @@
                         display: flex;
                         flex-direction: column;
                         gap: 7px;
-                        padding-left: 90px;
+                        margin-right: unset;
+                        padding-left: unset;
+                        @include mq(tablet) {
+                            margin-right: 20px;
+                        }
+                        @include mq(desktop) {
+                            margin-right: unset;
+                            padding-left: 90px;
+                        }
+                        
+                        &.is-disconnected {
+                            filter: opacity(0.2);
+                        }
 
                         > .m-button {
 
@@ -166,9 +219,22 @@
                         outline: none;
                         background-color: transparent;
                         color: $color-media-black-opacity-half;
-                        right: 80px;
-                        top: 50px;
                         cursor: pointer;
+                        left: 11px;
+                        bottom: 16px;
+                        right: unset;
+                        top: unset;
+
+                        @include mq(tablet) {
+                            left: unset;
+                            bottom: unset;
+                            right: 8px;
+                            top: 29px;
+                        }
+                        @include mq(desktop) {
+                            right: 80px;
+                            top: 50px;
+                        }
                     }
                 }
             }
