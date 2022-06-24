@@ -1,8 +1,6 @@
 deploy:
   script:
     - cd ../../../../../
-    - git reset --hard
-    - git checkout developp
     - sh ./deploy.sh
   only:
     - developp
