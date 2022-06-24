@@ -4,13 +4,13 @@ namespace App\Http\Controllers\functions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\MailTrait;
-use App\Models\Plan;
-use App\Models\User;
+use App\Http\Traits\RequestsTrait;
 use Illuminate\Http\Request;
 
 class ExempleController extends Controller
 {
     use MailTrait;
+    use RequestsTrait;
 
     protected $utilitiesController;
 
@@ -28,7 +28,6 @@ class ExempleController extends Controller
     {
         $response = $request->file('file') ? $this->utilitiesController->uploadFile($request->file('file')) : false;
 
-        return response()->json(['success' => $response ? true : false,
-        'files' => $response, ], 201);
+        return RequestsTrait::processResponse($response ? true : false, ['files' => $response]);
     }
 }

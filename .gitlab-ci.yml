@@ -1,6 +1,6 @@
 deploy:
   script:
-    - cd ../../../../../
+    - cd /var/www/media-posting/
     - ./deploy.sh
   only:
     - developp
