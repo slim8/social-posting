@@ -80,6 +80,10 @@ class UtilitiesController extends Controller
     {
         $fileObject = new \stdClass();
         $fileObject->type = $this->checkTypeOfFile($file);
+
+        if (!$fileObject->type) {
+            return RequestsTrait::processResponse(false, ['message' => 'You must upload Image or Video File']);
+        }
         if (envValue('APP_ENV') == 'local') {
             $fileObject->url = $this->uploadFileToFtp($file, $fileObject->type);
         } else {
@@ -94,15 +98,15 @@ class UtilitiesController extends Controller
      */
     public function checkTypeOfFile($file)
     {
-        $mimes = 'video/x-ms-asf,video/x-flv,video/mp4,application/x-mpegURL,video/MP2T,video/3gpp,video/quicktime,video/x-msvideo,video/x-ms-wmv,video/avi';
-        $mimes = explode(',', $mimes);
-        $type = 'image';
-
-        if (in_array($file->getMimeType(), $mimes)) {
-            $type = 'video';
+        if (substr($file->getMimeType(), 0, 5) == 'image') {
+            return 'image';
         }
 
-        return $type;
+        if (substr($file->getMimeType(), 0, 5) == 'video') {
+            return 'video';
+        }
+
+        return false;
     }
 
     /**
