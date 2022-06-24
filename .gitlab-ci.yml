@@ -1,5 +1,7 @@
 job1:
-  script: "git pull"
+  script:
+    - cd C:\xampp8\htdocs\media-posting
+    - git pull
   only:
     - developp
     - master
