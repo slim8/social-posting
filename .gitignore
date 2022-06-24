@@ -19,3 +19,4 @@ resources/views/angular.blade.php
 .env
 config.toml
 /builds
+deploy.sh

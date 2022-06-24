@@ -1,8 +1,7 @@
-job1:
+deploy:
   script:
     - cd ../../../../../
-    - git checkout developp
-    - npm run deploy
+    - sh ./deploy.sh
   only:
     - developp
     - master
