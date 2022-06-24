@@ -1,6 +1,6 @@
 job1:
   script:
-    - cd ../../../../../../
+    - cd ../../../../../
     - npm run deploy
   only:
     - developp
