@@ -49,11 +49,28 @@ trait FacebookService
     public static function getFacebookPageInfo($pageId, $accessToken)
     {
         $pageInfo = new \stdClass();
-        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?access_token='.$accessToken.'&fields=followers_count,link');
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?access_token='.$accessToken.'&fields=followers_count,link,username');
         $responseData = $response->json();
 
         $pageInfo->followers = $responseData['followers_count'];
         $pageInfo->link = $responseData['link'];
+        $pageInfo->username = isset($responseData['username']) ? $responseData['username'] : null;
+
+        return $pageInfo;
+    }
+
+    /**
+     * Get Instagram Page Info.
+     */
+    public static function getinstagramPageInfo($pageId, $accessToken)
+    {
+        $pageInfo = new \stdClass();
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?access_token='.$accessToken.'&fields=followers_count,username');
+        $responseData = $response->json();
+
+        $pageInfo->followers = $responseData['followers_count'];
+        $pageInfo->link = null;
+        $pageInfo->username = isset($responseData['username']) ? $responseData['username'] : null;
 
         return $pageInfo;
     }

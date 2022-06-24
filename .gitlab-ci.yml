@@ -1,6 +1,6 @@
 job1:
   script:
-    - cd C:\xampp8\htdocs\media-posting
+    - cd ../../../../../../
     - npm run deploy
   only:
     - developp
