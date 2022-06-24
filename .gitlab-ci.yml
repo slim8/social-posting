@@ -1,6 +1,7 @@
 job1:
   script:
     - cd ../../../../../
+    - git checkout developp
     - npm run deploy
   only:
     - developp
