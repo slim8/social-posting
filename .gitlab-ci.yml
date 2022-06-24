@@ -1,7 +1,7 @@
 deploy:
   script:
     - cd ../../../../../
-    - sh ./deploy.sh
+    - ./deploy.sh
   only:
     - developp
     - master
