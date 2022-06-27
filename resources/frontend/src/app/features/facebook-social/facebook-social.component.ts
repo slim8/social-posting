@@ -46,7 +46,7 @@ export class FacebookSocialComponent implements OnInit {
 
                 this.service
                     .manageFacebookPages(
-                        sharedConstants.API_ENDPOINT + '/get-meta-pages-groups',
+                        sharedConstants.API_ENDPOINT + 'get-meta-pages-groups',
                         {
                             accessToken: this.user.accessToken,
                             id: this.user.id,
@@ -86,7 +86,7 @@ export class FacebookSocialComponent implements OnInit {
             console.log(selectedobject);
             this.service
                 .manageFacebookPages(
-                    sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+                    sharedConstants.API_ENDPOINT + 'save-meta-pages-groups',
                     {
                         pages: selectedobject,
                         user: this.user.id
