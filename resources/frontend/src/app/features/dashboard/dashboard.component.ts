@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
                 accessToken: res.authResponse.accessToken,
                 id: res.authResponse.userID,
             };
-            this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
+            this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + 'get-meta-pages-groups', {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
@@ -173,7 +173,7 @@ export class DashboardComponent implements OnInit {
             );
 
             this.service.manageFacebookPages(
-                sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+                sharedConstants.API_ENDPOINT + 'save-meta-pages-groups',
                 {
                     pages: selectedobject,
                     user: this.user.id

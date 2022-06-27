@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Http\Controllers\Socials\InstagramController;
 use App\Http\Traits\Services\FacebookService;
 use App\Models\Account;
 use App\Models\UsersAccounts;
@@ -30,6 +31,7 @@ trait RequestsTrait
 
     public static function getAllAccountsFromDB(int $accountId = null)
     {
+        $instgramController = new InstagramController();
         $AllPages = [];
         $accountObject = Account::where('companyId', UserTrait::getCompanyId());
 
@@ -54,13 +56,16 @@ trait RequestsTrait
 
                 $followers = $pageInfo->followers;
                 $link = $pageInfo->link;
+                $username = $pageInfo->username;
             } else {
-                $followers = null;
-                $link = null;
+                $pageInfo = FacebookService::getinstagramPageInfo($uid, $instgramController->getAccessToken($id));
+                $followers = $pageInfo->followers;
+                $link = $pageInfo->link;
+                $username = $pageInfo->username;
             }
             $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,
                 'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false,
-                'followers' => $followers, 'link' => $link, ];
+                'followers' => $followers, 'link' => $link, 'username' => $username ];
 
             if (UserTrait::getUserObject()->hasRole('companyadmin')) {
                 $pageContent['users'] = UserTrait::getUsersLinkedToAccounts($id);
