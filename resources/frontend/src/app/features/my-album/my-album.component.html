@@ -1,1 +1,22 @@
-<p>my-album works!</p>
+<div class="preview-container">
+    <input type='file' (change)="onSelectFile($event)" />
+    <video id="video" [src]="url" *ngIf="format==='video' && url" height="200" controls></video> <br/>
+    <div class="preview-container" *ngIf="url">
+        <button (click)="capture()">Capture</button> <br/><br/>
+        <div id="preview" class="preview"></div>
+        <button (click)="save()">save</button> <br/><br/>
+    </div>
+</div>
+
+<style>
+    .preview {
+    display: flex;
+    overflow: auto;
+    }
+
+    .preview-container{
+        display: flex;
+        flex-direction: column;
+        margin : 20px 0;
+    }
+</style>
