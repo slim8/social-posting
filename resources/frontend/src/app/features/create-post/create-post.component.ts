@@ -21,7 +21,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 })
 export class CreatePostComponent implements OnInit {
     //upload file apiURL
-    uploadFileAPIURL = sharedConstants.API_ENDPOINT + "/uploadfile";
+    uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
 
     //refresh instagram component
     refresh: boolean = false;
@@ -39,19 +39,25 @@ export class CreatePostComponent implements OnInit {
     @Input() urlLinks: any[] = [{ url: "" }];
     urlLinksIndex = 0;
     tags: string[] = [];
+    instaTags: string[] = [];
+    fbTags: string[] = [];
     inputVisible = false;
     inputValue = '';
+    inputValueInsta = '';
+    inputValueFb = '';
     @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
     tabId1: any = 'instagram-tab-title';
     tabId: any = 'images';
     message: string = '';
+    facebookMessage: string = '';
+    instagramMessage: string = '';
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
     previewVisible = false;
     listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =
         [];
     size: NzSelectSizeType = 'large';
-    tagValue: any[] = [];
+    accountsValue: any[] = [];
     selectedFile: any = [];
     inputValue2 = '@';
     suggestions = [
@@ -88,7 +94,12 @@ export class CreatePostComponent implements OnInit {
     getPages() {
         this.facebookSocialService.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
-                this.listOfPages = success.pages;
+                success.pages.forEach((page: any) => {
+                    if (page.isConnected == true) {
+                        this.listOfPages.push(page);
+                    }
+                })
+
             },
             (error) => {
                 this.shared.createMessage('error', error.error.message);
@@ -99,8 +110,11 @@ export class CreatePostComponent implements OnInit {
     submitForm(param: string) {
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
         let btnSubmit = document.getElementById('btn-submit');
-        let successDialog = document.getElementById('successDialog');
-        let spinning = document.getElementsByClassName('m-loading-spin')[0];
+        let iconSave = document.querySelector('.m-button-icon-save');
+        let iconPublish = document.querySelector('.m-button-icon-publish');
+        let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
+        let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
+        // m-button-icon-save
         const formData: FormData = new FormData();
         let post: any = {
             message: "",
@@ -110,30 +124,37 @@ export class CreatePostComponent implements OnInit {
             videoTitle: ""
         }
 
-        // let post: any = []
-
-        this.tagValue.forEach((accountId: any) => {
-            post.message = this.message;
-            post.hashtags = this.tags;
-            post.mentions = this.mentions;
-            post.accountId = accountId;
-            post.videoTitle = "this is video title";
-
+        this.accountsValue.forEach((accountId: any) => {
+            let arr = accountId.split("|");
+            let id = arr[0];
+            if (accountId.includes('facebook')) {
+                post.message = this.facebookMessage;
+                post.hashtags = this.fbTags;
+                post.mentions = this.mentions;
+                post.accountId = id;
+                post.videoTitle = "";
+            } else if (accountId.includes('instagram')) {
+                post.message = this.instagramMessage;
+                post.hashtags = this.instaTags;
+                post.mentions = this.mentions;
+                post.accountId = id;
+                post.videoTitle = "";
+            }
             console.log(JSON.stringify(post));
             formData.append('posts[]', JSON.stringify(post));
         });
 
-        if (this.tags.length > 0) {
-            this.tags.forEach((tag: any) => {
-                formData.append('tags[]', tag);
-            });
-        }
+        // if (this.tags.length > 0) {
+        //     this.tags.forEach((tag: any) => {
+        //         formData.append('tags[]', tag);
+        //     });
+        // }
 
-        if (this.mentions.length > 0) {
-            this.mentions.forEach((mention: any) => {
-                formData.append('mention[]', mention);
-            });
-        }
+        // if (this.mentions.length > 0) {
+        //     this.mentions.forEach((mention: any) => {
+        //         formData.append('mention[]', mention);
+        //     });
+        // }
 
         if (this.urlLinks.length > 0) {
             this.urlLinks.forEach((url: any) => {
@@ -142,11 +163,11 @@ export class CreatePostComponent implements OnInit {
             });
         }
 
-        if (this.selectedFile.length > 0) {
-            this.selectedFile.forEach((file: any) => {
-                formData.append('sources[]', file.originFileObj);
-            });
-        }
+        // if (this.selectedFile.length > 0) {
+        //     this.selectedFile.forEach((file: any) => {
+        //         formData.append('sources[]', file.originFileObj);
+        //     });
+        // }
 
         formData.append('status', param);
         formData.append('message', this.message);
@@ -154,8 +175,16 @@ export class CreatePostComponent implements OnInit {
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: (event) => {
+                    if (param == 'PUBLISH') {
+                        iconPublish?.classList.add('hide');
+                        iconPublish?.parentElement?.classList.add('wide');
+                        spinningPublish.classList.add('show');
+                    } else {
+                        iconSave?.classList.add('hide');
+                        iconSave?.parentElement?.classList.add('wide');
+                        spinningDraft.classList.add('show');
+                    }
                     loadingScreen.classList.add('m-loading-screen-active');
-                    spinning.classList.add('show');
                     btnSubmit?.classList.add('m-btn-submit');
                 },
                 error: (err) => {
@@ -167,22 +196,39 @@ export class CreatePostComponent implements OnInit {
                     else {
                         this.shared.createMessage('error', err.error.message);
                     }
+                    if (param == 'PUBLISH') {
+                        iconPublish?.classList.remove('hide');
+                        iconPublish?.parentElement?.classList.remove('wide');
+                    } else {
+                        iconSave?.classList.remove('hide');
+                        iconSave?.parentElement?.classList.remove('wide');
+                    }
                     loadingScreen.classList.remove('m-loading-screen-active');
-                    spinning.classList.remove('show');
+                    spinningPublish.classList.remove('show');
+                    spinningDraft.classList.remove('show');
                     btnSubmit?.classList.remove('m-btn-submit');
                 },
                 complete: () => {
                     this.selectedFile = [];
                     this.message = '';
-                    this.tagValue = [];
+                    this.accountsValue = [];
                     loadingScreen.classList.remove('m-loading-screen-active');
-                    spinning.classList.remove('show');
+                    spinningPublish.classList.remove('show');
+                    spinningDraft.classList.remove('show');
                     btnSubmit?.classList.remove('m-btn-submit');
 
                     if (param == 'PUBLISH') {
-                        successDialog?.classList.remove('is-hidden');
+                        this.shared.createMessage('success', 'published!');
                     } else {
                         this.shared.createMessage('success', 'saved to drafts!');
+                    }
+
+                    if (param == 'PUBLISH') {
+                        iconPublish?.classList.remove('hide');
+                        iconPublish?.parentElement?.classList.remove('wide');
+                    } else {
+                        iconSave?.classList.remove('hide');
+                        iconSave?.parentElement?.classList.remove('wide');
                     }
 
                 },
@@ -203,23 +249,27 @@ export class CreatePostComponent implements OnInit {
     //upload files changes
     handleChange(event: any): void {
         let img = {
-            url : ""
+            url: ""
         }
         if (event.type == 'success') {
-            console.log(event)
-            img.url = "";
-            event.fileList.forEach((file: any) => {
-                console.log(file);
-                img.url = file.response.files.url;
-                this.urlLinks.push(img);
-                console.log("here");
-                console.log(this.urlLinks);
-            })
+            img.url = event.file.response.files.url;
+            this.urlLinks.push(img);
         }
+        console.log(this.urlLinks);
     }
 
-    handleClose(removedTag: {}): void {
+    handleCloseInsta(removedTag: {}): void {
+        this.instaTags = this.instaTags.filter((tag) => tag !== removedTag);
+    }
+
+    handleCloseFb(removedTag: {}): void {
+        this.fbTags = this.fbTags.filter((tag) => tag !== removedTag);
+    }
+
+    handleCloseMain(removedTag: {}): void {
         this.tags = this.tags.filter((tag) => tag !== removedTag);
+        this.instaTags = this.instaTags.filter((tag) => tag !== removedTag);
+        this.fbTags = this.fbTags.filter((tag) => tag !== removedTag);
     }
 
     sliceTagName(tag: string): string {
@@ -237,8 +287,26 @@ export class CreatePostComponent implements OnInit {
     handleInputConfirm(): void {
         if (this.inputValue) {
             this.tags = [...this.tags, this.inputValue];
+            this.instaTags = [...this.instaTags, this.inputValue];
+            this.fbTags = [...this.fbTags, this.inputValue];
         }
         this.inputValue = '';
+        this.inputVisible = true;
+    }
+
+    handleInputConfirmInsta(): void {
+        if (this.inputValueInsta) {
+            this.instaTags = [...this.instaTags, this.inputValueInsta];
+        }
+        this.inputValueInsta = '';
+        this.inputVisible = true;
+    }
+
+    handleInputConfirmFb(): void {
+        if (this.inputValueFb) {
+            this.fbTags = [...this.fbTags, this.inputValueFb];
+        }
+        this.inputValueFb = '';
         this.inputVisible = true;
     }
 
@@ -335,5 +403,19 @@ export class CreatePostComponent implements OnInit {
 
     collapseImageUpload() {
         this.uploadImageActive = !this.uploadImageActive;
+    }
+
+    updateMessage() {
+        this.facebookMessage = this.message;
+        this.instagramMessage = this.message;
+    }
+
+    checkMessage() {
+        let mainTextField = document.getElementById("mainMessage");
+        if (this.facebookMessage != this.message || this.instagramMessage != this.message) {
+            mainTextField?.setAttribute("disabled", "true");
+        } else {
+            mainTextField?.removeAttribute("disabled");
+        }
     }
 }

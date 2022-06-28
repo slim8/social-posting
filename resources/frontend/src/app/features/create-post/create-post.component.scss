@@ -38,16 +38,16 @@ z-select {
 // cdk-virtual-scroll-viewport {
 //     height: 150px;
 // }
-// .m-loading-screen-active {
-//     top: 0;
-//     left: 0;
-//     position: absolute;
-//     width: 100vw;
-//     height: 100vh;
-//     background-color: black;
-//     opacity: 0.25;
-//     z-index: 1;
-// }
+.m-loading-screen-active {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.25;
+    z-index: 1;
+}
 // .m-btn-submit {
 //     position: relative;
 //     width: 100px;
@@ -56,16 +56,21 @@ z-select {
 //     flex-direction: row;
 //     border: 1px solid #a8d7fd;
 // }
-// .m-loading-spin {
-//     display: none;
-//     position: absolute;
-//     right: 20px;
-//     top: 15px;
-// }
-// .show {
-//     display: block;
-// }
-
+.m-loading-spin {
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 25px;
+}
+.show {
+    display: block;
+}
+.hide {
+    display: none;
+}
+.wide {
+    width: 200px;
+}
 
 // .mod-create-post {
 //     height: 100%;
@@ -760,6 +765,25 @@ z-select {
                 width: calc(100% - 21px);
                 height: calc(100% - 41px);
                 background-color: $color-media-background-light-grey;
+
+                > .m-no-preview {
+                    width: 40%;
+                    margin: auto;
+                    text-align: center;
+                    padding-top: 20%;
+                    > h3 {
+                        @include textstyle-size-14-bold();
+                        color: $color-media-black-opacity-half;
+                        margin-bottom: 14px;
+                    }
+
+                    > p {
+                        @include textstyle-size-10();
+                        color: $color-media-black-opacity-half;
+                        margin: 0;
+                    }
+                }
+
                 > .m-instagram-device {
                     width:100%;
                     max-width: 360px;
@@ -976,6 +1000,7 @@ z-select {
             float: right;
 
             > button {
+                position: relative;
                 padding: 6px 12px 8px 14px;
                 margin-left: 7px;
                 >span {
