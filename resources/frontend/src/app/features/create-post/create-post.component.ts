@@ -36,7 +36,7 @@ export class CreatePostComponent implements OnInit {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    @Input() urlLinks: any[] = [{ url: "" }];
+    @Input() urlLinks: any[] = [{ url: "", type:"" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     instaTags: string[] = [];
@@ -123,7 +123,6 @@ export class CreatePostComponent implements OnInit {
             accountId: "",
             videoTitle: ""
         }
-
         this.accountsValue.forEach((accountId: any) => {
             let arr = accountId.split("|");
             let id = arr[0];
@@ -157,8 +156,21 @@ export class CreatePostComponent implements OnInit {
         // }
 
         if (this.urlLinks.length > 0) {
-            this.urlLinks.forEach((url: any) => {
-                formData.append('images[]', url.url);
+          this.urlLinks.forEach((media: any) => {
+              let videoObject: any = {
+                url: "",
+                seconde: "",
+                thumbnail: ""
+              }
+              if(media.type == "image") {
+                formData.append('images[]', media.url);
+              } else if (media.type == "video") {
+                videoObject.url = media.url;
+                videoObject.seconde = 3;
+                videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
+                formData.append('videos[]', JSON.stringify(videoObject));
+              }
+
                 // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
             });
         }
@@ -236,7 +248,7 @@ export class CreatePostComponent implements OnInit {
         }
     }
 
-    //Images preview from upload file 
+    //Images preview from upload file
     handlePreview = async (file: NzUploadFile): Promise<void> => {
         if (!file.url && !file['preview']) {
             file['preview'] = await getBase64(file.originFileObj!);
@@ -249,10 +261,12 @@ export class CreatePostComponent implements OnInit {
     //upload files changes
     handleChange(event: any): void {
         let img = {
-            url: ""
+            url: "",
+            type: ""
         }
         if (event.type == 'success') {
             img.url = event.file.response.files.url;
+            img.type = event.file.response.files.type;
             this.urlLinks.push(img);
         }
         console.log(this.urlLinks);
