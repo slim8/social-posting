@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -155,7 +154,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -194,7 +192,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
     ],
 
     /*
@@ -209,8 +206,8 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Eloquent'   => \App\Http\Extends\ExtendedModel::class,
+        'Eloquent' => \App\Http\Extends\ExtendedModel::class,
+        'Image' => \Intervention\Image\Facades\Image::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
-
 ];
