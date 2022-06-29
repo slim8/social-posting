@@ -288,10 +288,23 @@
                             </nz-modal>
                         </div>
                     </div>
+                    <div  *ngIf="showUploadVideo" class="m-upload-image" >
+                        <div id="selectbuttons">
+                            <button id="filebtn" class="btn" (click)="showFile()">From File</button>
+                            <!-- <button id="urlbtn" class="btn" (click)="showUrl()">From Url</button> -->
+                        </div>
+                        <div style="display: none; margin-top: 25px;" id="fileControls">
+                            <input type="file" id="inputfile" class="custom-file-input" accept="video/*" (change)="loadFile($event)" />
+                            <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
+                        </div>
+                        <video poster="" style="max-width: 150px; max-height: 100px; transform: scale(0); transition: all 0.3s;" controls id="video">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
                     <div class="m-form-field">
                         <div class="m-choose-media">
                             <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:image"></i></span> Foto hinzufügen</button>
-                            <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
+                            <button class="m-button is-disabled m-video" (click)="collapseVideoUpload()"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
                             <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
                         </div>
                     </div>
@@ -408,6 +421,17 @@
                                         <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
                                     </div>
                                 </div>
+                                <!-- display thumbnails -->
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" style="display: none; text-align: center;">
+                                    <img src="https://i.giphy.com/media/l3nWhI38IWDofyDrW/giphy.webp" alt="">
+                                  </div>
+                                  <div id="thumbnails" style="display: flex; align-items: center; transition: all 0.3s; flex-direction: row; overflow: auto;">
+                                  </div>
+                                  <div style="margin-top: 25px;" id="buttonWrapper">
+                                    <button id="generatethumbnails" (click)="generatethumbnails()">more</button>
+                                  </div>
+                                </div>
 
                             </div>
 
@@ -460,6 +484,16 @@
                                         <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
                                     </div>
                                 </div>
+
+                                <!-- display thumbnails -->
+                                <div class="m-form-group">
+                                    <div id="loader" style="display: none; text-align: center;">
+                                    <img src="https://i.giphy.com/media/l3nWhI38IWDofyDrW/giphy.webp" alt="">
+                                  </div>
+                                  <div id="thumbnails" style="display: flex; justify-content: center;flex-wrap: wrap; align-items: center; transition: all 0.3s;">
+                                  </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
