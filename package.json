@@ -21,7 +21,7 @@
         "test": "ng test",
         "start:swagger": "php artisan lrd:generate",
         "start:migrate": "php artisan migrate --seed",
-        "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --prod && node ./build.js && php artisan migrate",
+        "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration production && node ./build.js && php artisan migrate",
         "deploy-on-local": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration devlocal && node ./build.js && php artisan migrate"
     },
     "dependencies": {
