@@ -292,10 +292,6 @@
                                 Your browser does not support the video tag.
                             </video>
                         </div>
-                        <!-- <div id="selectbuttons">
-                            <button id="filebtn" class="btn" (click)="showFile()">From File</button>
-                            <button id="urlbtn" class="btn" (click)="showUrl()">From Url</button>
-                        </div> -->
                         <div style="display: none; margin-top: 25px;" id="fileControls">
                             <input type="file" id="inputfile" class="custom-file-input" accept="video/*" (change)="loadFile($event)" />
                             <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
@@ -423,13 +419,20 @@
                                 </div>
                                 <!-- display thumbnails -->
                                 <div class="m-form-group" *ngIf="showUploadVideo">
-                                    <div id="loader" style="display: none; text-align: center;">
-                                    <img src="https://i.giphy.com/media/l3nWhI38IWDofyDrW/giphy.webp" alt="">
+                                  <div id="loader" *ngIf="leadThumbnail" style=" text-align: center;">
+                                    <i nz-icon [nzType]="'loading'"></i>
                                   </div>
-                                  <div id="thumbnails" style="display: flex; align-items: center; transition: all 0.3s; flex-direction: row; overflow: auto;">
-                                  </div>
-                                  <div style="margin-top: 25px;" id="buttonWrapper">
-                                    <button id="generatethumbnails" (click)="generatethumbnails()">more</button>
+
+                                  <div class="" *ngIf="!leadThumbnail"  style="display: flex; justify-content: center;  align-items: center;">
+                                    <div class="" style="padding: 0 5px ; cursor: pointer;" (click)="generatethumbnails('previous')" >
+                                        <i nz-icon nzType="left" nzTheme="outline"></i>
+                                    </div>
+                                    <div style="display: flex; align-items: center; transition: all 0.3s; flex-direction: row; overflow: auto;">
+                                        <img *ngFor="let thumbnail of listThumbnail" style="width:72px; height : 56px ; object-fit:cover ; cursor : pointer ; margin : 10px;" [src]="thumbnail" alt="" (click)="selectThumbnail(thumbnail)">
+                                    </div>
+                                    <div class="" style="padding: 0 5px ;cursor: pointer;" (click)="generatethumbnails('next')">
+                                        <i nz-icon nzType="right" nzTheme="outline"></i>
+                                    </div>
                                   </div>
                                 </div>
 
@@ -486,13 +489,23 @@
                                 </div>
 
                                 <!-- display thumbnails -->
-                                <div class="m-form-group">
-                                    <div id="loader" style="display: none; text-align: center;">
-                                    <img src="https://i.giphy.com/media/l3nWhI38IWDofyDrW/giphy.webp" alt="">
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" style=" text-align: center;">
+                                      <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+  
+                                    <div class="" *ngIf="!leadThumbnail"  style="display: flex; justify-content: center;  align-items: center;">
+                                      <div class="" style="padding: 0 5px ; cursor: pointer;" (click)="generatethumbnails('previous')" >
+                                          <i nz-icon nzType="left" nzTheme="outline"></i>
+                                      </div>
+                                      <div style="display: flex; align-items: center; transition: all 0.3s; flex-direction: row; overflow: auto;">
+                                          <img *ngFor="let thumbnail of listThumbnail" style="width:72px; height : 56px ; object-fit:cover ; cursor : pointer ; margin : 10px;" [src]="thumbnail" alt="" (click)="selectThumbnail(thumbnail)">
+                                      </div>
+                                      <div class="" style="padding: 0 5px ;cursor: pointer;" (click)="generatethumbnails('next')">
+                                          <i nz-icon nzType="right" nzTheme="outline"></i>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div id="thumbnails" style="display: flex; justify-content: center;flex-wrap: wrap; align-items: center; transition: all 0.3s;">
-                                  </div>
-                                </div>
 
                             </div>
                         </div>

@@ -76,7 +76,11 @@ export class CreatePostComponent implements OnInit {
     showUploadVideo = false;
     selectedVideo :any = null;
 
-    currentTimePosition = 0;
+    selectedThumbnail : string = '';
+    listThumbnail : string[] = [];
+    leadThumbnail : Boolean = false;
+
+    currentTimePosition = -10;
     duration = 10;
 
     constructor(
@@ -445,76 +449,50 @@ export class CreatePostComponent implements OnInit {
         console.log(this.showUploadVideo);
     }
 
-    showFile(){
-        let selectbuttons = document.getElementById("selectbuttons") as HTMLDivElement;
-        let fileControls = document.getElementById("fileControls") as HTMLDivElement ;
-        let videoUrl = document.getElementById("videoUrl") as HTMLInputElement;
-        console.log(selectbuttons);
-          
-        selectbuttons.style.display = "none";
-        fileControls.style.display = "flex";
-        videoUrl.style.display = "none"
-    }
-
     loadFile(e : Event){
         let target = e.target as HTMLInputElement;
         let video = document.getElementById("video") as HTMLVideoElement;
-        let numberWrapper = document.getElementById("numberWrapper") as HTMLDivElement ;
-        let buttonWrapper = document.getElementById("buttonWrapper") as HTMLDivElement ;
         if (target.files?.length) {
-          this.selectedVideo = target.files[0];
-          var source = document.createElement('source');
-              importFileandPreview(this.selectedVideo).then((url) => {
-              source.setAttribute('src', url);
-              source.setAttribute('type', this.selectedVideo.type);
-              generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-                // video operations
-                // video.setAttribute("poster", thumbnails[1])
-                // video.setAttribute("src", url)
-                video.style.width = "auto";
-                video.style.height = "auto"
+            this.selectedVideo = target.files[0];
+            var source = document.createElement('source');
+            importFileandPreview(this.selectedVideo).then((url) => {
+                source.setAttribute('src', url);
+                source.setAttribute('type', this.selectedVideo.type);
+                generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
+                    video.style.width = "auto";
+                    video.style.height = "auto"
+                    video.style.transform = "scale(1)"
+                })
                 video.style.transform = "scale(1)"
-              })
-              // numberInput
-              numberWrapper.style.display = "block";
-              buttonWrapper.style.display = "block";
-              video.style.transform = "scale(1)"
-              video.innerHTML = "";
-              video.appendChild(source);
-              
+                video.innerHTML = "";
+                video.appendChild(source);
             });
         }
-        this.generatethumbnails();
+        this.generatethumbnails('next');
       }
 
-      generatethumbnails(){
-        let thumbnaislWrapper = document.getElementById("thumbnails") as HTMLDivElement;
-        let loader = document.getElementById("loader") as HTMLDivElement;
-        let numberInput = document.getElementById("numberofthumbnails") as HTMLInputElement ;
-       
-        thumbnaislWrapper.innerHTML = "";
-        loader.style.display = "block";
-        generateVideoThumbnails(this.selectedVideo, 4 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
-          // console.log(thumbArray);
-          this.currentTimePosition += this.duration ;
-          let thumbnailsImg = thumbArray.map((item) => {
-            let img = document.createElement('img');
-            img.src = item;
-            img.alt = "";
-            img.style.width = "200px";
-            img.style.objectFit = "cover";
-            img.style.margin = "10px";
-            img.style.cursor = "pointer";
-            img.addEventListener("click", function() {
-              (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item);
-            })
-            return img;
-          })
-          thumbnaislWrapper.innerHTML = "";
-          loader.style.display = "none";
-          thumbnailsImg.forEach((item) => {
-            thumbnaislWrapper.appendChild(item);
-          })
+      generatethumbnails(action : string){
+        this.leadThumbnail = true
+        console.log(this.selectedVideo , this.selectedVideo.duration)
+        if(action == "previous"){
+            this.currentTimePosition -= this.duration ;
+        }else if(action == "next"){
+            this.currentTimePosition += this.duration ;
+        }
+        console.log(this.currentTimePosition);
+        
+        generateVideoThumbnails(this.selectedVideo, 3 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
+          this.listThumbnail = thumbArray;
+          console.log(thumbArray , this.listThumbnail);
+          this.leadThumbnail = false ;
         })
       }
+
+      selectThumbnail(item : string){
+        console.log(item);
+        this.selectedThumbnail = item;
+        console.log(this.selectedThumbnail);
+        (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item);
+      }
+
 }

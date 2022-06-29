@@ -596,33 +596,7 @@ z-select {
                             flex-wrap: wrap;
                             gap: 8px;
 
-                            > button {
-                                background-color: $color-media-lighter-grey;
-                                color: $color-base-100;
-                                padding: 4px 12px 8px;
-                                @include textstyle-size-12();
-                                &.m-image , &.m-video {
-                                    width: 149px;
-                                } 
-                                &.m-gallery {
-                                    width: 100%;
-                                    text-align: left;
-                                    > span {
-                                        margin-left: 3px;
-                                    }
-                                }
-
-                                > span {
-                                    margin-right: 9px;
-
-                                    i {
-                                        > svg {
-                                            font-size: 15px;
-                                        }
-                                    }
-                                }
-                            }
-                            > label {
+                            > button , label {
                                 background-color: $color-media-lighter-grey;
                                 color: $color-base-100;
                                 padding: 4px 12px 8px;
