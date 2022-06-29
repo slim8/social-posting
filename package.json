@@ -2,8 +2,10 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
+        "local": "npm run devlocal",
         "i18n:extract": "ng extract-i18n --output-path resources/frontend/src/locale",
         "development": "mix",
+        "devlocal": "mix --devlocal",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
@@ -19,7 +21,8 @@
         "test": "ng test",
         "start:swagger": "php artisan lrd:generate",
         "start:migrate": "php artisan migrate --seed",
-        "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --prod && node ./build.js && php artisan migrate"
+        "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --prod && node ./build.js && php artisan migrate",
+        "deploy-on-local": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration development && node ./build.js && php artisan migrate"
     },
     "dependencies": {
         "@angular/animations": "~13.2.0",

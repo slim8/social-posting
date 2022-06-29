@@ -39,6 +39,34 @@
                     margin: 0;
                 }
             }
+
+            > .m-control-buttons {
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+                gap: 63px;
+                padding-right: 20%;
+
+                > .m-logout {
+                    cursor: pointer;
+
+                    > i {
+                        svg {
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                > .m-user {
+                    cursor: pointer;
+
+                    > i {
+                        svg {
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
         }
     }
 }

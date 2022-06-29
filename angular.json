@@ -82,6 +82,29 @@
                             ],
                             "outputHashing": "all"
                         },
+                        "devlocal": {
+                            "outputPath": "public/assets/angular",
+                            "deployUrl": "/assets/angular/",
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "20mb",
+                                    "maximumError": "50mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "20kb",
+                                    "maximumError": "40kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "resources/frontend/src/environments/environment.ts",
+                                    "with": "resources/frontend/src/environments/environment.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
                         "development": {
                             "buildOptimizer": false,
                             "optimization": false,

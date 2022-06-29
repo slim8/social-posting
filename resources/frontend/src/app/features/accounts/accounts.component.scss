@@ -213,7 +213,21 @@
                         }
                     }
 
-                    >.m-icon-button {
+                    > .m-action-manager {
+                        width: 100%;
+                        justify-content: flex-end;
+                        flex-direction: column;
+                        height: fit-content;
+                        gap: 30px;
+
+                        > button {
+                            border: none;
+                            outline: none;
+                            background-color: transparent;
+                        }
+                    }
+
+                    > .m-icon-button {
                         position: absolute;
                         border: none;
                         outline: none;

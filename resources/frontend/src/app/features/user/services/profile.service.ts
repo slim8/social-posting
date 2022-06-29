@@ -10,15 +10,15 @@ export class ProfileService {
   constructor(private http: HttpClient) { }
 
     getProfileDetails() {
-        return this.http.get(sharedConstants.API_ENDPOINT+ '/profile' );
+        return this.http.get(sharedConstants.API_ENDPOINT+ 'profile' );
     }
 
     saveNewPassword(data : any) {
-      return this.http.post(sharedConstants.API_ENDPOINT+ '/change-password',data );
+      return this.http.post(sharedConstants.API_ENDPOINT+ 'change-password',data );
     }
 
     saveProfile(data : any) {
-      return this.http.post(sharedConstants.API_ENDPOINT+ '/profile',data );
+      return this.http.post(sharedConstants.API_ENDPOINT+ 'profile',data );
     }
   
 }
