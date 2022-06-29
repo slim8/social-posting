@@ -75,9 +75,9 @@ class InstagramController extends Controller
     /**
      * Post Media Instagram From URL.
      */
-    public function postMediaUrl($igUser, $token, $url, string $type = 'image')
+    public function postMediaUrl($igUser, $token, $url, string $type = 'image', int $videoSecondes = 0)
     {
-        $mediaParameters = $type == 'video' ? '&media_type=VIDEO&video_url=' : '&image_url=';
+        $mediaParameters = $type == 'video' ? '&media_type=VIDEO&thumb_offset='.$videoSecondes.'&video_url=' : '&image_url=';
         $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.$mediaParameters.$url.'&is_carousel_item=true');
 
         if ($response->json('id')) {
@@ -192,7 +192,10 @@ class InstagramController extends Controller
             if ($videos) {
                 $videosConatiners = [];
                 foreach ($videos as $video) {
-                    $videoContainerId = $this->postMediaUrl($igUser, $object['access_token'], $video, 'video');
+                    $videoObj = json_decode($video, true);
+                    $video = $videoObj['url'];
+                    $videoSecondes = $videoObj['seconde'];
+                    $videoContainerId = $this->postMediaUrl($igUser, $object['access_token'], $video, 'video', $videoSecondes);
                     $videosConatiners[] = $videoContainerId;
                     $images[] = $videoContainerId;
                 }

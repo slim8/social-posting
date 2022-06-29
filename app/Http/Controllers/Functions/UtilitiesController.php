@@ -74,7 +74,7 @@ class UtilitiesController extends Controller
         $fileName = $exploded[count($exploded) - 1];
         $newFileName = explode('.', $fileName)[0];
         $newFile = storage_path().'/app/public/temporarStored/'.$newFileName.'.jpeg';
-        $this->imageManager->make($object)->encode('jpg', 80)->save($newFile); 
+        $this->imageManager->make($object)->encode('jpg', 80)->save($newFile);
 
         unlink($object);
 
