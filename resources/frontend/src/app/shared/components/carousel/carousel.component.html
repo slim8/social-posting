@@ -8,7 +8,7 @@
     <div id="tooltip" class="m-tooltip">who's this?</div>
     <ul id="data-slides" data-slides>
         <li *ngFor="let item of urlLinks; let index = index;" class="m-slide active" data-active>
-            <img *ngIf="item.url"  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()"  src="{{item.url}}" alt="image #{{index}}">
+            <img *ngIf="item.url!=''"  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()"  src="{{item.url}}" alt="image #{{index}}">
         </li>
     </ul>
 

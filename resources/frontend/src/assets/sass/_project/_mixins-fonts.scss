@@ -56,13 +56,13 @@
     @include line-height(36/36);
 }
 
-@mixin textstyle-size-44 {
+@mixin textstyle-size-44-bold {
     @include fontfamily-primary-bold;
-    @include font-size(20px);
-    @include line-height(24/20);
+    @include font-size(44px);
+    @include line-height(60/44);
     @include mq(desktop) {
-        @include font-size(24px);
-        @include line-height(28/24);
+        @include font-size(44px);
+        @include line-height(60/44);
     }
 }
 

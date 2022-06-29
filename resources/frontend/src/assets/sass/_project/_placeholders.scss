@@ -77,6 +77,9 @@
 }
 
 svg {
+    .m-logout & , .m-user & {
+        font-size: 18px;
+    }
     .m-home & , .m-collapse-menu-button & {
         font-size: 16px;
     }
