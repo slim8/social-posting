@@ -38,7 +38,7 @@ export const importFileandPreview = (file: File, revoke?: boolean): Promise<stri
  * @returns {string[]} An array of `base64` images
  *
  */
-export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnails: number, type: string): Promise<string[]> => {
+export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnails: number, type: string , startPosition: number = 0 , BandDuration : number = 0): Promise<string[]> => {
     let thumbnail: string[] = [];
     let fractions: number[] = [];
     return type !== "url" ? new Promise(async (resolve, reject) => {
@@ -47,17 +47,19 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
             // divide the video timing into particular timestamps in respective to number of thumbnails
             // ex if time is 10 and numOfthumbnails is 4 then result will be -> 0, 2.5, 5, 7.5 ,10
             // we will use this timestamp to take snapshots
-            for (let i = 0; i <= duration; i += duration / numberOfThumbnails) {
+            let endDuration = BandDuration > 0 ? startPosition + BandDuration : duration
+            let compteur =   BandDuration > 0 ? BandDuration / numberOfThumbnails : (startPosition > 0 ? (endDuration - startPosition) / numberOfThumbnails : endDuration / numberOfThumbnails )
+            for (let i = startPosition ; i <= endDuration ; i += compteur) {
                 fractions.push(Math.floor(i));
             }
             // the array of promises
             let promiseArray = fractions.map((time, index) => getVideoThumbnail(videoFile, index >= fractions.length - 1 ? time - 2 : time));
-            // console.log('promiseArray', promiseArray)
-            // console.log('duration', duration)
-            // console.log('fractions', fractions)
+            console.log('promiseArray', promiseArray)
+            console.log('duration', duration)
+            console.log('fractions', fractions)
             await Promise.all(promiseArray).then((res) => {
                 res.forEach((res) => {
-                    // console.log('res', res.slice(0,8))
+                    console.log('res', res.slice(0,8) , )
                     thumbnail.push(res);
                 });
                 // console.log('thumbnail', thumbnail)
@@ -81,9 +83,9 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
                 }
                 // the array of promises
                 let promiseArray = fractions.map((time, index) => getVideoThumbnail(videoFile, index >= fractions.length - 1 ? time - 2 : time))
-                // console.log('promiseArray', promiseArray)
-                // console.log('duration', duration)
-                // console.log('fractions', fractions)
+                console.log('promiseArray', promiseArray)
+                console.log('duration', duration)
+                console.log('fractions', fractions)
                 await Promise.all(promiseArray).then((res) => {
                     res.forEach((res) => {
                         // console.log('res', res.slice(0,8))
