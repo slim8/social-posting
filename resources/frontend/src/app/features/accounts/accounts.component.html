@@ -81,8 +81,11 @@
                         <button class="m-button is-primary"><span><i nz-icon nzType="ng-zorro:edit"></i></span> Zum Beitrag</button>
                         <button class="m-button is-disabled"><span><i nz-icon nzType="ng-zorro:pencil"></i></span> Daten ändern</button>
                     </div>
-                    <button *ngIf="!page.isConnected" (click)="reconnectPage($event,page.id)" class="m-icon-button"><i nz-icon nzType="login" nzTheme="outline"></i></button>
-                    <button *ngIf="page.isConnected" (click)="showDisconnectConfirm(page.id)" class="m-icon-button"><i nz-icon nzType="delete" nzTheme="outline"></i></button>
+                    <div class="m-action-manager">
+                        <button (click)="reconnectPage($event,page.id)" class="m-icon-button"><i nz-icon nzType="login" nzTheme="outline"></i></button>
+                    </div>
+                    <!-- <button *ngIf="!page.isConnected" (click)="reconnectPage($event,page.id)" class="m-icon-button"><i nz-icon nzType="login" nzTheme="outline"></i></button>
+                    <button *ngIf="page.isConnected" (click)="showDisconnectConfirm(page.id)" class="m-icon-button"><i nz-icon nzType="delete" nzTheme="outline"></i></button> -->
                 </div>
             </div>
         </div>

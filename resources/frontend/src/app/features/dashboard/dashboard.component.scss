@@ -248,7 +248,7 @@
                 flex-direction: column;
                 gap: 12px;
                 @include mq(desktop) {
-                    width: calc(30% - 6px);
+                    width: 290px;
                 }
 
                 > .m-buttons {
