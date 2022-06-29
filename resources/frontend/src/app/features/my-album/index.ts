@@ -50,6 +50,7 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
             let endDuration = BandDuration > 0 ? startPosition + BandDuration : duration
             let compteur =   BandDuration > 0 ? BandDuration / numberOfThumbnails : (startPosition > 0 ? (endDuration - startPosition) / numberOfThumbnails : endDuration / numberOfThumbnails )
             for (let i = startPosition ; i <= endDuration ; i += compteur) {
+                if(i <= duration )
                 fractions.push(Math.floor(i));
             }
             // the array of promises

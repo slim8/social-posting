@@ -24,6 +24,9 @@ export class MyAlbumComponent implements OnInit {
   filebtn = document.getElementById("filebtn") as HTMLButtonElement;
   selectedFile :any = null;
 
+  currentTimePosition = 0;
+  duration = 10;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -79,9 +82,10 @@ export class MyAlbumComponent implements OnInit {
           video.style.transform = "scale(1)"
           video.innerHTML = "";
           video.appendChild(source);
+          
         });
     }
-    // this.generatethumbnails();
+    this.generatethumbnails();
   }
 
   generatethumbnails(){
@@ -91,9 +95,9 @@ export class MyAlbumComponent implements OnInit {
    
     thumbnaislWrapper.innerHTML = "";
     loader.style.display = "block";
-    generateVideoThumbnails(this.selectedFile, parseInt(numberInput.value) , this.selectedFile.type ).then((thumbArray) => {
+    generateVideoThumbnails(this.selectedFile, 4 , this.selectedFile.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
       // console.log(thumbArray);
-      
+      this.currentTimePosition += this.duration ;
       let thumbnailsImg = thumbArray.map((item) => {
         let img = document.createElement('img');
         img.src = item;
