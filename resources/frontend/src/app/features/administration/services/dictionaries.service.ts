@@ -10,19 +10,19 @@ export class DictionariesService {
   constructor(private http: HttpClient) {}
 
   getDictionariesList(params : any = []) {
-    return this.http.get(sharedConstants.API_ENDPOINT+ '/dictionary',{params} );
+    return this.http.get(sharedConstants.API_ENDPOINT+ 'dictionary',{params} );
   }
 
   addDictionary(data : any) {
-    return this.http.post(sharedConstants.API_ENDPOINT+ '/dictionary' ,data );
+    return this.http.post(sharedConstants.API_ENDPOINT+ 'dictionary' ,data );
   }
 
   updateDictionary(data : any) {
-    return this.http.post(sharedConstants.API_ENDPOINT+ '/dictionary/'+ data.get('id') , data);
+    return this.http.post(sharedConstants.API_ENDPOINT+ 'dictionary/'+ data.get('id') , data);
   }
 
   removeDictionary(id : any) {
-    return this.http.delete(sharedConstants.API_ENDPOINT+ '/dictionary/'+id);
+    return this.http.delete(sharedConstants.API_ENDPOINT+ 'dictionary/'+id);
   }
 
 }

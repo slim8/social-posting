@@ -4,6 +4,7 @@ import { environment } from '../../../../../environments/environment';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
 import { RegisterService } from '../../services/register.service';
+import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 @Component({
     selector: 'app-register',
@@ -32,7 +33,7 @@ export class RegisterComponent implements OnInit {
         if (this.validateForm.valid) {
             let data = this.validateForm.value;
             data['isSubscriber'] = true;
-            this.registerService.saveResources("http://posting.local/api/" + 'register', data)
+            this.registerService.saveResources(sharedConstants.API_ENDPOINT + 'register', data)
                 .subscribe(res => {
                     this.router.navigate(['/auth/login']);
                 }, err => {

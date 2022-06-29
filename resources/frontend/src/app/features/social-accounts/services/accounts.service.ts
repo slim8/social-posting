@@ -10,23 +10,23 @@ export class AccountsService {
     constructor(private http: HttpClient) { }
 
     getConnectedAccounts() {
-        return this.http.get(sharedConstants.API_ENDPOINT + '/get-connected-accounts');
+        return this.http.get(sharedConstants.API_ENDPOINT + 'get-connected-accounts');
     }
 
     disconnectAccountById(id: string) {
-        return this.http.post(sharedConstants.API_ENDPOINT + '/disconnect-token', { 'id': id });
+        return this.http.post(sharedConstants.API_ENDPOINT + 'disconnect-token', { 'id': id });
     }
 
     disconnectPageById(id: string) {
-        return this.http.post(sharedConstants.API_ENDPOINT + '/accounts/status/0/' + id, {});
+        return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/status/0/' + id, {});
     }
 
     reconnectPageById(id: string) {
-        return this.http.post(sharedConstants.API_ENDPOINT + '/accounts/status/1/' + id, {});
+        return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/status/1/' + id, {});
     }
 
     getRecentPosts(params : any = []) {
-        return this.http.get(sharedConstants.API_ENDPOINT+ '/posts', {params})
+        return this.http.get(sharedConstants.API_ENDPOINT+ 'posts', {params})
     }
 
 }
