@@ -38,8 +38,8 @@ export const importFileandPreview = (file: File, revoke?: boolean): Promise<stri
  * @returns {string[]} An array of `base64` images
  *
  */
-export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnails: number, type: string , startPosition: number = 0 , BandDuration : number = 0): Promise<string[]> => {
-    let thumbnail: string[] = [];
+export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnails: number, type: string , startPosition: number = 0 , BandDuration : number = 0): Promise<{ imgB64 : String , time : Number }[]> => {
+    let thumbnail: { imgB64 : String , time : Number }[] = [];
     let fractions: number[] = [];
     return type !== "url" ? new Promise(async (resolve, reject) => {
         if (!videoFile.type?.includes("video")) reject("not a valid video file");
@@ -56,12 +56,12 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
             // the array of promises
             let promiseArray = fractions.map((time, index) => getVideoThumbnail(videoFile, index >= fractions.length - 1 ? time - 2 : time));
             console.log('promiseArray', promiseArray)
-            console.log('duration', duration)
-            console.log('fractions', fractions)
+            // console.log('duration', duration)
+            // console.log('fractions', fractions)
             await Promise.all(promiseArray).then((res) => {
-                res.forEach((res) => {
-                    console.log('res', res.slice(0,8) , )
-                    thumbnail.push(res);
+                res.forEach((res , key) => {
+                    console.log('res', key , fractions[key] )
+                    thumbnail.push({ imgB64 : res , time : fractions[key] });
                 });
                 // console.log('thumbnail', thumbnail)
                 resolve(thumbnail);
@@ -88,9 +88,9 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
                 console.log('duration', duration)
                 console.log('fractions', fractions)
                 await Promise.all(promiseArray).then((res) => {
-                    res.forEach((res) => {
+                    res.forEach((res , key) => {
                         // console.log('res', res.slice(0,8))
-                        thumbnail.push(res);
+                        thumbnail.push({ imgB64 : res , time : fractions[key] });
                     });
                     // console.log('thumbnail', thumbnail)
                     resolve(thumbnail);

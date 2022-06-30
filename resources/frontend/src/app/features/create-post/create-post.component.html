@@ -286,14 +286,18 @@
                             </nz-modal>
                         </div>
                     </div>
-                    <div  *ngIf="showUploadVideo" class="m-upload-image" >
+                    <div  *ngIf="showUploadVideo" class="m-upload-video" >
                         <div class="clearfix">
-                            <video poster="" style="max-width: 150px; max-height: 100px; transform: scale(0); transition: all 0.3s;" controls id="video">
+                            <video poster="" controls id="video">
                                 Your browser does not support the video tag.
                             </video>
+                            <label for="inputfile" class="m-img-container">
+                                <img *ngIf="selectedThumbnail.imgB64" [src]="selectedThumbnail.imgB64" />
+                            </label>
+
                         </div>
-                        <div style="display: none; margin-top: 25px;" id="fileControls">
-                            <input type="file" id="inputfile" class="custom-file-input" accept="video/*" (change)="loadFile($event)" />
+                        <div class="m-custom-file-input" id="fileControls">
+                            <input type="file" id="inputfile"  accept="video/*" (change)="loadFile($event)" />
                             <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
                         </div>
                     </div>
@@ -419,21 +423,21 @@
                                 </div>
                                 <!-- display thumbnails -->
                                 <div class="m-form-group" *ngIf="showUploadVideo">
-                                  <div id="loader" *ngIf="leadThumbnail" style=" text-align: center;">
-                                    <i nz-icon [nzType]="'loading'"></i>
-                                  </div>
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                        <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
 
-                                  <div class="" *ngIf="!leadThumbnail"  style="display: flex; justify-content: center;  align-items: center;">
-                                    <div class="" style="padding: 0 5px ; cursor: pointer;" (click)="generatethumbnails('previous')" >
-                                        <i nz-icon nzType="left" nzTheme="outline"></i>
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                        <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                            <i nz-icon nzType="left" nzTheme="outline"></i>
+                                        </div>
+                                        <div class="m-thumbnails-preview-items" >
+                                            <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                        </div>
+                                        <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                            <i nz-icon nzType="right" nzTheme="outline"></i>
+                                        </div>
                                     </div>
-                                    <div style="display: flex; align-items: center; transition: all 0.3s; flex-direction: row; overflow: auto;">
-                                        <img *ngFor="let thumbnail of listThumbnail" style="width:72px; height : 56px ; object-fit:cover ; cursor : pointer ; margin : 10px;" [src]="thumbnail" alt="" (click)="selectThumbnail(thumbnail)">
-                                    </div>
-                                    <div class="" style="padding: 0 5px ;cursor: pointer;" (click)="generatethumbnails('next')">
-                                        <i nz-icon nzType="right" nzTheme="outline"></i>
-                                    </div>
-                                  </div>
                                 </div>
 
                             </div>
@@ -490,22 +494,22 @@
 
                                 <!-- display thumbnails -->
                                 <div class="m-form-group" *ngIf="showUploadVideo">
-                                    <div id="loader" *ngIf="leadThumbnail" style=" text-align: center;">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
                                       <i nz-icon [nzType]="'loading'"></i>
                                     </div>
   
-                                    <div class="" *ngIf="!leadThumbnail"  style="display: flex; justify-content: center;  align-items: center;">
-                                      <div class="" style="padding: 0 5px ; cursor: pointer;" (click)="generatethumbnails('previous')" >
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                      <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
                                           <i nz-icon nzType="left" nzTheme="outline"></i>
                                       </div>
-                                      <div style="display: flex; align-items: center; transition: all 0.3s; flex-direction: row; overflow: auto;">
-                                          <img *ngFor="let thumbnail of listThumbnail" style="width:72px; height : 56px ; object-fit:cover ; cursor : pointer ; margin : 10px;" [src]="thumbnail" alt="" (click)="selectThumbnail(thumbnail)">
+                                      <div class="m-thumbnails-preview-items" >
+                                          <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
                                       </div>
-                                      <div class="" style="padding: 0 5px ;cursor: pointer;" (click)="generatethumbnails('next')">
+                                      <div class="m-next-icon" (click)="generatethumbnails('next')">
                                           <i nz-icon nzType="right" nzTheme="outline"></i>
                                       </div>
                                     </div>
-                                  </div>
+                                </div>
 
                             </div>
                         </div>
@@ -513,7 +517,7 @@
                 </div>
             </div>
             <div class="m-right-col">
-                <div *ngIf="urlLinks.length == 1" class="m-no-preview">
+                <div *ngIf="false" class="m-no-preview">
                     <h3>Vorschau nicht verfügbar</h3>
                     <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu, 
                         um hier eine Vorschau zu sehen. </p>
@@ -558,6 +562,7 @@
                         </main>
                     </div>
                 </div>
+                <app-facebook-preview [ThumbnailImg]="selectedThumbnail.imgB64"></app-facebook-preview>
             </div>
         </div>
         <div class="m-action-buttons">

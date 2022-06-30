@@ -76,8 +76,13 @@ export class CreatePostComponent implements OnInit {
     showUploadVideo = false;
     selectedVideo :any = null;
 
-    selectedThumbnail : string = '';
-    listThumbnail : string[] = [];
+    selectedThumbnail = {
+        imgB64 : '' , 
+        time : 0
+    };
+
+    listThumbnail : { imgB64 : any , time : any }[] = [];
+
     leadThumbnail : Boolean = false;
 
     currentTimePosition = -10;
@@ -119,6 +124,8 @@ export class CreatePostComponent implements OnInit {
     }
 
     submitForm(param: string) {
+        console.log(this.selectedThumbnail , this.selectedVideo);
+        
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
         let btnSubmit = document.getElementById('btn-submit');
         let iconSave = document.querySelector('.m-button-icon-save');
@@ -468,10 +475,11 @@ export class CreatePostComponent implements OnInit {
                 video.appendChild(source);
             });
         }
-        this.generatethumbnails('next');
+        this.generatethumbnails('next' , true);
+        this.currentTimePosition = -10;
       }
 
-      generatethumbnails(action : string){
+      generatethumbnails(action : string , newVideo = false ){
         this.leadThumbnail = true
         console.log(this.selectedVideo , this.selectedVideo.duration)
         if(action == "previous"){
@@ -483,16 +491,20 @@ export class CreatePostComponent implements OnInit {
         
         generateVideoThumbnails(this.selectedVideo, 3 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
           this.listThumbnail = thumbArray;
+          if(newVideo){
+            this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
+            this.selectedThumbnail.time = thumbArray[0].time as number ;
+          }
           console.log(thumbArray , this.listThumbnail);
           this.leadThumbnail = false ;
         })
       }
 
-      selectThumbnail(item : string){
+      selectThumbnail(item : {imgB64 : '' , time : 0 } ){
         console.log(item);
         this.selectedThumbnail = item;
         console.log(this.selectedThumbnail);
-        (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item);
+        (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
       }
 
 }

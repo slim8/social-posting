@@ -1,0 +1,114 @@
+.m-mod-facebook-preview {
+    background: white;
+    padding: 70px;
+    height: 100%;
+    >.m-wrapper{
+        width : 311px;
+        // height: 403px;
+        border: 0.547535px solid rgba(0, 0, 0, 0.5);
+        background : white ;
+        margin: auto;
+
+        >.m-post-header {
+        width: 100% ;
+        justify-content: space-between ;
+        display: flex;
+        padding : 10px ;
+
+            >.m-user-post{
+                display: flex;
+
+                >.m-user-avatar{
+                    margin: 2px 0 ;
+                }
+
+                >.m-user-info{
+                    margin: auto 0 5px 8px;
+                    >.m-username{
+                        font-family: 'Open Sans';
+                        font-style: normal;
+                        font-weight: 700;
+                        font-size: 8.44147px;
+                        line-height: 11px;
+                        color: #000000;
+                    }
+
+                    >.m-post-date{
+                        font-family: 'Open Sans';
+                        font-style: normal;
+                        font-size: 8.44147px;
+                        line-height: 11px;
+                        color :rgba(0, 0, 0, 0.5);
+                    }
+                }
+            }
+
+            >.m-header-dots{
+                color : #D9D9D9;
+            }
+        }
+
+        >.m-post-description{
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 8.44147px;
+            line-height: 11px;
+
+            /* black */
+
+            color: #000000;
+            padding : 15px;
+        }
+
+        >.m-post-image-container{
+            height: 228px;
+            width : 100% ;
+
+            >.m-post-image-preview{
+                height: 228px;
+                width : 100% ;
+            }
+
+            >.m-post-image-play-icon{
+                position: absolute;
+                margin-top: -150px;
+                margin-left: 120px;
+            }
+        }
+
+        >.m-post-action-section{
+            margin : 10px ;
+            border-top: 1.06667px solid #707070;
+            border-bottom: 1.06667px solid #707070;
+            text-align: center;
+            opacity: 0.5;
+
+            > button {
+                margin : 2px 10px ;
+                border : none ; 
+                background-color : white ;
+                color: #636468;
+            }
+        }
+
+        >.m-post-comment-section{
+            display: flex;
+            margin : 10px ;
+            padding-bottom: 15px;
+
+            >.m-comment-avatar{
+                height: 21px;
+            }
+
+            >.m-comment-input{
+                background: #F1F2F6;
+                border-radius: 20px;
+                margin: 2px;
+                height: 21px;
+                border : none;
+            }
+        }
+        
+    }
+}
