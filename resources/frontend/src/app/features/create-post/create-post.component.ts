@@ -139,7 +139,6 @@ export class CreatePostComponent implements OnInit {
                 post.accountId = id;
                 post.videoTitle = "";
             }
-            console.log(JSON.stringify(post));
             formData.append('posts[]', JSON.stringify(post));
         });
 
@@ -268,8 +267,8 @@ export class CreatePostComponent implements OnInit {
             img.url = event.file.response.files.url;
             img.type = event.file.response.files.type;
             this.urlLinks.push(img);
+            this.refreshCarousel();
         }
-        console.log(this.urlLinks);
     }
 
     handleCloseInsta(removedTag: {}): void {
