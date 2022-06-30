@@ -1,3 +1,4 @@
+import { PostService } from './../../shared/services/post.service';
 import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -92,6 +93,7 @@ export class CreatePostComponent implements OnInit {
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
         private activatedRoute: ActivatedRoute,
+        private postService: PostService
     ) { }
 
     ngOnInit(): void {
@@ -124,8 +126,17 @@ export class CreatePostComponent implements OnInit {
     }
 
     submitForm(param: string) {
-        console.log(this.selectedThumbnail , this.selectedVideo);
         
+        // this.postService.uploadFile(this.selectedVideo).subscribe({
+        //     next: (response) => {
+        //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+        //     },
+        //     error: (err) => {
+        //     },
+        //     complete: () => {
+        //     },
+        // }) ;
+
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
         let btnSubmit = document.getElementById('btn-submit');
         let iconSave = document.querySelector('.m-button-icon-save');
@@ -501,10 +512,10 @@ export class CreatePostComponent implements OnInit {
       }
 
       selectThumbnail(item : {imgB64 : '' , time : 0 } ){
-        console.log(item);
-        this.selectedThumbnail = item;
-        console.log(this.selectedThumbnail);
-        (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+            console.log(item);
+            this.selectedThumbnail = item;
+            console.log(this.selectedThumbnail);
+            (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
       }
 
 }
