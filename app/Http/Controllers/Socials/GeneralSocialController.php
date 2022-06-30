@@ -94,6 +94,8 @@ class GeneralSocialController extends Controller
         }
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
+
+            $videoThunb = [];
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
             $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $post['accountId']) ? true : false;
@@ -139,9 +141,17 @@ class GeneralSocialController extends Controller
                     }
 
                     if ($videos) {
+                        $videoCounter = 0;
                         foreach ($videos as $video) {
+                            $video = json_decode($video, true);
+
+                            if ($videoCounter == 0) {
+                                $videoThunb = $video;
+                            }
+                            ++$videoCounter;
+
                             PostMedia::create([
-                                'url' => $video,
+                                'url' => $video['url'],
                                 'postId' => $postId->id,
                                 'type' => 'video',
                             ]);
@@ -175,8 +185,9 @@ class GeneralSocialController extends Controller
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
-                        'source' => 'To BE DEFINED', // To DO
-                        'thumbnailRessource' => 'To BE DEFINED', // TO DO
+                        'thumbnailSeconde' => isset($videoThunb['seconde']) ? $videoThunb['seconde'] : null,
+                        'thumbnailLink' => isset($videoThunb['thumbnail']) ? $videoThunb['thumbnail'] : null,
+                        'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
                         'accountId' => $post['accountId'],
                         'postIdProvider' => $postProviderId,
                     ]);

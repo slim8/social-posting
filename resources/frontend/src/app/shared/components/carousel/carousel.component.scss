@@ -74,11 +74,11 @@
     }
 }
 
-.m-slide {
+.m-slide-insta {
     inset: 0;
 }
 
-.m-slide {
+.m-slide-insta {
     position: relative;
 
     >.m-view-mentions {
@@ -90,7 +90,7 @@
     }
 }
 
-.m-slide > img {
+.m-slide-insta > img {
     display: block;
     width: 360px;
     height: 100%;
