@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiURL :'http://media-posting/api/'
+  apiURL :'http://media-posting.server/api/'
 };
