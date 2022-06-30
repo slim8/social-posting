@@ -42,6 +42,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'temporar-video' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/temporarVideo'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
         'custom-ftp' => [
             'driver' => 'ftp',
             'host' => env('UPLOAD_FTP_SERVER_HOTE'),
