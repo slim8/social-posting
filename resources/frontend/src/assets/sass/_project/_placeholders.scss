@@ -136,17 +136,17 @@ svg {
             border: 0;
             padding: 27px 29px;
             height: 141px;
-    
+
             > .m-alert-title {
                 width: 216px;
                 @include textstyle-size-16-bold();
                 padding-bottom: 11px;
             }
-    
+
             > .m-alert-text {
                 @include textstyle-size-16();
             }
-    
+
             > .m-close-icon {
                 position: absolute;
                 right: 19px;
@@ -164,4 +164,38 @@ svg {
             }
         }
     }
+}
+
+z-select {
+  width: 100%;
+}
+
+.m-loading-screen-active {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.25;
+  z-index: 1;
+}
+
+.m-loading-spin {
+  display: none;
+  position: absolute;
+  top: 15px;
+  left: 25px;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.wide {
+  width: 200px;
 }

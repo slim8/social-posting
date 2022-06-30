@@ -26,6 +26,7 @@ const userIcon = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xm
 export class SidebarComponent implements OnInit {
     @Input() isCollapsed: boolean | undefined;
     roles: any = null;
+    timeout : any;
 
     constructor(
         private iconService: NzIconService,
@@ -61,16 +62,17 @@ export class SidebarComponent implements OnInit {
     }
 
     openSidenav() {
-        let modMenu = document.querySelector('.mod-sidebar');
-        let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
-        menu?.classList.add('is-active');
-        modMenu?.classList.add('is-active');
+      clearTimeout(this.timeout);
+      let modMenu = document.querySelector('.mod-sidebar');
+      let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
+      menu?.classList.add('is-active');
+      modMenu?.classList.add('is-active');
     }
 
     closeSidenav() {
         let modMenu = document.querySelector('.mod-sidebar');
         let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
             menu?.classList.remove('is-active');
             modMenu?.classList.remove('is-active');
         }, 1500);

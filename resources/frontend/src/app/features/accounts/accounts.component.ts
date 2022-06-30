@@ -222,4 +222,8 @@ export class AccountsComponent implements OnInit {
             }
         })
     }
+
+    deletePage (id:string) {
+
+    }
 }
