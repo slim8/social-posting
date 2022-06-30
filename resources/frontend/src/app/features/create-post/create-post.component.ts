@@ -126,7 +126,8 @@ export class CreatePostComponent implements OnInit {
     }
 
     submitForm(param: string) {
-        
+        // TODO:: for video upload
+         
         // this.postService.uploadFile(this.selectedVideo).subscribe({
         //     next: (response) => {
         //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
