@@ -8,6 +8,9 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FacebookPreviewComponent implements OnInit {
 
   @Input() ThumbnailImg!: string;
+  @Input() imgList: string[] = [];
+  @Input() postDescription! : string;
+  @Input() accountName! : string;
 
   constructor() { }
 
