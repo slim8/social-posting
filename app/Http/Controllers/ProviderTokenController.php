@@ -19,12 +19,14 @@ class ProviderTokenController extends Controller
     use RequestsTrait;
 
     protected $facebookController;
+    protected $accountController;
     protected $utilitiesController;
 
     public function __construct()
     {
         $this->facebookController = new FacebookController();
         $this->utilitiesController = new UtilitiesController();
+        $this->accountController = new AccountController();
     }
 
     /**
@@ -93,7 +95,7 @@ class ProviderTokenController extends Controller
     /**
      * Refresh Token. GET without parameters for refresh token all Active Users
      * OR
-     * POST /accounts/refreshToken/{FacebookUserId} to refresh token only connected User
+     * POST /accounts/refreshToken/{FacebookUserId} to refresh token only connected User.
      */
     public function refreshToken(Request $request, int $accountId = null)
     {
@@ -110,6 +112,27 @@ class ProviderTokenController extends Controller
                 $this->refreshTokenForAccount($providerAcount, $now); // Function To Refresh Token
             }
         }
+
+        return RequestsTrait::processResponse(true);
+    }
+
+    public function deleteToken(int $tokenId)
+    {
+        $providerAcount = ProviderToken::where('createdBy', UserTrait::getCurrentId())->where('id', $tokenId)->first();
+
+        if (!$providerAcount) {
+            return RequestsTrait::processResponse(false, ['message' => "You don't have access right to delete this Account Provider"]);
+        }
+
+        $accounts = Account::where('providerTokenId', $tokenId)->get();
+
+        if ($accounts) {
+            foreach ($accounts as $account) {
+                $this->accountController->deleteAccountAction($account->id);
+            }
+        }
+
+        ProviderToken::where('id', $tokenId)->delete();
 
         return RequestsTrait::processResponse(true);
     }

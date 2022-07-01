@@ -53,16 +53,10 @@ class AccountController extends Controller
     }
 
     /**
-     * delete account and his related informations.
+     * Action for Delete Account.
      */
-    public function deleteAccount(int $accountId = null)
+    public function deleteAccountAction(int $accountId = null)
     {
-        $postsIds = [];
-        $account = RequestsTrait::findAccountByUid($accountId, 'id', 1);
-
-        if (!$account) {
-            return RequestsTrait::processResponse(false, ['message' => "You don't have rights to delete this account"]);
-        }
         $accountsPosts = AccountPost::where('accountId', $accountId)->get();
 
         foreach ($accountsPosts as $accountPost) {
@@ -82,6 +76,22 @@ class AccountController extends Controller
         }
 
         Account::where('id', $accountId)->delete();
+
+        return true;
+    }
+
+    /**
+     * delete account and his related informations.
+     */
+    public function deleteAccount(int $accountId = null)
+    {
+        $account = RequestsTrait::findAccountByUid($accountId, 'id', 1);
+
+        if (!$account) {
+            return RequestsTrait::processResponse(false, ['message' => "You don't have rights to delete this account"]);
+        }
+
+        $this->deleteAccountAction($accountId);
 
         return RequestsTrait::processResponse(true);
     }

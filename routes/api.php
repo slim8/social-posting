@@ -48,7 +48,8 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
     Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
-    Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
+    Route::post('/token/disconnect', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
+    Route::post('/token/{tokenId}/delete', [ProviderTokenController::class, 'deleteToken'])->name('delete-token.api');
     Route::post('/accounts/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
     Route::post('/accounts/token/refresh/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
     Route::post('/accounts/{accountId}/delete', [AccountController::class, 'deleteAccount'])->name('delete-accounts.api');
