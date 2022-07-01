@@ -75,10 +75,10 @@
 @mixin textstyle-size-40 {
     @include fontfamily-primary;
     @include font-size(40px);
-    @include line-height(48/40);
+    @include line-height(54.47/40);
     @include mq(desktop) {
         @include font-size(40px);
-        @include line-height(48/40);
+        @include line-height(54.47/40);
     }
 }
 
@@ -93,23 +93,43 @@
 }
 
 @mixin textstyle-size-16-bold {
-    @include fontfamily-primary-bold;
-    @include font-size(16px);
-    @include line-height(21.79/16);
-    @include mq(desktop) {
-        @include font-size(16px);
-        @include line-height(21.79/16);
-    }
+  @include fontfamily-primary-bold;
+  @include font-size(16px);
+  @include line-height(21.79/16);
+  @include mq(desktop) {
+      @include font-size(16px);
+      @include line-height(21.79/16);
+  }
 }
 
 @mixin textstyle-size-16 {
-    @include fontfamily-primary;
-    @include font-size(16px);
-    @include line-height(26.27/16);
-    @include mq(desktop) {
-        @include font-size(16px);
-        @include line-height(26.27/16);
-    }
+  @include fontfamily-primary;
+  @include font-size(16px);
+  @include line-height(26.27/16);
+  @include mq(desktop) {
+      @include font-size(16px);
+      @include line-height(26.27/16);
+  }
+}
+
+@mixin textstyle-size-18-bold {
+  @include fontfamily-primary-bold;
+  @include font-size(18px);
+  @include line-height(24.51/18);
+  @include mq(desktop) {
+      @include font-size(18px);
+      @include line-height(24.51/18);
+  }
+}
+
+@mixin textstyle-size-18 {
+  @include fontfamily-primary;
+  @include font-size(18px);
+  @include line-height(24.51/18);
+  @include mq(desktop) {
+      @include font-size(18px);
+      @include line-height(24.51/18);
+  }
 }
 
 @mixin textstyle-size-14 {

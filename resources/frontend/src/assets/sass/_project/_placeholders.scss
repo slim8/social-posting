@@ -199,3 +199,33 @@ z-select {
 .wide {
   width: 200px;
 }
+
+.mod-register {
+  nz-form-item {
+    width: 57%;
+    margin: auto;
+    margin-bottom: 10px;
+  }
+  nz-form-control {
+    max-width: 50%;
+  }
+  nz-form-label {
+    max-width: 25%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  input {
+    height: 45px;
+    width: 100%;
+    border: 1px solid #FF8D69;
+    margin-bottom: 10px;
+  }
+  button {
+    padding: 10px 40px;
+    > span {
+      @include textstyle-size-14-bold();
+    }
+  }
+}
