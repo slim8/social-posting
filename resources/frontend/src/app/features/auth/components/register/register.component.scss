@@ -1,3 +1,83 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
 .mod-register {
-    min-width: 650px;
+  min-width: 650px;
+
+  > .m-wrapper {
+    text-align: center;
+    padding-top: 5%;
+
+    > .m-subtitle {
+        > h2 {
+            @include textstyle-size-20();
+            letter-spacing: 0.4em;
+            margin-bottom: 7px;
+        }
+    }
+
+    > .m-title {
+        > h1 {
+            @include textstyle-size-44-bold();
+            margin-bottom: 24px;
+        }
+    }
+
+    > .m-para {
+        @include textstyle-size-12();
+        margin-bottom: 39px;
+    }
+
+    > .m-form {
+      > .m-form-group {
+        display: flex;
+        flex-direction: row;
+        width: 57%;
+        margin: auto;
+
+        &.m-center {
+          justify-content: center;
+        }
+        > .m-form-label {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          width: 25%;
+          > h4 {
+            @include textstyle-size-14();
+            color: $color-media-dark-grey;
+            margin-bottom: 14px;
+            position: relative;
+
+            &:before {
+              content: '*';
+              color: $color-media-dark-orange;
+              position: absolute;
+              left: -10px;
+              top: 2px;
+            }
+          }
+        }
+
+        > .m-form-field {
+          width: 50%;
+          padding: 0 10px;
+
+          > input {
+            height: 45px;
+            width: 100%;
+            border: 1px solid #FF8D69;
+            margin-bottom: 10px;
+          }
+
+          > .m-form-control {
+            float: left;
+            margin-top: -10px;
+            color: red;
+          }
+        }
+      }
+    }
+  }
 }
