@@ -1,3 +1,5 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DemoNgZorroAntdModule } from './../../shared/ng-zorro-antd.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -11,7 +13,10 @@ import { MyAlbumComponent } from './my-album.component';
   ],
   imports: [
     CommonModule,
-    MyAlbumRoutingModule
+    MyAlbumRoutingModule,
+    DemoNgZorroAntdModule,
+    FormsModule,
+    ReactiveFormsModule ,
   ]
 })
 export class MyAlbumModule { }
