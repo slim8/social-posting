@@ -63,7 +63,7 @@
                             flex-wrap: wrap;
                             gap: 8px;
 
-                            > button {
+                            > button , label {
                                 background-color: $color-media-lighter-grey;
                                 color: $color-base-100;
                                 padding: 4px 12px 8px;
@@ -101,6 +101,30 @@
                         > .m-location {
                             width: 100%;
                             outline: none;
+                        }
+                    }
+
+                    >.m-upload-video{
+                        >.clearfix{
+                            > video {
+                                display : none ;
+                                max-width: 150px;
+                                max-height: 100px;
+                                transform: scale(0);
+                                transition: all 0.3s;
+                            }
+                            >.m-img-container{
+                                cursor: pointer;
+                                
+                                > img {
+                                    width: 51px;
+                                    height :40px ;
+                                    margin : 10px 0 14px
+                                }
+                            } 
+                        }
+                        >.m-custom-file-input{
+                            display: none; margin-top: 25px;
                         }
                     }
                 }
@@ -219,6 +243,37 @@
                                         > .m-location {
                                             width: 100%;
                                             outline: none;
+                                        }
+                                    }
+
+                                    >.m-thumbnail-loader{
+                                        text-align: center;
+                                    }
+
+                                    >.m-thumbnails-preview{
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+
+                                        >.m-previous-icon , .m-next-icon{
+                                            padding: 0 5px ;
+                                            cursor: pointer;
+                                        }
+
+                                        >.m-thumbnails-preview-items{
+                                            display: flex;
+                                            align-items: center; 
+                                            transition: all 0.3s; 
+                                            flex-direction: row; 
+                                            overflow: auto;
+
+                                            >.m-thumbnails-preview-item{
+                                                width:72px; 
+                                                height : 56px ; 
+                                                object-fit:cover ; 
+                                                cursor : pointer ; 
+                                                margin : 10px;
+                                            }
                                         }
                                     }
                                 }

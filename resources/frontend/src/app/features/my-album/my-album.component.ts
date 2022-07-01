@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-my-album',
   templateUrl: './my-album.component.html',
@@ -7,9 +6,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyAlbumComponent implements OnInit {
 
+
+  
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
+
+  
+  
+
 
 }

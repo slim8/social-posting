@@ -1,9 +1,11 @@
+import { PostService } from './../../shared/services/post.service';
 import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ActivatedRoute } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
+import {importFileandPreview , generateVideoThumbnails} from './index'
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
@@ -72,10 +74,26 @@ export class CreatePostComponent implements OnInit {
     posY = 0;
     postId = null;
 
+    showUploadVideo = false;
+    selectedVideo :any = null;
+
+    selectedThumbnail = {
+        imgB64 : '' , 
+        time : 0
+    };
+
+    listThumbnail : { imgB64 : any , time : any }[] = [];
+
+    leadThumbnail : Boolean = false;
+
+    currentTimePosition = -10;
+    duration = 10;
+
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
         private activatedRoute: ActivatedRoute,
+        private postService: PostService
     ) { }
 
     ngOnInit(): void {
@@ -108,6 +126,18 @@ export class CreatePostComponent implements OnInit {
     }
 
     submitForm(param: string) {
+        // TODO:: for video upload
+         
+        // this.postService.uploadFile(this.selectedVideo).subscribe({
+        //     next: (response) => {
+        //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+        //     },
+        //     error: (err) => {
+        //     },
+        //     complete: () => {
+        //     },
+        // }) ;
+
         let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
         let btnSubmit = document.getElementById('btn-submit');
         let iconSave = document.querySelector('.m-button-icon-save');
@@ -431,4 +461,61 @@ export class CreatePostComponent implements OnInit {
             mainTextField?.removeAttribute("disabled");
         }
     }
+
+    collapseVideoUpload(){
+        this.showUploadVideo = !this.showUploadVideo
+        console.log(this.showUploadVideo);
+    }
+
+    loadFile(e : Event){
+        let target = e.target as HTMLInputElement;
+        let video = document.getElementById("video") as HTMLVideoElement;
+        if (target.files?.length) {
+            this.selectedVideo = target.files[0];
+            var source = document.createElement('source');
+            importFileandPreview(this.selectedVideo).then((url) => {
+                source.setAttribute('src', url);
+                source.setAttribute('type', this.selectedVideo.type);
+                generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
+                    video.style.width = "auto";
+                    video.style.height = "auto"
+                    video.style.transform = "scale(1)"
+                })
+                video.style.transform = "scale(1)"
+                video.innerHTML = "";
+                video.appendChild(source);
+            });
+        }
+        this.generatethumbnails('next' , true);
+        this.currentTimePosition = -10;
+      }
+
+      generatethumbnails(action : string , newVideo = false ){
+        this.leadThumbnail = true
+        console.log(this.selectedVideo , this.selectedVideo.duration)
+        if(action == "previous"){
+            this.currentTimePosition -= this.duration ;
+        }else if(action == "next"){
+            this.currentTimePosition += this.duration ;
+        }
+        console.log(this.currentTimePosition);
+        
+        generateVideoThumbnails(this.selectedVideo, 3 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
+          this.listThumbnail = thumbArray;
+          if(newVideo){
+            this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
+            this.selectedThumbnail.time = thumbArray[0].time as number ;
+          }
+          console.log(thumbArray , this.listThumbnail);
+          this.leadThumbnail = false ;
+        })
+      }
+
+      selectThumbnail(item : {imgB64 : '' , time : 0 } ){
+            console.log(item);
+            this.selectedThumbnail = item;
+            console.log(this.selectedThumbnail);
+            (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+      }
+
 }

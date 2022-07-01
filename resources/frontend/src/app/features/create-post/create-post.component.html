@@ -268,6 +268,7 @@
                             [(nzFileList)]="fileList"
                             [nzShowButton]="fileList.length < 8"
                             (nzChange)="handleChange($event)"
+                            nzAccept = "image/*"
                             >
                             <div>
                                 <i nz-icon nzType="plus"></i>
@@ -286,10 +287,26 @@
                             </nz-modal>
                         </div>
                     </div>
+                    <div  *ngIf="showUploadVideo" class="m-upload-video" >
+                        <div class="clearfix">
+                            <video poster="" controls id="video">
+                                Your browser does not support the video tag.
+                            </video>
+                            <label for="inputfile" class="m-img-container">
+                                <img *ngIf="selectedThumbnail.imgB64" [src]="selectedThumbnail.imgB64" />
+                            </label>
+
+                        </div>
+                        <div class="m-custom-file-input" id="fileControls">
+                            <input type="file" id="inputfile"  accept="video/*" (change)="loadFile($event)" />
+                            <!-- TODO::for next change upload video from url -->
+                            <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
+                        </div>
+                    </div>
                     <div class="m-form-field">
                         <div class="m-choose-media">
                             <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:image"></i></span> Foto hinzufügen</button>
-                            <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
+                            <label for="inputfile" class="m-button is-disabled m-video" (click)="collapseVideoUpload()"><span ><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</label>
                             <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
                         </div>
                     </div>
@@ -406,6 +423,23 @@
                                         <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
                                     </div>
                                 </div>
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                        <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                        <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                            <i nz-icon nzType="left" nzTheme="outline"></i>
+                                        </div>
+                                        <div class="m-thumbnails-preview-items" >
+                                            <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                        </div>
+                                        <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                            <i nz-icon nzType="right" nzTheme="outline"></i>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
 
@@ -458,13 +492,33 @@
                                         <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
                                     </div>
                                 </div>
+
+                                
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                      <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+  
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                      <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                          <i nz-icon nzType="left" nzTheme="outline"></i>
+                                      </div>
+                                      <div class="m-thumbnails-preview-items" >
+                                          <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                      </div>
+                                      <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                          <i nz-icon nzType="right" nzTheme="outline"></i>
+                                      </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="m-right-col">
-                <div *ngIf="urlLinks.length == 1" class="m-no-preview">
+                <div *ngIf="urlLinks.length > 0" class="m-no-preview">
                     <h3>Vorschau nicht verfügbar</h3>
                     <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu, 
                         um hier eine Vorschau zu sehen. </p>
@@ -509,6 +563,7 @@
                         </main>
                     </div>
                 </div>
+                <app-facebook-preview [ThumbnailImg]="selectedThumbnail.imgB64"></app-facebook-preview>
             </div>
         </div>
         <div class="m-action-buttons">
