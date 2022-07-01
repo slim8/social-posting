@@ -55,7 +55,7 @@ class AccountController extends Controller
     /**
      * delete account and his related informations.
      */
-    public function deleteAccount(Request $request, int $accountId = null)
+    public function deleteAccount(int $accountId = null)
     {
         $postsIds = [];
         $account = RequestsTrait::findAccountByUid($accountId, 'id', 1);
