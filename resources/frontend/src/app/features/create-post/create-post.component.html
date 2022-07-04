@@ -292,8 +292,12 @@
                             <video poster="" controls id="video">
                                 Your browser does not support the video tag.
                             </video>
+                            <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
+                                <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
+                                <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                            </div>
                             <label for="inputfile" class="m-img-container">
-                                <img *ngIf="selectedThumbnail.imgB64" [src]="selectedThumbnail.imgB64" />
+                                <span ><i nz-icon nzType="ng-zorro:video" style="font-size : 40px"></i></span>
                             </label>
 
                         </div>
@@ -306,7 +310,7 @@
                     <div class="m-form-field">
                         <div class="m-choose-media">
                             <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Foto hinzufügen</button>
-                            <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
+                            <button class="m-button is-disabled m-video" (click)="collapseVideoUpload()"><span ><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
                             <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
                         </div>
                     </div>
