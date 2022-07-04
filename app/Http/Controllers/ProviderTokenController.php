@@ -160,7 +160,11 @@ class ProviderTokenController extends Controller
         if (isset($jsonResponse['error'])) {
             if ($jsonResponse['error']['code'] == 190) {
                 if ($jsonResponse['error']['error_subcode'] == 460) {
-                    $this->disconnectTokenAction($providerTokenId);
+                    $providerToken = ProviderToken::where('id', $providerTokenId)->first();
+
+                    $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
+                    $providerToken = $providerToken->update();
+                    Account::where('providerTokenId', $providerTokenId)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
                 }
             }
         }
