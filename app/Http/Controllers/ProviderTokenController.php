@@ -161,7 +161,6 @@ class ProviderTokenController extends Controller
             if ($jsonResponse['error']['code'] == 190) {
                 if ($jsonResponse['error']['error_subcode'] == 460) {
                     $providerToken = ProviderToken::where('id', $providerTokenId)->first();
-
                     $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
                     $providerToken = $providerToken->update();
                     Account::where('providerTokenId', $providerTokenId)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
@@ -185,7 +184,7 @@ class ProviderTokenController extends Controller
      */
     public function checkAccountToken()
     {
-        $accounts = Account::select(['provider_token_id'])->groupBy('provider_token_id')->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('companyId', UserTrait::getCompanyId())->get();
+        $accounts = Account::select(['provider_token_id'])->groupBy('provider_token_id')->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('companyId', UserTrait::getCompanyId())->whereBetween('provider', ['facebook' , 'instagram'])->get();
         foreach ($accounts as $account) {
             $this->checkTokenAvailablity($account->providerTokenId);
         }
