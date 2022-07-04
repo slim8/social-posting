@@ -53,7 +53,7 @@ trait FacebookService
         $responseData = $response->json();
 
         $pageInfo->followers = isset($responseData['followers_count']) ? $responseData['followers_count'] : 0;
-        $pageInfo->link = $responseData['link'];
+        $pageInfo->link = isset($responseData['link']) ? $responseData['link'] : null;
         $pageInfo->username = isset($responseData['username']) ? $responseData['username'] : null;
 
         return $pageInfo;
