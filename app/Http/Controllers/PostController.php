@@ -117,6 +117,10 @@ class PostController extends Controller
             $postRequest = $postRequest->where('id', $postId);
         }
 
+        $postRequest->whereHas('accounts', function ($query) use ($companyId) {
+            $query->where('accounts.status', 1);
+        });
+        
         // To filter by status PUBLISH or DRAFT
         if ($request->status) {
             $postRequest = $filterByAccounts ? $postRequest->whereHas('post', function ($query) use ($request) {
