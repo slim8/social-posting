@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
 import {importFileandPreview , generateVideoThumbnails} from './index'
 import { sharedConstants } from 'src/app/shared/sharedConstants';
+import { ignoreElements } from 'rxjs';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -34,6 +35,10 @@ export class CreatePostComponent implements OnInit {
     facebookPreview: boolean = false;
     instagramPreview: boolean = true;
 
+    //available media test
+    availableVideos: boolean = false;
+    availableImages: boolean = false;
+
     url1 = '';
     urlImages: string[] = [];
     bool: boolean = false;
@@ -43,7 +48,8 @@ export class CreatePostComponent implements OnInit {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    @Input() urlLinks: any[] = [{ url: "", type:"" }];
+    mediaId: number = 0;
+    @Input() urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     instaTags: string[] = [];
@@ -300,22 +306,54 @@ export class CreatePostComponent implements OnInit {
 
     //upload files changes
     handleChange(event: any): void {
-        let img = {
-            url: "",
-            type: ""
+      let img = {
+        id: 0,
+        url: "",
+        type: ""
+      }
+
+      if (event.type == 'success') {
+        this.mediaId = 0;
+        this.urlLinks = [{ id: 0, url: "", type:"" }];
+
+        if (event.fileList.count>0) {
+          this.availableImages = true;
+        } else {
+          this.availableImages = false;
         }
-        console.log(event);
-        if (event.type == 'success') {
-          this.urlLinks = [{ url: "", type:"" }];
-          event.fileList.forEach((elem: any) => {
-            //todo
-          })
-          img.url = event.file.response.files.url;
-          img.type = event.file.response.files.type;
+
+        event.fileList.forEach((elem: any) => {
+          this.mediaId++;
+          img.id = this.mediaId;
+          img.url = elem.response.files.url;
+          img.type = elem.response.files.type;
           this.urlLinks.push(img);
           this.refreshCarousel();
           console.log(this.urlLinks)
+        })
+      }
+      else if (event.type == 'removed') {
+        this.mediaId = 0;
+        this.urlLinks = [{ id: 0, url: "", type:"" }];
+
+        if (event.fileList.count>0) {
+          this.availableImages = true;
+        } else {
+          this.availableImages = false;
         }
+
+        event.fileList.forEach((elem: any) => {
+          this.mediaId++;
+          img.id = this.mediaId;
+          img.url = elem.response.files.url;
+          img.type = elem.response.files.type;
+          this.urlLinks.push(img);
+          this.refreshCarousel();
+          console.log(this.urlLinks)
+        })
+      }
+
+      this.refreshPages();
     }
 
     handleCloseInsta(removedTag: {}): void {
@@ -491,13 +529,15 @@ export class CreatePostComponent implements OnInit {
         let target = e.target as HTMLInputElement;
         // let video = document.getElementById("video") as HTMLVideoElement;
         if(target.files){
-            let loadedFile = {id : this.videoCounter ,file :target.files[0]};
-            this.videoList.push(loadedFile)
-            this.selectedVideo = loadedFile;
-            this.videoCounter++;
+          this.availableVideos = true;
+          let loadedFile = {id : this.videoCounter ,file :target.files[0]};
+          this.videoList.push(loadedFile)
+          this.selectedVideo = loadedFile;
+          this.videoCounter++;
+        }else {
+          this.availableVideos = false;
         }
         console.log(target.files , this.videoList);
-
 
         // if (target.files?.length) {
             // this.selectedVideo = target.files[0];
@@ -515,6 +555,7 @@ export class CreatePostComponent implements OnInit {
                 // video.appendChild(source);
             // });
         // }
+        this.refreshPages();
         this.generatethumbnails('next' , true);
         this.currentTimePosition = -10;
       }
@@ -586,6 +627,14 @@ export class CreatePostComponent implements OnInit {
 
       removeImage(event: any) {
         console.log(event);
+      }
+
+      refreshPages() {
+        if (this.availableImages && this.availableVideos) {
+          this.getPages('instagram');
+        } else {
+          this.getPages('mixed');
+        }
       }
 
 }
