@@ -169,7 +169,7 @@ class PostController extends Controller
         if ($posts) {
             return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
         } else {
-            return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
+            return RequestsTrait::processResponse(false, ['message' => 'No posts found Or some account are disconnected']);
         }
     }
 }
