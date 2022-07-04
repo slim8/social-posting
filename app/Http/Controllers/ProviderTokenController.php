@@ -10,6 +10,7 @@ use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\ProviderToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class ProviderTokenController extends Controller
@@ -145,5 +146,48 @@ class ProviderTokenController extends Controller
         ProviderToken::where('id', $tokenId)->delete();
 
         return RequestsTrait::processResponse(true);
+    }
+
+    /**
+     * Check Provider Token Availablety Only for facebook With API.
+     */
+    public function checkSingleProviderToken($accessToken, $uid, $providerTokenId)
+    {
+        $facebookUri = envValue('FACEBOOK_ENDPOINT').$uid.'/accounts?access_token='.$accessToken;
+
+        $response = Http::get($facebookUri);
+        $jsonResponse = $response->json();
+        if (isset($jsonResponse['error'])) {
+            if ($jsonResponse['error']['code'] == 190) {
+                if ($jsonResponse['error']['error_subcode'] == 460) {
+                    $providerToken = ProviderToken::where('id', $providerTokenId)->first();
+
+                    $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
+                    $providerToken = $providerToken->update();
+                    Account::where('providerTokenId', $providerTokenId)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Check if Token is Available By Token Id.
+     */
+    public function checkTokenAvailablity($providerTokenId)
+    {
+        $providerUid = ProviderToken::where('id', $providerTokenId)->first();
+        $newAccount = Account::where('provider_token_id', $providerTokenId)->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('accessToken', 'not like', 'NA')->where('companyId', UserTrait::getCompanyId())->first();
+        $this->checkSingleProviderToken($newAccount->accessToken, $providerUid->accountUserId, $providerTokenId);
+    }
+
+    /**
+     * Get all Provider Tokens and check if token is availabel.
+     */
+    public function checkAccountToken()
+    {
+        $accounts = Account::select(['provider_token_id'])->groupBy('provider_token_id')->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('companyId', UserTrait::getCompanyId())->get();
+        foreach ($accounts as $account) {
+            $this->checkTokenAvailablity($account->providerTokenId);
+        }
     }
 }
