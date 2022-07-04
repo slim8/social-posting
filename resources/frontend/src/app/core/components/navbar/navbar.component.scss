@@ -37,6 +37,7 @@
             > .m-home {
                 > i {
                     > svg {
+                        font-size: 16px;
                         > path {
                             fill: $color-base-0;
                         }
@@ -46,6 +47,38 @@
 
             > .m-title {
                 user-select: none;
+
+                > h5 {
+                    margin: 0;
+                }
+            }
+
+            > .m-control-buttons {
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+                gap: 63px;
+                padding-right: 20%;
+
+                > .m-logout {
+                    cursor: pointer;
+
+                    > i {
+                        svg {
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                > .m-user {
+                    cursor: pointer;
+
+                    > i {
+                        svg {
+                            font-size: 18px;
+                        }
+                    }
+                }
             }
         }
     }

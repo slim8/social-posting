@@ -2,14 +2,17 @@
 
   <div class="m-wrapper">
 
+    <div class="m-subtitle">
+      <h2 i18n>LOGIN</h2>
+    </div>
+
     <div class="m-title">
-      <h2 i18n>Sign In</h2>
+        <h1 i18n> Social Media Publisher</h1>
     </div>
 
-    <div class="m-subtitle" i18n>
-      Please enter your credantials
+    <div class="m-para">
+        Easily manage all your social media and get results with our application
     </div>
-
 
     <div class="m-form">
 
@@ -30,8 +33,7 @@
            nzTooltipTitle="Extra information"
            nzType="info-circle"></i>
       </ng-template>
-      <br />
-      <br />
+
 
       <nz-input-group [nzSuffix]="suffixTemplateVisible"
                       [nzPrefix]="prefixTemplateLock">
@@ -50,22 +52,20 @@
            (click)="passwordVisible = !passwordVisible"></i>
       </ng-template>
 
-      <br />
-      <br />
+      <div class="m-sign-up">
+        <p>Passwort vergessen? <a>Klicke hier.</a></p>
+        <p>Noch kein Konto? <a routerLink="../register">Registriere dich hier.</a></p>
+      </div>
+      <div class="m-button-login">
 
-      <div class="m-button">
-
-        <button nz-button
+        <button class="m-button is-primary"
+                nz-button
                 (click)="login()"
                 nzType="primary"
                 [nzLoading]="isLoading" i18n>
-          Sign In
+          Login
         </button>
       </div>
-
-
-
     </div>
   </div>
-
 </div>

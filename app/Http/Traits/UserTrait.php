@@ -25,7 +25,6 @@ trait UserTrait
         return Auth::user()->companyId;
     }
 
-
     /**
      * Get Current user Id.
      */

@@ -28,7 +28,7 @@
         .mod-dashboard & {
             background-color: $color-base-0;
             border: 0;
-            padding: 21px 29px;
+            padding: 22px 29px 23px;
             height: fit-content;
 
             > .m-alert-title {
@@ -81,4 +81,30 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+.m-page-img {
+    height: 19px;
+    margin-right: 10px;
+}
+
+.m-page-item-provider {
+    color: $color-media-dark-grey;
+    width: 100px;
+}
+
+.ant-upload-select {
+    height: 51px!important;
+    width: 93px!important;
+    > div  {
+        > div {
+            > div {
+                margin-top: 0!important;
+            }
+        }
+    }
+}
+
+.ant-upload-list-picture-card-container {
+    height: 51px!important;
+    width: 93px!important;
 }

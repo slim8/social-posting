@@ -64,10 +64,10 @@ export class DashboardComponent implements OnInit {
     }
 
     closeAlert(event: any) {
-        let alert = event.target.parentElement?.parentElement?.parentElement;
-        alert.classList.add('is-closed');
+        let message = event.target.parentElement?.parentElement?.parentElement;
+        message.classList.add('is-closed');
         setTimeout(() => {
-            alert.remove();
+            message.remove();
         }, 295)
     }
 
@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
                 accessToken: res.authResponse.accessToken,
                 id: res.authResponse.userID,
             };
-            this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
+            this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + 'get-meta-pages-groups', {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
@@ -135,6 +135,7 @@ export class DashboardComponent implements OnInit {
             },
             (error) => {
                 this.listOfPages = [];
+                this.isLoadingPages = false;
             }
         );
     }
@@ -151,8 +152,8 @@ export class DashboardComponent implements OnInit {
                 this.posts = event.posts;
                 this.isLoadingPosts = false;
             },
-            error() {
-
+            error: (err) => {
+                this.isLoadingPosts = false;
             },
             complete: () => {
                 this.isLoadingPosts = false;
@@ -172,7 +173,7 @@ export class DashboardComponent implements OnInit {
             );
 
             this.service.manageFacebookPages(
-                sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+                sharedConstants.API_ENDPOINT + 'save-meta-pages-groups',
                 {
                     pages: selectedobject,
                     user: this.user.id

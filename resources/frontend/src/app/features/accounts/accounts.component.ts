@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzIconService } from 'ng-zorro-antd/icon';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -32,6 +33,7 @@ export class AccountsComponent implements OnInit {
         private accountsService: AccountsService,
         private sharedModule: SharedModule,
         private formBuilder: FormBuilder,
+        private modal: NzModalService,
         private router: Router
     ) {
         this.iconService.addIconLiteral('ng-zorro:add', addIcon);
@@ -43,6 +45,7 @@ export class AccountsComponent implements OnInit {
             myChoices: new FormArray([]),
         });
         this.getConnectedAccounts();
+        this.getPages();
         if (this.router.url.includes('accounts')) {
             this.sharedModule.initSideMenu('accounts');
         }
@@ -51,7 +54,8 @@ export class AccountsComponent implements OnInit {
     getPages() {
         this.service.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
-                // this.listOfPages = success.pages;
+                this.listOfPages = success.pages;
+                console.log(this.listOfPages);
             },
             (error) => {
                 this.listOfPages = [];
@@ -67,7 +71,7 @@ export class AccountsComponent implements OnInit {
                 accessToken: res.authResponse.accessToken,
                 id: res.authResponse.userID,
             };
-            this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + '/get-meta-pages-groups', {
+            this.service.manageFacebookPages(sharedConstants.API_ENDPOINT + 'get-meta-pages-groups', {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
@@ -97,7 +101,6 @@ export class AccountsComponent implements OnInit {
         setTimeout(() => {
             this.accountsService.getConnectedAccounts().subscribe({
                 next: (response: any) => {
-                    console.log(response.accounts)
                     this.connectedAccounts = response.accounts;
                 },
                 error: (err) => {
@@ -147,7 +150,7 @@ export class AccountsComponent implements OnInit {
             );
 
             this.service.manageFacebookPages(
-                sharedConstants.API_ENDPOINT + '/save-meta-pages-groups',
+                sharedConstants.API_ENDPOINT + 'save-meta-pages-groups',
                 {
                     pages: selectedobject,
                     user: this.user.id
@@ -177,5 +180,50 @@ export class AccountsComponent implements OnInit {
         if (msg) {
             this.sharedModule.createMessage('error', msg);
         }
+    }
+
+    disconnectPage(id: any) {
+        this.accountsService.disconnectPageById(id).subscribe({
+            next: (event: any) => {
+
+            },
+            error: err => {
+
+            },
+            complete: () => {
+                this.getPages();
+            }
+        })
+    }
+
+    showDisconnectConfirm(id: any): void {
+        this.modal.confirm({
+            nzTitle: 'Do you really want to disconnect this account?',
+            nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => this.disconnectPage(id),
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel')
+        });
+    }
+
+    reconnectPage(event: any, id: any) {
+        this.accountsService.reconnectPageById(id).subscribe({
+            next: (event: any) => {
+
+            },
+            error: err => {
+
+            },
+            complete: () => {
+                this.getPages();
+            }
+        })
+    }
+
+    deletePage (id:string) {
+
     }
 }

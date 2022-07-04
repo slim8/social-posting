@@ -4,6 +4,7 @@ import { environment } from '../../../../../environments/environment';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
 import { RegisterService } from '../../services/register.service';
+import { sharedConstants } from 'src/app/shared/sharedConstants';
 
 @Component({
     selector: 'app-register',
@@ -18,13 +19,14 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit(): void {
         this.validateForm = this.fb.group({
-            firstName: [null, [Validators.required]],
-            lastName: [null, [Validators.required]],
-            email: [null, [Validators.email, Validators.required]],
-            phoneNumber: [null, [Validators.required]],
-            website: [null, [Validators.required]],
-            adress: [null, [Validators.required]],
-            companyName: [null, [Validators.required]],
+            firstName:new FormControl(null, [Validators.required]),
+            lastName: new FormControl(null, [Validators.required]),
+            email: new FormControl(null, [Validators.email , Validators.required]),
+            phoneNumber: new FormControl(null, [Validators.required]),
+            street: new FormControl(null, [Validators.required]),
+            website: new FormControl(null, [Validators.required]),
+            adress: new FormControl(null, [Validators.required]),
+            companyName: new FormControl(null, [Validators.required]),
         });
     }
 
@@ -32,7 +34,7 @@ export class RegisterComponent implements OnInit {
         if (this.validateForm.valid) {
             let data = this.validateForm.value;
             data['isSubscriber'] = true;
-            this.registerService.saveResources("http://posting.local/api/" + 'register', data)
+            this.registerService.saveResources(sharedConstants.API_ENDPOINT + 'register', data)
                 .subscribe(res => {
                     this.router.navigate(['/auth/login']);
                 }, err => {

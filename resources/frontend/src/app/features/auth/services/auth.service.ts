@@ -10,13 +10,13 @@ export class AuthService {
 
     constructor(private http: HttpClient, private jwtService: JwtHelperService) { }
 
-    public login(credentials: any) {
-        return this.http.post(sharedConstants.API_ENDPOINT + '/login', credentials);
-    }
+  public login(credentials: any) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'login', credentials);
+  }
 
-    public checkLoggedIn() {
-        return this.http.get(sharedConstants.API_ENDPOINT + '/check-logged-in');
-    }
+  public checkLoggedIn() {
+    return this.http.get(sharedConstants.API_ENDPOINT + 'check-logged-in');
+  }
 
     // return true is there is a loggen in user
     public loggedIn(): boolean {

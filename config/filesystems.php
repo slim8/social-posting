@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
@@ -29,7 +28,6 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -44,8 +42,14 @@ return [
             'visibility' => 'public',
         ],
 
-        'custom-ftp' => [
+        'temporar-video' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/temporarVideo'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
 
+        'custom-ftp' => [
             'driver' => 'ftp',
             'host' => env('UPLOAD_FTP_SERVER_HOTE'),
             'username' => env('UPLOAD_FTP_SERVER_USERNAME'),
@@ -56,9 +60,8 @@ return [
             //
             // 'passive'  => true,
             // 'ssl'      => true,
-            // 'timeout'  => 30,
+             'timeout' => 1800,
         ],
-
 
         's3' => [
             'driver' => 's3',
@@ -71,7 +74,6 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-
     ],
 
     /*
@@ -88,5 +90,4 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
-
 ];

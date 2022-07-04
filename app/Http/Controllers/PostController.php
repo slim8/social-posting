@@ -42,7 +42,7 @@ class PostController extends Controller
             $posts = [];
             $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
-            })->with('accounts')->orderby('id','DESC')->get();
+            })->with('accounts')->orderby('id', 'DESC')->get();
 
             foreach ($accountPosts as $accountPost) {
                 $accountPost->provider = $accountPost->accounts[0]->provider;

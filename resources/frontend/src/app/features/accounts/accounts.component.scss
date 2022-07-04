@@ -1,5 +1,7 @@
+@import '../../../assets/sass/_global/_mixins.scss';
 @import '../../../assets/sass/_project/_config.scss';
 @import '../../../assets/sass/_project/base.scss';
+
 
 .mod-accounts {
     width: 100%;
@@ -29,7 +31,8 @@
 
         > .m-accounts-container {
             position: relative;
-            height: calc(100% - 118px);
+            height: calc(100vh - 258px);
+            overflow: auto;
 
             > .m-loading {
                 position: absolute;
@@ -37,7 +40,7 @@
                 top: 32%;
                 transform: translate3d(-50%, -50%, 0);
             }
-            
+
             > .m-login {
                 width: 500px;
                 margin: auto;
@@ -78,41 +81,84 @@
 
             > .m-connected-accounts {
 
+                > h2 {
+                    padding: 20px 55px;
+                    color: $color-media-black-opacity-half;
+                    margin: 0;
+                }
+
                 > .m-account-container {
                     position: relative;
                     display: flex;
                     align-items: center;
                     flex-direction: row;
                     flex-wrap: nowrap;
-                    padding: 40px 0 50px 71px;
-                    gap: 50px;
+                    padding: 20px 20px 20px 20px;
+                    gap: 10px;
                     border-bottom: 1px solid $color-media-secondary-button;
+                    justify-content: unset;
+                    @include mq(tablet) {
+                        justify-content: space-around;
+                    }
+                    @include mq(desktop) {
+                        justify-content: space-between;
+                        gap: 50px;
+                        padding: 40px 77px 50px 71px;
+                    }
 
                     > .m-media-small {
-                        width: 95px;
-                        height: 95px;
+                        width: 60px;
+                        height: 60px;
+                        @include mq(tablet) {
+                            width: 95px;
+                            height: 95px;
+                        }
                         position: relative;
+                        &.is-disconnected {
+                            filter: opacity(0.2);
+                        }
 
                         > img {
                             border-radius: 50%;
                             display: block;
                             object-fit: cover;
-                            width: 95px;
-                            height: 95px;
+                            width: 60px;
+                            height: 60px;
+                            @include mq(tablet) {
+                                width: 95px;
+                                height: 95px;
+                            }
                         }
 
                         > .m-provider-logo {
                             position: absolute;
                             bottom: -8px;
                             right: -8px;
+
                             >img {
-                                width: 60px;
-                                border-radius: 5px;
+                                width: 30px;
+                                @include mq(tablet) {
+                                    width: 60px;
+                                }
+
+                                &.facebook {
+                                    background-color: $color-base-0;
+                                    padding: 3px;
+                                    box-shadow: 0 0 5px $color-media-light-grey;
+                                    width: 25px;
+                                    @include mq(tablet) {
+                                        width: 54px;
+                                        padding: 6px;
+                                    }
+                                }
                             }
                         }
                     }
 
                     > .m-page-info {
+                        &.is-disconnected {
+                            filter: opacity(0.2);
+                        }
                         > .m-page {
                             @include textstyle-size-16-bold();
                         }
@@ -128,6 +174,29 @@
                     }
 
                     > .m-alert {
+                        width: 24px;
+                        position: relative;
+
+                        &:hover {
+                          >.m-title-hover {
+                            display: block;
+                          }
+                        }
+
+                        >.m-title-hover {
+                          position: absolute;
+                          @include textstyle-size-10();
+                          width: 142px;
+                          height: fit-content;
+                          padding: 9px 4px 8px 9px;
+                          background-color: $color-base-0;
+                          box-shadow: 0px 4px 4px $color-media-secondary-button;
+                          border-radius: 5px;
+                          display: none;
+                          top: 14px;
+                          left: 13px;
+                        }
+
                         >i {
                             > svg {
                                 fill: transparent;
@@ -139,10 +208,22 @@
                         display: flex;
                         flex-direction: column;
                         gap: 7px;
-                        padding-left: 90px;
+                        margin-right: unset;
+                        padding-left: unset;
+                        @include mq(tablet) {
+                            margin-right: 20px;
+                        }
+                        @include mq(desktop) {
+                            margin-right: unset;
+                            padding-left: 90px;
+                        }
+
+                        &.is-disconnected {
+                            filter: opacity(0.2);
+                        }
 
                         > .m-button {
-
+                            width: 156px;
                             &.is-disabled {
                                 color: $color-base-100;
                             }
@@ -153,15 +234,44 @@
                         }
                     }
 
-                    >.m-icon-button {
+                    > .m-action-manager {
+                        width: 25%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: flex-end;
+                        flex-direction: column;
+                        gap: 30px;
+
+                        > button {
+                            border: none;
+                            outline: none;
+                            background-color: transparent;
+                            cursor: pointer;
+                        }
+                    }
+
+                    > .m-icon-button {
                         position: absolute;
                         border: none;
                         outline: none;
                         background-color: transparent;
                         color: $color-media-black-opacity-half;
-                        right: 80px;
-                        top: 50px;
                         cursor: pointer;
+                        left: 11px;
+                        bottom: 16px;
+                        right: unset;
+                        top: unset;
+
+                        @include mq(tablet) {
+                            left: unset;
+                            bottom: unset;
+                            right: 8px;
+                            top: 29px;
+                        }
+                        @include mq(desktop) {
+                            right: 80px;
+                            top: 50px;
+                        }
                     }
                 }
             }

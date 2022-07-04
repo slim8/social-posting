@@ -53,7 +53,7 @@
                     }
 
                     > .m-history-header {
-                        height: 50px;
+                        height: fit-content;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
@@ -90,10 +90,12 @@
                             > h4 {
                                 @include textstyle-size-14-bold();
                                 color: $color-media-dark-grey;
+                                margin: 0;
                             }
                             > p {
                                 @include textstyle-size-14();
                                 color: $color-media-dark-grey;
+                                margin: 0;
                             }
                         }
 
@@ -244,7 +246,7 @@
                 flex-direction: column;
                 gap: 12px;
                 @include mq(desktop) {
-                    width: calc(30% - 6px);
+                    width: 290px;
                 }
 
                 > .m-buttons {
@@ -254,7 +256,7 @@
                     gap: 12px;
                     height: unset;
                     @include mq(desktop) {
-                        height: 141px;
+                        height: 152px;
                     }
 
                     > .m-button {
@@ -264,7 +266,7 @@
                         @include textstyle-size-20();
                         text-align: center;
                         @include mq(desktop) {
-                            height: calc(50% - 6px);
+                            height: 70px;
                         }
 
                         &.m-create-post {

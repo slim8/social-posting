@@ -69,4 +69,8 @@ figure {
     &.is-disabled {
         background-color: $color-media-light-grey;
     }
+    .mod-register & {
+      padding: 10px 40px;
+      @include textstyle-size-14-bold();
+    }
 }

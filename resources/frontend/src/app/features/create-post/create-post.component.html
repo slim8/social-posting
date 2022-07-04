@@ -1,5 +1,5 @@
-<div class="m-loading-screen"></div>
-<div id="successDialog" class="m-success is-hidden">
+ <div class="m-loading-screen"></div>
+<!--<div id="successDialog" class="m-success is-hidden">
     <nz-result class="m-success-result"
           nzStatus="success"
           nzTitle="Your post has been submitted successfully! "
@@ -15,7 +15,7 @@
     <div class="m-container">
         <div class="m-post-form">
             <div class="m-wrapper">
-                
+
                     <nz-form-label [nzSpan]="24" nzFor="Statut">Statut</nz-form-label>
                     <nz-form-control [nzSpan]="24">
                         <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
@@ -65,8 +65,8 @@
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)" *ngIf="index > 0"><i nz-icon nzType="delete"></i></button>
                                         </ng-template>
-                                        <br/><br/> 
-                                    </div> 
+                                        <br/><br/>
+                                    </div>
                                     <button nz-button nzType="dashed" (click)="addLink()">add item</button>
                                 </div>
                             </nz-form-control>
@@ -75,7 +75,7 @@
                             <nz-form-control [nzSpan]="24">
                                 <div class="clearfix">
                                     <nz-upload
-                                    nzAction="http://posting.local/api/uploadfile"
+                                    [nzAction]="uploadFileAPIURL"
                                     nzListType="picture-card"
                                     [(nzFileList)]="fileList"
                                     [nzShowButton]="fileList.length < 8"
@@ -101,14 +101,14 @@
                         </div>
 
                         <div class="m-content" *ngIf="tabId == 'videos'">
-                            
+
                         </div>
                     </div>
                 </div>
 
                     <nz-form-label [nzSpan]="24" nzFor="pages">Choose facebook page</nz-form-label>
                     <nz-form-control [nzSpan]="24">
-                        <nz-select [(ngModel)]="tagValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                        <nz-select [(ngModel)]="accountsValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
                             <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
                         </nz-select>
                     </nz-form-control>
@@ -161,7 +161,7 @@
                                                             <div class="m-spacer">&nbsp;</div>
                                                             <div class="m-post-btn"><span class="save">&nbsp;</span></div>
                                                         </div>
-                                
+
                                                         <div class="m-likes" *ngIf="isliked">
                                                             <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
                                                             <strong>1 like</strong>
@@ -175,8 +175,6 @@
                                             </main>
                                         </div>
                                     </div>
-
-                                    <!-- <app-instagram-preview></app-instagram-preview> -->
                                 </div>
 
                                 <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
@@ -206,14 +204,14 @@
                                                         <p>Like</p>
                                                       </a>
                                                     </div>
-                                              
+
                                                     <div class="comment">
                                                       <a href="#">
                                                         <img src="../../../../../assets/img/svgs/comment-facebook.svg" />
                                                         <p>Comment</p>
                                                       </a>
                                                     </div>
-                                              
+
                                                     <div class="share">
                                                       <a href="#">
                                                         <img src="http://download.seaicons.com/icons/icons8/windows-8/512/Arrows-Redo-icon.png" alt="" />
@@ -222,7 +220,7 @@
                                                         </p>
                                                       </a>
                                                     </div>
-                                              
+
                                                   </div>
                                                 <div class="footer__dropdown"></div>
                                             </div>
@@ -237,4 +235,340 @@
         </div>
     </div>
 </div>
+ -->
+<div class="mod-create-post">
+    <div class="m-wrapper">
+        <div class="m-header">
+            <h3>Neuer Beitrag</h3>
+        </div>
+        <div class="m-cp-container">
+            <div class="m-left-col">
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Platzierung</h4>
+                    </div>
+                    <div class="m-form-field">
+                        <nz-form-control [nzSpan]="24">
+                            <nz-select [(ngModel)]="accountsValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
+                                <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id +'|'+option.provider"><img class="m-page-img" [src]="option.pagePictureUrl" /><label ><small class="m-page-item-provider">{{option.provider}}</small> - {{option.pageName}}</label></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </div>
+                </div>
 
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Medien</h4>
+                    </div>
+                    <div *ngIf="uploadImageActive" class="m-upload-image">
+                        <div class="clearfix">
+                            <nz-upload
+                            [nzAction]="uploadFileAPIURL"
+                            nzListType="picture-card"
+                            [(nzFileList)]="fileList"
+                            [nzShowButton]="fileList.length < 8"
+                            (nzChange)="handleChange($event)"
+                            nzAccept = "image/*"
+                            >
+                            <div>
+                                <i nz-icon nzType="plus"></i>
+                                <div style="margin-top: 8px">Upload</div>
+                            </div>
+                            </nz-upload>
+                            <nz-modal
+                            [nzVisible]="previewVisible"
+                            [nzContent]="modalContent"
+                            [nzFooter]="null"
+                            (nzOnCancel)="previewVisible = false"
+                            >
+                            <ng-template #modalContent>
+                                <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+                            </ng-template>
+                            </nz-modal>
+                        </div>
+                    </div>
+                    <div  *ngIf="showUploadVideo" class="m-upload-video" >
+                        <div class="clearfix">
+                            <video poster="" controls id="video">
+                                Your browser does not support the video tag.
+                            </video>
+                            <label for="inputfile" class="m-img-container">
+                                <img *ngIf="selectedThumbnail.imgB64" [src]="selectedThumbnail.imgB64" />
+                            </label>
+
+                        </div>
+                        <div class="m-custom-file-input" id="fileControls">
+                            <input type="file" id="inputfile"  accept="video/*" (change)="loadFile($event)" />
+                            <!-- TODO::for next change upload video from url -->
+                            <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
+                        </div>
+                    </div>
+                    <div class="m-form-field">
+                        <div class="m-choose-media">
+                            <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Foto hinzufügen</button>
+                            <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
+                            <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Text</h4>
+                    </div>
+                    <div class="m-form-field">
+                        <textarea id="mainMessage" [(ngModel)]="message" (keyup)="updateMessage()" class="m-textarea-message" nz-input placeholder="Statut"></textarea>
+                    </div>
+                </div>
+
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Hashtags</h4>
+                    </div>
+                    <div class="m-form-field">
+                        <nz-tag
+                            *ngFor="let tag of tags; let i = index"
+                            [nzMode]="'closeable'"
+                            (nzOnClose)="handleCloseMain(tag)"
+                            >{{ sliceTagName(tag) }}</nz-tag>
+                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                            <i nz-icon nzType="plus"></i>  New tag
+                        </nz-tag>
+                        <input
+                            #inputElement
+                            nz-input
+                            nzSize="small"
+                            *ngIf="inputVisible"
+                            type="text"
+                            [(ngModel)]="inputValue"
+                            style="width: 78px;"
+                            (blur)="handleInputConfirm()"
+                            (keydown.enter)="handleInputConfirm()"
+                        />
+                    </div>
+                </div>
+
+                <div class="m-form-group">
+                    <div class="m-form-label">
+                        <h4>Standort <small>- optional</small></h4>
+                    </div>
+                    <div class="m-form-field">
+                        <input nz-input placeholder="Gib einen Standort ein" class="m-location"  />
+                    </div>
+                </div>
+            </div>
+            <div class="m-mid-col is-active">
+                <div class="m-collapse-menu-button">
+                    <i class="m-sidemenu-button is-active" (click)="collapse()" nz-icon nzType="ng-zorro:menuButton"></i>
+                </div>
+                <div class="m-sidemenu is-active">
+                    <div class="m-tab">
+                        <ul>
+                            <li id="instagram-tab-title" class="is-active" (click)="tabChange1('instagram-tab-title', $event)">
+                                <span><i class="instagram"  nz-icon nzType="ng-zorro:instagram"></i></span>
+                                Instagram
+                            </li>
+                            <li id="facebook-tab-title" (click)="tabChange1('facebook-tab-title', $event)">
+                                <span><i class="facebook" nz-icon nzType="ng-zorro:facebook"></i></span>
+                                Facebook
+                            </li>
+                        </ul>
+                        <div class="m-tab-content">
+                            <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
+                                <div class="m-header">
+                                    <h3>Instagram Beitrag anpassen</h3>
+                                    <p>Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.</p>
+                                </div>
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Instagram Text</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <textarea [(ngModel)]="instagramMessage" (change)="checkMessage()" class="m-textarea-message" nz-input placeholder="Statut"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Hashtags</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <nz-tag
+                                            *ngFor="let tag of instaTags; let i = index"
+                                            [nzMode]="'closeable'"
+                                            (nzOnClose)="handleCloseInsta(tag)"
+                                            >{{ sliceTagName(tag) }}</nz-tag>
+                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                                            <i nz-icon nzType="plus"></i>  New tag
+                                        </nz-tag>
+                                        <input
+                                            #inputElement
+                                            nz-input
+                                            nzSize="small"
+                                            *ngIf="inputVisible"
+                                            type="text"
+                                            [(ngModel)]="inputValueInsta"
+                                            style="width: 78px;"
+                                            (blur)="handleInputConfirmInsta()"
+                                            (keydown.enter)="handleInputConfirmInsta()"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Markierung <small>- optional</small></h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
+                                    </div>
+                                </div>
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                        <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                        <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                            <i nz-icon nzType="left" nzTheme="outline"></i>
+                                        </div>
+                                        <div class="m-thumbnails-preview-items" >
+                                            <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                        </div>
+                                        <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                            <i nz-icon nzType="right" nzTheme="outline"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
+                                <div class="m-header">
+                                    <h3>Facebook Beitrag anpassen</h3>
+                                    <p>Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.</p>
+                                </div>
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Facebook Text</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <textarea [(ngModel)]="facebookMessage" (change)="checkMessage()" class="m-textarea-message" nz-input placeholder="Statut"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Hashtags</h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <nz-tag
+                                            *ngFor="let tag of fbTags; let i = index"
+                                            [nzMode]="'closeable'"
+                                            (nzOnClose)="handleCloseFb(tag)"
+                                            >{{ sliceTagName(tag) }}</nz-tag>
+                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
+                                            <i nz-icon nzType="plus"></i>  New tag
+                                        </nz-tag>
+                                        <input
+                                            #inputElement
+                                            nz-input
+                                            nzSize="small"
+                                            *ngIf="inputVisible"
+                                            type="text"
+                                            [(ngModel)]="inputValueFb"
+                                            style="width: 78px;"
+                                            (blur)="handleInputConfirmFb()"
+                                            (keydown.enter)="handleInputConfirmFb()"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div class="m-form-group">
+                                    <div class="m-form-label">
+                                        <h4>Markierung <small>- optional</small></h4>
+                                    </div>
+                                    <div class="m-form-field">
+                                        <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
+                                    </div>
+                                </div>
+
+
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                      <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                      <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                          <i nz-icon nzType="left" nzTheme="outline"></i>
+                                      </div>
+                                      <div class="m-thumbnails-preview-items" >
+                                          <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                      </div>
+                                      <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                          <i nz-icon nzType="right" nzTheme="outline"></i>
+                                      </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="m-right-col">
+                <div *ngIf="urlLinks.length > 0" class="m-no-preview">
+                    <h3>Vorschau nicht verfügbar</h3>
+                    <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu,
+                        um hier eine Vorschau zu sehen. </p>
+                </div>
+                <div *ngIf="urlLinks.length > 1" class="m-instagram-device">
+                    <div class="m-instagram">
+                        <main class="m-post-content">
+
+                            <div class="m-post">
+                                <div class="m-post-header">
+                                    <img class="m-user-thumb" src="../../../../../assets/img/instapic.jpg" alt="Walter">
+                                    <div class="m-user-details">
+                                        <strong class="m-name">My page</strong>
+                                        <span class="m-location">location</span>
+                                    </div>
+                                    <div class="m-post-menu">
+                                        <span class="m-menu">&nbsp;</span>
+                                    </div>
+                                </div>
+                                <div id="postView">
+                                    <app-carousel *ngIf="!refresh" [urlLinks]="urlLinks"></app-carousel>
+                                </div>
+                                <div class="m-post-footer">
+                                    <br>
+                                    <div class="m-buttons">
+                                        <div class="m-post-btn"><span (click)="liked($event)" class="like">&nbsp;</span></div>
+                                        <div class="m-post-btn"><span class="comn">&nbsp;</span></div>
+                                        <div class="m-spacer">&nbsp;</div>
+                                        <div class="m-post-btn"><span class="save">&nbsp;</span></div>
+                                    </div>
+
+                                    <div class="m-likes" *ngIf="isliked">
+                                        <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
+                                        <strong>1 like</strong>
+                                    </div>
+                                    <br>
+                                    <span class="m-time">à l'instant</span>
+
+                                </div>
+                            </div>
+
+                        </main>
+                    </div>
+                </div>
+                <app-facebook-preview [ThumbnailImg]="selectedThumbnail.imgB64" [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="images"></app-facebook-preview>
+            </div>
+        </div>
+        <div class="m-action-buttons">
+            <button class="m-button is-secondary" (click)="submitForm('DRAFT')"><span class="m-button-icon-save"><i nz-icon nzType="ng-zorro:folder"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Als Entwurf speichern</button>
+            <button class="m-button is-primary" (click)="submitForm('PUBLISH')"><span class="m-button-icon-publish"><i nz-icon nzType="ng-zorro:send"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Veröffentlichen</button>
+        </div>
+    </div>
+</div>

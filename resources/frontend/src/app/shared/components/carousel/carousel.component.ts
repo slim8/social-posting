@@ -8,7 +8,7 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange } from
 export class CarouselComponent implements  OnChanges {
     //preview images variable
     @Input() urlLinks: any[] = [{ url: "" }];
-    
+
     //tags variables.
     displaMentions: boolean = false;
     taggedImage: any;
@@ -27,7 +27,6 @@ export class CarouselComponent implements  OnChanges {
         '中文',
         'にほんご',
     ];
-
     // carousel slider variables
     slideNbr = 0;
     nbrSlides: any = 1;
@@ -48,7 +47,7 @@ export class CarouselComponent implements  OnChanges {
         this.nbrSlides = 0;
         let carouselDotsContainer = document.getElementById("dots") as any;
         setTimeout(() => {
-            this.nbrSlides = document.querySelector("[data-slides]")?.children.length;
+            this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
             for (let i = 0; i < this.nbrSlides; i++) {
                 let dotElem = document.createElement("li");
                 let dotImg = document.createElement("img");
@@ -66,7 +65,7 @@ export class CarouselComponent implements  OnChanges {
     initCarousel() {
         let offset = 0;
         let dots = document.querySelectorAll('.m-dots li');
-        this.nbrSlides = document.querySelector("[data-slides]")?.children.length;
+        this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
         let carouselWidth = 360 * this.nbrSlides;
         let carousel = document.getElementById("data-slides");
         let prev = document.getElementById("prev");
@@ -93,6 +92,7 @@ export class CarouselComponent implements  OnChanges {
             carousel.style.width = carouselWidth + "px";
         }
         const buttons = document.querySelectorAll("[data-carousel-button]");
+        this.initCarouselNextButton();
         buttons.forEach((button: any) => {
             button.addEventListener("click", () => {
                 if (prev != null) {
@@ -105,18 +105,18 @@ export class CarouselComponent implements  OnChanges {
                 if (carousel != null) {
                     carousel.style.transform = "translateX(" + offset + "px)";
                 }
-                const slides = button.closest("[data-carousel]").querySelector("[data-slides]");
+                const slides = button.closest("[data-carousel]").querySelectorAll("[data-slides]>li>img");
                 this.slideNbr += stride
                 if (this.slideNbr < 1) {
                     if (prev != null) {
                         prev.style.display = "none";
+
                     }
-                    if (next != null) {
+                    if (next != null && this.nbrSlides > 1) {
                         next.style.display = "block";
                     }
                 }
-
-                else if ((this.slideNbr + 1) == slides.children.length) {
+                else if ((this.slideNbr + 1) == slides.length) {
                     if (next != null) {
                         next.style.display = "none";
                     }
@@ -128,7 +128,6 @@ export class CarouselComponent implements  OnChanges {
                         prev.style.display = "block";
                     }
                 }
-
                 if (dots.length == 1) {
                     dots[0].setAttribute("style", "display:none;");
                 } else if (dots.length > 1) {
@@ -149,9 +148,9 @@ export class CarouselComponent implements  OnChanges {
 
     // after adding new image to carousel
     initCarouselNextButton() {
-        this.nbrSlides = document.querySelector("[data-slides]")?.children.length;
+        this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
         let next = document.getElementById("next");
-        if (this.nbrSlides > this.slideNbr) {
+        if (this.nbrSlides >=2 && this.nbrSlides > this.slideNbr) {
             // next is possibly null (can't use next?.style in this case so i had to use if not null)
             if (next != null) next.style.display = "block";
         }

@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Dictionary;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
@@ -38,10 +36,10 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
     Route::post('/sendmail', [ExempleController::class, 'sendmail'])->name('sendmail.api');
     Route::get('/refresh-token', [ProviderTokenController::class, 'refreshToken'])->name('refreshToken.api');
-    Route::post('/forget-password', [ForgotPasswordController::class,'forgetPassword']);
-    Route::post('/reset-password', [ForgotPasswordController::class,'resetPassword']);
-    Route::get('/dictionary', [DictionaryController::class ,'index']);
-    Route::get('/dictionary/{lang}/{key}', [DictionaryController::class ,'show']);
+    Route::post('/forget-password', [ForgotPasswordController::class, 'forgetPassword']);
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
+    Route::get('/dictionary', [DictionaryController::class, 'index']);
+    Route::get('/dictionary/{lang}/{key}', [DictionaryController::class, 'show']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -50,9 +48,11 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/register-user', [ApiAuthController::class, 'registerUser'])->name('register-user.api');
     Route::post('/facebook/get-longlife-token', [FacebookController::class, 'getLongLifeToken'])->name('get-longlife-facebook-token.api');
     Route::get('/get-connected-accounts', [ProviderTokenController::class, 'getConnectedAccounts'])->name('get-connected-accounts.api');
-    Route::post('/disconnect-token', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
+    Route::post('/token/disconnect', [ProviderTokenController::class, 'disconnectToken'])->name('disconnect-token.api');
+    Route::post('/token/{tokenId}/delete', [ProviderTokenController::class, 'deleteToken'])->name('delete-token.api');
     Route::post('/accounts/status/{action}/{accountId}', [AccountController::class, 'disconnectAccount'])->name('disconnect-account.api');
     Route::post('/accounts/token/refresh/{accountId}', [ProviderTokenController::class, 'refreshToken'])->name('disconnect-token.api');
+    Route::post('/accounts/{accountId}/delete', [AccountController::class, 'deleteAccount'])->name('delete-accounts.api');
     Route::post('/managment/permissions/add', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
     Route::post('/managment/permissions/remove', [CompanyAdminsController::class, 'removeAccountFromUser'])->name('remove-permissions.api');
     Route::get('/managment/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
@@ -79,5 +79,5 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('get-profile.api');
     Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
-    Route::post('/change-password', [ProfileController::class,'changePassword']);
+    Route::post('/change-password', [ProfileController::class, 'changePassword']);
 });

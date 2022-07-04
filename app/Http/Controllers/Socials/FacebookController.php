@@ -12,7 +12,9 @@ use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
 
 class FacebookController extends Controller
 {
@@ -21,10 +23,12 @@ class FacebookController extends Controller
     use FacebookService;
 
     protected $instagramController;
+    protected $imageManager;
 
     public function __construct()
     {
         $this->instagramController = new InstagramController();
+        $this->imageManager = new ImageManager();
     }
 
     public function getFacebookPersonalInformations($accessToken)
@@ -127,13 +131,22 @@ class FacebookController extends Controller
     {
         $client = new Client();
 
+        $multiPart = [];
+
+        foreach ($object as $key => $value) {
+            array_push($multiPart, ['name' => $key, 'contents' => $key == 'thumb' ? fopen($value, 'rb') : $value]);
+        }
         $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/videos', [
-            'form_params' => $object,
+            'multipart' => $multiPart,
         ]);
 
+        if ($object['thumb']) {
+            unlink($object['thumb']);
+        }
         if ($response->getStatusCode() == 200) {
             $responseObject['status'] = true;
             $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+            $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
         } else {
             $responseObject['status'] = false;
             $responseObject['message'] = 'to be defined';
@@ -165,8 +178,19 @@ class FacebookController extends Controller
         $object['message'] = $object['message'].$tagsString;
 
         if ($videos) {
-            $object['file_url'] = $videos[0];
+            $videos = json_decode($videos[0], true);
+            $object['file_url'] = $videos['url'];
             $object['publihshed'] = true;
+
+            if ($videos['thumbnail']) {
+                $fileUrl = $videos['thumbnail'];
+                $fileUrl = explode('/', $fileUrl)[count(explode('/', $fileUrl)) - 1];
+                $temporarFile = Storage::disk('custom-ftp')->get('images/'.$fileUrl);
+                $temporarFile = Storage::disk('temporar-video')->put($fileUrl, $temporarFile);
+                $temporarFile = Storage::disk('temporar-video')->path($fileUrl);
+                $object['thumb'] = $temporarFile;
+            }
+
             $object['description'] = $object['message'];
             if ($videoTitle) {
                 $object['title'] = $videoTitle;
@@ -403,16 +427,18 @@ class FacebookController extends Controller
         $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
         $response = $request->json('data');
 
-        // Start Fetching Statistics
-        foreach ($response as $statsData) {
-            // Start Fetching Likes
-            if ($statsData['name'] == 'post_reactions_by_type_total') {
-                foreach ($statsData['values'][0]['value'] as $key => $value) {
-                    $value = (int) $value;
-                    $likes = $likes + $value;
+        if ($response) {
+            // Start Fetching Statistics
+            foreach ($response as $statsData) {
+                // Start Fetching Likes
+                if ($statsData['name'] == 'post_reactions_by_type_total') {
+                    foreach ($statsData['values'][0]['value'] as $key => $value) {
+                        $value = (int) $value;
+                        $likes = $likes + $value;
+                    }
                 }
+                // End Fetching Likes
             }
-            // End Fetching Likes
         }
 
         // End fetching Statistics

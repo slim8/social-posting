@@ -10,7 +10,7 @@ export class PostService {
     constructor(private http: HttpClient) { }
 
     posts() {
-        return this.http.get(sharedConstants.API_ENDPOINT + '/posts');
+        return this.http.get(sharedConstants.API_ENDPOINT + 'posts');
     }
 
 }
