@@ -8,7 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FacebookPreviewComponent implements OnInit {
 
   @Input() ThumbnailImg!: string;
-  @Input() imgList: string[] = [];
+  @Input() imgList: any[] = [];
   @Input() postDescription! : string;
   @Input() accountName! : string;
 
@@ -16,7 +16,7 @@ export class FacebookPreviewComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.ThumbnailImg);
-    
+
   }
 
 }

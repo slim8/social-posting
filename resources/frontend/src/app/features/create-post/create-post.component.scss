@@ -9,6 +9,7 @@
 
     > .m-wrapper {
         height: 100%;
+        min-width: 1087px;
 
         > .m-header {
             height: fit-content;
@@ -115,13 +116,13 @@
                             }
                             >.m-img-container{
                                 cursor: pointer;
-                                
+
                                 > img {
                                     width: 51px;
                                     height :40px ;
                                     margin : 10px 0 14px
                                 }
-                            } 
+                            }
                         }
                         >.m-custom-file-input{
                             display: none; margin-top: 25px;
@@ -262,16 +263,16 @@
 
                                         >.m-thumbnails-preview-items{
                                             display: flex;
-                                            align-items: center; 
-                                            transition: all 0.3s; 
-                                            flex-direction: row; 
+                                            align-items: center;
+                                            transition: all 0.3s;
+                                            flex-direction: row;
                                             overflow: auto;
 
                                             >.m-thumbnails-preview-item{
-                                                width:72px; 
-                                                height : 56px ; 
-                                                object-fit:cover ; 
-                                                cursor : pointer ; 
+                                                width:72px;
+                                                height : 56px ;
+                                                object-fit:cover ;
+                                                cursor : pointer ;
                                                 margin : 10px;
                                             }
                                         }
@@ -285,6 +286,7 @@
 
             > .m-right-col {
                 width: calc(100% - 21px);
+                min-width: 400px;
                 height: calc(100% - 41px);
                 background-color: $color-media-background-light-grey;
 
@@ -310,7 +312,7 @@
                     width:100%;
                     max-width: 360px;
                     height: fit-content;
-                    margin: 1em auto;
+                    margin: 35px auto;
 
                     > .m-instagram {
                         width: 100%;

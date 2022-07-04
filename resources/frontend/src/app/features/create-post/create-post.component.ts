@@ -29,6 +29,10 @@ export class CreatePostComponent implements OnInit {
     refresh: boolean = false;
     uploadImageActive: boolean = false;
 
+    //open app previews
+    facebookPreview: boolean = false;
+    instagramPreview: boolean = true;
+
     url1 = '';
     urlImages: string[] = [];
     bool: boolean = false;
@@ -56,8 +60,7 @@ export class CreatePostComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
     previewVisible = false;
-    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =
-        [];
+    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =[];
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
     selectedFile: any = [];
@@ -73,31 +76,16 @@ export class CreatePostComponent implements OnInit {
     posX = 0;
     posY = 0;
     postId = null;
-
     showUploadVideo = false;
     selectedVideo :any = null;
-
     selectedThumbnail = {
-        imgB64 : '' , 
+        imgB64 : '' ,
         time : 0
     };
-
     listThumbnail : { imgB64 : any , time : any }[] = [];
-
     leadThumbnail : Boolean = false;
-
     currentTimePosition = -10;
     duration = 10;
-
-    images : string[] = [
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    ]
 
     constructor(
         private shared: SharedModule,
@@ -107,7 +95,7 @@ export class CreatePostComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.getPages();
+        this.getPages('mixed');
         const mentioned = document.querySelector('.mentioned');
 
         mentioned?.addEventListener('click', this.edit);
@@ -119,15 +107,21 @@ export class CreatePostComponent implements OnInit {
         // }
     }
 
-    getPages() {
+    getPages(param: string) {
+      this.listOfPages = [];
         this.facebookSocialService.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
-                success.pages.forEach((page: any) => {
-                    if (page.isConnected == true) {
-                        this.listOfPages.push(page);
-                    }
-                })
-
+              success.pages.forEach((page: any) => {
+                if(param == 'mixed') {
+                  if (page.isConnected == true) {
+                    this.listOfPages.push(page);
+                  }
+                } else if (param == 'instagram') {
+                  if (page.isConnected == true && page.provider == 'instagram') {
+                    this.listOfPages.push(page);
+                  }
+                }
+              })
             },
             (error) => {
                 this.shared.createMessage('error', error.error.message);
@@ -137,7 +131,7 @@ export class CreatePostComponent implements OnInit {
 
     submitForm(param: string) {
         // TODO:: for video upload
-         
+
         // this.postService.uploadFile(this.selectedVideo).subscribe({
         //     next: (response) => {
         //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
@@ -303,11 +297,17 @@ export class CreatePostComponent implements OnInit {
             url: "",
             type: ""
         }
+        console.log(event);
         if (event.type == 'success') {
-            img.url = event.file.response.files.url;
-            img.type = event.file.response.files.type;
-            this.urlLinks.push(img);
-            this.refreshCarousel();
+          this.urlLinks = [{ url: "", type:"" }];
+          event.fileList.forEach((elem: any) => {
+            //todo
+          })
+          img.url = event.file.response.files.url;
+          img.type = event.file.response.files.type;
+          this.urlLinks.push(img);
+          this.refreshCarousel();
+          console.log(this.urlLinks)
         }
     }
 
@@ -370,16 +370,15 @@ export class CreatePostComponent implements OnInit {
         });
         event.target.classList.add('is-active');
         this.tabId1 = id;
+        if(id == 'instagram-tab-title') {
+          this.instagramPreview = true;
+          this.facebookPreview = false;
+        } else if(id == 'facebook-tab-title') {
+          this.instagramPreview = false;
+          this.facebookPreview = true;
+        }
     }
 
-    tabChange2(id: any, event: any) {
-        let list = [].slice.call(event.target.parentNode.children);
-        list.forEach((elem: any) => {
-            elem.classList.remove('is-active');
-        });
-        event.target.classList.add('is-active');
-        this.tabId = id;
-    }
 
     like(e: any) {
         if (e.target.classList.contains('liked')) {
@@ -472,12 +471,12 @@ export class CreatePostComponent implements OnInit {
         }
     }
 
-    collapseVideoUpload(){
+    collapseVideoUpload() {
         this.showUploadVideo = !this.showUploadVideo
         console.log(this.showUploadVideo);
     }
 
-    loadFile(e : Event){
+    loadFile(e : Event) {
         let target = e.target as HTMLInputElement;
         let video = document.getElementById("video") as HTMLVideoElement;
         if (target.files?.length) {
@@ -509,7 +508,7 @@ export class CreatePostComponent implements OnInit {
             this.currentTimePosition += this.duration ;
         }
         console.log(this.currentTimePosition);
-        
+
         generateVideoThumbnails(this.selectedVideo, 3 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
           this.listThumbnail = thumbArray;
           if(newVideo){
@@ -526,6 +525,10 @@ export class CreatePostComponent implements OnInit {
             this.selectedThumbnail = item;
             console.log(this.selectedThumbnail);
             (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+      }
+
+      removeImage(event: any) {
+        console.log(event);
       }
 
 }
