@@ -105,10 +105,10 @@ class PostController extends Controller
         $getStat = ($request->getStat == true && $filterByAccounts) ? true : false;
         // If FilterBy Accounts then Get POsts using AccountPost else Get Posts Normally
         $postRequest = $filterByAccounts ? AccountPost::whereHas('account', function ($query) use ($companyId) {
-            $query->where('accounts.companyId', $companyId);
+            $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
         })->with('accounts') :
                     Post::whereHas('accounts', function ($query) use ($companyId) {
-                        $query->where('accounts.companyId', $companyId);
+                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
                     });
 
         // $postId Used to return Single Post Id
@@ -116,11 +116,6 @@ class PostController extends Controller
         if ($postId) {
             $postRequest = $postRequest->where('id', $postId);
         }
-
-        $postRequest->whereHas('accounts', function ($query) use ($companyId) {
-            $query->where('accounts.status', 1);
-        });
-        
         // To filter by status PUBLISH or DRAFT
         if ($request->status) {
             $postRequest = $filterByAccounts ? $postRequest->whereHas('post', function ($query) use ($request) {
