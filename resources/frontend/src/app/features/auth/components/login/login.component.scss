@@ -3,11 +3,8 @@
 @import '../../../../../assets/sass/_project/base.scss';
 
 .mod-login {
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
-    position: absolute;
     background-color: $color-base-0;
     border: 15px solid #F4F4F4;
 
@@ -52,11 +49,24 @@
             margin-bottom: 10px;
         }
 
+        > .m-sign-up {
+          margin: 6px 0 17px;
+
+          >p {
+            margin: 0;
+            @include textstyle-size-12();
+
+            > a {
+              color: $color-base-100;
+              text-decoration: underline;
+            }
+          }
+        }
+
         > .m-button-login {
             text-align: center;
 
             > button {
-                margin-top: 35px;
                 border-radius: 0%;
                 width: 118px;
                 height: 39px;

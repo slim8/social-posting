@@ -183,7 +183,7 @@ class FacebookController extends Controller
             $object['publihshed'] = true;
 
             if ($videos['thumbnail']) {
-                $fileUrl =$videos['thumbnail'];
+                $fileUrl = $videos['thumbnail'];
                 $fileUrl = explode('/', $fileUrl)[count(explode('/', $fileUrl)) - 1];
                 $temporarFile = Storage::disk('custom-ftp')->get('images/'.$fileUrl);
                 $temporarFile = Storage::disk('temporar-video')->put($fileUrl, $temporarFile);
@@ -426,16 +426,19 @@ class FacebookController extends Controller
         $postIdProvider = $acountPost->postIdProvider;
         $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
         $response = $request->json('data');
-        // Start Fetching Statistics
-        foreach ($response as $statsData) {
-            // Start Fetching Likes
-            if ($statsData['name'] == 'post_reactions_by_type_total') {
-                foreach ($statsData['values'][0]['value'] as $key => $value) {
-                    $value = (int) $value;
-                    $likes = $likes + $value;
+
+        if ($response) {
+            // Start Fetching Statistics
+            foreach ($response as $statsData) {
+                // Start Fetching Likes
+                if ($statsData['name'] == 'post_reactions_by_type_total') {
+                    foreach ($statsData['values'][0]['value'] as $key => $value) {
+                        $value = (int) $value;
+                        $likes = $likes + $value;
+                    }
                 }
+                // End Fetching Likes
             }
-            // End Fetching Likes
         }
 
         // End fetching Statistics
