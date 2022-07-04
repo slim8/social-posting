@@ -33,17 +33,19 @@ export class LoginComponent implements OnInit {
     login() {
         this.isLoading = true;
         this.service.login(this.credentials).subscribe(
-            (success: any) => {
-                this.createMessage('success', 'login succeed !');
-                localStorage.setItem('token', success.token);
-                this.router.navigate(['/application/dashboard']);
-            },
-            (error) => {
-                this.createMessage('error', error.error.message);
-                this.isLoading = false;
-            },
-            () => {
-                this.isLoading = false;
+            {
+                next: (response: any) => {
+                    this.createMessage('success', 'login succeed !');
+                    localStorage.setItem('token', response.token);
+                    this.router.navigate(['/application/dashboard']);
+                },
+                error: (error) => {
+                    this.createMessage('error', error.error.message);
+                    this.isLoading = false;
+                },
+                complete: () => {
+                    this.isLoading = false;
+                }
             }
         );
     }
