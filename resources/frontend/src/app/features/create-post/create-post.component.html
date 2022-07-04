@@ -15,7 +15,7 @@
     <div class="m-container">
         <div class="m-post-form">
             <div class="m-wrapper">
-                
+
                     <nz-form-label [nzSpan]="24" nzFor="Statut">Statut</nz-form-label>
                     <nz-form-control [nzSpan]="24">
                         <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
@@ -65,8 +65,8 @@
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)" *ngIf="index > 0"><i nz-icon nzType="delete"></i></button>
                                         </ng-template>
-                                        <br/><br/> 
-                                    </div> 
+                                        <br/><br/>
+                                    </div>
                                     <button nz-button nzType="dashed" (click)="addLink()">add item</button>
                                 </div>
                             </nz-form-control>
@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="m-content" *ngIf="tabId == 'videos'">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                                                             <div class="m-spacer">&nbsp;</div>
                                                             <div class="m-post-btn"><span class="save">&nbsp;</span></div>
                                                         </div>
-                                
+
                                                         <div class="m-likes" *ngIf="isliked">
                                                             <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
                                                             <strong>1 like</strong>
@@ -204,14 +204,14 @@
                                                         <p>Like</p>
                                                       </a>
                                                     </div>
-                                              
+
                                                     <div class="comment">
                                                       <a href="#">
                                                         <img src="../../../../../assets/img/svgs/comment-facebook.svg" />
                                                         <p>Comment</p>
                                                       </a>
                                                     </div>
-                                              
+
                                                     <div class="share">
                                                       <a href="#">
                                                         <img src="http://download.seaicons.com/icons/icons8/windows-8/512/Arrows-Redo-icon.png" alt="" />
@@ -220,7 +220,7 @@
                                                         </p>
                                                       </a>
                                                     </div>
-                                              
+
                                                   </div>
                                                 <div class="footer__dropdown"></div>
                                             </div>
@@ -268,6 +268,7 @@
                             [(nzFileList)]="fileList"
                             [nzShowButton]="fileList.length < 8"
                             (nzChange)="handleChange($event)"
+                            nzAccept = "image/*"
                             >
                             <div>
                                 <i nz-icon nzType="plus"></i>
@@ -286,9 +287,25 @@
                             </nz-modal>
                         </div>
                     </div>
+                    <div  *ngIf="showUploadVideo" class="m-upload-video" >
+                        <div class="clearfix">
+                            <video poster="" controls id="video">
+                                Your browser does not support the video tag.
+                            </video>
+                            <label for="inputfile" class="m-img-container">
+                                <img *ngIf="selectedThumbnail.imgB64" [src]="selectedThumbnail.imgB64" />
+                            </label>
+
+                        </div>
+                        <div class="m-custom-file-input" id="fileControls">
+                            <input type="file" id="inputfile"  accept="video/*" (change)="loadFile($event)" />
+                            <!-- TODO::for next change upload video from url -->
+                            <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
+                        </div>
+                    </div>
                     <div class="m-form-field">
                         <div class="m-choose-media">
-                            <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:image"></i></span> Foto hinzufügen</button>
+                            <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Foto hinzufügen</button>
                             <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
                             <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
                         </div>
@@ -397,13 +414,30 @@
                                         />
                                     </div>
                                 </div>
-                
+
                                 <div class="m-form-group">
                                     <div class="m-form-label">
                                         <h4>Markierung <small>- optional</small></h4>
                                     </div>
                                     <div class="m-form-field">
                                         <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
+                                    </div>
+                                </div>
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                        <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                        <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                            <i nz-icon nzType="left" nzTheme="outline"></i>
+                                        </div>
+                                        <div class="m-thumbnails-preview-items" >
+                                            <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                        </div>
+                                        <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                            <i nz-icon nzType="right" nzTheme="outline"></i>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -449,7 +483,7 @@
                                         />
                                     </div>
                                 </div>
-                
+
                                 <div class="m-form-group">
                                     <div class="m-form-label">
                                         <h4>Markierung <small>- optional</small></h4>
@@ -458,15 +492,35 @@
                                         <input nz-input placeholder="Gib ein mit dir vernetztes Profil ein." class="m-location"  />
                                     </div>
                                 </div>
+
+
+                                <div class="m-form-group" *ngIf="showUploadVideo">
+                                    <div id="loader" *ngIf="leadThumbnail" class="m-thumbnail-loader" >
+                                      <i nz-icon [nzType]="'loading'"></i>
+                                    </div>
+
+                                    <div class="m-thumbnails-preview" *ngIf="!leadThumbnail"  >
+                                      <div class="m-previous-icon"  (click)="generatethumbnails('previous')" >
+                                          <i nz-icon nzType="left" nzTheme="outline"></i>
+                                      </div>
+                                      <div class="m-thumbnails-preview-items" >
+                                          <img *ngFor="let thumbnail of listThumbnail" class="m-thumbnails-preview-item"  [src]="thumbnail.imgB64" alt="" (click)="selectThumbnail(thumbnail)">
+                                      </div>
+                                      <div class="m-next-icon" (click)="generatethumbnails('next')">
+                                          <i nz-icon nzType="right" nzTheme="outline"></i>
+                                      </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="m-right-col">
-                <div *ngIf="urlLinks.length == 1" class="m-no-preview">
+                <div *ngIf="urlLinks.length > 0" class="m-no-preview">
                     <h3>Vorschau nicht verfügbar</h3>
-                    <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu, 
+                    <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu,
                         um hier eine Vorschau zu sehen. </p>
                 </div>
                 <div *ngIf="urlLinks.length > 1" class="m-instagram-device">
@@ -495,7 +549,7 @@
                                         <div class="m-spacer">&nbsp;</div>
                                         <div class="m-post-btn"><span class="save">&nbsp;</span></div>
                                     </div>
-            
+
                                     <div class="m-likes" *ngIf="isliked">
                                         <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
                                         <strong>1 like</strong>
@@ -509,6 +563,7 @@
                         </main>
                     </div>
                 </div>
+                <app-facebook-preview [ThumbnailImg]="selectedThumbnail.imgB64" [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="images"></app-facebook-preview>
             </div>
         </div>
         <div class="m-action-buttons">

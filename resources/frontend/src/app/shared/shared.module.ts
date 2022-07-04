@@ -12,7 +12,7 @@ import { ServerErrorComponent } from './components/server-error/server-error.com
     declarations: [
         NotFoundComponent,
         ServerErrorComponent,
-        UnauthorizedComponent
+        UnauthorizedComponent,
     ],
     imports: [
         DemoNgZorroAntdModule
