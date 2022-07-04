@@ -1,3 +1,4 @@
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
 import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
@@ -33,10 +34,6 @@ export class CreatePostComponent implements OnInit {
     facebookPreview: boolean = false;
     instagramPreview: boolean = true;
 
-    //test  mixed media types
-    availableVideo: boolean = false;
-    availableImages: boolean = false;
-
     url1 = '';
     urlImages: string[] = [];
     bool: boolean = false;
@@ -46,8 +43,7 @@ export class CreatePostComponent implements OnInit {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    mediaId: number = 0;
-    @Input() urlLinks: any[] = [{ id: 0, url: "", type:"" }];
+    @Input() urlLinks: any[] = [{ url: "", type:"" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     instaTags: string[] = [];
@@ -92,11 +88,17 @@ export class CreatePostComponent implements OnInit {
     currentTimePosition = -10;
     duration = 10;
 
+    videoCounter = 0;
+    videoList: {id : number ,file : File }[] = [];
+    selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
+
+
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
         private activatedRoute: ActivatedRoute,
-        private postService: PostService
+        private postService: PostService ,
+        private modal: NzModalService
     ) { }
 
     ngOnInit(): void {
@@ -114,27 +116,24 @@ export class CreatePostComponent implements OnInit {
 
     getPages(param: string) {
       this.listOfPages = [];
-        this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
-          next: (event: any) => {
-            event.pages.forEach((page: any) => {
-              if(param == 'mixed') {
-                if (page.isConnected == true) {
-                  this.listOfPages.push(page);
+        this.facebookSocialService.getCurrentApprovedFBPages().subscribe(
+            (success: any) => {
+              success.pages.forEach((page: any) => {
+                if(param == 'mixed') {
+                  if (page.isConnected == true) {
+                    this.listOfPages.push(page);
+                  }
+                } else if (param == 'instagram') {
+                  if (page.isConnected == true && page.provider == 'instagram') {
+                    this.listOfPages.push(page);
+                  }
                 }
-              } else if (param == 'instagram') {
-                if (page.isConnected == true && page.provider == 'instagram') {
-                  this.listOfPages.push(page);
-                }
-              }
-            })
-          },
-        error: err => {
-          this.shared.createMessage('error', err.error.message);
-        },
-        complete: () => {
-          //todo
-        }
-      });
+              })
+            },
+            (error) => {
+                this.shared.createMessage('error', error.error.message);
+            }
+        );
     }
 
     submitForm(param: string) {
@@ -301,48 +300,22 @@ export class CreatePostComponent implements OnInit {
 
     //upload files changes
     handleChange(event: any): void {
-      let img = {
-        id: 0,
-        url: "",
-        type: ""
-      }
-
-      if (event.type == 'success') {
-        this.mediaId = 0;
-        this.urlLinks = [{ id: 0, url: "", type:"" }];
-
-        if (event.fileList.count>0) {
-          this.availableImages = true;
-          if (this.availableVideo) {
-            this.getPages('instagram');
-          }
-        } else {
-          this.availableImages = false;
+        let img = {
+            url: "",
+            type: ""
         }
-        event.fileList.forEach((elem: any) => {
-          this.mediaId++;
-          img.id = this.mediaId;
-          img.url = elem.response.files.url;
-          img.type = elem.response.files.type;
+        console.log(event);
+        if (event.type == 'success') {
+          this.urlLinks = [{ url: "", type:"" }];
+          event.fileList.forEach((elem: any) => {
+            //todo
+          })
+          img.url = event.file.response.files.url;
+          img.type = event.file.response.files.type;
           this.urlLinks.push(img);
           this.refreshCarousel();
           console.log(this.urlLinks)
-        })
-      }
-      else if (event.type == 'removed') {
-        this.mediaId = 0;
-        this.urlLinks = [{ id: 0, url: "", type:"" }];
-
-        event.fileList.forEach((elem: any) => {
-          this.mediaId++;
-          img.id = this.mediaId;
-          img.url = elem.response.files.url;
-          img.type = elem.response.files.type;
-          this.urlLinks.push(img);
-          this.refreshCarousel();
-          console.log(this.urlLinks)
-        })
-      }
+        }
     }
 
     handleCloseInsta(removedTag: {}): void {
@@ -507,31 +480,44 @@ export class CreatePostComponent implements OnInit {
 
     collapseVideoUpload() {
         this.showUploadVideo = !this.showUploadVideo
+        this.videoList = [];
+        this.selectedThumbnailList = [];
+        this.listThumbnail = [];
         console.log(this.showUploadVideo);
     }
 
+    // TODO:: comment line for video display
     loadFile(e : Event) {
-      let target = e.target as HTMLInputElement;
-      let video = document.getElementById("video") as HTMLVideoElement;
-      if (target.files?.length) {
-          this.selectedVideo = target.files[0];
-          var source = document.createElement('source');
-          importFileandPreview(this.selectedVideo).then((url) => {
-              source.setAttribute('src', url);
-              source.setAttribute('type', this.selectedVideo.type);
-              generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-                  video.style.width = "auto";
-                  video.style.height = "auto"
-                  video.style.transform = "scale(1)"
-              })
-              video.style.transform = "scale(1)"
-              video.innerHTML = "";
-              video.appendChild(source);
-          });
+        let target = e.target as HTMLInputElement;
+        // let video = document.getElementById("video") as HTMLVideoElement;
+        if(target.files){
+            let loadedFile = {id : this.videoCounter ,file :target.files[0]};
+            this.videoList.push(loadedFile)
+            this.selectedVideo = loadedFile;
+            this.videoCounter++;
+        }
+        console.log(target.files , this.videoList);
+
+
+        // if (target.files?.length) {
+            // this.selectedVideo = target.files[0];
+            // var source = document.createElement('source');
+            // importFileandPreview(this.selectedVideo).then((url) => {
+                // source.setAttribute('src', url);
+                // source.setAttribute('type', this.selectedVideo.type);
+                // generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
+                    // video.style.width = "auto";
+                    // video.style.height = "auto"
+                    // video.style.transform = "scale(1)"
+                // })
+                // video.style.transform = "scale(1)"
+                // video.innerHTML = "";
+                // video.appendChild(source);
+            // });
+        // }
+        this.generatethumbnails('next' , true);
+        this.currentTimePosition = -10;
       }
-      this.generatethumbnails('next' , true);
-      this.currentTimePosition = -10;
-    }
 
       generatethumbnails(action : string , newVideo = false ){
         this.leadThumbnail = true
@@ -543,11 +529,13 @@ export class CreatePostComponent implements OnInit {
         }
         console.log(this.currentTimePosition);
 
-        generateVideoThumbnails(this.selectedVideo, 3 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
+        generateVideoThumbnails(this.selectedVideo.file, 3 , this.selectedVideo.file.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
           this.listThumbnail = thumbArray;
+
           if(newVideo){
             this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
             this.selectedThumbnail.time = thumbArray[0].time as number ;
+            this.selectedThumbnailList.push({id : this.selectedVideo.id , imgB64 : this.selectedThumbnail.imgB64 , time : this.selectedThumbnail.time })
           }
           console.log(thumbArray , this.listThumbnail);
           this.leadThumbnail = false ;
@@ -557,8 +545,43 @@ export class CreatePostComponent implements OnInit {
       selectThumbnail(item : {imgB64 : '' , time : 0 } ){
             console.log(item);
             this.selectedThumbnail = item;
+
+            this.selectedThumbnailList.forEach(selectedThumbnail => {
+                if(selectedThumbnail.id == this.selectedVideo.id){
+                    selectedThumbnail.imgB64 = item.imgB64 ;
+                    selectedThumbnail.time = item.time ;
+                }
+            })
             console.log(this.selectedThumbnail);
-            (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+            // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+      }
+
+      changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
+        this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
+        this.generatethumbnails('next');
+        this.currentTimePosition = -10;
+        console.log(item , this.selectedVideo);
+      }
+
+      deleteVideo(item : {id : number ,imgB64 : string , time : number}){
+        console.log(item );
+        this.modal.confirm({
+            nzTitle: 'Are you sure delete this video?',
+            nzContent: '<b style="color: red;">remove video </b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => {
+                console.log('OK' , item);
+                this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
+                this.videoList = this.videoList.filter((video) => item.id != video.id  )
+                if(this.selectedVideo.id == item.id){
+                    this.listThumbnail = [];
+                }
+            },
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel', item)
+        });
       }
 
       removeImage(event: any) {
