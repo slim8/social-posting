@@ -33,6 +33,10 @@ export class CreatePostComponent implements OnInit {
     facebookPreview: boolean = false;
     instagramPreview: boolean = true;
 
+    //test  mixed media types
+    availableVideo: boolean = false;
+    availableImages: boolean = false;
+
     url1 = '';
     urlImages: string[] = [];
     bool: boolean = false;
@@ -42,7 +46,8 @@ export class CreatePostComponent implements OnInit {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    @Input() urlLinks: any[] = [{ url: "", type:"" }];
+    mediaId: number = 0;
+    @Input() urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     instaTags: string[] = [];
@@ -109,24 +114,27 @@ export class CreatePostComponent implements OnInit {
 
     getPages(param: string) {
       this.listOfPages = [];
-        this.facebookSocialService.getCurrentApprovedFBPages().subscribe(
-            (success: any) => {
-              success.pages.forEach((page: any) => {
-                if(param == 'mixed') {
-                  if (page.isConnected == true) {
-                    this.listOfPages.push(page);
-                  }
-                } else if (param == 'instagram') {
-                  if (page.isConnected == true && page.provider == 'instagram') {
-                    this.listOfPages.push(page);
-                  }
+        this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
+          next: (event: any) => {
+            event.pages.forEach((page: any) => {
+              if(param == 'mixed') {
+                if (page.isConnected == true) {
+                  this.listOfPages.push(page);
                 }
-              })
-            },
-            (error) => {
-                this.shared.createMessage('error', error.error.message);
-            }
-        );
+              } else if (param == 'instagram') {
+                if (page.isConnected == true && page.provider == 'instagram') {
+                  this.listOfPages.push(page);
+                }
+              }
+            })
+          },
+        error: err => {
+          this.shared.createMessage('error', err.error.message);
+        },
+        complete: () => {
+          //todo
+        }
+      });
     }
 
     submitForm(param: string) {
@@ -293,22 +301,48 @@ export class CreatePostComponent implements OnInit {
 
     //upload files changes
     handleChange(event: any): void {
-        let img = {
-            url: "",
-            type: ""
+      let img = {
+        id: 0,
+        url: "",
+        type: ""
+      }
+
+      if (event.type == 'success') {
+        this.mediaId = 0;
+        this.urlLinks = [{ id: 0, url: "", type:"" }];
+
+        if (event.fileList.count>0) {
+          this.availableImages = true;
+          if (this.availableVideo) {
+            this.getPages('instagram');
+          }
+        } else {
+          this.availableImages = false;
         }
-        console.log(event);
-        if (event.type == 'success') {
-          this.urlLinks = [{ url: "", type:"" }];
-          event.fileList.forEach((elem: any) => {
-            //todo
-          })
-          img.url = event.file.response.files.url;
-          img.type = event.file.response.files.type;
+        event.fileList.forEach((elem: any) => {
+          this.mediaId++;
+          img.id = this.mediaId;
+          img.url = elem.response.files.url;
+          img.type = elem.response.files.type;
           this.urlLinks.push(img);
           this.refreshCarousel();
           console.log(this.urlLinks)
-        }
+        })
+      }
+      else if (event.type == 'removed') {
+        this.mediaId = 0;
+        this.urlLinks = [{ id: 0, url: "", type:"" }];
+
+        event.fileList.forEach((elem: any) => {
+          this.mediaId++;
+          img.id = this.mediaId;
+          img.url = elem.response.files.url;
+          img.type = elem.response.files.type;
+          this.urlLinks.push(img);
+          this.refreshCarousel();
+          console.log(this.urlLinks)
+        })
+      }
     }
 
     handleCloseInsta(removedTag: {}): void {
@@ -477,27 +511,27 @@ export class CreatePostComponent implements OnInit {
     }
 
     loadFile(e : Event) {
-        let target = e.target as HTMLInputElement;
-        let video = document.getElementById("video") as HTMLVideoElement;
-        if (target.files?.length) {
-            this.selectedVideo = target.files[0];
-            var source = document.createElement('source');
-            importFileandPreview(this.selectedVideo).then((url) => {
-                source.setAttribute('src', url);
-                source.setAttribute('type', this.selectedVideo.type);
-                generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-                    video.style.width = "auto";
-                    video.style.height = "auto"
-                    video.style.transform = "scale(1)"
-                })
-                video.style.transform = "scale(1)"
-                video.innerHTML = "";
-                video.appendChild(source);
-            });
-        }
-        this.generatethumbnails('next' , true);
-        this.currentTimePosition = -10;
+      let target = e.target as HTMLInputElement;
+      let video = document.getElementById("video") as HTMLVideoElement;
+      if (target.files?.length) {
+          this.selectedVideo = target.files[0];
+          var source = document.createElement('source');
+          importFileandPreview(this.selectedVideo).then((url) => {
+              source.setAttribute('src', url);
+              source.setAttribute('type', this.selectedVideo.type);
+              generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
+                  video.style.width = "auto";
+                  video.style.height = "auto"
+                  video.style.transform = "scale(1)"
+              })
+              video.style.transform = "scale(1)"
+              video.innerHTML = "";
+              video.appendChild(source);
+          });
       }
+      this.generatethumbnails('next' , true);
+      this.currentTimePosition = -10;
+    }
 
       generatethumbnails(action : string , newVideo = false ){
         this.leadThumbnail = true
