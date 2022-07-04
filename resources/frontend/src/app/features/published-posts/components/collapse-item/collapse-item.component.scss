@@ -1,14 +1,22 @@
 @import '../../../../../assets/sass/_project/base.scss';
+@import '../../../../../assets/sass/_global/mixins';
 @import '../../../../../assets/sass/_project/_mixins-fonts.scss';
 .mod-collapse-item {
     > .m-wrapper {
         > .m-table {
+            overflow-x: auto;
+
             > .m-container {
+                min-width: 600px;
+                max-width: 100%;
                 width: 100%;
                 display: flex;
                 flex-wrap: wrap;
-                gap: 10px;
                 align-items: center;
+
+                @include mq(xl) {
+                    gap: 10px;
+                }
 
                 > .m-icon {
                     width: 5%;
@@ -16,7 +24,6 @@
 
                 > .m-image {
                     width: 15%;
-                    // padding: 18px 0;
                 }
 
                 > .m-content {
@@ -41,6 +48,7 @@
                     @include textstyle-size-10();
                     > .m-create-date {
                         @include textstyle-size-10-bold();
+                        width: 100%;
                     }
                 }
 
