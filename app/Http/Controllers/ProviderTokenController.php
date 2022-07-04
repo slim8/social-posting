@@ -30,6 +30,26 @@ class ProviderTokenController extends Controller
     }
 
     /**
+     * Disconnect Provider Token Action.
+     */
+    public function disconnectTokenAction($providerId)
+    {
+        $providerToken = UserTrait::getProviderTByProviderUID($providerId);
+
+        if (!$providerToken) {
+            return RequestsTrait::processResponse(false, ['message' => 'No Account Found']);
+        }
+
+        $id = $providerToken->id;
+
+        $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
+        $providerToken = $providerToken->update();
+        Account::where('providerTokenId', $id)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
+
+        return true;
+    }
+
+    /**
      * Disconnect Provider token and his Accounts.
      */
     public function disconnectToken(Request $request)
@@ -41,17 +61,7 @@ class ProviderTokenController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
-        $providerToken = UserTrait::getProviderTByProviderUID($request->id);
-
-        if (!$providerToken) {
-            return RequestsTrait::processResponse(false, ['message' => 'No Account Found']);
-        }
-
-        $id = $providerToken->id;
-
-        $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
-        $providerToken = $providerToken->update();
-        Account::where('providerTokenId', $id)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
+        $this->disconnectTokenAction($request->id);
 
         return RequestsTrait::processResponse(true, ['message' => 'Your account has been disconnected']);
     }

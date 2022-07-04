@@ -31,6 +31,9 @@ class User extends ExtendedUser
         'autoRefresh',
         'isSubscriber',
         'companyId',
+        'address',
+        'postCode',
+        'city'
     ];
 
     /**
