@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\repositories\UserRepository;
 use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
@@ -175,6 +176,11 @@ class ApiAuthController extends Controller
                     ];
 
                     $jwt = JWT::encode($token, $secret_key, envValue('JWT_HASH_ALGORITHME'));
+
+                    // Check and disconnect Inactif Account
+                    Auth::login($user);
+                    $providerTokenController = new ProviderTokenController();
+                    $providerTokenController->checkAccountToken();
 
                     return RequestsTrait::processResponse(true, ['message' => trans('message.sucess_login'),
                             'token' => $jwt,
