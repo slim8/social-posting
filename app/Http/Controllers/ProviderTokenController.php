@@ -151,22 +151,18 @@ class ProviderTokenController extends Controller
     /**
      * Check Provider Token Availablety Only for facebook With API.
      */
-    public function checkSingleProviderToken($accessToken, $uid)
+    public function checkSingleProviderToken($accessToken, $uid, $providerTokenId)
     {
         $facebookUri = envValue('FACEBOOK_ENDPOINT').$uid.'/accounts?access_token='.$accessToken;
 
         $response = Http::get($facebookUri);
         $jsonResponse = $response->json();
-        d($jsonResponse);
-
         if (isset($jsonResponse['error'])) {
-            d($jsonResponse['error']);
-
             if ($jsonResponse['error']['code'] == 190) {
-                d('is 190 Error Code');
+                if ($jsonResponse['error']['error_subcode'] == 460) {
+                    $this->disconnectTokenAction($providerTokenId);
+                }
             }
-        } else {
-            d('is look Good');
         }
     }
 
@@ -177,7 +173,7 @@ class ProviderTokenController extends Controller
     {
         $providerUid = ProviderToken::where('id', $providerTokenId)->first();
         $newAccount = Account::where('provider_token_id', $providerTokenId)->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('accessToken', 'not like', 'NA')->where('companyId', UserTrait::getCompanyId())->first();
-        $this->checkSingleProviderToken($newAccount->accessToken, $providerUid->accountUserId);
+        $this->checkSingleProviderToken($newAccount->accessToken, $providerUid->accountUserId, $providerTokenId);
     }
 
     /**
