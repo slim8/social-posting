@@ -63,7 +63,6 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::post('/send-post', [GeneralSocialController::class, 'sendToPost'])->name('send-general-post.api');
     Route::get('/accounts', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api'); // For Managment Account
     Route::get('/accounts/{accountId}', [GeneralSocialController::class, 'getAllAccountsByCompanyId'])->name('load-accounts.api');
-    Route::get('/check-accounts', [ProviderTokenController::class, 'checkAccountToken'])->name('check-account-token.api');
     Route::get('/accounts/{id}/posts', [PostController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
     Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
