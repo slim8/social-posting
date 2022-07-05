@@ -65,7 +65,7 @@ trait RequestsTrait
             }
             $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,
                 'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false,
-                'followers' => $followers, 'link' => $link, 'username' => $username ];
+                'followers' => $followers, 'link' => $link, 'username' => $username, ];
 
             if (UserTrait::getUserObject()->hasRole('companyadmin')) {
                 $pageContent['users'] = UserTrait::getUsersLinkedToAccounts($id);
@@ -129,5 +129,23 @@ trait RequestsTrait
         $object['success'] = $sucess;
 
         return response()->json($object, $sucess ? 201 : 401);
+    }
+
+    /**
+     * Prepare Multi part form from Object.
+     */
+    public static function prepareMultiPartForm($object)
+    {
+        $multipart = [];
+
+        foreach ($object as $key => $value) {
+            if ($key == 'user_tags') {
+                array_push($multipart, ['name' => $key, 'contents' => json_encode($value)]);
+            } else {
+                array_push($multipart, ['name' => $key, 'contents' => $value]);
+            }
+        }
+
+        return $multipart;
     }
 }
