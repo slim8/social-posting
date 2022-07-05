@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\repositories\UserRepository;
 use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
@@ -52,6 +53,9 @@ class ApiAuthController extends Controller
         //     'lastName' => 'required|string|max:255',
         //     'adress' => 'string|max:255',
         //     'website' => 'string|max:255',
+        //      'address' => 'required|string|max:255',
+        // 'postCode' => 'required|string|max:255',
+        // 'city' => 'required|string|max:255',
         //     'email' => 'required|string|email|max:255|unique:users|unique:companies',
         //     'phoneNumber' => 'required|string|max:255|unique:companies',
         //     'isSubscriber' => '',
@@ -82,6 +86,9 @@ class ApiAuthController extends Controller
             'companyId' => $company->id,
             'password' => hash::make($password),
             'autoRefresh' => 1,
+            'address' => $request->address,
+            'postCode' => $request->postCode,
+            'city' => $request->city,
         ]);
 
         $user->attachRole('companyadmin');
@@ -100,6 +107,9 @@ class ApiAuthController extends Controller
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
             'email' => 'required|email',
+            'address' => 'required|string|max:255',
+            'postCode' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
             'password' => 'required|string|min:8',
             'isSubscriber' => '',
         ], [
@@ -119,6 +129,9 @@ class ApiAuthController extends Controller
             'companyId' => $actualCompanyId,
             'password' => hash::make($request->password),
             'autoRefresh' => 1,
+            'address' => $request->address,
+            'postCode' => $request->postCode,
+            'city' => $request->city,
         ]);
 
         $user->attachRole('user');
@@ -163,6 +176,11 @@ class ApiAuthController extends Controller
                     ];
 
                     $jwt = JWT::encode($token, $secret_key, envValue('JWT_HASH_ALGORITHME'));
+
+                    // Check and disconnect Inactif Account
+                    Auth::login($user);
+                    $providerTokenController = new ProviderTokenController();
+                    $providerTokenController->checkAccountToken();
 
                     return RequestsTrait::processResponse(true, ['message' => trans('message.sucess_login'),
                             'token' => $jwt,

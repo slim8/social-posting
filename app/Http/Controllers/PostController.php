@@ -105,10 +105,10 @@ class PostController extends Controller
         $getStat = ($request->getStat == true && $filterByAccounts) ? true : false;
         // If FilterBy Accounts then Get POsts using AccountPost else Get Posts Normally
         $postRequest = $filterByAccounts ? AccountPost::whereHas('account', function ($query) use ($companyId) {
-            $query->where('accounts.companyId', $companyId);
+            $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
         })->with('accounts') :
                     Post::whereHas('accounts', function ($query) use ($companyId) {
-                        $query->where('accounts.companyId', $companyId);
+                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
                     });
 
         // $postId Used to return Single Post Id
@@ -116,7 +116,6 @@ class PostController extends Controller
         if ($postId) {
             $postRequest = $postRequest->where('id', $postId);
         }
-
         // To filter by status PUBLISH or DRAFT
         if ($request->status) {
             $postRequest = $filterByAccounts ? $postRequest->whereHas('post', function ($query) use ($request) {
@@ -170,7 +169,7 @@ class PostController extends Controller
         if ($posts) {
             return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
         } else {
-            return RequestsTrait::processResponse(false, ['message' => 'No posts found']);
+            return RequestsTrait::processResponse(false, ['message' => 'No posts found Or some account are disconnected']);
         }
     }
 }
