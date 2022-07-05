@@ -1,3 +1,4 @@
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
 import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
@@ -5,8 +6,9 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ActivatedRoute } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
-import {importFileandPreview , generateVideoThumbnails} from './index'
+import {importFileandPreview , generateVideoThumbnails} from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -21,13 +23,21 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.scss'],
 })
-export class CreatePostComponent implements OnInit {
+export class CreatePostComponent implements OnInit  {
     //upload file apiURL
     uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
 
     //refresh instagram component
     refresh: boolean = false;
     uploadImageActive: boolean = false;
+
+    //open app previews
+    facebookPreview: boolean = false;
+    instagramPreview: boolean = true;
+
+    //available media test
+    availableVideos: boolean = false;
+    availableImages: boolean = false;
 
     url1 = '';
     urlImages: string[] = [];
@@ -38,7 +48,8 @@ export class CreatePostComponent implements OnInit {
     mentions: any = [];
     selectedValue = [];
     isliked: boolean = false;
-    @Input() urlLinks: any[] = [{ url: "", type:"" }];
+    mediaId: number = 0;
+    @Input() urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     instaTags: string[] = [];
@@ -56,8 +67,7 @@ export class CreatePostComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
     previewVisible = false;
-    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =
-        [];
+    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =[];
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
     selectedFile: any = [];
@@ -73,31 +83,21 @@ export class CreatePostComponent implements OnInit {
     posX = 0;
     posY = 0;
     postId = null;
-
     showUploadVideo = false;
     selectedVideo :any = null;
-
     selectedThumbnail = {
-        imgB64 : '' , 
+        imgB64 : '' ,
         time : 0
     };
-
     listThumbnail : { imgB64 : any , time : any }[] = [];
-
     leadThumbnail : Boolean = false;
-
     currentTimePosition = -10;
     duration = 10;
 
-    images : string[] = [
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    ]
+    videoCounter = 0;
+    videoList: {id : number ,file : File }[] = [];
+    selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
+
 
     showAlbum : boolean = false;
 
@@ -105,11 +105,13 @@ export class CreatePostComponent implements OnInit {
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
         private activatedRoute: ActivatedRoute,
-        private postService: PostService
+        private postService: PostService ,
+        private modal: NzModalService,
+        private notification: NzNotificationService
     ) { }
 
     ngOnInit(): void {
-        this.getPages();
+        this.getPages('mixed');
         const mentioned = document.querySelector('.mentioned');
 
         mentioned?.addEventListener('click', this.edit);
@@ -121,25 +123,37 @@ export class CreatePostComponent implements OnInit {
         // }
     }
 
-    getPages() {
-        this.facebookSocialService.getCurrentApprovedFBPages().subscribe(
-            (success: any) => {
-                success.pages.forEach((page: any) => {
-                    if (page.isConnected == true) {
-                        this.listOfPages.push(page);
-                    }
-                })
-
-            },
-            (error) => {
-                this.shared.createMessage('error', error.error.message);
+    getPages(param: string) {
+      this.listOfPages=[];
+      this.accountsValue = [];
+      this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
+        next: (event: any) => {
+          this.listOfPages = new Array();
+          event.pages.forEach((page: any) => {
+            if(param == 'mixed') {
+              if (page.isConnected == true) {
+                this.listOfPages.push(page);
+              }
             }
-        );
+            else if (param == 'instagram') {
+              if (page.isConnected == true && page.provider == 'instagram') {
+                this.listOfPages.push(page);
+              }
+            }
+          })
+        },
+        error: err => {
+          this.shared.createMessage('error', err.error.message);
+        },
+        complete: () => {
+
+        }
+      });
     }
 
     submitForm(param: string) {
         // TODO:: for video upload
-         
+
         // this.postService.uploadFile(this.selectedVideo).subscribe({
         //     next: (response) => {
         //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
@@ -299,18 +313,51 @@ export class CreatePostComponent implements OnInit {
         this.previewVisible = true;
     };
 
-    //upload files changes
+    //upload image changes
     handleChange(event: any): void {
-        let img = {
-            url: "",
-            type: ""
-        }
-        if (event.type == 'success') {
-            img.url = event.file.response.files.url;
-            img.type = event.file.response.files.type;
-            this.urlLinks.push(img);
-            this.refreshCarousel();
-        }
+      let img = {
+        id: 0,
+        url: "",
+        type: ""
+      }
+
+      if (event.fileList.length>0) {
+        this.availableImages = true;
+      } else {
+        this.availableImages = false;
+      }
+
+      if (event.type == 'success') {
+        this.mediaId = 0;
+        this.urlLinks = [{ id: 0, url: "", type:"" }];
+
+        event.fileList.forEach((elem: any) => {
+          this.mediaId++;
+          img.id = this.mediaId;
+          img.url = elem.response.files.url;
+          img.type = elem.response.files.type;
+          this.urlLinks.push(img);
+          this.refreshCarousel();
+        })
+        this.refreshPages();
+      }
+      else if (event.type == 'removed') {
+        this.refreshPages();
+        this.mediaId = 0;
+        this.urlLinks = [{ id: 0, url: "", type:"" }];
+
+        event.fileList.forEach((elem: any) => {
+          this.mediaId++;
+          img.id = this.mediaId;
+          img.url = elem.response.files.url;
+          img.type = elem.response.files.type;
+          this.urlLinks.push(img);
+          this.refreshCarousel();
+        })
+      }
+
+
+
     }
 
     handleCloseInsta(removedTag: {}): void {
@@ -366,21 +413,19 @@ export class CreatePostComponent implements OnInit {
     }
 
     tabChange1(id: any, event: any) {
-        let list = [].slice.call(event.target.parentNode.children);
+        let list = [].slice.call(event.target.closest('li').parentNode.children);
         list.forEach((elem: any) => {
             elem.classList.remove('is-active');
         });
-        event.target.classList.add('is-active');
+        event.target.closest('li').classList.add('is-active');
         this.tabId1 = id;
-    }
-
-    tabChange2(id: any, event: any) {
-        let list = [].slice.call(event.target.parentNode.children);
-        list.forEach((elem: any) => {
-            elem.classList.remove('is-active');
-        });
-        event.target.classList.add('is-active');
-        this.tabId = id;
+        if(id == 'instagram-tab-title') {
+          this.instagramPreview = true;
+          this.facebookPreview = false;
+        } else if(id == 'facebook-tab-title') {
+          this.instagramPreview = false;
+          this.facebookPreview = true;
+        }
     }
 
     like(e: any) {
@@ -449,15 +494,18 @@ export class CreatePostComponent implements OnInit {
 
     collapse() {
         let menuButton = document.querySelector('.m-sidemenu-button');
+        let midColDiv = document.querySelector('.m-collapse-menu-button');
         let menu = document.querySelector('.m-sidemenu');
         let midCol = document.querySelector('.m-mid-col');
+        midColDiv?.classList.toggle('is-active');
         menuButton?.classList.toggle('is-active');
         menu?.classList.toggle('is-active');
         midCol?.classList.toggle('is-active');
     }
 
     collapseImageUpload() {
-        this.uploadImageActive = !this.uploadImageActive;
+      this.showUploadVideo= false;
+      this.uploadImageActive = !this.uploadImageActive;
     }
 
     updateMessage() {
@@ -474,60 +522,128 @@ export class CreatePostComponent implements OnInit {
         }
     }
 
-    collapseVideoUpload(){
+    collapseVideoUpload() {
         this.showUploadVideo = !this.showUploadVideo
-        console.log(this.showUploadVideo);
+        this.uploadImageActive = false;
     }
 
-    loadFile(e : Event){
+    // TODO:: comment line for video display
+    loadFile(e : Event) {
         let target = e.target as HTMLInputElement;
-        let video = document.getElementById("video") as HTMLVideoElement;
-        if (target.files?.length) {
-            this.selectedVideo = target.files[0];
-            var source = document.createElement('source');
-            importFileandPreview(this.selectedVideo).then((url) => {
-                source.setAttribute('src', url);
-                source.setAttribute('type', this.selectedVideo.type);
-                generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-                    video.style.width = "auto";
-                    video.style.height = "auto"
-                    video.style.transform = "scale(1)"
-                })
-                video.style.transform = "scale(1)"
-                video.innerHTML = "";
-                video.appendChild(source);
-            });
+        // let video = document.getElementById("video") as HTMLVideoElement;
+        if(target.files){
+          this.availableVideos = true;
+          let loadedFile = {id : this.videoCounter ,file :target.files[0]};
+          this.videoList.push(loadedFile)
+          this.selectedVideo = loadedFile;
+          this.videoCounter++;
+        }else {
+          this.availableVideos = false;
         }
+
+        // if (target.files?.length) {
+            // this.selectedVideo = target.files[0];
+            // var source = document.createElement('source');
+            // importFileandPreview(this.selectedVideo).then((url) => {
+                // source.setAttribute('src', url);
+                // source.setAttribute('type', this.selectedVideo.type);
+                // generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
+                    // video.style.width = "auto";
+                    // video.style.height = "auto"
+                    // video.style.transform = "scale(1)"
+                // })
+                // video.style.transform = "scale(1)"
+                // video.innerHTML = "";
+                // video.appendChild(source);
+            // });
+        // }
+        this.refreshPages();
         this.generatethumbnails('next' , true);
         this.currentTimePosition = -10;
       }
 
       generatethumbnails(action : string , newVideo = false ){
         this.leadThumbnail = true
-        console.log(this.selectedVideo , this.selectedVideo.duration)
         if(action == "previous"){
             this.currentTimePosition -= this.duration ;
         }else if(action == "next"){
             this.currentTimePosition += this.duration ;
         }
-        console.log(this.currentTimePosition);
-        
-        generateVideoThumbnails(this.selectedVideo, 3 , this.selectedVideo.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
+
+        generateVideoThumbnails(this.selectedVideo.file, 3 , this.selectedVideo.file.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
           this.listThumbnail = thumbArray;
+
           if(newVideo){
             this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
             this.selectedThumbnail.time = thumbArray[0].time as number ;
+            this.selectedThumbnailList.push({id : this.selectedVideo.id , imgB64 : this.selectedThumbnail.imgB64 , time : this.selectedThumbnail.time })
           }
-          console.log(thumbArray , this.listThumbnail);
           this.leadThumbnail = false ;
         })
       }
 
       selectThumbnail(item : {imgB64 : '' , time : 0 } ){
-            console.log(item);
             this.selectedThumbnail = item;
-            console.log(this.selectedThumbnail);
-            (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+
+            this.selectedThumbnailList.forEach(selectedThumbnail => {
+                if(selectedThumbnail.id == this.selectedVideo.id){
+                    selectedThumbnail.imgB64 = item.imgB64 ;
+                    selectedThumbnail.time = item.time ;
+                }
+            })
+            // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+      }
+
+      changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
+        this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
+        this.generatethumbnails('next');
+        this.currentTimePosition = -10;
+      }
+
+      deleteVideo(item : {id : number ,imgB64 : string , time : number}){
+        this.modal.confirm({
+            nzTitle: 'Are you sure delete this video?',
+            nzContent: '<b style="color: red;">remove video </b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => {
+                this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
+                this.videoList = this.videoList.filter((video) => item.id != video.id  )
+                if(this.selectedVideo.id == item.id){
+                    this.listThumbnail = [];
+                }
+
+                if(this.videoList.length>0) {
+                  this.availableVideos = true;
+                }else {
+                  this.availableVideos = false;
+                }
+                this.refreshPages();
+            },
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel', item)
+        });
+      }
+
+      removeImage(event: any) {
+        console.log('it finally worked!!!');
+      }
+
+      refreshPages() {
+        if (this.availableImages && this.availableVideos) {
+          this.getPages('instagram');
+          this.notification
+          .blank(
+            'Reminder',
+            "<strong>Facebook</strong> doesn't support images and videos on the same post."
+          )
+          .onClick.subscribe(() => {
+            console.log('notification clicked!');
+          });
+        } else {
+          this.getPages('mixed');
+        }
       }
 
       showAlbumModal(){

@@ -1,241 +1,4 @@
- <div class="m-loading-screen"></div>
-<!--<div id="successDialog" class="m-success is-hidden">
-    <nz-result class="m-success-result"
-          nzStatus="success"
-          nzTitle="Your post has been submitted successfully! "
-          nzSubTitle="Thank you for using mgo360 SHARE"
-        >
-        <div nz-result-extra>
-            <button (click)="resetSuccess()" nz-button>OK</button>
-        </div>
-    </nz-result>
-</div>
-
-<div class="mod-create-post">
-    <div class="m-container">
-        <div class="m-post-form">
-            <div class="m-wrapper">
-
-                    <nz-form-label [nzSpan]="24" nzFor="Statut">Statut</nz-form-label>
-                    <nz-form-control [nzSpan]="24">
-                        <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
-                    </nz-form-control>
-                <br/>
-                <nz-form-item>
-                    <nz-form-label [nzSpan]="4" nzFor="Statut">Hashtags</nz-form-label>
-                    <nz-form-control [nzSpan]="20">
-                        <nz-tag
-                            *ngFor="let tag of tags; let i = index"
-                            [nzMode]="'closeable'"
-                            (nzOnClose)="handleClose(tag)"
-                            >{{ sliceTagName(tag) }}</nz-tag>
-                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                            <i nz-icon nzType="plus"></i>  New tag
-                        </nz-tag>
-                        <input
-                            #inputElement
-                            nz-input
-                            nzSize="small"
-                            *ngIf="inputVisible"
-                            type="text"
-                            [(ngModel)]="inputValue"
-                            style="width: 78px;"
-                            (blur)="handleInputConfirm()"
-                            (keydown.enter)="handleInputConfirm()"
-                        />
-                    </nz-form-control>
-                </nz-form-item >
-
-
-                <div class="m-tab">
-                    <ul>
-                        <li id="images" class="is-active" (click)="tabChange2('images', $event)">Images</li>
-                        <li id="videos" (click)="tabChange2('videos', $event)">Videos</li>
-                    </ul>
-                    <div class="m-tab-content">
-                        <div class="m-content" *ngIf="tabId == 'images'">
-                            <nz-form-label [nzSpan]="4" nzFor="url">Picture URL</nz-form-label>
-                            <nz-form-control [nzSpan]="24">
-                                <div>
-                                    <br >
-                                    <div *ngFor="let item of urlLinks; let index = index;">
-                                        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
-                                            <input type="text" (ngModelChange)="refreshCarousel()" id="testinput" nz-input placeholder="input search text" [(ngModel)]="urlLinks[index].url" />
-                                        </nz-input-group>
-                                        <ng-template #suffixIconButton>
-                                            <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)" *ngIf="index > 0"><i nz-icon nzType="delete"></i></button>
-                                        </ng-template>
-                                        <br/><br/>
-                                    </div>
-                                    <button nz-button nzType="dashed" (click)="addLink()">add item</button>
-                                </div>
-                            </nz-form-control>
-
-                            <nz-form-label [nzSpan]="24" nzFor="upload">Upload images</nz-form-label>
-                            <nz-form-control [nzSpan]="24">
-                                <div class="clearfix">
-                                    <nz-upload
-                                    [nzAction]="uploadFileAPIURL"
-                                    nzListType="picture-card"
-                                    [(nzFileList)]="fileList"
-                                    [nzShowButton]="fileList.length < 8"
-                                    (nzChange)="handleChange($event)"
-                                    >
-                                    <div>
-                                        <i nz-icon nzType="plus"></i>
-                                        <div style="margin-top: 8px">Upload</div>
-                                    </div>
-                                    </nz-upload>
-                                    <nz-modal
-                                    [nzVisible]="previewVisible"
-                                    [nzContent]="modalContent"
-                                    [nzFooter]="null"
-                                    (nzOnCancel)="previewVisible = false"
-                                    >
-                                    <ng-template #modalContent>
-                                        <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
-                                    </ng-template>
-                                    </nz-modal>
-                                </div>
-                            </nz-form-control>
-                        </div>
-
-                        <div class="m-content" *ngIf="tabId == 'videos'">
-
-                        </div>
-                    </div>
-                </div>
-
-                    <nz-form-label [nzSpan]="24" nzFor="pages">Choose facebook page</nz-form-label>
-                    <nz-form-control [nzSpan]="24">
-                        <nz-select [(ngModel)]="accountsValue" [nzSize]="size" nzMode="tags" nzPlaceHolder="Please select">
-                            <nz-option *ngFor="let option of listOfPages" [nzLabel]="option.pageName" [nzCustomContent]="true" [nzValue]="option.id"><img class="m-page-img" [src]="option.pagePictureUrl" /><label >{{option.pageName}}</label></nz-option>
-                        </nz-select>
-                    </nz-form-control>
-                    <br>
-                    <nz-form-control [nzXs]="{ span: 10, offset: 3 }" [nzSm]="{offset: 14 }">
-                        <button id="btn-save" nz-button (click)="submitForm('DRAFT')"><div>Save</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
-                        <button id="btn-submit" nz-button (click)="submitForm('PUBLISH')"><div>Submit</div><div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div></button>
-                    </nz-form-control>
-
-            </div>
-        </div>
-        <div class="m-preview-post">
-            <div class="m-wrapper">
-                <div class="m-preview-title">
-                    Vorschau
-                </div>
-                <div class="m-preview-tabs">
-                    <div class="m-card-container">
-                        <div class="m-tab">
-                            <ul>
-                                <li id="instagram-tab-title" class="is-active" (click)="tabChange1('instagram-tab-title', $event)">Instagram</li>
-                                <li id="facebook-tab-title" (click)="tabChange1('facebook-tab-title', $event)">Facebook</li>
-                            </ul>
-                            <div class="m-tab-content">
-                                <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
-
-                                    <div class="m-instagram-device">
-                                        <div class="m-instagram">
-                                            <main class="m-post-content">
-
-                                                <div class="m-post">
-                                                    <div class="m-post-header">
-                                                        <img class="m-user-thumb" src="../../../../../assets/img/instapic.jpg" alt="Walter">
-                                                        <div class="m-user-details">
-                                                            <strong class="m-name">My page</strong>
-                                                            <span class="m-location">location</span>
-                                                        </div>
-                                                        <div class="m-post-menu">
-                                                            <span class="m-menu">&nbsp;</span>
-                                                        </div>
-                                                    </div>
-                                                    <div id="postView">
-                                                        <app-carousel *ngIf="!refresh" [urlLinks]="urlLinks"></app-carousel>
-                                                    </div>
-                                                    <div class="m-post-footer">
-                                                        <br>
-                                                        <div class="m-buttons">
-                                                            <div class="m-post-btn"><span (click)="liked($event)" class="like">&nbsp;</span></div>
-                                                            <div class="m-post-btn"><span class="comn">&nbsp;</span></div>
-                                                            <div class="m-spacer">&nbsp;</div>
-                                                            <div class="m-post-btn"><span class="save">&nbsp;</span></div>
-                                                        </div>
-
-                                                        <div class="m-likes" *ngIf="isliked">
-                                                            <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
-                                                            <strong>1 like</strong>
-                                                        </div>
-                                                        <br>
-                                                        <span class="m-time">à l'instant</span>
-
-                                                    </div>
-                                                </div>
-
-                                            </main>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
-                                    <div class="m-facebook">
-                                        <div class="m-container">
-                                            <div class="m-headline">
-                                              <img class="headline__image" src="../../../../../assets/img/instapic.jpg">
-                                              <div class="m-column">
-                                                <p class="headline__title">
-                                                  My page
-                                                </p>
-                                                <p class="headline__subtitle">
-                                                  Published by MGO360 SHARE · à l'instant · <img class="headline__world" src="https://www.facebook.com/rsrc.php/v3/yD/r/-ZGO_vK2ube.png">
-                                              </div>
-                                            </div>
-                                            <div class="m-content">
-                                              <p class="m-text--small">Statut</p>
-                                            </div>
-                                            <div class="m-content">
-                                              <img id="fp" alt="post facebook" class="m-image" src="">
-                                            </div>
-                                            <div class="m-footer">
-                                                <div class="m-action">
-                                                    <div class="like">
-                                                      <a href="#">
-                                                        <img src="https://1.bp.blogspot.com/-qns_lZPjg0I/VWY2dO1HN-I/AAAAAAAACVA/akLTMY7RJSk/s1600/Thumbs-up-facebook-icon-small.png" alt="thumbs up" />
-                                                        <p>Like</p>
-                                                      </a>
-                                                    </div>
-
-                                                    <div class="comment">
-                                                      <a href="#">
-                                                        <img src="../../../../../assets/img/svgs/comment-facebook.svg" />
-                                                        <p>Comment</p>
-                                                      </a>
-                                                    </div>
-
-                                                    <div class="share">
-                                                      <a href="#">
-                                                        <img src="http://download.seaicons.com/icons/icons8/windows-8/512/Arrows-Redo-icon.png" alt="" />
-                                                        <p>
-                                                          Share
-                                                        </p>
-                                                      </a>
-                                                    </div>
-
-                                                  </div>
-                                                <div class="footer__dropdown"></div>
-                                            </div>
-                                          </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
- -->
+<div class="m-loading-screen"></div>
 <div class="mod-create-post">
     <div class="m-wrapper">
         <div class="m-header">
@@ -279,7 +42,7 @@
                             [nzVisible]="previewVisible"
                             [nzContent]="modalContent"
                             [nzFooter]="null"
-                            (nzOnCancel)="previewVisible = false"
+                            (nzOnCancel)="previewVisible = false; removeImage($event)"
                             >
                             <ng-template #modalContent>
                                 <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
@@ -292,8 +55,12 @@
                             <video poster="" controls id="video">
                                 Your browser does not support the video tag.
                             </video>
+                            <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
+                                <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
+                                <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                            </div>
                             <label for="inputfile" class="m-img-container">
-                                <img *ngIf="selectedThumbnail.imgB64" [src]="selectedThumbnail.imgB64" />
+                                <span ><i nz-icon nzType="ng-zorro:video" style="font-size : 40px"></i></span>
                             </label>
 
                         </div>
@@ -306,7 +73,7 @@
                     <div class="m-form-field">
                         <div class="m-choose-media">
                             <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Foto hinzufügen</button>
-                            <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
+                            <button class="m-button is-disabled m-video" (click)="collapseVideoUpload()"><span ><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
                             <button class="m-button is-disabled m-gallery" (click)="showAlbumModal()" ><span><i nz-icon nzType="ng-zorro:album" ></i></span> Meine individualisierten Vorlagen</button>
                             <nz-modal [(nzVisible)]="showAlbum" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" >
                                 <div *nzModalTitle style="font-weight: 400; font-size: 24px; line-height: 33px; color: rgba(0, 0, 0, 0.5);">
@@ -528,12 +295,12 @@
                 </div>
             </div>
             <div class="m-right-col">
-                <div *ngIf="urlLinks.length > 0" class="m-no-preview">
+                <div *ngIf="urlLinks.length <= 1" class="m-no-preview">
                     <h3>Vorschau nicht verfügbar</h3>
                     <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu,
                         um hier eine Vorschau zu sehen. </p>
                 </div>
-                <div *ngIf="urlLinks.length > 1" class="m-instagram-device">
+                <div *ngIf="urlLinks.length > 1 && instagramPreview" class="m-instagram-device">
                     <div class="m-instagram">
                         <main class="m-post-content">
 
@@ -573,7 +340,7 @@
                         </main>
                     </div>
                 </div>
-                <app-facebook-preview [ThumbnailImg]="selectedThumbnail.imgB64" [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="images"></app-facebook-preview>
+                <app-facebook-preview *ngIf="urlLinks.length > 1 && facebookPreview && !refresh"  [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="urlLinks"></app-facebook-preview>
             </div>
         </div>
         <div class="m-action-buttons">
