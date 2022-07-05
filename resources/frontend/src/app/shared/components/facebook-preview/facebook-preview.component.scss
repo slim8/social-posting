@@ -1,44 +1,38 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../assets/sass/_project/base.scss';
+
 .m-mod-facebook-preview {
-    background: white;
-    padding: 70px;
     height: 100%;
     >.m-wrapper{
-        width : 311px;
-        // height: 403px;
-        border: 0.547535px solid rgba(0, 0, 0, 0.5);
+        width : 360px;
+        min-height: 556px;
         background : white ;
-        margin: auto;
+        margin: 35px auto;
 
         >.m-post-header {
         width: 100% ;
         justify-content: space-between ;
         display: flex;
-        padding : 10px ;
+        padding : 10px;
+        height: 78px;
+        align-items: center;
 
             >.m-user-post{
                 display: flex;
 
                 >.m-user-avatar{
-                    margin: 2px 0 ;
+                    margin: 2px;
                 }
 
                 >.m-user-info{
-                    margin: auto 0 5px 8px;
+                    margin: auto 10px 5px 8px;
                     >.m-username{
-                        font-family: 'Open Sans';
-                        font-style: normal;
-                        font-weight: 700;
-                        font-size: 8.44147px;
-                        line-height: 11px;
-                        color: #000000;
+                      @include textstyle-size-12-bold();
                     }
 
                     >.m-post-date{
-                        font-family: 'Open Sans';
-                        font-style: normal;
-                        font-size: 8.44147px;
-                        line-height: 11px;
-                        color :rgba(0, 0, 0, 0.5);
+                      @include textstyle-size-12();
                     }
                 }
             }
@@ -61,39 +55,42 @@
             padding : 15px;
 
             > span {
-                
+
                 font-weight: 700;
             }
         }
 
         >.m-post-image-container{
-            height: 228px;
+            min-height: 350px;
             width : 100% ;
 
                 div {
                     >.m-post-image-preview{
-                        height: 228px;
+                        height: 350px;
                         width : 100% ;
                     }
 
                     >.m-post-image-preview-2{
-                        height: 114px;
+                        height: 175px;
                         width : 100% ;
                         object-fit: cover;
+                        object-position: center;
                     }
 
                     >.m-post-image-preview-3{
-                        height: 114px;
+                        height: 175px;
                         width : 50% ;
                         object-fit: cover;
+                        object-position: center;
                     }
 
                     >.m-post-image-preview-4{
-                        height: 114px;
+                        height: 175px;
                         width : 33% ;
                         object-fit: cover;
+                        object-position: center;
                         &.m-more-img-layout{
-                            margin: -37% 66%;
+                            margin: -48.6157% 239px;
                             background-color: rgba(0,0,0,.3);
                             position: relative;
                             >div{
@@ -122,7 +119,7 @@
 
             > button {
                 margin : 2px 10px ;
-                border : none ; 
+                border : none ;
                 background-color : white ;
                 color: #636468;
             }
@@ -145,6 +142,6 @@
                 border : none;
             }
         }
-        
+
     }
 }
