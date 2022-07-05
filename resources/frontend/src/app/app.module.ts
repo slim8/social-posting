@@ -15,7 +15,6 @@ import { Observable } from 'rxjs';
 import { TokenInterceptorService } from './shared/services/token-interceptor.service'
 import { JwtModule } from '@auth0/angular-jwt';
 import { sharedConstants } from './shared/sharedConstants';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 registerLocaleData(en);
 
@@ -42,7 +41,6 @@ registerLocaleData(en);
                 disallowedRoutes: ['http://localhost:4200/auth/login']
             }
         }),
-        NgbModule,
     ],
     exports: [
         JwtModule
