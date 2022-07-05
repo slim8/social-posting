@@ -52,8 +52,8 @@ trait FacebookService
         $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?access_token='.$accessToken.'&fields=followers_count,link,username');
         $responseData = $response->json();
 
-        $pageInfo->followers = $responseData['followers_count'];
-        $pageInfo->link = $responseData['link'];
+        $pageInfo->followers = isset($responseData['followers_count']) ? $responseData['followers_count'] : 0;
+        $pageInfo->link = isset($responseData['link']) ? $responseData['link'] : null;
         $pageInfo->username = isset($responseData['username']) ? $responseData['username'] : null;
 
         return $pageInfo;
@@ -68,7 +68,7 @@ trait FacebookService
         $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?access_token='.$accessToken.'&fields=followers_count,username');
         $responseData = $response->json();
 
-        $pageInfo->followers = $responseData['followers_count'];
+        $pageInfo->followers = isset($responseData['followers_count']) ? $responseData['followers_count'] : 0;
         $pageInfo->link = null;
         $pageInfo->username = isset($responseData['username']) ? $responseData['username'] : null;
 

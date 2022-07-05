@@ -93,21 +93,27 @@
 }
 
 .ant-upload-select {
-    height: 51px!important;
-    width: 93px!important;
-    > div  {
+    height: 40px !important;
+    width: 51px !important;
+    > div {
         > div {
             > div {
-                margin-top: 0!important;
+                margin-top: 0 !important;
             }
         }
     }
 }
 
 .ant-upload-list-picture-card-container {
-    height: 51px!important;
-    width: 93px!important;
+    height: 40px !important;
+    width: 51px !important;
 }
-
-/* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+.ant-upload-list-item {
+    padding: 0 !important;
+}
+.ant-upload-list-item-card-actions-btn {
+    width: fit-content !important;
+}
+.anticon-download {
+    display: none !important;
+}

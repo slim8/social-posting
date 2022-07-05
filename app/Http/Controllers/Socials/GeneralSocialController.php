@@ -190,6 +190,8 @@ class GeneralSocialController extends Controller
                         'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
                         'accountId' => $post['accountId'],
                         'postIdProvider' => $postProviderId,
+                        'localisationText' => null,
+                        'localisationRessource' => null,
                     ]);
 
                     if ($post['hashtags']) {
