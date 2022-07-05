@@ -52,7 +52,8 @@ figure {
     border: none;
     cursor: pointer;
     display: flex;
-    column-gap: 14px;
+    column-gap: 9px;
+    align-items:center ;
     @include textstyle-size-12();
 
     @include mq(desktop) {
