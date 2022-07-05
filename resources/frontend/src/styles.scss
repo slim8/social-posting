@@ -84,15 +84,19 @@
 }
 
 .ant-upload-list-picture-card-container {
-  height: 40px !important;
-  width: 51px !important;
-}
-.ant-upload-list-item {
-  padding: 0!important;
-}
-.ant-upload-list-item-card-actions-btn {
-  width: fit-content!important;
-}
-.anticon-download {
-  display: none!important;
+    height: 40px !important;
+    width: 51px !important;
+  }
+  .ant-upload-list-item {
+    padding: 0!important;
+  }
+  .ant-upload-list-item-card-actions-btn {
+    width: fit-content!important;
+  }
+  .anticon-download {
+    display: none!important;
+  }
+
+.ant-modal {
+    width : max-content !important;
 }
