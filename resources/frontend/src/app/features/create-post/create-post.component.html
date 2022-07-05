@@ -307,7 +307,17 @@
                         <div class="m-choose-media">
                             <button class="m-button is-disabled m-image" (click)="collapseImageUpload()"><span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Foto hinzufügen</button>
                             <button class="m-button is-disabled m-video"><span><i nz-icon nzType="ng-zorro:video"></i></span> Video hinzufügen</button>
-                            <button class="m-button is-disabled m-gallery"><span><i nz-icon nzType="ng-zorro:album"></i></span> Meine individualisierten Vorlagen</button>
+                            <button class="m-button is-disabled m-gallery" (click)="showAlbumModal()" ><span><i nz-icon nzType="ng-zorro:album" ></i></span> Meine individualisierten Vorlagen</button>
+                            <nz-modal [(nzVisible)]="showAlbum" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" >
+                                <div *nzModalTitle style="font-weight: 400; font-size: 24px; line-height: 33px; color: rgba(0, 0, 0, 0.5);">
+                                    Meine individualisierten Vorlagen
+                                </div>
+                                <ng-container *nzModalContent>
+                                  <app-album-preview></app-album-preview>
+                                </ng-container>
+                                <div *nzModalFooter>
+                                </div>
+                            </nz-modal>
                         </div>
                     </div>
                 </div>
