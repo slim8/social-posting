@@ -152,7 +152,7 @@ class InstagramController extends Controller
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls, $tags, $videos)
+    public function postToInstagramMethod($object, $igUser, $imagesUrls, $tags, $videos, string $location = null)
     {
         $images = [];
         $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
@@ -174,7 +174,16 @@ class InstagramController extends Controller
         $object['caption'] = $object['caption'].$tagsString;
 
         if ($counts == 1) {
+            if (!$location) {
+                $object['location_id'] = $location;
+            }
+
+
+
+            $object['location_id'] = '7640348500';
+
             $object['creation_id'] = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos);
+            unset($object['location_id']);
             $checkContainer = $this->checkIfCreationIsReady($object, $object['creation_id'], $videos ? 1 : 0);
 
             if (!$checkContainer['status']) {
@@ -210,8 +219,12 @@ class InstagramController extends Controller
             }
             $object['children'] = implode(',', $images);
             $object['media_type'] = 'CAROUSEL';
+            if (!$location) {
+                $object['location_id'] = $location;
+            }
             $object['creation_id'] = $this->postContainer($object, $igUser);
             unset($object['caption']);
+            unset($object['location_id']);
             unset($object['children']);
             if (isset($videosConatiners) && $videosConatiners) {
                 $checkContainer = $this->checkIfCreationIsReady($object, $object['creation_id'], 1);
