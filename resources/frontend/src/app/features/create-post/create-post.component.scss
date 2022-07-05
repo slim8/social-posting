@@ -4,6 +4,7 @@
 
 .mod-create-post {
     width: 100%;
+    min-width: 1087px;
     height: 100%;
     background-color: $color-base-0;
 
@@ -120,10 +121,9 @@
                             }
                             >.m-img-container{
                                 cursor: pointer;
-                                // margin: 0 6px 0 0;
                                 display: flex;
                                 flex-direction: column;
-                                margin : 10px 6px 14px 0;
+                                margin: 0 6px 7px 0;
 
                                 > img {
                                     width: 51px;
@@ -161,12 +161,20 @@
                 > .m-collapse-menu-button {
                     position: absolute;
                     right: 0;
+                    left: unset;
+                    transform: unset;
+                    &.is-active {
+                      right: unset;
+                      left: 50%;
+                      transform: translateX(-50%);
+                    }
                     > i {
                         cursor: pointer;
                         padding: 25px 23px;
 
                         &.is-active {
-                            padding: 8px 11px 9px;
+                            padding: 6px 11px 7px;
+                            right: 0;
                         }
                         > svg {
                             font-size: 16px;
