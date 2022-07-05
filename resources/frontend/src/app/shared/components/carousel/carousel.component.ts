@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange, Output } from '@angular/core';
+import { Mention } from 'ng-zorro-antd/mention';
 
 @Component({
     selector: 'app-carousel',
@@ -7,8 +8,10 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange } from
 })
 export class CarouselComponent implements  OnChanges {
     //preview images variable
+    @Input() selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
     @Input() urlLinks: any[] = [{ url: "" }];
-
+    mentions: any = [];
+    // @Output() mentionsList = new EventEmitter();
     //tags variables.
     displaMentions: boolean = false;
     taggedImage: any;
@@ -18,7 +21,6 @@ export class CarouselComponent implements  OnChanges {
     posY = 0;
     inputValue2 = '';
     mentionIndex = 0;
-    mentions: any = [];
     suggestions = [
         'Ali_werghemmi',
         'z.i.e.d.m',
@@ -33,14 +35,30 @@ export class CarouselComponent implements  OnChanges {
     constructor() { }
 
     ngOnChanges(changes: SimpleChanges) {
-        document.addEventListener('click', this.resetPostView);
-        this.nbrSlides = changes['urlLinks'].currentValue.length;
-        this.urlLinks = changes['urlLinks'].currentValue;
-        setTimeout(() => {
-            this.refreshDots();
-            this.initCarousel();
-            this.initCarouselDots();
-        }, 200);
+      let videoList:any[] = [];
+      this.selectedThumbnailList.forEach((vid:any)=> {
+        let video ={
+          id:0,
+          url:"",
+          type:"video"
+        }
+        video.id = vid.id;
+        video.url = vid.imgB64;
+        video.type = "video";
+        videoList.push(video);
+      })
+
+      this.urlLinks = [...this.urlLinks, ...videoList];
+      this.urlLinks = [];
+
+      document.addEventListener('click', this.resetPostView);
+      this.nbrSlides = changes['urlLinks'].currentValue.length;
+      this.urlLinks = changes['urlLinks'].currentValue;
+      setTimeout(() => {
+        this.refreshDots();
+        this.initCarousel();
+        this.initCarouselDots();
+      }, 200);
     }
 
     initCarouselDots() {
@@ -185,6 +203,7 @@ export class CarouselComponent implements  OnChanges {
         mention.y = Math.round((this.posY / this.imageHeight) * 100) / 100;
         mention.image = this.slideNbr;
         this.mentions.push(mention);
+        console.log(this.mentions);
         // mentioned?.addEventListener('click', this.edit);
 
         close.classList.add('m-close');
@@ -275,6 +294,7 @@ export class CarouselComponent implements  OnChanges {
         }
 
         this.mentionIndex++;
+        // this.mentionsList.emit({mention:this.mentions})
     }
 
     viewMentions() {

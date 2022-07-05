@@ -72,14 +72,6 @@ export class CreatePostComponent implements OnInit  {
     accountsValue: any[] = [];
     selectedFile: any = [];
     inputValue2 = '@';
-    suggestions = [
-        'Ali_werghemmi',
-        'z.i.e.d.m',
-        'oussemakassis',
-        'amalrk',
-        '中文',
-        'にほんご',
-    ];
     posX = 0;
     posY = 0;
     postId = null;
@@ -96,7 +88,7 @@ export class CreatePostComponent implements OnInit  {
 
     videoCounter = 0;
     videoList: {id : number ,file : File }[] = [];
-    selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
+    @Input() selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
 
 
     showAlbum : boolean = false;
@@ -152,155 +144,155 @@ export class CreatePostComponent implements OnInit  {
     }
 
     submitForm(param: string) {
-        // TODO:: for video upload
+      // TODO:: for video upload
 
-        // this.postService.uploadFile(this.selectedVideo).subscribe({
-        //     next: (response) => {
-        //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-        //     },
-        //     error: (err) => {
-        //     },
-        //     complete: () => {
-        //     },
-        // }) ;
+      // this.postService.uploadFile(this.selectedVideo).subscribe({
+      //     next: (response) => {
+      //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+      //     },
+      //     error: (err) => {
+      //     },
+      //     complete: () => {
+      //     },
+      // }) ;
 
-        let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
-        let btnSubmit = document.getElementById('btn-submit');
-        let iconSave = document.querySelector('.m-button-icon-save');
-        let iconPublish = document.querySelector('.m-button-icon-publish');
-        let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
-        let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
-        // m-button-icon-save
-        const formData: FormData = new FormData();
-        let post: any = {
-            message: "",
-            hashtags: [],
-            mentions: [],
-            accountId: "",
-            videoTitle: ""
-        }
-        this.accountsValue.forEach((accountId: any) => {
-            let arr = accountId.split("|");
-            let id = arr[0];
-            if (accountId.includes('facebook')) {
-                post.message = this.facebookMessage;
-                post.hashtags = this.fbTags;
-                post.mentions = this.mentions;
-                post.accountId = id;
-                post.videoTitle = "";
-            } else if (accountId.includes('instagram')) {
-                post.message = this.instagramMessage;
-                post.hashtags = this.instaTags;
-                post.mentions = this.mentions;
-                post.accountId = id;
-                post.videoTitle = "";
+      let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
+      let btnSubmit = document.getElementById('btn-submit');
+      let iconSave = document.querySelector('.m-button-icon-save');
+      let iconPublish = document.querySelector('.m-button-icon-publish');
+      let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
+      let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
+      // m-button-icon-save
+      const formData: FormData = new FormData();
+      let post: any = {
+          message: "",
+          hashtags: [],
+          mentions: [],
+          accountId: "",
+          videoTitle: ""
+      }
+      this.accountsValue.forEach((accountId: any) => {
+          let arr = accountId.split("|");
+          let id = arr[0];
+          if (accountId.includes('facebook')) {
+              post.message = this.facebookMessage;
+              post.hashtags = this.fbTags;
+              post.mentions = this.mentions;
+              post.accountId = id;
+              post.videoTitle = "";
+          } else if (accountId.includes('instagram')) {
+              post.message = this.instagramMessage;
+              post.hashtags = this.instaTags;
+              post.mentions = this.mentions;
+              post.accountId = id;
+              post.videoTitle = "";
+          }
+          formData.append('posts[]', JSON.stringify(post));
+      });
+
+      // if (this.tags.length > 0) {
+      //     this.tags.forEach((tag: any) => {
+      //         formData.append('tags[]', tag);
+      //     });
+      // }
+
+      // if (this.mentions.length > 0) {
+      //     this.mentions.forEach((mention: any) => {
+      //         formData.append('mention[]', mention);
+      //     });
+      // }
+
+      if (this.urlLinks.length > 0) {
+        this.urlLinks.forEach((media: any) => {
+            let videoObject: any = {
+              url: "",
+              seconde: "",
+              thumbnail: ""
             }
-            formData.append('posts[]', JSON.stringify(post));
+            if(media.type == "image") {
+              formData.append('images[]', media.url);
+            } else if (media.type == "video") {
+              videoObject.url = media.url;
+              videoObject.seconde = 3;
+              videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
+              formData.append('videos[]', JSON.stringify(videoObject));
+            }
+
+              // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
+          });
+      }
+
+      // if (this.selectedFile.length > 0) {
+      //     this.selectedFile.forEach((file: any) => {
+      //         formData.append('sources[]', file.originFileObj);
+      //     });
+      // }
+
+      formData.append('status', param);
+      formData.append('message', this.message);
+
+      if (formData) {
+          this.facebookSocialService.postToSocialMedia(formData).subscribe({
+              next: (event) => {
+                  if (param == 'PUBLISH') {
+                      iconPublish?.classList.add('hide');
+                      iconPublish?.parentElement?.classList.add('wide');
+                      spinningPublish.classList.add('show');
+                  } else {
+                      iconSave?.classList.add('hide');
+                      iconSave?.parentElement?.classList.add('wide');
+                      spinningDraft.classList.add('show');
+                  }
+                  loadingScreen.classList.add('m-loading-screen-active');
+                  btnSubmit?.classList.add('m-btn-submit');
+              },
+              error: (err) => {
+                  if (err.error.errors) {
+                      err.error.errors.forEach((error: any) => {
+                          this.shared.createMessage('error', error);
+                      });
+                  }
+                  else {
+                      this.shared.createMessage('error', err.error.message);
+                  }
+                  if (param == 'PUBLISH') {
+                      iconPublish?.classList.remove('hide');
+                      iconPublish?.parentElement?.classList.remove('wide');
+                  } else {
+                      iconSave?.classList.remove('hide');
+                      iconSave?.parentElement?.classList.remove('wide');
+                  }
+                  loadingScreen.classList.remove('m-loading-screen-active');
+                  spinningPublish.classList.remove('show');
+                  spinningDraft.classList.remove('show');
+                  btnSubmit?.classList.remove('m-btn-submit');
+            },
+            complete: () => {
+                this.selectedFile = [];
+                this.message = '';
+                this.accountsValue = [];
+                loadingScreen.classList.remove('m-loading-screen-active');
+                spinningPublish.classList.remove('show');
+                spinningDraft.classList.remove('show');
+                btnSubmit?.classList.remove('m-btn-submit');
+
+                if (param == 'PUBLISH') {
+                    this.shared.createMessage('success', 'published!');
+                } else {
+                    this.shared.createMessage('success', 'saved to drafts!');
+                }
+
+                if (param == 'PUBLISH') {
+                    iconPublish?.classList.remove('hide');
+                    iconPublish?.parentElement?.classList.remove('wide');
+                } else {
+                    iconSave?.classList.remove('hide');
+                    iconSave?.parentElement?.classList.remove('wide');
+                }
+
+            },
         });
-
-        // if (this.tags.length > 0) {
-        //     this.tags.forEach((tag: any) => {
-        //         formData.append('tags[]', tag);
-        //     });
-        // }
-
-        // if (this.mentions.length > 0) {
-        //     this.mentions.forEach((mention: any) => {
-        //         formData.append('mention[]', mention);
-        //     });
-        // }
-
-        if (this.urlLinks.length > 0) {
-          this.urlLinks.forEach((media: any) => {
-              let videoObject: any = {
-                url: "",
-                seconde: "",
-                thumbnail: ""
-              }
-              if(media.type == "image") {
-                formData.append('images[]', media.url);
-              } else if (media.type == "video") {
-                videoObject.url = media.url;
-                videoObject.seconde = 3;
-                videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
-                formData.append('videos[]', JSON.stringify(videoObject));
-              }
-
-                // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
-            });
-        }
-
-        // if (this.selectedFile.length > 0) {
-        //     this.selectedFile.forEach((file: any) => {
-        //         formData.append('sources[]', file.originFileObj);
-        //     });
-        // }
-
-        formData.append('status', param);
-        formData.append('message', this.message);
-
-        if (formData) {
-            this.facebookSocialService.postToSocialMedia(formData).subscribe({
-                next: (event) => {
-                    if (param == 'PUBLISH') {
-                        iconPublish?.classList.add('hide');
-                        iconPublish?.parentElement?.classList.add('wide');
-                        spinningPublish.classList.add('show');
-                    } else {
-                        iconSave?.classList.add('hide');
-                        iconSave?.parentElement?.classList.add('wide');
-                        spinningDraft.classList.add('show');
-                    }
-                    loadingScreen.classList.add('m-loading-screen-active');
-                    btnSubmit?.classList.add('m-btn-submit');
-                },
-                error: (err) => {
-                    if (err.error.errors) {
-                        err.error.errors.forEach((error: any) => {
-                            this.shared.createMessage('error', error);
-                        });
-                    }
-                    else {
-                        this.shared.createMessage('error', err.error.message);
-                    }
-                    if (param == 'PUBLISH') {
-                        iconPublish?.classList.remove('hide');
-                        iconPublish?.parentElement?.classList.remove('wide');
-                    } else {
-                        iconSave?.classList.remove('hide');
-                        iconSave?.parentElement?.classList.remove('wide');
-                    }
-                    loadingScreen.classList.remove('m-loading-screen-active');
-                    spinningPublish.classList.remove('show');
-                    spinningDraft.classList.remove('show');
-                    btnSubmit?.classList.remove('m-btn-submit');
-                },
-                complete: () => {
-                    this.selectedFile = [];
-                    this.message = '';
-                    this.accountsValue = [];
-                    loadingScreen.classList.remove('m-loading-screen-active');
-                    spinningPublish.classList.remove('show');
-                    spinningDraft.classList.remove('show');
-                    btnSubmit?.classList.remove('m-btn-submit');
-
-                    if (param == 'PUBLISH') {
-                        this.shared.createMessage('success', 'published!');
-                    } else {
-                        this.shared.createMessage('success', 'saved to drafts!');
-                    }
-
-                    if (param == 'PUBLISH') {
-                        iconPublish?.classList.remove('hide');
-                        iconPublish?.parentElement?.classList.remove('wide');
-                    } else {
-                        iconSave?.classList.remove('hide');
-                        iconSave?.parentElement?.classList.remove('wide');
-                    }
-
-                },
-            });
-        }
+      }
     }
 
     //Images preview from upload file
@@ -315,12 +307,6 @@ export class CreatePostComponent implements OnInit  {
 
     //upload image changes
     handleChange(event: any): void {
-      let img = {
-        id: 0,
-        url: "",
-        type: ""
-      }
-
       if (event.fileList.length>0) {
         this.availableImages = true;
       } else {
@@ -330,8 +316,12 @@ export class CreatePostComponent implements OnInit  {
       if (event.type == 'success') {
         this.mediaId = 0;
         this.urlLinks = [{ id: 0, url: "", type:"" }];
-
         event.fileList.forEach((elem: any) => {
+          let img = {
+            id: 0,
+            url: "",
+            type: ""
+          }
           this.mediaId++;
           img.id = this.mediaId;
           img.url = elem.response.files.url;
@@ -347,6 +337,11 @@ export class CreatePostComponent implements OnInit  {
         this.urlLinks = [{ id: 0, url: "", type:"" }];
 
         event.fileList.forEach((elem: any) => {
+          let img = {
+            id: 0,
+            url: "",
+            type: ""
+          }
           this.mediaId++;
           img.id = this.mediaId;
           img.url = elem.response.files.url;
@@ -580,15 +575,17 @@ export class CreatePostComponent implements OnInit  {
           }
           this.leadThumbnail = false ;
         })
+        this.refreshCarousel();
       }
 
       selectThumbnail(item : {imgB64 : '' , time : 0 } ){
             this.selectedThumbnail = item;
 
+
             this.selectedThumbnailList.forEach(selectedThumbnail => {
                 if(selectedThumbnail.id == this.selectedVideo.id){
-                    selectedThumbnail.imgB64 = item.imgB64 ;
-                    selectedThumbnail.time = item.time ;
+                    selectedThumbnail.imgB64 = item.imgB64;
+                    selectedThumbnail.time = item.time;
                 }
             })
             // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
@@ -648,7 +645,7 @@ export class CreatePostComponent implements OnInit  {
 
       showAlbumModal(){
         console.log('click');
-        
+
         this.showAlbum = true;
       }
 
@@ -656,7 +653,7 @@ export class CreatePostComponent implements OnInit  {
         console.log('Button ok clicked!');
         this.showAlbum = false;
       }
-    
+
       handleCancel(): void {
         console.log('Button cancel clicked!');
         this.showAlbum = false;
