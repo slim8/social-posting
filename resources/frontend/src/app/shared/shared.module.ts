@@ -7,7 +7,6 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -23,7 +22,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         IconsProviderModule,
         FormsModule,
         ReactiveFormsModule,
-        NgbModule,
 
         NotFoundComponent,
         ServerErrorComponent,
