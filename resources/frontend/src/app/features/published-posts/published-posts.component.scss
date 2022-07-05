@@ -1,6 +1,6 @@
 @import '../../../assets/sass/_project/_config.scss';
+@import '../../../assets/sass/_global/_mixins.scss';
 @import '../../../assets/sass/_project/base.scss';
-@import '../../../assets/sass/_global/mixins.scss';
 
 .mod-my-posts {
     height: 100%;
@@ -21,17 +21,70 @@
             flex-wrap: wrap;
             gap: 12px;
             width: 100%;
-            max-height: calc(100vh - 100px);
             overflow-x: auto;
             background-color: $color-base-0;
             padding: 25px;
+            max-width: 950px;
 
+            > .m-array-header {
+                max-width: 100%;
+                overflow: hidden;
+                width: 100%;
+
+                > .m-titles {
+                    position: relative;
+                    min-width: 600px;
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: nowrap;
+                    justify-content: center;
+                    padding-left: 50px;
+
+                    height: 50px;
+                    gap: 10px;
+                    background-color: $color-base-30;
+
+                    @include mq(desktop) {
+                        gap: 25px;
+                    }
+
+                    > .m-image,
+                    > .m-status,
+                    > .m-date {
+                        position: absolute;
+                        top: 0;
+                    }
+
+                    > .m-image {
+                        // margin-left: 50px;
+                        left: 50px;
+
+                        @include mq(desktop) {
+                            left: 100px;
+                        }
+                    }
+
+                    // > .m-space {
+                    //     min-width: 20%;
+                    // }
+                    > .m-status {
+                    }
+
+                    > .m-date {
+                        right: 45px;
+
+                        @include mq(desktop) {
+                            right: 120px;
+                        }
+                    }
+                }
+            }
             > .m-item {
                 width: 100%;
                 padding: 10px 0;
 
                 @include mq(desktop) {
-                    padding: 20px 30px;
+                    padding: 20px 32px;
                 }
             }
 

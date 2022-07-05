@@ -1,9 +1,11 @@
-@import '../../../../../assets/sass/_project/base.scss';
 @import '../../../../../assets/sass/_global/mixins';
 @import '../../../../../assets/sass/_project/_mixins-fonts.scss';
+@import '../../../../../assets/sass/_project/base.scss';
 .mod-collapse-item {
     > .m-wrapper {
+        padding: 0 24px;
         > .m-table {
+            overflow-y: hidden;
             overflow-x: auto;
 
             > .m-container {
@@ -11,38 +13,103 @@
                 max-width: 100%;
                 width: 100%;
                 display: flex;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 align-items: center;
+                gap: 10px;
 
-                @include mq(xl) {
-                    gap: 10px;
+                @include mq(desktop) {
+                    gap: 25px;
                 }
 
                 > .m-icon {
-                    width: 5%;
+                    padding: 0;
                 }
 
                 > .m-image {
-                    width: 15%;
+                    > img {
+                        height: 70px;
+                    }
                 }
 
                 > .m-content {
-                    width: 30%;
                     display: flex;
                     flex-wrap: wrap;
+                    row-gap: 10px;
+
+                    @include mq(desktop) {
+                        padding-left: 10px;
+                    }
+
                     > h6 {
                         font-weight: bold;
                         width: 100%;
                         margin: 0;
                     }
+
+                    > .m-account {
+                        display: flex;
+                        gap: 10px;
+                        align-items: center;
+                        > .m-image {
+                            position: relative;
+                            &.is-disconnected {
+                                filter: opacity(0.2);
+                            }
+
+                            > img {
+                                border-radius: 50%;
+                                display: block;
+                                object-fit: cover;
+                                width: 40px;
+                                height: 40px;
+                                // width: 19px;
+                                // height: 19px;
+                            }
+
+                            > .m-provider-logo {
+                                position: absolute;
+                                bottom: -5px;
+                                right: -5px;
+                                // bottom: 0;
+                                // right: 0;
+                                display: flex;
+
+                                > img {
+                                    width: 20px;
+                                    height: 20px;
+                                    // width: 9px;
+                                    // height: 9px;
+
+                                    &.facebook {
+                                        background-color: $color-base-0;
+                                        padding: 3px;
+                                        box-shadow: 0 0 5px $color-media-light-grey;
+                                        width: 25px;
+                                        @include mq(tablet) {
+                                            width: 54px;
+                                            padding: 6px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        > .m-name {
+                            @include textstyle-size-10();
+                            color: $color-media-black-opacity-half;
+                        }
+                    }
                 }
 
                 > .m-status {
-                    width: 20%;
+                    min-width: 180px;
+
+                    .m-text {
+                        @include textstyle-size-10();
+                    }
                 }
 
                 > .m-date {
-                    width: 20%;
                     display: flex;
                     flex-wrap: wrap;
                     @include textstyle-size-10();
