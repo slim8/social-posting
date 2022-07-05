@@ -99,26 +99,26 @@ class GeneralSocialController extends Controller
             $videoThunb = [];
 
             $mentions = $request->mentions;
-            $mentions = '[
-                {
-                    "image": 0,
-                    "username": "z.i.e.d.m",
-                    "x": 0.39,
-                    "y": 0.55
-                },
-                {
-                    "image": 1,
-                    "username": "z.i.e.d.m",
-                    "x": 0.56,
-                    "y": 0.26
-                },
-                {
-                    "image": 2,
-                    "username": "z.i.e.d.m",
-                    "x": 0.57,
-                    "y": 0.58
-                }
-            ]';
+            // $mentions = '[
+            //     {
+            //         "image": 0,
+            //         "username": "z.i.e.d.m",
+            //         "x": 0.39,
+            //         "y": 0.55
+            //     },
+            //     {
+            //         "image": 1,
+            //         "username": "z.i.e.d.m",
+            //         "x": 0.56,
+            //         "y": 0.26
+            //     },
+            //     {
+            //         "image": 2,
+            //         "username": "z.i.e.d.m",
+            //         "x": 0.57,
+            //         "y": 0.58
+            //     }
+            // ]';
             $mentions = json_decode($mentions , true);
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
