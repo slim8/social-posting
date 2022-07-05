@@ -1,0 +1,108 @@
+@import '../../../assets/sass/_project/_config.scss';
+@import '../../../assets/sass/_global/_mixins.scss';
+@import '../../../assets/sass/_project/base.scss';
+
+.mod-my-posts {
+    height: 100%;
+    > .m-wrapper {
+        height: 100%;
+        > .m-title {
+            padding: 28px;
+
+            > h1 {
+                @include textstyle-size-40();
+                user-select: none;
+                margin: 0;
+            }
+        }
+
+        > .m-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            overflow-x: auto;
+            background-color: $color-base-0;
+            max-width: 1070px;
+
+            > .m-buttons {
+            }
+            > .m-content {
+                padding: 25px;
+
+                max-width: 100%;
+                overflow-y: hidden;
+                overflow-x: auto;
+
+                @include mq(desktop) {
+                    overflow-x: hidden;
+                }
+                > .m-array-header {
+                    > .m-titles {
+                        margin-top: 10px;
+                        position: relative;
+                        min-width: 625px;
+                        width: 100%;
+                        display: flex;
+                        flex-wrap: nowrap;
+                        justify-content: center;
+                        height: 20px;
+                        gap: 10px;
+
+                        @include mq(desktop) {
+                            gap: 25px;
+                        }
+
+                        > .m-image,
+                        > .m-status,
+                        > .m-date {
+                            position: absolute;
+                            top: 0;
+                            @include textstyle-size-10-bold();
+                            color: $color-media-black-opacity-half;
+                        }
+
+                        > .m-image {
+                            left: 50px;
+
+                            @include mq(desktop) {
+                                left: 100px;
+                            }
+                        }
+
+                        > .m-status {
+                        }
+
+                        > .m-date {
+                            right: 5%;
+                            @include mq(desktop) {
+                                right: 22%;
+                            }
+                        }
+                    }
+                }
+
+                > .m-item {
+                    width: fit-content;
+                    padding: 10px 0;
+                    position: relative;
+
+                    @include mq(desktop) {
+                        padding: 0 20px 16px;
+                    }
+
+                    &:before {
+                        content: '';
+                        border-bottom: 1px solid $color-media-black-opacity-30;
+                        position: absolute;
+                        width: 100%;
+                    }
+                }
+            }
+
+            > hr {
+                width: 100%;
+            }
+        }
+    }
+}
