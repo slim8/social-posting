@@ -1,40 +1,59 @@
 <div class="mod-my-posts">
   <div class="m-wrapper">
     <div class="m-title">
-      <h1 i18n="My Posts Title|Title for My Posts Page@@myPostsTitle">
-        Meine Beiträge
+      <h1
+        i18n="
+          My Published Posts Title|Title for My Posts
+          Page@@myPublishedPostsTitle"
+      >
+        My Posts
       </h1>
       <br />
-      <h3>
-        Hier findest Du all deine bisherig geplanten oder veröffentlichten
-        Beiträge
+      <h3
+        i18n="
+          My Published Posts Sub Title|Title for My Posts
+          Page@@myPublishedPostsSubTitle"
+      >
+        Here you will find all your previously planned or published posts
       </h3>
     </div>
 
     <div class="m-container">
-      <br />
-      Ali Werghemmi
-      <br />
+      <div class="m-buttons"></div>
       <hr />
-
-      <div class="m-array-header">
-        <div class="m-titles">
-          <div class="m-image">Beitrag</div>
-          <!-- <div class="m-space"></div> -->
-          <div class="m-status">Status</div>
-          <div class="m-date">Veröffentlicht am</div>
+      <div class="m-content">
+        <div class="m-array-header">
+          <div class="m-titles">
+            <div
+              class="m-image"
+              i18n="
+                My Published Posts Contribution|Contribution Title for My Posts
+                Page@@myPublishedPostsContribution"
+            >
+              Contribution
+            </div>
+            <div
+              class="m-status"
+              i18n="
+                My Published Posts Status|Status Title for My Posts
+                Page@@myPublishedPostsStatus"
+            >
+              Status
+            </div>
+            <div
+              class="m-date"
+              i18n="
+                My Published Posts Date|Date Title for My Posts
+                Page@@myPublishedPostsDate"
+            >
+              Published At
+            </div>
+          </div>
+        </div>
+        <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
+          <app-collapse-item></app-collapse-item>
         </div>
       </div>
-      <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
-        <app-collapse-item></app-collapse-item>
-      </div>
-      <!-- <table class="m-table">
-        <tr>
-          <th>Beitrag</th>
-          <th>Status</th>
-          <th>Veröffentlicht am</th>
-        </tr>
-      </table> -->
     </div>
   </div>
 </div>

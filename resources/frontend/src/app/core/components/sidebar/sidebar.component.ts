@@ -74,10 +74,10 @@ export class SidebarComponent implements OnInit {
     closeSidenav() {
         let modMenu = document.querySelector('.mod-sidebar');
         let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
-        // this.timeout = setTimeout(() => {
-        //     menu?.classList.remove('is-active');
-        //     modMenu?.classList.remove('is-active');
-        // }, 1500);
+        this.timeout = setTimeout(() => {
+            menu?.classList.remove('is-active');
+            modMenu?.classList.remove('is-active');
+        }, 1500);
     }
 
     toggleActiveItem(event: any) {

@@ -9,6 +9,10 @@ h1 {
     @include textstyle-size-40();
 }
 
+h3 {
+    @include textstyle-size-18();
+}
+
 h5 {
     @include textstyle-size-14();
 }
@@ -47,6 +51,8 @@ figure {
     color: $color-base-0;
     border: none;
     cursor: pointer;
+    display: flex;
+    column-gap: 14px;
     @include textstyle-size-12();
 
     @include mq(desktop) {
@@ -69,8 +75,13 @@ figure {
     &.is-disabled {
         background-color: $color-media-light-grey;
     }
+
+    &.is-grey {
+        background-color: $color-media-background-light-grey;
+        color: $color-base-100;
+    }
     .mod-register & {
-      padding: 10px 40px;
-      @include textstyle-size-14-bold();
+        padding: 10px 40px;
+        @include textstyle-size-14-bold();
     }
 }

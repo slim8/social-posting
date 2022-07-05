@@ -2,11 +2,13 @@
     position: relative;
     padding: 20px;
 
-    &.dashboard, &.published-posts, &.accounts {
+    &.dashboard,
+    &.published-posts,
+    &.accounts {
         > i {
             font-size: 21px;
-            >svg {
-                >path {
+            > svg {
+                > path {
                     fill: $color-base-0;
                     stroke: transparent;
                 }
@@ -14,10 +16,12 @@
         }
     }
 
-    &.drafts, &.my-album, &.create-post {
+    &.drafts,
+    &.my-album,
+    &.create-post {
         i {
             svg {
-                >path {
+                > path {
                     stroke: $color-base-0;
                     fill: transparent;
                 }
@@ -26,21 +30,25 @@
     }
 
     &.is-selected {
-        &.dashboard, &.published-posts, &.accounts {
+        &.dashboard,
+        &.published-posts,
+        &.accounts {
             i {
                 svg {
-                    >path {
-                        fill: $color-media-primary-orange!important;
+                    > path {
+                        fill: $color-media-primary-orange !important;
                     }
                 }
             }
         }
 
-        &.drafts, &.my-album, &.create-post {
+        &.drafts,
+        &.my-album,
+        &.create-post {
             i {
                 svg {
-                    >path {
-                        stroke: $color-media-primary-orange!important;
+                    > path {
+                        stroke: $color-media-primary-orange !important;
                     }
                 }
             }
@@ -48,15 +56,15 @@
     }
 }
 
-.m-button {
-    > span {
-        > i {
-            > svg {
-                fill: transparent;
-            }
-        }
-    }
-}
+// .m-button {
+//     > span {
+//         > i {
+//             > svg {
+//                 fill: transparent;
+//             }
+//         }
+//     }
+// }
 
 .m-login-icon {
     > i {
@@ -77,10 +85,12 @@
 }
 
 svg {
-    .m-logout & , .m-user & {
+    .m-logout &,
+    .m-user & {
         font-size: 18px;
     }
-    .m-home & , .m-collapse-menu-button & {
+    .m-home &,
+    .m-collapse-menu-button & {
         font-size: 16px;
     }
 
@@ -90,7 +100,9 @@ svg {
         }
     }
 
-    .m-gallery & , .m-image & , .m-video & {
+    .m-gallery &,
+    .m-image &,
+    .m-video & {
         font-size: 15px;
     }
 
@@ -103,8 +115,8 @@ svg {
 }
 
 .m-loading {
-    >i {
-        >svg {
+    > i {
+        > svg {
             width: 60px;
             height: 60px;
         }
@@ -155,7 +167,7 @@ svg {
                 height: 10px;
                 cursor: pointer;
 
-                >img {
+                > img {
                     position: absolute;
                     z-index: 9;
                     width: 10px;
@@ -167,65 +179,65 @@ svg {
 }
 
 z-select {
-  width: 100%;
+    width: 100%;
 }
 
 .m-loading-screen-active {
-  top: 0;
-  left: 0;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  opacity: 0.25;
-  z-index: 1;
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.25;
+    z-index: 1;
 }
 
 .m-loading-spin {
-  display: none;
-  position: absolute;
-  top: 15px;
-  left: 25px;
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 25px;
 }
 
 .show {
-  display: block;
+    display: block;
 }
 
 .hide {
-  display: none;
+    display: none;
 }
 
 .wide {
-  width: 200px;
+    width: 200px;
 }
 
 .mod-register {
-  nz-form-item {
-    width: 57%;
-    margin: auto;
-    margin-bottom: 10px;
-  }
-  nz-form-control {
-    max-width: 50%;
-  }
-  nz-form-label {
-    max-width: 25%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  input {
-    height: 45px;
-    width: 100%;
-    border: 1px solid #FF8D69;
-    margin-bottom: 10px;
-  }
-  button {
-    padding: 10px 40px;
-    > span {
-      @include textstyle-size-14-bold();
+    nz-form-item {
+        width: 57%;
+        margin: auto;
+        margin-bottom: 10px;
     }
-  }
+    nz-form-control {
+        max-width: 50%;
+    }
+    nz-form-label {
+        max-width: 25%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    input {
+        height: 45px;
+        width: 100%;
+        border: 1px solid #ff8d69;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 40px;
+        > span {
+            @include textstyle-size-14-bold();
+        }
+    }
 }
