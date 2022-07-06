@@ -4,11 +4,13 @@
 
 .mod-create-post {
     width: 100%;
+    min-width: 1087px;
     height: 100%;
     background-color: $color-base-0;
 
     > .m-wrapper {
         height: 100%;
+        min-width: 1087px;
 
         > .m-header {
             height: fit-content;
@@ -63,12 +65,14 @@
                             flex-wrap: wrap;
                             gap: 8px;
 
-                            > button , label {
+                            > button,
+                            label {
                                 background-color: $color-media-lighter-grey;
                                 color: $color-base-100;
                                 padding: 4px 12px 8px;
                                 @include textstyle-size-12();
-                                &.m-image , &.m-video {
+                                &.m-image,
+                                &.m-video {
                                     width: 149px;
                                 }
                                 &.m-gallery {
@@ -104,27 +108,45 @@
                         }
                     }
 
-                    >.m-upload-video{
-                        >.clearfix{
+                    > .m-upload-video {
+                        > .clearfix {
+                            display: flex;
+                            overflow: auto;
+                            align-items: center;
+
                             > video {
-                                display : none ;
+                                display: none;
                                 max-width: 150px;
                                 max-height: 100px;
                                 transform: scale(0);
                                 transition: all 0.3s;
                             }
-                            >.m-img-container{
+                            > .m-img-container {
                                 cursor: pointer;
-                                
+                                display: flex;
+                                flex-direction: column;
+                                margin: 0 6px 7px 0;
+
                                 > img {
                                     width: 51px;
-                                    height :40px ;
-                                    margin : 10px 0 14px
+                                    height: 40px;
                                 }
-                            } 
+
+                                > i {
+                                    position: absolute;
+                                    margin: 0px 0px 0px 31px;
+                                    padding: 3px;
+
+                                    &:hover {
+                                        background: #fff;
+                                        border-radius: 40%;
+                                    }
+                                }
+                            }
                         }
-                        >.m-custom-file-input{
-                            display: none; margin-top: 25px;
+                        > .m-custom-file-input {
+                            display: none;
+                            margin-top: 25px;
                         }
                     }
                 }
@@ -141,12 +163,20 @@
                 > .m-collapse-menu-button {
                     position: absolute;
                     right: 0;
+                    left: unset;
+                    transform: unset;
+                    &.is-active {
+                        right: unset;
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
                     > i {
                         cursor: pointer;
                         padding: 25px 23px;
 
                         &.is-active {
-                            padding: 8px 11px 9px;
+                            padding: 6px 11px 7px;
+                            right: 0;
                         }
                         > svg {
                             font-size: 16px;
@@ -164,7 +194,7 @@
                         width: 340px;
                     }
 
-                    >.m-tab {
+                    > .m-tab {
                         height: 100%;
 
                         > ul {
@@ -194,7 +224,7 @@
                                     border-bottom: 1px solid $color-base-0;
                                 }
 
-                                >span {
+                                > span {
                                     position: absolute;
                                     margin-right: 10px;
                                     left: 10px;
@@ -232,7 +262,6 @@
                                     }
 
                                     > .m-form-field {
-
                                         > .m-textarea-message {
                                             height: 132px;
                                             resize: none;
@@ -246,33 +275,34 @@
                                         }
                                     }
 
-                                    >.m-thumbnail-loader{
+                                    > .m-thumbnail-loader {
                                         text-align: center;
                                     }
 
-                                    >.m-thumbnails-preview{
+                                    > .m-thumbnails-preview {
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
 
-                                        >.m-previous-icon , .m-next-icon{
-                                            padding: 0 5px ;
+                                        > .m-previous-icon,
+                                        .m-next-icon {
+                                            padding: 0 5px;
                                             cursor: pointer;
                                         }
 
-                                        >.m-thumbnails-preview-items{
+                                        > .m-thumbnails-preview-items {
                                             display: flex;
-                                            align-items: center; 
-                                            transition: all 0.3s; 
-                                            flex-direction: row; 
+                                            align-items: center;
+                                            transition: all 0.3s;
+                                            flex-direction: row;
                                             overflow: auto;
 
-                                            >.m-thumbnails-preview-item{
-                                                width:72px; 
-                                                height : 56px ; 
-                                                object-fit:cover ; 
-                                                cursor : pointer ; 
-                                                margin : 10px;
+                                            > .m-thumbnails-preview-item {
+                                                width: 72px;
+                                                height: 56px;
+                                                object-fit: cover;
+                                                cursor: pointer;
+                                                margin: 10px;
                                             }
                                         }
                                     }
@@ -285,6 +315,7 @@
 
             > .m-right-col {
                 width: calc(100% - 21px);
+                min-width: 400px;
                 height: calc(100% - 41px);
                 background-color: $color-media-background-light-grey;
 
@@ -307,10 +338,10 @@
                 }
 
                 > .m-instagram-device {
-                    width:100%;
+                    width: 100%;
                     max-width: 360px;
                     height: fit-content;
-                    margin: 1em auto;
+                    margin: 35px auto;
 
                     > .m-instagram {
                         width: 100%;
@@ -331,7 +362,6 @@
                                 margin-bottom: 1em;
 
                                 &:last-child {
-
                                 }
 
                                 > .m-post-header {
@@ -340,9 +370,9 @@
                                     display: flex;
                                     justify-content: flex-start;
                                     align-items: center;
-                                    padding: .4em;
+                                    padding: 0.4em;
 
-                                    >.m-user-thumb {
+                                    > .m-user-thumb {
                                         width: 30px;
                                         min-width: 30px;
                                         height: 30px;
@@ -350,21 +380,22 @@
                                         border: 2px solid deeppink;
                                     }
 
-                                    >.m-user-details {
-                                        font-size: .95em;
+                                    > .m-user-details {
+                                        font-size: 0.95em;
                                         line-height: 1em;
                                         flex-grow: 1;
-                                        padding: 0 .5em;
+                                        padding: 0 0.5em;
 
-                                        >span, strong {
+                                        > span,
+                                        strong {
                                             display: block;
                                         }
                                     }
 
-                                    >.m-post-menu {
+                                    > .m-post-menu {
                                         min-width: 40px;
 
-                                        >.m-menu {
+                                        > .m-menu {
                                             display: inline-block;
                                             width: 24px;
                                             height: 24px;
@@ -376,15 +407,14 @@
                                 }
 
                                 > .m-post-footer {
-
                                     > .m-buttons {
                                         width: 100%;
-                                        padding: .4em 1em;
+                                        padding: 0.4em 1em;
                                         display: flex;
                                         justify-content: flex-start;
                                         align-items: center;
 
-                                        >.m-post-btn {
+                                        > .m-post-btn {
                                             user-select: none;
                                             cursor: pointer;
                                             text-align: center;
@@ -397,27 +427,27 @@
                                                 background-image: url(https://storage.googleapis.com/mkts/insta-sprite.png);
                                             }
 
-                                            >.like {
+                                            > .like {
                                                 background-size: 270px 235px;
                                                 background-position: -25px -161px;
                                             }
-                                            >.is-liked {
+                                            > .is-liked {
                                                 background-size: 270px 235px;
                                                 background-position: 0px -161px;
                                             }
 
-                                            >.comn {
+                                            > .comn {
                                                 background-size: 270px 235px;
                                                 background-position: -142px -103px;
                                             }
 
-                                            >.save {
+                                            > .save {
                                                 background-size: 270px 235px;
                                                 background-position: -221px -150px;
                                             }
                                         }
 
-                                        >.m-spacer {
+                                        > .m-spacer {
                                             flex-grow: 1;
                                         }
                                     }
@@ -426,19 +456,19 @@
                                         display: flex;
                                         justify-content: flex-start;
                                         align-items: center;
-                                        padding: .4em 1em;
-                                        font-size: .95em;
+                                        padding: 0.4em 1em;
+                                        font-size: 0.95em;
 
-                                        >.m-user-like {
+                                        > .m-user-like {
                                             display: inline-block;
                                             width: 20px;
                                             height: 20px;
                                             border-radius: 50%;
-                                            margin-right: .5em;
+                                            margin-right: 0.5em;
                                         }
 
                                         > strong {
-                                            margin: 0 .3em;
+                                            margin: 0 0.3em;
                                         }
                                     }
 
@@ -447,17 +477,16 @@
                                         display: block;
                                         padding: 0 1em;
                                         color: #c0c0c0;
-                                        font-size: .75em;
+                                        font-size: 0.75em;
                                     }
                                 }
 
                                 > #postView {
-
-                                    >.view-mentions {
+                                    > .view-mentions {
                                         display: none !important;
                                     }
 
-                                    > .tooltip{
+                                    > .tooltip {
                                         user-select: none;
                                         display: none;
                                         background: #000;
@@ -520,12 +549,13 @@
         > .m-action-buttons {
             padding: 18px 23px 19px;
             float: right;
-
+            display: flex;
             > button {
                 position: relative;
                 padding: 6px 12px 8px 14px;
                 margin-left: 7px;
-                >span {
+                gap: 0;
+                > span {
                     margin-right: 12px;
                 }
             }
