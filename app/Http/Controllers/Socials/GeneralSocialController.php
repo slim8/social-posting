@@ -98,28 +98,32 @@ class GeneralSocialController extends Controller
 
             $videoThunb = [];
 
-            $mentions = $request->mentions;
-            // $mentions = '[
-            //     {
-            //         "image": 0,
-            //         "username": "z.i.e.d.m",
-            //         "x": 0.39,
-            //         "y": 0.55
-            //     },
-            //     {
-            //         "image": 1,
-            //         "username": "z.i.e.d.m",
-            //         "x": 0.56,
-            //         "y": 0.26
-            //     },
-            //     {
-            //         "image": 2,
-            //         "username": "z.i.e.d.m",
-            //         "x": 0.57,
-            //         "y": 0.58
-            //     }
-            // ]';
-            $mentions = json_decode($mentions , true);
+            $mentions = [];
+            if ($request->mentions) {
+                $mentions = $request->mentions;
+                // $mentions = '[
+                //     {
+                //         "image": 0,
+                //         "username": "z.i.e.d.m",
+                //         "x": 0.39,
+                //         "y": 0.55
+                //     },
+                //     {
+                //         "image": 1,
+                //         "username": "z.i.e.d.m",
+                //         "x": 0.56,
+                //         "y": 0.26
+                //     },
+                //     {
+                //         "image": 2,
+                //         "username": "z.i.e.d.m",
+                //         "x": 0.57,
+                //         "y": 0.58
+                //     }
+                // ]';
+                $mentions = json_decode($mentions, true);
+            }
+
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
             $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $post['accountId']) ? true : false;
@@ -185,7 +189,6 @@ class GeneralSocialController extends Controller
                 ++$inc;
                 $localisation = null;
 
-
                 $message = $post['message'];
                 if ($accountProvider == 'facebook') {
                     if ($message) {
@@ -200,7 +203,7 @@ class GeneralSocialController extends Controller
                     }
                     $BusinessIG = $account->uid;
                     $obj['access_token'] = $this->instagramController->getAccessToken($account->id);
-                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos , $localisation , $mentions) : POST::$STATUS_DRAFT;
+                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos, $localisation, $mentions) : POST::$STATUS_DRAFT;
                 }
 
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {

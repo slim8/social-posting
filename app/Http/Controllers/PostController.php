@@ -140,10 +140,10 @@ class PostController extends Controller
                 $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
             } else {
                 $subPosts = [];
-                $subPosts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
+                $subPostsAccounts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
                 // Append Tags and provider to Sub accounts
 
-                foreach ($subPosts as $subPost) {
+                foreach ($subPostsAccounts as $subPost) {
                     $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
 
                     $subPost->hashtags = $this->getHashTagByPostOrAccountId($subPost->id);
