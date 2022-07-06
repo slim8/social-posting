@@ -1,0 +1,136 @@
+.m-mod-blog-posts{
+    background: #fff;
+    padding: 33px 42px ;
+    
+    >.m-wrapper{
+        >.m-header{
+            padding-bottom:43px ;
+
+            >.m-title{
+                font-weight: 400;
+                font-size: 40px;
+                line-height: 54px;
+            }
+            >.m-description{
+                font-weight: 400;
+                font-size: 22px;
+                line-height: 30px;
+            }
+        }
+
+        >.m-container{
+
+            >.m-posts-container{
+                margin-left: 120px;
+                
+
+                >.m-first-post{
+                    width : 608px ;
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 48px;
+
+                    >.m-post-img{
+
+                        >img{
+                            width : 608px ;
+                            height: 226px;
+                            object-fit: cover;
+                            object-position: center;
+
+                        }
+                    }
+
+                    >.m-post-description{
+                        margin-top: 22px ;
+                        width: 100%;
+
+                        >.m-post-date{
+                            font-weight: 400;
+                            font-size: 12px;
+                            line-height: 138.68%;
+                            color: rgba(0, 0, 0, 0.5);
+                        }
+
+                        >.m-post-title{
+                            font-weight: 700;
+                            font-size: 24px;
+                            line-height: 138.68%;
+                            display: flex;
+                            justify-content: space-between;
+
+                            >.m-redirect-icon{
+                                cursor: pointer;
+                            }
+                        }
+
+                        >.m-post-teaser{
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 138.68%;
+                            max-width : 507px ;
+                        }
+                        
+                    }
+                }
+
+                >.m-post-item{
+                    width : 608px ;
+                    display: flex;
+                    align-items: center;
+                    margin : 49px 0 ;
+
+                    >.m-post-img{
+                        margin-right: 22px ;
+
+                        >img{
+                            width : 204px ;
+                            height: 151px;
+                            object-fit: cover;
+                            object-position: center;
+                        }
+                    }
+
+                    >.m-post-description{
+                        width: 100%; 
+
+                        >.m-post-date{
+                            font-weight: 400;
+                            font-size: 12px;
+                            line-height: 138.68%;
+                            color: rgba(0, 0, 0, 0.5);
+                        }
+
+                        >.m-post-title{
+                            font-weight: 700;
+                            font-size: 24px;
+                            line-height: 138.68%;
+                            display: flex;
+                            justify-content: space-between;
+
+                            >.m-redirect-icon{
+                                cursor: pointer;
+                            }
+                        }
+
+                        >.m-post-teaser{
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 138.68%;
+                            max-width : 507px ;
+                            padding-right : 40px;
+                        }
+                        
+                    }
+                    
+                }
+
+                >.m-post-line{
+                    border: 1px solid #000000;
+                    width: 608px;
+                    margin-left: 0px;
+                }
+            }
+        }
+    }
+}

@@ -11,9 +11,13 @@
             <div class="m-button-icon">
               <i nz-icon nzType="ng-zorro:image"></i>
             </div>
-            <div class="m-button-text" i18n="postType|Title for the post type@@post type" >post type</div>
+            <div class="m-button-text" i18n="postType|Title for the post type@@post type" >Post type</div>
             <div class="m-button-arrow">
-              <i  nz-icon nzType="down"></i>
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
             </div>
           </button>
           <nz-dropdown-menu #postType="nzDropdownMenu">
@@ -29,7 +33,11 @@
             </div>
             <div class="m-button-text" i18n="AllPostings|Title for the All Postings@@All Postings" >All Postings</div>
             <div class="m-button-arrow">
-              <i  nz-icon nzType="down"></i>
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
             </div>
           </button>
           <nz-dropdown-menu #postings="nzDropdownMenu">
