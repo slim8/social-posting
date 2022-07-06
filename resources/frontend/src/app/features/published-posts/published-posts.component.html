@@ -19,7 +19,66 @@
     </div>
 
     <div class="m-container">
-      <div class="m-buttons"></div>
+      <div class="m-filter-panel">
+        <div class="m-left">
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postType"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i nz-icon nzType="ng-zorro:image"></i>
+            </div>
+            <div class="m-button-text">Beitragsart</div>
+            <div class="m-button-arrow">
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postType="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postings"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i
+                nz-icon
+                nzType="ng-zorro:customCalendar"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+            <div class="m-button-text">Alle Postings</div>
+            <div class="m-button-arrow">
+              <i nz-icon nzType="ng-zorro:customArrow"></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postings="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+        <div class="m-right">
+          <button class="m-button is-primary">
+            <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
+            Neu erstellen
+          </button>
+        </div>
+      </div>
       <hr />
       <div class="m-content">
         <div class="m-array-header">
