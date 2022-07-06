@@ -10,6 +10,7 @@ use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Hashtag;
+use App\Models\Mentions;
 use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
@@ -153,18 +154,37 @@ class GeneralSocialController extends Controller
                     } else {
                         $postId = Post::where('id', $requestPostId)->update($postObject);
                         $postId = Post::where('id', $requestPostId)->first();
-
                         // Delete All Saved Post Media
+                        Mentions::where('postId', $postId->id)->delete();
                         PostMedia::where('postId', $postId->id)->delete();
                     }
 
                     if ($images) {
+                        $imgInc = 0;
                         foreach ($images as $image) {
-                            PostMedia::create([
+                            $postMedia = PostMedia::create([
                                 'url' => $image,
                                 'postId' => $postId->id,
                                 'type' => 'image',
                             ]);
+
+                            // Save Mentions to database
+                            if ($mentions) {
+                                foreach ($mentions as $mention) {
+                                    if ($mention['image'] == $imgInc) {
+                                        Mentions::create([
+                                            'postMediaId' => $postMedia->id,
+                                            'username' => $mention['username'],
+                                            'postId' => $postId->id,
+                                            'posX' => $mention['x'],
+                                            'posY' => $mention['y'],
+                                            'provider' => 'instagram',
+                                        ]);
+                                    }
+                                }
+                            }
+
+                            ++$imgInc;
                         }
                     }
 
