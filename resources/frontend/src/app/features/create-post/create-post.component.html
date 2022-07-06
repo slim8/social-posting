@@ -80,7 +80,7 @@
                                     Meine individualisierten Vorlagen
                                 </div>
                                 <ng-container *nzModalContent>
-                                  <app-album-preview></app-album-preview>
+                                  <app-album-preview (onSubmit)="addToPost($event)"></app-album-preview>
                                 </ng-container>
                                 <div *nzModalFooter>
                                 </div>

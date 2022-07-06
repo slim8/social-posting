@@ -41,12 +41,12 @@
           </div>
         </div>
         <div class="m-album-items-container">
-          <div class="m-album-item-container" *ngFor=" let item of images ">
-              <img [src]="item" alt="" class="m-album-item-image" (click)="selectImage(item)">
+          <div class="m-album-item-container" *ngFor=" let item of images " >
+              <img [src]="item" alt="" class="m-album-item-image" (click)="selectImage(item)" [ngClass]="{'active' : selectedImages.includes(item)}">
           </div>
         </div>
         <div class="m-action">
-            <button class="m-button">
+            <button class="m-button" (click)="onAddPost()">
                 <div class="m-button-icon">
                   <i nz-icon nzType="ng-zorro:costum-edit"></i>
                 </div>

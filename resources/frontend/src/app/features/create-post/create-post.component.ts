@@ -647,19 +647,20 @@ export class CreatePostComponent implements OnInit  {
       }
 
       showAlbumModal(){
-        console.log('click');
-        
         this.showAlbum = true;
       }
 
       handleOk(): void {
-        console.log('Button ok clicked!');
         this.showAlbum = false;
       }
     
       handleCancel(): void {
-        console.log('Button cancel clicked!');
         this.showAlbum = false;
+      }
+
+      addToPost(event : any){
+        // TODO:: list of images selected from album list
+        console.log(event);
       }
 
 }
