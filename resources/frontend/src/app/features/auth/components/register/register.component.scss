@@ -34,54 +34,86 @@
         }
 
         > .m-form {
-            > .m-form-group {
-                display: flex;
-                flex-direction: row;
-                width: 57%;
+            // > .m-form-group {
+            //     display: flex;
+            //     flex-direction: row;
+            //     width: 57%;
+            //     margin: auto;
+
+            //     &.m-center {
+            //         justify-content: center;
+            //     }
+            //     > .m-form-label {
+            //         display: flex;
+            //         justify-content: flex-end;
+            //         align-items: center;
+            //         width: 25%;
+            //         > h4 {
+            //             @include textstyle-size-14();
+            //             color: $color-media-dark-grey;
+            //             margin-bottom: 14px;
+            //             position: relative;
+
+            //             &:before {
+            //                 content: '*';
+            //                 color: $color-media-dark-orange;
+            //                 position: absolute;
+            //                 left: -10px;
+            //                 top: 2px;
+            //             }
+            //         }
+            //     }
+
+            //     > .m-form-field {
+            //         width: 50%;
+            //         padding: 0 10px;
+            //         background-color: red;
+
+            //         > input {
+            //             height: 45px;
+            //             width: 100%;
+            //             border: 1px solid #ff8d69;
+            //             margin-bottom: 10px;
+            //         }
+
+            //         > .m-form-control {
+            //             float: left;
+            //             margin-top: -10px;
+            //             color: red;
+            //         }
+            //     }
+            // }
+            >.m-two-column {
+                width: 38%;
                 margin: auto;
+                display: flex;
 
-                &.m-center {
-                    justify-content: center;
+                >.m-form-field-1{
+                    display : flex;
+                    justify-content:start ;
+
+                    >.m-form-label{
+                        max-width: 25%;
+                        margin: 0px 10px 0px -10px;
+                    }
+
+                    >.m-form-control{
+                        max-width: 65%;
+                    }
                 }
-                > .m-form-label {
-                    display: flex;
-                    justify-content: flex-end;
-                    align-items: center;
-                    width: 25%;
-                    > h4 {
-                        @include textstyle-size-14();
-                        color: $color-media-dark-grey;
-                        margin-bottom: 14px;
-                        position: relative;
+                >.m-form-field-2{
+                    display : flex;
+                    justify-content:start ;
 
-                        &:before {
-                            content: '*';
-                            color: $color-media-dark-orange;
-                            position: absolute;
-                            left: -10px;
-                            top: 2px;
-                        }
+                    >.m-form-label{
+                        max-width: 15%;
+                    }
+
+                    >.m-form-control{
+                        max-width: 60%;
                     }
                 }
 
-                > .m-form-field {
-                    width: 50%;
-                    padding: 0 10px;
-                    background-color: red;
-
-                    > input {
-                        height: 45px;
-                        width: 100%;
-                        border: 1px solid #ff8d69;
-                        margin-bottom: 10px;
-                    }
-
-                    > .m-form-control {
-                        float: left;
-                        margin-top: -10px;
-                        color: red;
-                    }
-                }
             }
         }
     }
