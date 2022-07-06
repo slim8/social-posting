@@ -19,4 +19,9 @@ class PostMedia extends ExtendedModel
     {
         $this->belongsTo(Post::class);
     }
+
+    public function mentions()
+    {
+        return $this->hasMany(Mentions::class , 'postMediaId');
+    }
 }

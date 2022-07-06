@@ -132,7 +132,7 @@ class PostController extends Controller
 
         $posts = $postId ? null : [];
         foreach ($postRequest as $postContent) {
-            $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
+            $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->with('mentions')->get();
 
             if ($filterByAccounts) {
                 $postContent->provider = $postContent->accounts[0]->provider;
