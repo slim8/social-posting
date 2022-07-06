@@ -77,39 +77,11 @@
                     > .m-button {
                         gap: 3px;
                     }
-                    // display: flex;
-                    // flex-direction: row;
-                    // > .m-button {
-                    //     margin-right: 10px;
-                    //     height: 36px;
-                    //     padding: 5px;
-                    //     background: $color-media-primary-orange;
-                    //     align-items: center;
-                    //     display: flex;
-                    //     justify-content: center;
-
-                    //     > .m-button-icon {
-                    //         font-size: 19px;
-                    //         color: $color-media-background-light-grey;
-                    //         padding-top: 3px;
-                    //     }
-                    //     > .m-button-text {
-                    //         font-family: 'Open Sans';
-                    //         font-style: normal;
-                    //         font-weight: 400;
-                    //         font-size: 12px;
-                    //         line-height: 16px;
-                    //         margin: 0 10px;
-                    //     }
-                    // }
-
-                    // > .m-search-form {
-                    //     border: 1px solid $color-media-background-light-grey;
-                    //     margin-right: 25px;
-                    //     height: 36px;
-                    //     padding: 5px;
-                    // }
                 }
+            }
+
+            > hr {
+                border: 1px solid $color-media-black-opacity-30;
             }
             > .m-content {
                 padding: 25px;

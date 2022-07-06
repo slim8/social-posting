@@ -222,7 +222,8 @@
                         width: 100%;
                         height: 100%;
                         @include textstyle-size-20();
-
+                        justify-content: center;
+                        gap: 0;
                         > span {
                             padding-right: 28px;
 
