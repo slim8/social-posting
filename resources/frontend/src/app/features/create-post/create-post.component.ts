@@ -160,17 +160,6 @@ export class CreatePostComponent implements OnInit  {
     }
 
     submitForm(param: string) {
-      // TODO:: for video upload
-
-      // this.postService.uploadFile(this.selectedVideo).subscribe({
-      //     next: (response) => {
-      //         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-      //     },
-      //     error: (err) => {
-      //     },
-      //     complete: () => {
-      //     },
-      // });
 
       let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
       let btnSubmit = document.getElementById('btn-submit');
@@ -218,24 +207,41 @@ export class CreatePostComponent implements OnInit  {
       //     });
       // }
 
-      if (this.urlLinks.length > 0) {
-        this.urlLinks.forEach((media: any) => {
-            let videoObject: any = {
-              url: "",
-              seconde: "",
-              thumbnail: ""
-            }
-            if(media.type == "image") {
-              formData.append('images[]', media.url);
-            } else if (media.type == "video") {
-              videoObject.url = media.url;
-              videoObject.seconde = 3;
-              videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
-              formData.append('videos[]', JSON.stringify(videoObject));
-            }
-              // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
-          });
-      }
+      // if (this.urlLinks.length > 0) {
+      //   this.urlLinks.forEach((media: any) => {
+      //       let videoObject: any = {
+      //         url: "",
+      //         seconde: "",
+      //         thumbnail: ""
+      //       }
+      //       if(media.type == "image") {
+      //         formData.append('images[]', media.url);
+      //       } else if (media.type == "video") {
+      //         videoObject.url = media.url;
+      //         videoObject.seconde = 3;
+      //         videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
+      //         formData.append('videos[]', JSON.stringify(videoObject));
+      //       }
+      //         // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
+      //     });
+      // }
+
+      // TODO:: for video upload
+
+      // this.videoList.forEach((video: any) => {
+      //     this.postService.uploadFile(video).subscribe({
+      //         next: (response) => {
+      //             console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+      //             let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
+      //             formData.append('videos[]', JSON.stringify({url : response.files , seconde : thumbnail.time , thumbnail : thumbnail.imgB64 }));
+      //         },
+      //         error: (err) => {
+      //           this.shared.createMessage('error', err);
+      //         },
+      //         complete: () => {
+      //         },
+      //     });
+      // })
 
       if (this.urlLinks.length > 0) {
         this.urlLinks.forEach((media: any) => {
