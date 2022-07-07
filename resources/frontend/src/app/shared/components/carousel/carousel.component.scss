@@ -78,6 +78,24 @@
     inset: 0;
 }
 
+.video {
+  &:after {
+    content: '';
+    z-index: 999;
+    position: absolute;
+    background-image: url('../../../../assets/img/svgs/icons/play.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    left: 50%;
+    top: 50%;
+    width: 70px;
+    height: 70px;
+    transform: translate3d(-50%, -50%, 0);
+    filter: invert(1);
+  }
+}
+
 .m-slide-insta {
     position: relative;
 

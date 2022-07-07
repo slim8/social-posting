@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange, Output } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { Mention } from 'ng-zorro-antd/mention';
 
 @Component({
@@ -8,10 +8,10 @@ import { Mention } from 'ng-zorro-antd/mention';
 })
 export class CarouselComponent implements  OnChanges {
     //preview images variable
-    @Input() selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
-    @Input() urlLinks: any[] = [{ url: "" }];
+    @Input() mediaList: any[] = [{url: ""}];
+    @Output() newItemEvent = new EventEmitter<any[]>();
     mentions: any = [];
-    // @Output() mentionsList = new EventEmitter();
+
     //tags variables.
     displaMentions: boolean = false;
     taggedImage: any;
@@ -21,7 +21,7 @@ export class CarouselComponent implements  OnChanges {
     posY = 0;
     inputValue2 = '';
     mentionIndex = 0;
-    suggestions = [
+    suggestions = [ 
         'Ali_werghemmi',
         'z.i.e.d.m',
         'oussemakassis',
@@ -35,25 +35,9 @@ export class CarouselComponent implements  OnChanges {
     constructor() { }
 
     ngOnChanges(changes: SimpleChanges) {
-      let videoList:any[] = [];
-      this.selectedThumbnailList.forEach((vid:any)=> {
-        let video ={
-          id:0,
-          url:"",
-          type:"video"
-        }
-        video.id = vid.id;
-        video.url = vid.imgB64;
-        video.type = "video";
-        videoList.push(video);
-      })
-
-      this.urlLinks = [...this.urlLinks, ...videoList];
-      this.urlLinks = [];
-
       document.addEventListener('click', this.resetPostView);
-      this.nbrSlides = changes['urlLinks'].currentValue.length;
-      this.urlLinks = changes['urlLinks'].currentValue;
+      this.nbrSlides = changes['mediaList'].currentValue.length;
+      this.mediaList = changes['mediaList'].currentValue;
       setTimeout(() => {
         this.refreshDots();
         this.initCarousel();
@@ -81,87 +65,87 @@ export class CarouselComponent implements  OnChanges {
     }
 
     initCarousel() {
-        let offset = 0;
-        let dots = document.querySelectorAll('.m-dots li');
-        this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
-        let carouselWidth = 360 * this.nbrSlides;
-        let carousel = document.getElementById("data-slides");
-        let prev = document.getElementById("prev");
-        let next = document.getElementById("next");
-        if (dots.length == 1) {
-            dots[0].setAttribute("style", "display:none;");
-        } else if (dots.length > 1) {
-            dots[0].setAttribute("style", "display:block;filter: opacity(1);");
-        }
+      let offset = 0;
+      let dots = document.querySelectorAll('.m-dots li');
+      this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
+      let carouselWidth = 360 * this.nbrSlides;
+      let carousel = document.getElementById("data-slides");
+      let prev = document.getElementById("prev");
+      let next = document.getElementById("next");
+      if (dots.length == 1) {
+        dots[0].setAttribute("style", "display:none;");
+      } else if (dots.length > 1) {
+        dots[0].setAttribute("style", "display:block;filter: opacity(1);");
+      }
 
-        if (this.nbrSlides == 1 || this.nbrSlides == 0) {
+      if (this.nbrSlides == 1 || this.nbrSlides == 0) {
+        if (next != null) {
+          next.style.display = "none";
+        }
+        if (prev != null) {
+          prev.style.display = "none";
+        }
+      }
+
+      if (prev != null) {
+        prev.style.display = "none";
+      }
+      if (carousel != null) {
+        carousel.style.width = carouselWidth + "px";
+      }
+      const buttons = document.querySelectorAll("[data-carousel-button]");
+      this.initCarouselNextButton();
+      buttons.forEach((button: any) => {
+        button.addEventListener("click", () => {
+          if (prev != null) {
+            prev.style.display = "block";
+          }
+          const stride = button.dataset.carouselButton === 'next' ? 1 : -1;
+          const offsetStride = button.dataset.carouselButton === 'next' ? -360 : 360;
+          offset += offsetStride;
+
+          if (carousel != null) {
+            carousel.style.transform = "translateX(" + offset + "px)";
+          }
+          const slides = button.closest("[data-carousel]").querySelectorAll("[data-slides]>li>img");
+          this.slideNbr += stride
+          if (this.slideNbr < 1) {
+            if (prev != null) {
+              prev.style.display = "none";
+
+            }
+            if (next != null && this.nbrSlides > 1) {
+              next.style.display = "block";
+            }
+          }
+          else if ((this.slideNbr + 1) == slides.length) {
             if (next != null) {
-                next.style.display = "none";
+              next.style.display = "none";
+            }
+          } else {
+            if (next != null) {
+              next.style.display = "block";
             }
             if (prev != null) {
-                prev.style.display = "none";
+              prev.style.display = "block";
             }
-        }
+          }
+          if (dots.length == 1) {
+            dots[0].setAttribute("style", "display:none;");
+          } else if (dots.length > 1) {
+            dots[0].setAttribute("style", "display:block;");
+          }
 
-        if (prev != null) {
-            prev.style.display = "none";
-        }
-        if (carousel != null) {
-            carousel.style.width = carouselWidth + "px";
-        }
-        const buttons = document.querySelectorAll("[data-carousel-button]");
-        this.initCarouselNextButton();
-        buttons.forEach((button: any) => {
-            button.addEventListener("click", () => {
-                if (prev != null) {
-                    prev.style.display = "block";
-                }
-                const stride = button.dataset.carouselButton === 'next' ? 1 : -1;
-                const offsetStride = button.dataset.carouselButton === 'next' ? -360 : 360;
-                offset += offsetStride;
+          document.querySelectorAll('.m-dots li').forEach((dot: any) => {
+            dot.setAttribute("style", "filter: opacity(0.3);");
+          })
 
-                if (carousel != null) {
-                    carousel.style.transform = "translateX(" + offset + "px)";
-                }
-                const slides = button.closest("[data-carousel]").querySelectorAll("[data-slides]>li>img");
-                this.slideNbr += stride
-                if (this.slideNbr < 1) {
-                    if (prev != null) {
-                        prev.style.display = "none";
-
-                    }
-                    if (next != null && this.nbrSlides > 1) {
-                        next.style.display = "block";
-                    }
-                }
-                else if ((this.slideNbr + 1) == slides.length) {
-                    if (next != null) {
-                        next.style.display = "none";
-                    }
-                } else {
-                    if (next != null) {
-                        next.style.display = "block";
-                    }
-                    if (prev != null) {
-                        prev.style.display = "block";
-                    }
-                }
-                if (dots.length == 1) {
-                    dots[0].setAttribute("style", "display:none;");
-                } else if (dots.length > 1) {
-                    dots[0].setAttribute("style", "display:block;");
-                }
-
-                document.querySelectorAll('.m-dots li').forEach((dot: any) => {
-                    dot.setAttribute("style", "filter: opacity(0.3);");
-                })
-
-                let activeDot = document.querySelector('.m-dots li:nth-child(' + (this.slideNbr + 1) + ')');
-                if (activeDot != null) {
-                    activeDot.setAttribute("style", "filter: opacity(1);");
-                }
-            })
+          let activeDot = document.querySelector('.m-dots li:nth-child(' + (this.slideNbr + 1) + ')');
+          if (activeDot != null) {
+            activeDot.setAttribute("style", "filter: opacity(1);");
+          }
         })
+      })
     }
 
     // after adding new image to carousel
@@ -203,7 +187,7 @@ export class CarouselComponent implements  OnChanges {
         mention.y = Math.round((this.posY / this.imageHeight) * 100) / 100;
         mention.image = this.slideNbr;
         this.mentions.push(mention);
-        console.log(this.mentions);
+        this.passToParentComponent(this.mentions);
         // mentioned?.addEventListener('click', this.edit);
 
         close.classList.add('m-close');
@@ -359,5 +343,9 @@ export class CarouselComponent implements  OnChanges {
             });
         }
 
+    }
+
+    passToParentComponent(value: any[]) {
+      this.newItemEvent.emit(value);
     }
 }

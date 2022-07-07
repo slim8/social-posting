@@ -6,10 +6,11 @@
         <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
     </nz-mention>
     <div id="tooltip" class="m-tooltip">who's this?</div>
+
     <ul id="data-slides" data-slides>
-        <li *ngFor="let item of urlLinks; let index = index;" class="m-slide-insta active" data-active>
+        <li *ngFor="let item of mediaList; let index = index;" class="m-slide-insta active {{item.type}}" data-active>
             <img *ngIf="item.url!=''"  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()"  src="{{item.url}}" alt="image #{{index}}">
-        </li>
+          </li>
     </ul>
 
     <ul id="dots" class="m-dots">

@@ -49,7 +49,7 @@ export class CreatePostComponent implements OnInit  {
     selectedValue = [];
     isliked: boolean = false;
     mediaId: number = 0;
-    @Input() urlLinks: any[] = [{ id: 0, url: "", type:"" }];
+    urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
     tags: string[] = [];
     instaTags: string[] = [];
@@ -88,10 +88,26 @@ export class CreatePostComponent implements OnInit  {
 
     videoCounter = 0;
     videoList: {id : number ,file : File }[] = [];
-    @Input() selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
-
-
+    selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
+    mediaList:any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     showAlbum : boolean = false;
+
+
+    //tags variables.
+    displaMentions: boolean = false;
+    taggedImage: any;
+    suggestions = [
+        'Ali_werghemmi',
+        'z.i.e.d.m',
+        'oussemakassis',
+        'amalrk',
+        '中文',
+        'にほんご',
+    ];
+    // carousel slider variables
+    slideNbr = 0;
+    nbrSlides: any = 1;
+
 
     constructor(
         private shared: SharedModule,
@@ -154,7 +170,7 @@ export class CreatePostComponent implements OnInit  {
       //     },
       //     complete: () => {
       //     },
-      // }) ;
+      // });
 
       let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
       let btnSubmit = document.getElementById('btn-submit');
@@ -217,16 +233,15 @@ export class CreatePostComponent implements OnInit  {
               videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
               formData.append('videos[]', JSON.stringify(videoObject));
             }
-
               // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
           });
       }
 
-      // if (this.selectedFile.length > 0) {
-      //     this.selectedFile.forEach((file: any) => {
-      //         formData.append('sources[]', file.originFileObj);
-      //     });
-      // }
+      if (this.urlLinks.length > 0) {
+        this.urlLinks.forEach((media: any) => {
+          formData.append('images[]', media.url);
+        })
+      }
 
       formData.append('status', param);
       formData.append('message', this.message);
@@ -350,9 +365,7 @@ export class CreatePostComponent implements OnInit  {
           this.refreshCarousel();
         })
       }
-
-
-
+      this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     }
 
     handleCloseInsta(removedTag: {}): void {
@@ -524,17 +537,18 @@ export class CreatePostComponent implements OnInit  {
 
     // TODO:: comment line for video display
     loadFile(e : Event) {
-        let target = e.target as HTMLInputElement;
-        // let video = document.getElementById("video") as HTMLVideoElement;
-        if(target.files){
-          this.availableVideos = true;
-          let loadedFile = {id : this.videoCounter ,file :target.files[0]};
-          this.videoList.push(loadedFile)
-          this.selectedVideo = loadedFile;
-          this.videoCounter++;
-        }else {
-          this.availableVideos = false;
-        }
+      let target = e.target as HTMLInputElement;
+      // let video = document.getElementById("video") as HTMLVideoElement;
+      if(target.files){
+        this.availableVideos = true;
+        let loadedFile = {id : this.videoCounter ,file :target.files[0]};
+        this.videoList.push(loadedFile)
+        this.selectedVideo = loadedFile;
+        this.videoCounter++;
+
+      }else {
+        this.availableVideos = false;
+      }
 
         // if (target.files?.length) {
             // this.selectedVideo = target.files[0];
@@ -555,6 +569,9 @@ export class CreatePostComponent implements OnInit  {
         this.refreshPages();
         this.generatethumbnails('next' , true);
         this.currentTimePosition = -10;
+        setTimeout(() => {
+          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+        }, 2500);
       }
 
       generatethumbnails(action : string , newVideo = false ){
@@ -588,6 +605,7 @@ export class CreatePostComponent implements OnInit  {
                     selectedThumbnail.time = item.time;
                 }
             })
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
             // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
       }
 
@@ -617,6 +635,7 @@ export class CreatePostComponent implements OnInit  {
                   this.availableVideos = false;
                 }
                 this.refreshPages();
+                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
             },
             nzCancelText: 'No',
             nzOnCancel: () => console.log('Cancel', item)
@@ -659,4 +678,186 @@ export class CreatePostComponent implements OnInit  {
         this.showAlbum = false;
       }
 
+      onSelect() {
+        let tooltip = document.createElement('div');
+        // let mentioned = document.querySelector('.mentioned');
+        tooltip.setAttribute('data-index', this.mentionIndex.toString());
+        tooltip.setAttribute('class', 'mentioned');
+        let close = document.createElement('div');
+        let imagetop = this.posY;
+        let imageleft = this.posX;
+        let mention = {
+            image: 0,
+            username: '',
+            x: 0,
+            y: 0,
+        };
+
+        mention.username = this.inputValue2;
+        mention.x = Math.round((this.posX / this.imageWidth) * 100) / 100;
+        mention.y = Math.round((this.posY / this.imageHeight) * 100) / 100;
+        mention.image = this.slideNbr;
+        this.mentions.push(mention);
+        // mentioned?.addEventListener('click', this.edit);
+
+        close.classList.add('m-close');
+        close.innerHTML = 'x';
+        close?.setAttribute('style', 'padding:0 4px 0 10px;');
+        tooltip.innerHTML = this.inputValue2;
+        this.taggedImage?.appendChild(tooltip);
+        tooltip.appendChild(close);
+        tooltip?.setAttribute(
+            'style',
+            'top: ' +
+            this.posY +
+            'px;left: ' +
+            this.posX +
+            'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+        );
+
+        let tooltipwidth = tooltip.offsetWidth;
+        let tooltipheight = tooltip.offsetHeight;
+
+        //check left + bottom offset
+        if (
+            this.posX - tooltipwidth / 2 < 0 &&
+            this.posY + tooltipheight > this.imageHeight
+        ) {
+            imageleft += tooltipwidth / 2 - this.posX;
+            imagetop -= imagetop - this.imageHeight + tooltipheight;
+            tooltip?.setAttribute(
+                'style',
+                'top: ' +
+                imagetop +
+                'px;left: ' +
+                imageleft +
+                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+            );
+        }
+        //check right + bottom offset
+        else if (
+            this.posX + tooltipwidth / 2 > this.imageWidth &&
+            this.posY + tooltipheight > this.imageHeight
+        ) {
+            imageleft -= tooltipwidth / 2 + (this.posX - this.imageWidth);
+            imagetop -= imagetop - this.imageHeight + tooltipheight;
+            tooltip?.setAttribute(
+                'style',
+                'top: ' +
+                imagetop +
+                'px;left: ' +
+                imageleft +
+                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+            );
+        }
+        //check left offset
+        else if (this.posX - tooltipwidth / 2 < 0) {
+            imageleft += tooltipwidth / 2 - this.posX;
+            tooltip?.setAttribute(
+                'style',
+                'top: ' +
+                this.posY +
+                'px;left: ' +
+                imageleft +
+                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+            );
+        }
+        //check bottom offset
+        else if (this.posY + tooltipheight > this.imageHeight) {
+            imagetop -= imagetop - this.imageHeight + tooltipheight;
+            tooltip?.setAttribute(
+                'style',
+                'top: ' +
+                imagetop +
+                'px;left: ' +
+                this.posX +
+                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+            );
+        }
+        //check right offset
+        else if (this.posX + tooltipwidth / 2 > this.imageWidth) {
+            imageleft -= tooltipwidth / 2 + (this.posX - this.imageWidth);
+            tooltip?.setAttribute(
+                'style',
+                'top: ' +
+                this.posY +
+                'px;left: ' +
+                imageleft +
+                'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+            );
+        }
+
+        this.mentionIndex++;
+        // this.mentionsList.emit({mention:this.mentions})
+
+        console.log('mentions List');
+        console.log(this.mentions);
+    }
+
+    viewMentions() {
+        this.displaMentions = !this.displaMentions;
+        let mentions = Array.from(document.getElementsByClassName('mentioned'));
+        mentions.forEach((element: any) => {
+            if (this.displaMentions) {
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    element.style.display = 'none!important';
+                }, 300);
+            }
+            if (!this.displaMentions) {
+                element.style.display = 'block!important';
+                element.style.opacity = '0.3';
+            }
+        });
+    }
+
+    tag(event: any) {
+        this.taggedImage = event.path[1];
+        this.imageHeight = event.path[0].clientHeight;
+        this.imageWidth = event.path[0].clientWidth;
+        this.inputValue2 = '@';
+        let post = event.target;
+        let input = document.getElementsByClassName(
+            'm-input-tag'
+        )[0] as HTMLElement;
+        let tooltip = document.getElementById('tooltip') as HTMLElement;
+        this.posX = event.offsetX;
+        this.posY = event.offsetY + 20;
+
+        input?.classList.add('is-shown');
+        tooltip?.classList.add('is-shown');
+        tooltip?.setAttribute(
+            'style',
+            'top: ' + this.posY + 'px;left: ' + this.posX + 'px;'
+        );
+        post?.setAttribute('style', 'filter: brightness(0.5);');
+        input.focus();
+    }
+
+    resetPostView(e: any) {
+        let instaPost = document.getElementById('carousel') as HTMLElement;
+        let tagPerson = document.getElementById('tagPerson') as HTMLElement;
+        let Slides = document.getElementById('data-slides') as HTMLElement;
+        let images: any[] = [];
+        if (Slides != null) { images = Array.from(Slides?.children) };
+        let input = document.getElementsByClassName('m-input-tag')[0] as HTMLElement;
+        let tagOption = document.getElementsByClassName('tag-option');
+        let tooltip = document.getElementById('tooltip') as HTMLElement;
+        if (
+            !e.path?.includes(instaPost) &&
+            !e.path?.includes(tagPerson) &&
+            !e.path?.includes(tagOption) &&
+            !e.path?.includes(tooltip)
+        ) {
+            input?.classList.remove('is-shown');
+            tooltip?.classList.remove('is-shown');
+            images?.forEach(element => {
+                element?.children[0]?.setAttribute('style', 'filter: brightness(1);')
+            });
+        }
+    }
+
+    addMentions(event:any[]) {
+      this.mentions = event;
+    }
 }
