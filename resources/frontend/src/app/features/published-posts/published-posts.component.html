@@ -109,8 +109,17 @@
             </div>
           </div>
         </div>
-        <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
-          <app-collapse-item></app-collapse-item>
+
+        <div *ngIf="!isLoading">
+          <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
+            <app-collapse-item></app-collapse-item>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading">
+          <div class="m-item is-full" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
+            <app-item-loader></app-item-loader>
+          </div>
         </div>
       </div>
     </div>
