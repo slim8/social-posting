@@ -6,10 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
-use File;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
 class UtilitiesController extends Controller
@@ -61,120 +57,6 @@ class UtilitiesController extends Controller
         }
 
         return $responseObject;
-    }
-
-    /**
-     * Convert Image To Jpeg.
-     */
-    public function convertToJpeg($image)
-    {
-        $object = $image->store('temporar'.'s/'.date('Y').'/'.date('m').'/'.date('d'));
-
-        $object = storage_path().'/app/public/'.$object;
-        $exploded = explode('/', $object);
-        $fileName = $exploded[count($exploded) - 1];
-        $newFileName = explode('.', $fileName)[0];
-        $newFile = storage_path().'/app/public/temporarStored/'.$newFileName.'.jpeg';
-        $this->imageManager->make($object)->encode('jpg', 80)->save($newFile);
-
-        unlink($object);
-
-        return $newFile;
-    }
-
-    /**
-     * Upload file to FTP.
-     */
-    public function uploadToDistant($image, $type)
-    {
-        if ($type == 'image') {
-            $imageLink = $this->convertToJpeg($image);
-            $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
-            $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/'.$imageName);
-        }
-
-        if (envValue('UPLOAD_PROVIDER') == 'hoster') {
-            $client = new Client();
-
-            $response = $client->request('POST', envValue('IMAGE_HOSTER_URL'), [
-                'multipart' => [
-                    ['name' => 'media', 'contents' => fopen($image, 'rb')],
-                    ['name' => 'key', 'contents' => envValue('IMAGE_HOSTER_API')],
-                ],
-            ]);
-
-            if ($type == 'image') {
-                unlink($imageLink);
-            }
-
-            if ($response->getStatusCode() == 200) {
-                $arrayResponse = json_decode($response->getBody(), true);
-
-                if ($arrayResponse['success']) {
-                    return $arrayResponse["data"]["media"];
-                } else {
-                    RequestsTrait::processResponse(false, ['message' => 'Upload Failed']);
-                }
-            } else {
-                RequestsTrait::processResponse(false, ['message' => 'Upload Failed']);
-            }
-        } else {
-            $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images/'.$imageName : 'others', $image);
-
-            if ($type == 'image') {
-                unlink($imageLink);
-
-                return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').'images/'.$imageName;
-            }
-
-            return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
-        }
-    }
-
-    /**
-     * Start Local Image Upload.
-     */
-    public function uploadLocalImage($file, $type)
-    {
-        $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
-
-        return envValue('APP_URL').'/'.$object;
-    }
-
-    /**
-     * Check type of file and start upload workflow.
-     */
-    public function uploadFile($file)
-    {
-        $fileObject = new \stdClass();
-        $fileObject->type = $this->checkTypeOfFile($file);
-
-        if (!$fileObject->type) {
-            return RequestsTrait::processResponse(false, ['message' => 'You must upload Image or Video File']);
-        }
-        if (envValue('APP_ENV') == 'local') {
-            $fileObject->url = $this->uploadToDistant($file, $fileObject->type);
-        } else {
-            $fileObject->url = $this->uploadLocal($file, $fileObject->type);
-        }
-
-        return $fileObject;
-    }
-
-    /**
-     * Return the Type Of the Uploaded File.
-     */
-    public function checkTypeOfFile($file)
-    {
-        if (substr($file->getMimeType(), 0, 5) == 'image') {
-            return 'image';
-        }
-
-        if (substr($file->getMimeType(), 0, 5) == 'video') {
-            return 'video';
-        }
-
-        return false;
     }
 
     /**

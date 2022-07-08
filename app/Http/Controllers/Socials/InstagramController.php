@@ -8,6 +8,7 @@ use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -75,15 +76,43 @@ class InstagramController extends Controller
     /**
      * Post Media Instagram From URL.
      */
-    public function postMediaUrl($igUser, $token, $url, string $type = 'image', int $videoSecondes = 0)
+    public function postMediaUrl($igUser, $token, $url, array $mentions = [], int $orderMention = 0, string $type = 'image', int $videoSecondes = 0)
     {
-        $mediaParameters = $type == 'video' ? '&media_type=VIDEO&thumb_offset='.$videoSecondes.'&video_url=' : '&image_url=';
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?access_token='.$token.$mediaParameters.$url.'&is_carousel_item=true');
+        $responseObject = [];
+        $client = new Client();
 
-        if ($response->json('id')) {
-            return $response->json('id');
+        $object = [];
+        if ($type == 'video') {
+            $object['media_type'] = 'VIDEO';
+            $object['thumb_offset'] = $videoSecondes;
+            $object['video_url'] = $url;
         } else {
-            return $response->json('error')['message'];
+            $object['image_url'] = $url;
+        }
+
+        $object['access_token'] = $token;
+        $object['is_carousel_item'] = true;
+        if ($mentions) {
+            $object['user_tags'] = [];
+
+            foreach ($mentions as $mention) {
+                if ($mention['image'] == $orderMention) {
+                    $object['user_tags'][] = ['username' => $mention['username'], 'x' => $mention['x'], 'y' => $mention['y']];
+                }
+            }
+        }
+
+        try {
+            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$igUser.'/media', [
+            'multipart' => RequestsTrait::prepareMultiPartForm($object),
+        ]);
+            if ($response->getStatusCode() == 200) {
+                return json_decode($response->getBody(), true)['id'];
+            } else {
+                return 'an error occured';
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -125,17 +154,43 @@ class InstagramController extends Controller
     /**
      * Post Single Media to Instagram.
      */
-    public function postSingleMedia($igUser, $object, $imagesUrls, $videos)
+    public function postSingleMedia($igUser, $object, $imagesUrls, $videos, $mentions)
     {
+        $responseObject = [];
+        $client = new Client();
         $object[$videos ? 'video_url' : 'image_url'] = $videos ? $videos[0] : $imagesUrls[0];
 
         if ($videos) {
             $object['media_type'] = 'VIDEO';
         }
-        $parameter = RequestsTrait::prepareParameters($object);
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
 
-        return $response->json('id');
+        if ($mentions) {
+            $object['user_tags'] = [];
+
+            foreach ($mentions as $mention) {
+                if ($mention['image'] == 0) {
+                    $object['user_tags'][] = ['username' => $mention['username'], 'x' => $mention['x'], 'y' => $mention['y']];
+                }
+            }
+        }
+
+        try {
+            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$igUser.'/media', [
+            'multipart' => RequestsTrait::prepareMultiPartForm($object),
+        ]);
+            if ($response->getStatusCode() == 200) {
+                $responseObject['status'] = true;
+                $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+            } else {
+                $responseObject['status'] = false;
+                $responseObject['message'] = 'an error occured';
+            }
+        } catch (\Exception $e) {
+            $responseObject['status'] = false;
+            $responseObject['message'] = $e->getMessage();
+        }
+
+        return $responseObject;
     }
 
     /**
@@ -152,7 +207,7 @@ class InstagramController extends Controller
     /**
      * Post to Instagram Method.
      */
-    public function postToInstagramMethod($object, $igUser, $imagesUrls, $tags, $videos)
+    public function postToInstagramMethod($object, $igUser, $imagesUrls, $tags, $videos, string $location = null, array $mentions = [])
     {
         $images = [];
         $imagesCount = $imagesUrls ? count($imagesUrls) : 0;
@@ -174,7 +229,19 @@ class InstagramController extends Controller
         $object['caption'] = $object['caption'].$tagsString;
 
         if ($counts == 1) {
-            $object['creation_id'] = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos);
+            if (!$location) {
+                $object['location_id'] = $location;
+            }
+
+            $object['location_id'] = '7640348500';
+
+            $singlePostResponse = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos, $mentions);
+
+            if (!$singlePostResponse['status']) {
+                return $singlePostResponse;
+            }
+            $object['creation_id'] = $singlePostResponse['id'];
+            unset($object['location_id']);
             $checkContainer = $this->checkIfCreationIsReady($object, $object['creation_id'], $videos ? 1 : 0);
 
             if (!$checkContainer['status']) {
@@ -184,20 +251,24 @@ class InstagramController extends Controller
             return $this->publishContainer($object, $igUser);
         } else {
             if ($imagesUrls) {
+                $incImages = 0;
                 foreach ($imagesUrls as $image) {
-                    $images[] = $this->postMediaUrl($igUser, $object['access_token'], $image);
+                    $images[] = $this->postMediaUrl($igUser, $object['access_token'], $image, $mentions, $incImages);
+                    ++$incImages;
                 }
             }
 
             if ($videos) {
                 $videosConatiners = [];
+                $incImages = 0;
                 foreach ($videos as $video) {
                     $videoObj = json_decode($video, true);
                     $video = $videoObj['url'];
                     $videoSecondes = $videoObj['seconde'];
-                    $videoContainerId = $this->postMediaUrl($igUser, $object['access_token'], $video, 'video', $videoSecondes);
+                    $videoContainerId = $this->postMediaUrl($igUser, $object['access_token'], $video, $mentions, $incImages, 'video', $videoSecondes);
                     $videosConatiners[] = $videoContainerId;
                     $images[] = $videoContainerId;
+                    ++$incImages;
                 }
             }
 
@@ -210,8 +281,12 @@ class InstagramController extends Controller
             }
             $object['children'] = implode(',', $images);
             $object['media_type'] = 'CAROUSEL';
+            if (!$location) {
+                $object['location_id'] = $location;
+            }
             $object['creation_id'] = $this->postContainer($object, $igUser);
             unset($object['caption']);
+            unset($object['location_id']);
             unset($object['children']);
             if (isset($videosConatiners) && $videosConatiners) {
                 $checkContainer = $this->checkIfCreationIsReady($object, $object['creation_id'], 1);

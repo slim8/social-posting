@@ -1,1 +1,118 @@
-<p>published-posts works!</p>
+<div class="mod-my-posts">
+  <div class="m-wrapper">
+    <div class="m-title">
+      <h1
+        i18n="
+          My Published Posts Title|Title for My Posts
+          Page@@myPublishedPostsTitle"
+      >
+        My Posts
+      </h1>
+      <br />
+      <h3
+        i18n="
+          My Published Posts Sub Title|Title for My Posts
+          Page@@myPublishedPostsSubTitle"
+      >
+        Here you will find all your previously planned or published posts
+      </h3>
+    </div>
+
+    <div class="m-container">
+      <div class="m-filter-panel">
+        <div class="m-left">
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postType"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i nz-icon nzType="ng-zorro:image"></i>
+            </div>
+            <div class="m-button-text">Beitragsart</div>
+            <div class="m-button-arrow">
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postType="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postings"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i
+                nz-icon
+                nzType="ng-zorro:customCalendar"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+            <div class="m-button-text">Alle Postings</div>
+            <div class="m-button-arrow">
+              <i nz-icon nzType="ng-zorro:customArrow"></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postings="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+        <div class="m-right">
+          <button class="m-button is-primary">
+            <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
+            Neu erstellen
+          </button>
+        </div>
+      </div>
+      <hr />
+      <div class="m-content">
+        <div class="m-array-header">
+          <div class="m-titles">
+            <div
+              class="m-image"
+              i18n="
+                My Published Posts Contribution|Contribution Title for My Posts
+                Page@@myPublishedPostsContribution"
+            >
+              Contribution
+            </div>
+            <div
+              class="m-status"
+              i18n="
+                My Published Posts Status|Status Title for My Posts
+                Page@@myPublishedPostsStatus"
+            >
+              Status
+            </div>
+            <div
+              class="m-date"
+              i18n="
+                My Published Posts Date|Date Title for My Posts
+                Page@@myPublishedPostsDate"
+            >
+              Published At
+            </div>
+          </div>
+        </div>
+        <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
+          <app-collapse-item></app-collapse-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

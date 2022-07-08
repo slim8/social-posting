@@ -6,6 +6,7 @@ use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
+use App\Models\Mentions;
 use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
@@ -68,6 +69,7 @@ class AccountController extends Controller
             $count = AccountPost::where('postId', $postId)->count();
 
             if ($count == 1) {
+                Mentions::where('postId', $postId)->delete();
                 PostMedia::where('postId', $postId)->delete();
                 Post::where('id', $postId)->delete();
             }

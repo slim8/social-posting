@@ -10,6 +10,7 @@ use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Hashtag;
+use App\Models\Mentions;
 use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
@@ -92,10 +93,38 @@ class GeneralSocialController extends Controller
         if (!$validator->status) {
             return RequestsTrait::processResponse(false, ['message' => $validator->message]);
         }
+
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
 
             $videoThunb = [];
+
+            $mentions = [];
+            if ($request->mentions) {
+                $mentions = $request->mentions;
+                // $mentions = '[
+                //     {
+                //         "image": 0,
+                //         "username": "z.i.e.d.m",
+                //         "x": 0.39,
+                //         "y": 0.55
+                //     },
+                //     {
+                //         "image": 1,
+                //         "username": "z.i.e.d.m",
+                //         "x": 0.56,
+                //         "y": 0.26
+                //     },
+                //     {
+                //         "image": 2,
+                //         "username": "z.i.e.d.m",
+                //         "x": 0.57,
+                //         "y": 0.58
+                //     }
+                // ]';
+                $mentions = json_decode($mentions, true);
+            }
+
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
             $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $post['accountId']) ? true : false;
@@ -125,18 +154,37 @@ class GeneralSocialController extends Controller
                     } else {
                         $postId = Post::where('id', $requestPostId)->update($postObject);
                         $postId = Post::where('id', $requestPostId)->first();
-
                         // Delete All Saved Post Media
+                        Mentions::where('postId', $postId->id)->delete();
                         PostMedia::where('postId', $postId->id)->delete();
                     }
 
                     if ($images) {
+                        $imgInc = 0;
                         foreach ($images as $image) {
-                            PostMedia::create([
+                            $postMedia = PostMedia::create([
                                 'url' => $image,
                                 'postId' => $postId->id,
                                 'type' => 'image',
                             ]);
+
+                            // Save Mentions to database
+                            if ($mentions) {
+                                foreach ($mentions as $mention) {
+                                    if ($mention['image'] == $imgInc) {
+                                        Mentions::create([
+                                            'postMediaId' => $postMedia->id,
+                                            'username' => $mention['username'],
+                                            'postId' => $postId->id,
+                                            'posX' => $mention['x'],
+                                            'posY' => $mention['y'],
+                                            'provider' => 'instagram',
+                                        ]);
+                                    }
+                                }
+                            }
+
+                            ++$imgInc;
                         }
                     }
 
@@ -159,6 +207,7 @@ class GeneralSocialController extends Controller
                     }
                 }
                 ++$inc;
+                $localisation = null;
 
                 $message = $post['message'];
                 if ($accountProvider == 'facebook') {
@@ -174,7 +223,7 @@ class GeneralSocialController extends Controller
                     }
                     $BusinessIG = $account->uid;
                     $obj['access_token'] = $this->instagramController->getAccessToken($account->id);
-                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos) : POST::$STATUS_DRAFT;
+                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos, $localisation, $mentions) : POST::$STATUS_DRAFT;
                 }
 
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {
@@ -190,6 +239,8 @@ class GeneralSocialController extends Controller
                         'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
                         'accountId' => $post['accountId'],
                         'postIdProvider' => $postProviderId,
+                        'localisationText' => null,
+                        'localisationRessource' => null,
                     ]);
 
                     if ($post['hashtags']) {

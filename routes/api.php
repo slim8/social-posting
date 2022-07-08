@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\DictionaryController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
@@ -66,7 +67,8 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::get('/accounts/{id}/posts', [PostController::class, 'getPostsByAccountId'])->name('check-logged-in-api');
     Route::get('/posts', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
-    Route::post('/uploadfile', [ExempleController::class, 'uploadfile'])->name('uploadfile.api');
+    Route::post('/uploadfile', [FileController::class, 'uploadFile'])->name('uploadfile.api');
+    Route::post('/uploadbase64', [FileController::class, 'uploadBase64'])->name('uploadbase64.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {

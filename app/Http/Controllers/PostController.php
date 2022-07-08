@@ -132,7 +132,7 @@ class PostController extends Controller
 
         $posts = $postId ? null : [];
         foreach ($postRequest as $postContent) {
-            $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
+            $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->with('mentions')->get();
 
             if ($filterByAccounts) {
                 $postContent->provider = $postContent->accounts[0]->provider;
@@ -140,10 +140,10 @@ class PostController extends Controller
                 $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
             } else {
                 $subPosts = [];
-                $subPosts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
+                $subPostsAccounts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
                 // Append Tags and provider to Sub accounts
 
-                foreach ($subPosts as $subPost) {
+                foreach ($subPostsAccounts as $subPost) {
                     $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
 
                     $subPost->hashtags = $this->getHashTagByPostOrAccountId($subPost->id);
