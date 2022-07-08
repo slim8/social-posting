@@ -11,7 +11,7 @@
     <div class="m-para">
       Easily manage all your social media and get results with our application
     </div>
-    <form nz-form [formGroup]="validateForm" (ngSubmit)="onSaveCompany()">
+    <form class="m-form" nz-form [formGroup]="validateForm" (ngSubmit)="onSaveCompany()">
       <nz-form-item class="m-form-field">
         <nz-form-label
           class="m-form-label"
@@ -103,6 +103,46 @@
           <input nz-input id="adress" formControlName="adress" />
         </nz-form-control>
       </nz-form-item>
+      <div class="m-two-column">
+        <nz-form-item class="m-form-field-1">
+          <nz-form-label
+            class="m-form-label"
+            [nzSm]="6"
+            [nzXs]="24"
+            nzFor="Postcode"
+            nzRequired
+            i18n
+            >Postcode</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            class="m-form-control"
+            nzErrorTip="Please input Postcode!"
+          >
+            <input nz-input id="Postcode" formControlName="postcode" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="m-form-field-2">
+          <nz-form-label
+            class="m-form-label"
+            [nzSm]="6"
+            [nzXs]="24"
+            nzFor="city"
+            nzRequired
+            i18n
+            >city</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            class="m-form-control"
+            nzErrorTip="Please input city!"
+          >
+            <input nz-input id="city" formControlName="city" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
       <nz-form-item class="m-form-field">
         <nz-form-label
           class="m-form-label"

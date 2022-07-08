@@ -117,9 +117,14 @@
     display: none !important;
 }
 
-.anticon svg {
-    fill: transparent;
-    .mod-login & {
-      fill: $color-base-0
+.m-button {
+    &:not(.no-transparent) {
+        .anticon svg {
+            fill: transparent;
+        }
     }
+}
+
+.ant-modal {
+    width: max-content !important;
 }
