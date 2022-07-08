@@ -179,6 +179,7 @@ class GeneralSocialController extends Controller
                                             'posX' => $mention['x'],
                                             'posY' => $mention['y'],
                                             'provider' => 'instagram',
+                                            'companyId' => UserTrail::getCompanyId(),
                                         ]);
                                     }
                                 }
@@ -251,6 +252,7 @@ class GeneralSocialController extends Controller
                             if (!$hashtagId) {
                                 $hashtagId = Hashtag::create([
                                 'name' => $hashtag,
+                                'companyId' => UserTrail::getCompanyId(),
                                 ]);
                             }
 
@@ -449,5 +451,38 @@ class GeneralSocialController extends Controller
         } else {
             return RequestsTrait::processResponse(false, ['message' => 'No page autorized']);
         }
+    }
+
+    /**
+     * Search Users Mentions by Key.
+     */
+    public function searchUsers(Request $request)
+    {
+        $searchQuery = $request->q;
+        if (!$searchQuery) {
+            return RequestsTrait::processResponse(false);
+        }
+
+        $mentions = Mentions::where('companyId', UserTrait::getCompanyId())->where('username', 'like', '%'.$searchQuery.'%')->distinct('username')->get('username');
+
+        if (!$mentions) {
+            return RequestsTrait::processResponse(false);
+        }
+
+        return RequestsTrait::processResponse(true, ['mentions' => $mentions]);
+    }
+
+    /**
+     * Search Tags by Key.
+     */
+    public function searchTags(Request $request)
+    {
+        $searchQuery = $request->q;
+        if (!$searchQuery) {
+            return RequestsTrait::processResponse(false);
+        }
+        $hashtags = Hashtag::where('companyId', UserTrait::getCompanyId())->where('name', 'like', '%'.str_replace(' ','_' , $searchQuery).'%')->distinct('name')->get('name');
+
+        return RequestsTrait::processResponse(count($hashtags) > 0 ? true : false, ['hashtags' => $hashtags]);
     }
 }
