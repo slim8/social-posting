@@ -11,72 +11,72 @@
     border-right: 20px solid $color-media-border;
     border-left: 20px solid $color-media-border;
 
-  > .m-wrapper {
-    padding-top: 50px;
-    @include mq(desktop) {
-        padding-top: 280px;
-    }
-    width: 500px;
-    margin: auto;
-    text-align: center;
-
-    i {
-      cursor: pointer;
-    }
-
-    > .m-subtitle {
-        > h2 {
-            @include textstyle-size-20();
-            letter-spacing: 0.4em;
-            margin-bottom: 7px;
+    > .m-wrapper {
+        padding-top: 50px;
+        @include mq(desktop) {
+            padding-top: 280px;
         }
-    }
+        width: 500px;
+        margin: auto;
+        text-align: center;
 
-    > .m-title {
-        > h1 {
-            @include textstyle-size-44-bold();
-            margin-bottom: 24px;
-        }
-    }
-
-    > .m-para {
-        @include textstyle-size-12();
-        margin-bottom: 39px;
-    }
-
-    > .m-form {
-        nz-input-group {
-            height: 45px;
-            width: 400px;
-            border: 1px solid $color-media-primary-orange;
-            margin-bottom: 10px;
+        i {
+            cursor: pointer;
         }
 
-        > .m-sign-up {
-          margin: 6px 0 17px;
+        > .m-subtitle {
+            > h2 {
+                @include textstyle-size-20();
+                letter-spacing: 0.4em;
+                margin-bottom: 7px;
+            }
+        }
 
-          >p {
-            margin: 0;
+        > .m-title {
+            > h1 {
+                @include textstyle-size-44-bold();
+                margin-bottom: 24px;
+            }
+        }
+
+        > .m-para {
             @include textstyle-size-12();
-
-            > a {
-              color: $color-base-100;
-              text-decoration: underline;
-            }
-          }
+            margin-bottom: 39px;
         }
 
-        > .m-button-login {
-            text-align: center;
+        > .m-form {
+            nz-input-group {
+                height: 45px;
+                width: 400px;
+                border: 1px solid $color-media-primary-orange;
+                margin-bottom: 10px;
+            }
 
-            > button {
-                border-radius: 0%;
-                width: 118px;
-                height: 39px;
-                @include textstyle-size-14();
-                padding: 10px 40px;
+            > .m-sign-up {
+                margin: 6px 0 17px;
+
+                > p {
+                    margin: 0;
+                    @include textstyle-size-12();
+
+                    > a {
+                        color: $color-base-100;
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            > .m-button-login {
+                text-align: center;
+
+                > button {
+                    border-radius: 0%;
+                    width: 118px;
+                    height: 39px;
+                    @include textstyle-size-14();
+                    justify-content: center;
+                }
             }
         }
     }
-  }
 }
