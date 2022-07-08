@@ -18,4 +18,14 @@ export class PostService {
     
     return this.http.post<{files : any[] , success : boolean}>(sharedConstants.API_ENDPOINT + "uploadfile" ,formData);
   }
+
+  uploadFileB64(file : File) : Observable<{files : any[] , success : boolean}> {
+
+    const formData = new FormData(); 
+        
+    formData.append("file", file, file.name);
+    
+    return this.http.post<{files : any[] , success : boolean}>(sharedConstants.API_ENDPOINT + "uploadBase64" ,formData);
+  }
+
 }

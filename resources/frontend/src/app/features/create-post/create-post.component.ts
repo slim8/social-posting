@@ -161,159 +161,174 @@ export class CreatePostComponent implements OnInit  {
 
     submitForm(param: string) {
 
-      let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
-      let btnSubmit = document.getElementById('btn-submit');
-      let iconSave = document.querySelector('.m-button-icon-save');
-      let iconPublish = document.querySelector('.m-button-icon-publish');
-      let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
-      let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
-      // m-button-icon-save
+      // let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
+      // let btnSubmit = document.getElementById('btn-submit');
+      // let iconSave = document.querySelector('.m-button-icon-save');
+      // let iconPublish = document.querySelector('.m-button-icon-publish');
+      // let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
+      // let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
+      // // m-button-icon-save
       const formData: FormData = new FormData();
-      let post: any = {
-          message: "",
-          hashtags: [],
-          mentions: [],
-          accountId: "",
-          videoTitle: ""
-      }
-      this.accountsValue.forEach((accountId: any) => {
-          let arr = accountId.split("|");
-          let id = arr[0];
-          if (accountId.includes('facebook')) {
-              post.message = this.facebookMessage;
-              post.hashtags = this.fbTags;
-              post.mentions = this.mentions;
-              post.accountId = id;
-              post.videoTitle = "";
-          } else if (accountId.includes('instagram')) {
-              post.message = this.instagramMessage;
-              post.hashtags = this.instaTags;
-              post.mentions = this.mentions;
-              post.accountId = id;
-              post.videoTitle = "";
-          }
-          formData.append('posts[]', JSON.stringify(post));
-      });
-
-      // if (this.tags.length > 0) {
-      //     this.tags.forEach((tag: any) => {
-      //         formData.append('tags[]', tag);
-      //     });
+      // let post: any = {
+      //     message: "",
+      //     hashtags: [],
+      //     mentions: [],
+      //     accountId: "",
+      //     videoTitle: ""
       // }
+      // this.accountsValue.forEach((accountId: any) => {
+      //     let arr = accountId.split("|");
+      //     let id = arr[0];
+      //     if (accountId.includes('facebook')) {
+      //         post.message = this.facebookMessage;
+      //         post.hashtags = this.fbTags;
+      //         post.mentions = this.mentions;
+      //         post.accountId = id;
+      //         post.videoTitle = "";
+      //     } else if (accountId.includes('instagram')) {
+      //         post.message = this.instagramMessage;
+      //         post.hashtags = this.instaTags;
+      //         post.mentions = this.mentions;
+      //         post.accountId = id;
+      //         post.videoTitle = "";
+      //     }
+      //     formData.append('posts[]', JSON.stringify(post));
+      // });
 
-      // if (this.mentions.length > 0) {
-      //     this.mentions.forEach((mention: any) => {
-      //         formData.append('mention[]', mention);
-      //     });
-      // }
+      // // if (this.tags.length > 0) {
+      // //     this.tags.forEach((tag: any) => {
+      // //         formData.append('tags[]', tag);
+      // //     });
+      // // }
+
+      // // if (this.mentions.length > 0) {
+      // //     this.mentions.forEach((mention: any) => {
+      // //         formData.append('mention[]', mention);
+      // //     });
+      // // }
+
+      // // if (this.urlLinks.length > 0) {
+      // //   this.urlLinks.forEach((media: any) => {
+      // //       let videoObject: any = {
+      // //         url: "",
+      // //         seconde: "",
+      // //         thumbnail: ""
+      // //       }
+      // //       if(media.type == "image") {
+      // //         formData.append('images[]', media.url);
+      // //       } else if (media.type == "video") {
+      // //         videoObject.url = media.url;
+      // //         videoObject.seconde = 3;
+      // //         videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
+      // //         formData.append('videos[]', JSON.stringify(videoObject));
+      // //       }
+      // //         // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
+      // //     });
+      // // }
+
+      // // TODO:: for video upload
+
+      let listOfVideos: {url : any , seconde : any , thumbnail : any , imgB64 : string }[] = [];
+      this.videoList.forEach((video: any) => {
+          this.postService.uploadFile(video.file).subscribe({
+              next: (response ) => {
+                  console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+                  let videoUrl = response.files
+                  let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
+                  listOfVideos.push({url : videoUrl , seconde : thumbnail.time , thumbnail : null , imgB64 : thumbnail.imgB64});
+              },
+              error: (err) => {
+                this.shared.createMessage('error', err);
+              },
+              complete: () => {
+                listOfVideos.forEach((videoObject) => {
+                  this.postService.uploadFileB64(video.file).subscribe({
+                    next: (response ) => {
+                        console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+                        
+                    },
+                    error: (err) => {
+                      this.shared.createMessage('error', err);
+                    },
+                    complete: () => {
+
+                    }});
+                })
+              },
+          });
+      })
 
       // if (this.urlLinks.length > 0) {
       //   this.urlLinks.forEach((media: any) => {
-      //       let videoObject: any = {
-      //         url: "",
-      //         seconde: "",
-      //         thumbnail: ""
-      //       }
-      //       if(media.type == "image") {
-      //         formData.append('images[]', media.url);
-      //       } else if (media.type == "video") {
-      //         videoObject.url = media.url;
-      //         videoObject.seconde = 3;
-      //         videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
-      //         formData.append('videos[]', JSON.stringify(videoObject));
-      //       }
-      //         // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
-      //     });
+      //     formData.append('images[]', media.url);
+      //   })
       // }
 
-      // TODO:: for video upload
+      // formData.append('status', param);
+      // formData.append('message', this.message);
 
-      // this.videoList.forEach((video: any) => {
-      //     this.postService.uploadFile(video).subscribe({
-      //         next: (response) => {
-      //             console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-      //             let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
-      //             formData.append('videos[]', JSON.stringify({url : response.files , seconde : thumbnail.time , thumbnail : thumbnail.imgB64 }));
+      // if (formData) {
+      //     this.facebookSocialService.postToSocialMedia(formData).subscribe({
+      //         next: (event) => {
+      //             if (param == 'PUBLISH') {
+      //                 iconPublish?.classList.add('hide');
+      //                 iconPublish?.parentElement?.classList.add('wide');
+      //                 spinningPublish.classList.add('show');
+      //             } else {
+      //                 iconSave?.classList.add('hide');
+      //                 iconSave?.parentElement?.classList.add('wide');
+      //                 spinningDraft.classList.add('show');
+      //             }
+      //             loadingScreen.classList.add('m-loading-screen-active');
+      //             btnSubmit?.classList.add('m-btn-submit');
       //         },
       //         error: (err) => {
-      //           this.shared.createMessage('error', err);
-      //         },
-      //         complete: () => {
-      //         },
-      //     });
-      // })
+      //             if (err.error.errors) {
+      //                 err.error.errors.forEach((error: any) => {
+      //                     this.shared.createMessage('error', error);
+      //                 });
+      //             }
+      //             else {
+      //                 this.shared.createMessage('error', err.error.message);
+      //             }
+      //             if (param == 'PUBLISH') {
+      //                 iconPublish?.classList.remove('hide');
+      //                 iconPublish?.parentElement?.classList.remove('wide');
+      //             } else {
+      //                 iconSave?.classList.remove('hide');
+      //                 iconSave?.parentElement?.classList.remove('wide');
+      //             }
+      //             loadingScreen.classList.remove('m-loading-screen-active');
+      //             spinningPublish.classList.remove('show');
+      //             spinningDraft.classList.remove('show');
+      //             btnSubmit?.classList.remove('m-btn-submit');
+      //       },
+      //       complete: () => {
+      //           this.selectedFile = [];
+      //           this.message = '';
+      //           this.accountsValue = [];
+      //           loadingScreen.classList.remove('m-loading-screen-active');
+      //           spinningPublish.classList.remove('show');
+      //           spinningDraft.classList.remove('show');
+      //           btnSubmit?.classList.remove('m-btn-submit');
 
-      if (this.urlLinks.length > 0) {
-        this.urlLinks.forEach((media: any) => {
-          formData.append('images[]', media.url);
-        })
-      }
+      //           if (param == 'PUBLISH') {
+      //               this.shared.createMessage('success', 'published!');
+      //           } else {
+      //               this.shared.createMessage('success', 'saved to drafts!');
+      //           }
 
-      formData.append('status', param);
-      formData.append('message', this.message);
+      //           if (param == 'PUBLISH') {
+      //               iconPublish?.classList.remove('hide');
+      //               iconPublish?.parentElement?.classList.remove('wide');
+      //           } else {
+      //               iconSave?.classList.remove('hide');
+      //               iconSave?.parentElement?.classList.remove('wide');
+      //           }
 
-      if (formData) {
-          this.facebookSocialService.postToSocialMedia(formData).subscribe({
-              next: (event) => {
-                  if (param == 'PUBLISH') {
-                      iconPublish?.classList.add('hide');
-                      iconPublish?.parentElement?.classList.add('wide');
-                      spinningPublish.classList.add('show');
-                  } else {
-                      iconSave?.classList.add('hide');
-                      iconSave?.parentElement?.classList.add('wide');
-                      spinningDraft.classList.add('show');
-                  }
-                  loadingScreen.classList.add('m-loading-screen-active');
-                  btnSubmit?.classList.add('m-btn-submit');
-              },
-              error: (err) => {
-                  if (err.error.errors) {
-                      err.error.errors.forEach((error: any) => {
-                          this.shared.createMessage('error', error);
-                      });
-                  }
-                  else {
-                      this.shared.createMessage('error', err.error.message);
-                  }
-                  if (param == 'PUBLISH') {
-                      iconPublish?.classList.remove('hide');
-                      iconPublish?.parentElement?.classList.remove('wide');
-                  } else {
-                      iconSave?.classList.remove('hide');
-                      iconSave?.parentElement?.classList.remove('wide');
-                  }
-                  loadingScreen.classList.remove('m-loading-screen-active');
-                  spinningPublish.classList.remove('show');
-                  spinningDraft.classList.remove('show');
-                  btnSubmit?.classList.remove('m-btn-submit');
-            },
-            complete: () => {
-                this.selectedFile = [];
-                this.message = '';
-                this.accountsValue = [];
-                loadingScreen.classList.remove('m-loading-screen-active');
-                spinningPublish.classList.remove('show');
-                spinningDraft.classList.remove('show');
-                btnSubmit?.classList.remove('m-btn-submit');
-
-                if (param == 'PUBLISH') {
-                    this.shared.createMessage('success', 'published!');
-                } else {
-                    this.shared.createMessage('success', 'saved to drafts!');
-                }
-
-                if (param == 'PUBLISH') {
-                    iconPublish?.classList.remove('hide');
-                    iconPublish?.parentElement?.classList.remove('wide');
-                } else {
-                    iconSave?.classList.remove('hide');
-                    iconSave?.parentElement?.classList.remove('wide');
-                }
-
-            },
-        });
-      }
+      //       },
+      //   });
+      // }
     }
 
     //Images preview from upload file
