@@ -69,6 +69,8 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::get('/posts/{postId}', [PostController::class, 'getPosts'])->name('get-posts-api');
     Route::post('/uploadfile', [FileController::class, 'uploadFile'])->name('uploadfile.api');
     Route::post('/uploadbase64', [FileController::class, 'uploadBase64'])->name('uploadbase64.api');
+    Route::post('/searchusers', [GeneralSocialController::class, 'searchUsers'])->name('search.users.api');
+    Route::post('/searchtags', [GeneralSocialController::class, 'searchTags'])->name('search.tags.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
