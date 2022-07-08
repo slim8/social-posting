@@ -99,6 +99,8 @@ export class CreatePostComponent implements OnInit  {
     selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
 
 
+    showAlbum : boolean = false;
+
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
@@ -642,6 +644,23 @@ export class CreatePostComponent implements OnInit  {
         } else {
           this.getPages('mixed');
         }
+      }
+
+      showAlbumModal(){
+        this.showAlbum = true;
+      }
+
+      handleOk(): void {
+        this.showAlbum = false;
+      }
+    
+      handleCancel(): void {
+        this.showAlbum = false;
+      }
+
+      addToPost(event : any){
+        // TODO:: list of images selected from album list
+        console.log(event);
       }
 
 }
