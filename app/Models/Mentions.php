@@ -15,7 +15,8 @@ class Mentions extends ExtendedModel
         'postId',
         'posX',
         'posY',
-        'provider'
+        'provider',
+        'companyId',
     ];
 
     public function post()
