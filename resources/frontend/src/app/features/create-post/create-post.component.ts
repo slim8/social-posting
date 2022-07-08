@@ -242,10 +242,10 @@ export class CreatePostComponent implements OnInit  {
               },
               complete: () => {
                 listOfVideos.forEach((videoObject) => {
-                  this.postService.uploadFileB64(video.file).subscribe({
+                  this.postService.uploadFileB64(videoObject.imgB64).subscribe({
                     next: (response ) => {
                         console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-                        
+                        formData.append('videos[]', JSON.stringify({...videoObject , thumbnail : response.files }));
                     },
                     error: (err) => {
                       this.shared.createMessage('error', err);
