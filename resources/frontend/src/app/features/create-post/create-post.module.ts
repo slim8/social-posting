@@ -1,3 +1,4 @@
+import { AlbumPreviewComponent } from 'src/app/Shared/Components/album-preview/album-preview.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -17,7 +18,8 @@ import { FacebookPreviewComponent } from 'src/app/shared/components/facebook-pre
   declarations: [
     CreatePostComponent,
     CarouselComponent,
-    FacebookPreviewComponent
+    FacebookPreviewComponent,
+    AlbumPreviewComponent
   ],
   imports: [
     CreatePostRoutingModule,
