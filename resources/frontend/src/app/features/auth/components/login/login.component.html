@@ -16,31 +16,23 @@
 
     <div class="m-form">
 
-      <nz-input-group [nzSuffix]="suffixTemplateInfo"
+      <nz-input-group [nzSuffix]=""
                       [nzPrefix]="prefixTemplateUser">
         <input type="text"
                nz-input
-               placeholder="Enter your username"
+               placeholder="E-Mail Adresse"
                [(ngModel)]="credentials.email" />
       </nz-input-group>
       <ng-template #prefixTemplateUser><i nz-icon
            nzType="user"></i>
       </ng-template>
 
-      <ng-template #suffixTemplateInfo>
-        <i nz-icon
-           nz-tooltip
-           nzTooltipTitle="Extra information"
-           nzType="info-circle"></i>
-      </ng-template>
-
-
       <nz-input-group [nzSuffix]="suffixTemplateVisible"
                       [nzPrefix]="prefixTemplateLock">
         <input [type]="passwordVisible ? 'text' : 'password'"
                nz-input
                [(ngModel)]="credentials.password"
-               placeholder="input password" />
+               placeholder="Passwort" />
       </nz-input-group>
 
       <ng-template #prefixTemplateLock><i nz-icon

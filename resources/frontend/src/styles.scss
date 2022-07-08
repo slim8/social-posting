@@ -119,4 +119,7 @@
 
 .anticon svg {
     fill: transparent;
+    .mod-login & {
+      fill: $color-base-0
+    }
 }
