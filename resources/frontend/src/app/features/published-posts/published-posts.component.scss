@@ -82,8 +82,10 @@
             }
 
             > hr {
-                border: 1px solid $color-media-black-opacity-30;
+                border-color: $color-media-black-opacity-30;
+                border-bottom: hidden;
             }
+
             > .m-content {
                 padding: 25px;
 
