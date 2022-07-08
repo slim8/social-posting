@@ -1,4 +1,4 @@
-import { AlbumPreviewComponent } from 'src/app/Shared/Components/album-preview/album-preview.component';
+import { AlbumPreviewComponent } from 'src/app/shared/components/album-preview/album-preview.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
