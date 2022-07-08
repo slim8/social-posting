@@ -42,17 +42,15 @@
             </div>
           </div>
           <div class="m-status">
+            <nz-skeleton [nzActive]="true" [nzParagraph]="false"></nz-skeleton>
+          </div>
+          <div class="m-date">
             <nz-skeleton
+              [nzTitle]="false"
               [nzActive]="true"
               [nzParagraph]="paragraph"
             ></nz-skeleton>
           </div>
-          <div class="m-date">
-            <div class="m-create-date">12.05.2022 15:30</div>
-            <br />
-            <span class="m-text"> Max Mustermann </span>
-          </div>
-          <div class="m-collapse"></div>
         </div>
       </div>
     </div>
