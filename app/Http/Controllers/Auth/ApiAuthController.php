@@ -57,7 +57,7 @@ class ApiAuthController extends Controller
         //     'postCode' => 'required|string|max:255',
         //     'city' => 'required|string|max:255',
         //     'email' => 'required|string|email|max:255|unique:users|unique:companies',
-        //     'phoneNumber' => 'required|string|max:255|unique:companies',
+        //     'phone_number' => 'required|string|max:255|unique:companies',
         //     'isSubscriber' => '',
         // ], [
         //     'companyName.required' => 'This is a required message for company name',
