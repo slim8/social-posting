@@ -54,8 +54,8 @@ class ApiAuthController extends Controller
         //     'adress' => 'string|max:255',
         //     'website' => 'string|max:255',
         //      'address' => 'required|string|max:255',
-        // 'postCode' => 'required|string|max:255',
-        // 'city' => 'required|string|max:255',
+        //     'postCode' => 'required|string|max:255',
+        //     'city' => 'required|string|max:255',
         //     'email' => 'required|string|email|max:255|unique:users|unique:companies',
         //     'phoneNumber' => 'required|string|max:255|unique:companies',
         //     'isSubscriber' => '',
@@ -66,6 +66,13 @@ class ApiAuthController extends Controller
         //     return response(['errors' => $validator->errors()->all()], 422);
         // }
 
+        if (Company::where('phoneNumber', $request->phoneNumber)->first()) {
+            return RequestsTrait::processResponse(false, ['message' => 'This Phone Number is Already exist']);
+        }
+
+        if (Company::where('email', $request->email)->first()) {
+            return RequestsTrait::processResponse(false, ['message' => 'This Email is Already exist']);
+        }
         $company = Company::create([
             'name' => $request->companyName,
             'email' => $request->email,
