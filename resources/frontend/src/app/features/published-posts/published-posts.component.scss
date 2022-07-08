@@ -141,6 +141,7 @@
                     }
                 }
 
+                > div > .m-item,
                 > .m-item {
                     width: fit-content;
                     padding: 10px 0;
@@ -150,6 +151,9 @@
                         padding: 0 20px 16px;
                     }
 
+                    &.is-full {
+                        width: 100%;
+                    }
                     &:before {
                         content: '';
                         border-bottom: 1px solid $color-media-black-opacity-30;
