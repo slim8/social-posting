@@ -24,10 +24,10 @@ class ExempleController extends Controller
         MailTrait::index('This is an mail exemple', 'zied.maaloul@softtodo.com', 'Subject Exemple');
     }
 
-    public function uploadfile(Request $request)
-    {
-        $response = $request->file('file') ? $this->utilitiesController->uploadFile($request->file('file')) : false;
+    // public function uploadfile(Request $request)
+    // {
+    //     $response = $request->file('file') ? $this->utilitiesController->uploadFile($request->file('file')) : false;
 
-        return RequestsTrait::processResponse($response ? true : false, ['files' => $response]);
-    }
+    //     return RequestsTrait::processResponse($response ? true : false, ['files' => $response]);
+    // }
 }
