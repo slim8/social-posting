@@ -15,7 +15,7 @@
     <div class="m-container">
         <div class="m-post-form">
             <div class="m-wrapper">
-                
+
                     <nz-form-label [nzSpan]="24" nzFor="Statut">Statut</nz-form-label>
                     <nz-form-control [nzSpan]="24">
                         <textarea [(ngModel)]="message" nz-input placeholder="Statut" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
@@ -65,8 +65,8 @@
                                         <ng-template #suffixIconButton>
                                             <button nz-button nzType="primary" nzDanger="" nzSearch (click)="removeLink(item)" *ngIf="index > 0"><i nz-icon nzType="delete"></i></button>
                                         </ng-template>
-                                        <br/><br/> 
-                                    </div> 
+                                        <br/><br/>
+                                    </div>
                                     <button nz-button nzType="dashed" (click)="addLink()">add item</button>
                                 </div>
                             </nz-form-control>
@@ -101,7 +101,7 @@
                         </div>
 
                         <div class="m-content" *ngIf="tabId == 'videos'">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,6 @@
                                                         </div>
                                                     </div>
                                                     <div id="postView">
-                                                        <!-- <app-carousel *ngIf="!refresh" [urlLinks]="urlLinks"></app-carousel> -->
                                                     </div>
                                                     <div class="m-post-footer">
                                                         <br>
@@ -161,7 +160,7 @@
                                                             <div class="m-spacer">&nbsp;</div>
                                                             <div class="m-post-btn"><span class="save">&nbsp;</span></div>
                                                         </div>
-                                
+
                                                         <div class="m-likes" *ngIf="isliked">
                                                             <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
                                                             <strong>1 like</strong>
@@ -206,14 +205,14 @@
                                                         <p>Like</p>
                                                       </a>
                                                     </div>
-                                              
+
                                                     <div class="comment">
                                                       <a href="#">
                                                         <img src="../../../../../assets/img/svgs/comment-facebook.svg" />
                                                         <p>Comment</p>
                                                       </a>
                                                     </div>
-                                              
+
                                                     <div class="share">
                                                       <a href="#">
                                                         <img src="http://download.seaicons.com/icons/icons8/windows-8/512/Arrows-Redo-icon.png" alt="" />
@@ -222,7 +221,7 @@
                                                         </p>
                                                       </a>
                                                     </div>
-                                              
+
                                                   </div>
                                                 <div class="footer__dropdown"></div>
                                             </div>

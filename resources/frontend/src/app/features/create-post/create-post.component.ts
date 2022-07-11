@@ -47,7 +47,6 @@ export class CreatePostComponent implements OnInit  {
     mentionIndex = 0;
     mentions: any = [];
     selectedValue = [];
-    isliked: boolean = false;
     mediaId: number = 0;
     urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
@@ -160,175 +159,155 @@ export class CreatePostComponent implements OnInit  {
     }
 
     submitForm(param: string) {
+      let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
+      let btnSubmit = document.getElementById('btn-submit');
+      let iconSave = document.querySelector('.m-button-icon-save');
+      let iconPublish = document.querySelector('.m-button-icon-publish');
+      let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
+      let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
 
-      // let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
-      // let btnSubmit = document.getElementById('btn-submit');
-      // let iconSave = document.querySelector('.m-button-icon-save');
-      // let iconPublish = document.querySelector('.m-button-icon-publish');
-      // let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
-      // let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
-      // // m-button-icon-save
       const formData: FormData = new FormData();
-      // let post: any = {
-      //     message: "",
-      //     hashtags: [],
-      //     mentions: [],
-      //     accountId: "",
-      //     videoTitle: ""
-      // }
-      // this.accountsValue.forEach((accountId: any) => {
-      //     let arr = accountId.split("|");
-      //     let id = arr[0];
-      //     if (accountId.includes('facebook')) {
-      //         post.message = this.facebookMessage;
-      //         post.hashtags = this.fbTags;
-      //         post.mentions = this.mentions;
-      //         post.accountId = id;
-      //         post.videoTitle = "";
-      //     } else if (accountId.includes('instagram')) {
-      //         post.message = this.instagramMessage;
-      //         post.hashtags = this.instaTags;
-      //         post.mentions = this.mentions;
-      //         post.accountId = id;
-      //         post.videoTitle = "";
-      //     }
-      //     formData.append('posts[]', JSON.stringify(post));
-      // });
+      let post: any = {
+        message: "",
+        hashtags: [],
+        mentions: [],
+        accountId: "",
+        videoTitle: ""
+      }
+      this.accountsValue.forEach((accountId: any) => {
+        let arr = accountId.split("|");
+        let id = arr[0];
+        if (accountId.includes('facebook')) {
+          post.message = this.facebookMessage;
+          post.hashtags = this.fbTags;
+          post.mentions = this.mentions;
+          post.accountId = id;
+          post.videoTitle = "";
+        } else if (accountId.includes('instagram')) {
+          post.message = this.instagramMessage;
+          post.hashtags = this.instaTags;
+          post.mentions = this.mentions;
+          post.accountId = id;
+          post.videoTitle = "";
+        }
+        formData.append('posts[]', JSON.stringify(post));
+      });
 
-      // // if (this.tags.length > 0) {
-      // //     this.tags.forEach((tag: any) => {
-      // //         formData.append('tags[]', tag);
-      // //     });
-      // // }
+      if (this.tags.length > 0) {
+        this.tags.forEach((tag: any) => {
+          formData.append('tags[]', tag);
+        });
+      }
 
-      // // if (this.mentions.length > 0) {
-      // //     this.mentions.forEach((mention: any) => {
-      // //         formData.append('mention[]', mention);
-      // //     });
-      // // }
+      if (this.mentions.length > 0) {
+        this.mentions.forEach((mention: any) => {
+          formData.append('mention[]', mention);
+        });
+      }
 
-      // // if (this.urlLinks.length > 0) {
-      // //   this.urlLinks.forEach((media: any) => {
-      // //       let videoObject: any = {
-      // //         url: "",
-      // //         seconde: "",
-      // //         thumbnail: ""
-      // //       }
-      // //       if(media.type == "image") {
-      // //         formData.append('images[]', media.url);
-      // //       } else if (media.type == "video") {
-      // //         videoObject.url = media.url;
-      // //         videoObject.seconde = 3;
-      // //         videoObject.thumbnail = "http://thisisaverytestmp.rf.gd/files/images/2YQ3yYkITqiIH6UPe4THHNUGheTYDBYhaSEL7VVn.jpg";
-      // //         formData.append('videos[]', JSON.stringify(videoObject));
-      // //       }
-      // //         // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
-      // //     });
-      // // }
+      if (this.urlLinks.length > 0) {
+        this.urlLinks.forEach((media: any) => {
+          formData.append('images[]', media.url);
+        });
+      }
 
       // // TODO:: for video upload
-
       let listOfVideos: {url : any , seconde : any , thumbnail : any , imgB64 : string }[] = [];
       this.videoList.forEach((video: any) => {
-          this.postService.uploadFile(video.file).subscribe({
-              next: (response ) => {
+        this.postService.uploadFile(video.file).subscribe({
+          next: (response ) => {
+            console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+            let videoUrl = response.files
+            let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
+            listOfVideos.push({url : videoUrl , seconde : thumbnail.time , thumbnail : null , imgB64 : thumbnail.imgB64});
+          },
+          error: (err) => {
+            this.shared.createMessage('error', err);
+          },
+          complete: () => {
+            listOfVideos.forEach((videoObject) => {
+              this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+                next: (response ) => {
                   console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-                  let videoUrl = response.files
-                  let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
-                  listOfVideos.push({url : videoUrl , seconde : thumbnail.time , thumbnail : null , imgB64 : thumbnail.imgB64});
-              },
-              error: (err) => {
-                this.shared.createMessage('error', err);
-              },
-              complete: () => {
-                listOfVideos.forEach((videoObject) => {
-                  this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                    next: (response ) => {
-                        console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-                        formData.append('videos[]', JSON.stringify({...videoObject , thumbnail : response.files }));
-                    },
-                    error: (err) => {
-                      this.shared.createMessage('error', err);
-                    },
-                    complete: () => {
+                  formData.append('videos[]', JSON.stringify({...videoObject , thumbnail : response.files }));
+                },
+                error: (err) => {
+                  this.shared.createMessage('error', err);
+                },
+                complete: () => {
 
-                    }});
-                })
-              },
-          });
+                }
+              });
+            })
+          },
+        });
       })
 
-      // if (this.urlLinks.length > 0) {
-      //   this.urlLinks.forEach((media: any) => {
-      //     formData.append('images[]', media.url);
-      //   })
-      // }
+      formData.append('status', param);
+      formData.append('message', this.message);
 
-      // formData.append('status', param);
-      // formData.append('message', this.message);
+      if (formData) {
+          this.facebookSocialService.postToSocialMedia(formData).subscribe({
+              next: (event) => {
+                  if (param == 'PUBLISH') {
+                      iconPublish?.classList.add('hide');
+                      iconPublish?.parentElement?.classList.add('wide');
+                      spinningPublish.classList.add('show');
+                  } else {
+                      iconSave?.classList.add('hide');
+                      iconSave?.parentElement?.classList.add('wide');
+                      spinningDraft.classList.add('show');
+                  }
+                  loadingScreen.classList.add('m-loading-screen-active');
+                  btnSubmit?.classList.add('m-btn-submit');
+              },
+              error: (err) => {
+                  if (err.error.errors) {
+                      err.error.errors.forEach((error: any) => {
+                          this.shared.createMessage('error', error);
+                      });
+                  }
+                  else {
+                      this.shared.createMessage('error', err.error.message);
+                  }
+                  if (param == 'PUBLISH') {
+                      iconPublish?.classList.remove('hide');
+                      iconPublish?.parentElement?.classList.remove('wide');
+                  } else {
+                      iconSave?.classList.remove('hide');
+                      iconSave?.parentElement?.classList.remove('wide');
+                  }
+                  loadingScreen.classList.remove('m-loading-screen-active');
+                  spinningPublish.classList.remove('show');
+                  spinningDraft.classList.remove('show');
+                  btnSubmit?.classList.remove('m-btn-submit');
+            },
+            complete: () => {
+                this.selectedFile = [];
+                this.message = '';
+                this.accountsValue = [];
+                loadingScreen.classList.remove('m-loading-screen-active');
+                spinningPublish.classList.remove('show');
+                spinningDraft.classList.remove('show');
+                btnSubmit?.classList.remove('m-btn-submit');
 
-      // if (formData) {
-      //     this.facebookSocialService.postToSocialMedia(formData).subscribe({
-      //         next: (event) => {
-      //             if (param == 'PUBLISH') {
-      //                 iconPublish?.classList.add('hide');
-      //                 iconPublish?.parentElement?.classList.add('wide');
-      //                 spinningPublish.classList.add('show');
-      //             } else {
-      //                 iconSave?.classList.add('hide');
-      //                 iconSave?.parentElement?.classList.add('wide');
-      //                 spinningDraft.classList.add('show');
-      //             }
-      //             loadingScreen.classList.add('m-loading-screen-active');
-      //             btnSubmit?.classList.add('m-btn-submit');
-      //         },
-      //         error: (err) => {
-      //             if (err.error.errors) {
-      //                 err.error.errors.forEach((error: any) => {
-      //                     this.shared.createMessage('error', error);
-      //                 });
-      //             }
-      //             else {
-      //                 this.shared.createMessage('error', err.error.message);
-      //             }
-      //             if (param == 'PUBLISH') {
-      //                 iconPublish?.classList.remove('hide');
-      //                 iconPublish?.parentElement?.classList.remove('wide');
-      //             } else {
-      //                 iconSave?.classList.remove('hide');
-      //                 iconSave?.parentElement?.classList.remove('wide');
-      //             }
-      //             loadingScreen.classList.remove('m-loading-screen-active');
-      //             spinningPublish.classList.remove('show');
-      //             spinningDraft.classList.remove('show');
-      //             btnSubmit?.classList.remove('m-btn-submit');
-      //       },
-      //       complete: () => {
-      //           this.selectedFile = [];
-      //           this.message = '';
-      //           this.accountsValue = [];
-      //           loadingScreen.classList.remove('m-loading-screen-active');
-      //           spinningPublish.classList.remove('show');
-      //           spinningDraft.classList.remove('show');
-      //           btnSubmit?.classList.remove('m-btn-submit');
+                if (param == 'PUBLISH') {
+                    this.shared.createMessage('success', 'published!');
+                } else {
+                    this.shared.createMessage('success', 'saved to drafts!');
+                }
 
-      //           if (param == 'PUBLISH') {
-      //               this.shared.createMessage('success', 'published!');
-      //           } else {
-      //               this.shared.createMessage('success', 'saved to drafts!');
-      //           }
+                if (param == 'PUBLISH') {
+                    iconPublish?.classList.remove('hide');
+                    iconPublish?.parentElement?.classList.remove('wide');
+                } else {
+                    iconSave?.classList.remove('hide');
+                    iconSave?.parentElement?.classList.remove('wide');
+                }
 
-      //           if (param == 'PUBLISH') {
-      //               iconPublish?.classList.remove('hide');
-      //               iconPublish?.parentElement?.classList.remove('wide');
-      //           } else {
-      //               iconSave?.classList.remove('hide');
-      //               iconSave?.parentElement?.classList.remove('wide');
-      //           }
-
-      //       },
-      //   });
-      // }
+            },
+        });
+      }
     }
 
     //Images preview from upload file
@@ -442,6 +421,7 @@ export class CreatePostComponent implements OnInit  {
     }
 
     tabChange1(id: any, event: any) {
+      if(!event.target.closest('li').classList.contains('is-blocked')) {
         let list = [].slice.call(event.target.closest('li').parentNode.children);
         list.forEach((elem: any) => {
             elem.classList.remove('is-active');
@@ -455,14 +435,7 @@ export class CreatePostComponent implements OnInit  {
           this.instagramPreview = false;
           this.facebookPreview = true;
         }
-    }
-
-    like(e: any) {
-        if (e.target.classList.contains('liked')) {
-            e.target.classList.remove('liked');
-        } else {
-            e.target.classList.add('liked');
-        }
+      }
     }
 
     addLink() {
@@ -478,12 +451,6 @@ export class CreatePostComponent implements OnInit  {
                 this.urlLinksIndex--;
             }
         });
-    }
-
-    liked(event: any) {
-        event.target.classList.toggle('like');
-        event.target.classList.toggle('is-liked');
-        this.isliked = !this.isliked;
     }
 
     resetSuccess() {
@@ -514,7 +481,7 @@ export class CreatePostComponent implements OnInit  {
     }
 
     refreshCarousel() {
-        // waiting for better solution
+        // looking for a better solution
         this.refresh = true;
         setTimeout(() => {
             this.refresh = false;
@@ -595,291 +562,122 @@ export class CreatePostComponent implements OnInit  {
         }, 2500);
       }
 
-      generatethumbnails(action : string , newVideo = false ){
-        this.leadThumbnail = true
-        if(action == "previous"){
-            this.currentTimePosition -= this.duration ;
-        }else if(action == "next"){
-            this.currentTimePosition += this.duration ;
+    generatethumbnails(action : string , newVideo = false ){
+      this.leadThumbnail = true
+      if(action == "previous"){
+          this.currentTimePosition -= this.duration ;
+      }else if(action == "next"){
+          this.currentTimePosition += this.duration ;
+      }
+
+      generateVideoThumbnails(this.selectedVideo.file, 3 , this.selectedVideo.file.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
+        this.listThumbnail = thumbArray;
+
+        if(newVideo){
+          this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
+          this.selectedThumbnail.time = thumbArray[0].time as number ;
+          this.selectedThumbnailList.push({id : this.selectedVideo.id , imgB64 : this.selectedThumbnail.imgB64 , time : this.selectedThumbnail.time })
         }
+        this.leadThumbnail = false ;
+      })
+      this.refreshCarousel();
+    }
 
-        generateVideoThumbnails(this.selectedVideo.file, 3 , this.selectedVideo.file.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
-          this.listThumbnail = thumbArray;
-
-          if(newVideo){
-            this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
-            this.selectedThumbnail.time = thumbArray[0].time as number ;
-            this.selectedThumbnailList.push({id : this.selectedVideo.id , imgB64 : this.selectedThumbnail.imgB64 , time : this.selectedThumbnail.time })
-          }
-          this.leadThumbnail = false ;
-        })
-        this.refreshCarousel();
-      }
-
-      selectThumbnail(item : {imgB64 : '' , time : 0 } ){
-            this.selectedThumbnail = item;
+    selectThumbnail(item : {imgB64 : '' , time : 0 } ){
+          this.selectedThumbnail = item;
 
 
-            this.selectedThumbnailList.forEach(selectedThumbnail => {
-                if(selectedThumbnail.id == this.selectedVideo.id){
-                    selectedThumbnail.imgB64 = item.imgB64;
-                    selectedThumbnail.time = item.time;
-                }
-            })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-            // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
-      }
+          this.selectedThumbnailList.forEach(selectedThumbnail => {
+              if(selectedThumbnail.id == this.selectedVideo.id){
+                  selectedThumbnail.imgB64 = item.imgB64;
+                  selectedThumbnail.time = item.time;
+              }
+          })
+          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+          // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
+    }
 
-      changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
-        this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
-        this.generatethumbnails('next');
-        this.currentTimePosition = -10;
-      }
+    changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
+      this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
+      this.generatethumbnails('next');
+      this.currentTimePosition = -10;
+    }
 
-      deleteVideo(item : {id : number ,imgB64 : string , time : number}){
-        this.modal.confirm({
-            nzTitle: 'Are you sure delete this video?',
-            nzContent: '<b style="color: red;">remove video </b>',
-            nzOkText: 'Yes',
-            nzOkType: 'primary',
-            nzOkDanger: true,
-            nzOnOk: () => {
-                this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
-                this.videoList = this.videoList.filter((video) => item.id != video.id  )
-                if(this.selectedVideo.id == item.id){
-                    this.listThumbnail = [];
-                }
+    deleteVideo(item : {id : number ,imgB64 : string , time : number}){
+      this.modal.confirm({
+          nzTitle: 'Are you sure delete this video?',
+          nzContent: '<b style="color: red;">remove video </b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => {
+              this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
+              this.videoList = this.videoList.filter((video) => item.id != video.id  )
+              if(this.selectedVideo.id == item.id){
+                  this.listThumbnail = [];
+              }
 
-                if(this.videoList.length>0) {
-                  this.availableVideos = true;
-                }else {
-                  this.availableVideos = false;
-                }
-                this.refreshPages();
-                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-            },
-            nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel', item)
-        });
-      }
-
-      removeImage(event: any) {
-        console.log('it finally worked!!!');
-      }
-
-      refreshPages() {
-        if (this.availableImages && this.availableVideos) {
-          this.getPages('instagram');
-          this.notification
-          .blank(
-            'Reminder',
-            "<strong>Facebook</strong> doesn't support images and videos on the same post."
-          )
-          .onClick.subscribe(() => {
-            console.log('notification clicked!');
-          });
-        } else {
-          this.getPages('mixed');
-        }
-      }
-
-      showAlbumModal(){
-        this.showAlbum = true;
-      }
-
-      handleOk(): void {
-        this.showAlbum = false;
-      }
-
-      handleCancel(): void {
-        this.showAlbum = false;
-      }
-
-    onSelect() {
-      let tooltip = document.createElement('div');
-      // let mentioned = document.querySelector('.mentioned');
-      tooltip.setAttribute('data-index', this.mentionIndex.toString());
-      tooltip.setAttribute('class', 'mentioned');
-      let close = document.createElement('div');
-      let imagetop = this.posY;
-      let imageleft = this.posX;
-      let mention = {
-          image: 0,
-          username: '',
-          x: 0,
-          y: 0,
-      };
-
-      mention.username = this.inputValue2;
-      mention.x = Math.round((this.posX / this.imageWidth) * 100) / 100;
-      mention.y = Math.round((this.posY / this.imageHeight) * 100) / 100;
-      mention.image = this.slideNbr;
-      this.mentions.push(mention);
-      // mentioned?.addEventListener('click', this.edit);
-
-      close.classList.add('m-close');
-      close.innerHTML = 'x';
-      close?.setAttribute('style', 'padding:0 4px 0 10px;');
-      tooltip.innerHTML = this.inputValue2;
-      this.taggedImage?.appendChild(tooltip);
-      tooltip.appendChild(close);
-      tooltip?.setAttribute(
-          'style',
-          'top: ' +
-          this.posY +
-          'px;left: ' +
-          this.posX +
-          'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-      );
-
-      let tooltipwidth = tooltip.offsetWidth;
-      let tooltipheight = tooltip.offsetHeight;
-
-      //check left + bottom offset
-      if (
-          this.posX - tooltipwidth / 2 < 0 &&
-          this.posY + tooltipheight > this.imageHeight
-      ) {
-          imageleft += tooltipwidth / 2 - this.posX;
-          imagetop -= imagetop - this.imageHeight + tooltipheight;
-          tooltip?.setAttribute(
-              'style',
-              'top: ' +
-              imagetop +
-              'px;left: ' +
-              imageleft +
-              'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-          );
-      }
-      //check right + bottom offset
-      else if (
-          this.posX + tooltipwidth / 2 > this.imageWidth &&
-          this.posY + tooltipheight > this.imageHeight
-      ) {
-          imageleft -= tooltipwidth / 2 + (this.posX - this.imageWidth);
-          imagetop -= imagetop - this.imageHeight + tooltipheight;
-          tooltip?.setAttribute(
-              'style',
-              'top: ' +
-              imagetop +
-              'px;left: ' +
-              imageleft +
-              'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-          );
-      }
-      //check left offset
-      else if (this.posX - tooltipwidth / 2 < 0) {
-          imageleft += tooltipwidth / 2 - this.posX;
-          tooltip?.setAttribute(
-              'style',
-              'top: ' +
-              this.posY +
-              'px;left: ' +
-              imageleft +
-              'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-          );
-      }
-      //check bottom offset
-      else if (this.posY + tooltipheight > this.imageHeight) {
-          imagetop -= imagetop - this.imageHeight + tooltipheight;
-          tooltip?.setAttribute(
-              'style',
-              'top: ' +
-              imagetop +
-              'px;left: ' +
-              this.posX +
-              'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-          );
-      }
-      //check right offset
-      else if (this.posX + tooltipwidth / 2 > this.imageWidth) {
-          imageleft -= tooltipwidth / 2 + (this.posX - this.imageWidth);
-          tooltip?.setAttribute(
-              'style',
-              'top: ' +
-              this.posY +
-              'px;left: ' +
-              imageleft +
-              'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
-          );
-      }
-
-      this.mentionIndex++;
-      // this.mentionsList.emit({mention:this.mentions})
-
-      console.log('mentions List');
-      console.log(this.mentions);
-  }
-
-  viewMentions() {
-      this.displaMentions = !this.displaMentions;
-      let mentions = Array.from(document.getElementsByClassName('mentioned'));
-      mentions.forEach((element: any) => {
-          if (this.displaMentions) {
-              element.style.opacity = '0';
-              setTimeout(() => {
-                  element.style.display = 'none!important';
-              }, 300);
-          }
-          if (!this.displaMentions) {
-              element.style.display = 'block!important';
-              element.style.opacity = '0.3';
-          }
+              if(this.videoList.length>0) {
+                this.availableVideos = true;
+              }else {
+                this.availableVideos = false;
+              }
+              this.refreshPages();
+              this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+          },
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel', item)
       });
-  }
+    }
 
-  tag(event: any) {
-      this.taggedImage = event.path[1];
-      this.imageHeight = event.path[0].clientHeight;
-      this.imageWidth = event.path[0].clientWidth;
-      this.inputValue2 = '@';
-      let post = event.target;
-      let input = document.getElementsByClassName(
-          'm-input-tag'
-      )[0] as HTMLElement;
-      let tooltip = document.getElementById('tooltip') as HTMLElement;
-      this.posX = event.offsetX;
-      this.posY = event.offsetY + 20;
+    removeImage(event: any) {
+      console.log('it finally worked!!!');
+    }
 
-      input?.classList.add('is-shown');
-      tooltip?.classList.add('is-shown');
-      tooltip?.setAttribute(
-          'style',
-          'top: ' + this.posY + 'px;left: ' + this.posX + 'px;'
-      );
-      post?.setAttribute('style', 'filter: brightness(0.5);');
-      input.focus();
-  }
-
-  resetPostView(e: any) {
-      let instaPost = document.getElementById('carousel') as HTMLElement;
-      let tagPerson = document.getElementById('tagPerson') as HTMLElement;
-      let Slides = document.getElementById('data-slides') as HTMLElement;
-      let images: any[] = [];
-      if (Slides != null) { images = Array.from(Slides?.children) };
-      let input = document.getElementsByClassName('m-input-tag')[0] as HTMLElement;
-      let tagOption = document.getElementsByClassName('tag-option');
-      let tooltip = document.getElementById('tooltip') as HTMLElement;
-      if (
-          !e.path?.includes(instaPost) &&
-          !e.path?.includes(tagPerson) &&
-          !e.path?.includes(tagOption) &&
-          !e.path?.includes(tooltip)
-      ) {
-          input?.classList.remove('is-shown');
-          tooltip?.classList.remove('is-shown');
-          images?.forEach(element => {
-              element?.children[0]?.setAttribute('style', 'filter: brightness(1);')
-          });
+    refreshPages() {
+      let instaTab = document.getElementById('instagram-tab-title');
+      let fbTab = document.getElementById('facebook-tab-title');
+      if (this.availableImages && this.availableVideos) {
+        if(!instaTab?.classList.contains('is-active')) instaTab?.classList.add('is-active');
+        fbTab?.classList.remove('is-active');
+        fbTab?.classList.add('is-blocked');
+        this.instagramPreview = true;
+        this.facebookPreview = false;
+        this.tabId1='instagram-tab-title';
+        this.getPages('instagram');
+        this.notification
+        .blank(
+          'Reminder',
+          "<strong>Facebook</strong> doesn't support images and videos on the same post."
+        )
+        .onClick.subscribe(() => {
+          console.log('notification clicked!');
+        });
+      } else {
+        fbTab?.classList.remove('is-blocked');
+        this.getPages('mixed');
       }
-  }
+    }
+
+    showAlbumModal(){
+      this.showAlbum = true;
+    }
+
+    handleOk(): void {
+      this.showAlbum = false;
+    }
+
+    handleCancel(): void {
+      this.showAlbum = false;
+    }
 
   addMentions(event:any[]) {
     this.mentions = event;
   }
-    addToPost(event : any){
-      // TODO:: list of images selected from album list
-      console.log(event);
-    }
+
+  addToPost(event : any){
+    // TODO:: list of images selected from album list
+    console.log(event);
+  }
 
 }
