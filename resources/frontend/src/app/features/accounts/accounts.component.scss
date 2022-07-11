@@ -2,7 +2,6 @@
 @import '../../../assets/sass/_project/_config.scss';
 @import '../../../assets/sass/_project/base.scss';
 
-
 .mod-accounts {
     width: 100%;
     height: 100%;
@@ -14,7 +13,7 @@
             display: flex;
             justify-content: space-between;
             padding: 33px 38px 38px 48px;
-            border-bottom: 1px solid $color-media-secondary-button;
+            border-bottom: 1px solid $color-media-black-opacity-30;
             align-items: center;
 
             > h1 {
@@ -34,13 +33,6 @@
             height: calc(100vh - 258px);
             overflow: auto;
 
-            > .m-loading {
-                position: absolute;
-                left: 50%;
-                top: 32%;
-                transform: translate3d(-50%, -50%, 0);
-            }
-
             > .m-login {
                 width: 500px;
                 margin: auto;
@@ -50,7 +42,7 @@
                 align-items: center;
                 padding: 165px 40px 40px 40px;
 
-                >.m-login-icon {
+                > .m-login-icon {
                     // placeholders.scss
                     margin-bottom: 29px;
                 }
@@ -80,7 +72,6 @@
             }
 
             > .m-connected-accounts {
-
                 > h2 {
                     padding: 20px 55px;
                     color: $color-media-black-opacity-half;
@@ -95,7 +86,7 @@
                     flex-wrap: nowrap;
                     padding: 20px 20px 20px 20px;
                     gap: 10px;
-                    border-bottom: 1px solid $color-media-secondary-button;
+                    border-bottom: 1px solid $color-media-black-opacity-30;
                     justify-content: unset;
                     @include mq(tablet) {
                         justify-content: space-around;
@@ -135,7 +126,7 @@
                             bottom: -8px;
                             right: -8px;
 
-                            >img {
+                            > img {
                                 width: 30px;
                                 @include mq(tablet) {
                                     width: 60px;
@@ -156,6 +147,7 @@
                     }
 
                     > .m-page-info {
+                        min-width: 200px;
                         &.is-disconnected {
                             filter: opacity(0.2);
                         }
@@ -178,26 +170,26 @@
                         position: relative;
 
                         &:hover {
-                          >.m-title-hover {
-                            display: block;
-                          }
+                            > .m-title-hover {
+                                display: block;
+                            }
                         }
 
-                        >.m-title-hover {
-                          position: absolute;
-                          @include textstyle-size-10();
-                          width: 142px;
-                          height: fit-content;
-                          padding: 9px 4px 8px 9px;
-                          background-color: $color-base-0;
-                          box-shadow: 0px 4px 4px $color-media-secondary-button;
-                          border-radius: 5px;
-                          display: none;
-                          top: 14px;
-                          left: 13px;
+                        > .m-title-hover {
+                            position: absolute;
+                            @include textstyle-size-10();
+                            width: 142px;
+                            height: fit-content;
+                            padding: 9px 4px 8px 9px;
+                            background-color: $color-base-0;
+                            box-shadow: 0px 4px 4px $color-media-secondary-button;
+                            border-radius: 5px;
+                            display: none;
+                            top: 14px;
+                            left: 13px;
                         }
 
-                        >i {
+                        > i {
                             > svg {
                                 fill: transparent;
                             }
@@ -228,7 +220,7 @@
                                 color: $color-base-100;
                             }
 
-                            >span {
+                            > span {
                                 margin-right: 14px;
                             }
                         }
@@ -312,17 +304,6 @@
                 }
             }
 
-            // &::before {
-            //     content: '';
-            //     z-index: 18;
-            //     position: absolute;
-            //     left: -100vw;
-            //     top: -100vh;
-            //     width: 300vw;
-            //     height: 300vh;
-            //     background-color: rgba(0, 0, 0, 0.5);
-            // }
-
             > .m-close-icon {
                 position: absolute;
                 right: 24px;
@@ -331,7 +312,7 @@
                 width: 10px;
                 cursor: pointer;
 
-                >img {
+                > img {
                     position: absolute;
                     z-index: 9;
                     width: 10px;
@@ -367,9 +348,7 @@
                 padding-left: 28px;
 
                 > tr {
-
                     > td {
-
                         > label {
                             display: flex;
                             align-items: center;
@@ -377,7 +356,7 @@
                             > input {
                                 width: 20px;
                                 height: 20px;
-                                -webkit-appearance:none;
+                                -webkit-appearance: none;
                                 outline: none;
                                 border: 1px solid $color-media-black-opacity-half;
                                 border-radius: 0;
@@ -432,7 +411,7 @@
                 width: 10px;
                 cursor: pointer;
 
-                >img {
+                > img {
                     position: absolute;
                     z-index: 9;
                     width: 10px;
@@ -440,7 +419,7 @@
                 }
             }
 
-            >.m-success {
+            > .m-success {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -452,7 +431,7 @@
                 > img {
                     width: 33px;
                     height: 33px;
-                    margin-bottom: 17px
+                    margin-bottom: 17px;
                 }
 
                 > .m-success-title {
