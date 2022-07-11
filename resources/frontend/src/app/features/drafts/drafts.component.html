@@ -70,12 +70,15 @@
               <li nz-menu-item>menu4 3rd menu item</li>
             </ul>
           </nz-dropdown-menu>
-          <img
-            i18n-alt
-            src="/assets/img/remove.svg"
-            alt="send icon"
-            class="m-icon"
-          />
+          <div class="m-remove" (click)="removeDraft()">
+            <img
+              i18n-alt
+              src="/assets/img/svgs/icons/remove.svg"
+              alt="send icon"
+              class="m-icon-remove"
+            />
+          </div>
+
         </div>
         <div class="m-right">
           <button class="m-button is-primary">

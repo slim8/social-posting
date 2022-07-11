@@ -13,7 +13,7 @@ const arrowIcon = '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xml
 })
 export class DraftsComponent implements OnInit {
   posts : any[] = [];
-  draftsList : any [] = [];
+  draftsList : any = [];
 
   constructor(private iconService: NzIconService, private accountsService: AccountsService) {
         this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
@@ -47,5 +47,27 @@ console.log(event)
             }
         })
     }
+
+    removeDraft() {
+     if(this.draftsList.length > 0) {
+
+        const formData : FormData = new FormData();
+        formData.append('postIds[]', this.draftsList);
+
+        this.accountsService.removeDrafts(formData).subscribe({
+          next: (event: any) => {
+              console.log(event)
+              this.posts = event.posts;
+          },
+          error: (err) => {
+          },
+          complete: () => {
+          }
+      })
+     }else {
+       alert('vide');
+     }
+
+  }
 
 }

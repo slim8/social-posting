@@ -22,23 +22,30 @@
 
           > .m-checkbox {
 
-            //-webkit-appearance:none;
+            -webkit-appearance: none;
             outline: none;
             position: relative;
             margin-right: 28px;
+            margin-bottom: 15px;
 
-            &:checked::after {
+            &::after {
               content: '';
-              background-image: url('../../../../../assets/img/Check.jpg');
               position: absolute;
-              background-size: 19px 19px;
-              background-position: center;
-              background-repeat: no-repeat;
-              background: rgba(231, 231, 231, 0.5);
               border: 1px solid rgba(0, 0, 0, 0.5);
               border-radius: 5px;
               width: 18px;
               height: 18px;
+            }
+
+            &:checked::after {
+              content: url('../../../../../assets/img/check-icon.png');
+              position: absolute;
+              background: rgba(231, 231, 231, 0.5);
+              width: 18px;
+              height: 18px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
           }
 
