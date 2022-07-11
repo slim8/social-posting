@@ -3,7 +3,7 @@
     <div class="m-table">
       <div class="m-container">
         <div class="m-header">
-          <input type="checkbox" [value]="post.id" class="m-checkbox" />
+          <input type="checkbox" (click)="check($event,itemValue.value)" [value]="post.id" class="m-checkbox" #itemValue/>
           <div class="m-icon">
             <img src="/assets/img/test-images/image.svg" alt=""/>
           </div>

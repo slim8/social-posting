@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-post-item',
@@ -7,10 +7,29 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PostItemComponent implements OnInit {
   @Input() post: any =  [];
+  @Output() newItemEvent = new EventEmitter<any[]>();
+  @Input() draftsList: any[] = [];
   constructor() { }
 
   ngOnInit(): void {
-   // console.log(this.post);
   }
+
+  check(event:any, value:string) {
+   if(event.target.checked) {
+         if(!this.draftsList.includes(value)) {
+             this.draftsList.push(value);
+         }
+     } else {
+         if(this.draftsList.includes(value)) {
+             let index = this.draftsList.indexOf(value);
+             this.draftsList.splice(index, 1);
+         }
+     }
+
+   console.log(this.draftsList);
+  }
+updateList() {
+   this.newItemEvent.emit(this.draftsList);
+}
 
 }

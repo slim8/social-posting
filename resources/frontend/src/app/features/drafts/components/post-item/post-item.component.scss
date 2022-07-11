@@ -22,24 +22,10 @@
 
           > .m-checkbox {
 
-            -webkit-appearance:none;
+            //-webkit-appearance:none;
             outline: none;
             position: relative;
             margin-right: 28px;
-
-            &::after {
-              content: '';
-              background-image: url('../../../../../assets/img/Check.jpg');
-              position: absolute;
-              top: -8px;
-              background-size: 19px 19px;
-              background-position: center;
-              background-repeat: no-repeat;
-              border: 1px solid rgba(0, 0, 0, 0.5);
-              border-radius: 5px;
-              width: 18px;
-              height: 18px;
-            }
 
             &:checked::after {
               content: '';

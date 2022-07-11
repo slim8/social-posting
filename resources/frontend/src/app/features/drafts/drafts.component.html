@@ -70,6 +70,12 @@
               <li nz-menu-item>menu4 3rd menu item</li>
             </ul>
           </nz-dropdown-menu>
+          <img
+            i18n-alt
+            src="/assets/img/remove.svg"
+            alt="send icon"
+            class="m-icon"
+          />
         </div>
         <div class="m-right">
           <button class="m-button is-primary">
@@ -111,7 +117,7 @@
           </div>
         </div>
         <div class="m-item" *ngFor="let post of posts">
-          <app-post-item [post]="post"></app-post-item>
+          <app-post-item [post]="post" [draftsList]="draftsList" (newItemEvent)="update($event)"></app-post-item>
         </div>
       </div>
     </div>
