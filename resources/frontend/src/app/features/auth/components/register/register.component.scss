@@ -4,6 +4,9 @@
 
 .mod-register {
     min-width: 650px;
+    @media screen and (max-width : 700px) {
+        min-width: auto;
+    }
 
     //TODO: place it in the right place and add multi-devices check
     button {
@@ -24,18 +27,74 @@
         > .m-title {
             > h1 {
                 @include textstyle-size-44-bold();
-                margin-bottom: 24px;
+                margin-bottom: 5px;
             }
         }
 
         > .m-para {
             @include textstyle-size-12();
-            margin-bottom: 39px;
+            margin-bottom: 22px;
         }
 
         > .m-form {
+            nz-form-item {
+                width: 57%;
+                margin: auto;
+                margin-bottom: 10px;
+                @media screen and (max-width : 570px) {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 10px;
+                    margin-bottom: 0px;
+                }
+
+                @media screen and (min-width : 570px) and (max-width : 1024px) {
+                    width: 85%;
+                }
+            }
+            nz-form-control {
+                max-width: 50%;
+                @media screen and (max-width : 570px) {
+                    max-width: 100%;
+                    margin-left: 0;
+                }
+            }
+            nz-form-label {
+                max-width: 25%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                margin-bottom: 10px;
+                margin-right: 10px;
+
+                @media screen and (max-width : 570px) {
+                    justify-content: flex-start;
+                    margin-bottom: -10px;
+                    max-width: 100%;
+                }
+
+            }
+            input {
+                height: 45px;
+                width: 100%;
+                border: 1px solid #ff8d69;
+                margin-bottom: 10px;
+                @media screen and (max-width : 570px) {
+                    margin-bottom: 0px;
+                }
+            }
+            button {
+                padding: 10px 40px;
+                margin: auto;
+                > span {
+                    @include textstyle-size-14-bold();
+                }
+            }
            
             >.m-two-column {
+                @media screen and (min-width : 1200px) {
+                  
                 width: 38%;
                 margin: auto;
                 display: flex;
@@ -46,7 +105,7 @@
 
                     >.m-form-label{
                         max-width: 25%;
-                        margin: 0px 10px 0px -10px;
+                        margin: 0px 20px 0px -10px;
                     }
 
                     >.m-form-control{
@@ -64,6 +123,9 @@
                     >.m-form-control{
                         max-width: 60%;
                     }
+                }
+
+                  
                 }
 
             }
