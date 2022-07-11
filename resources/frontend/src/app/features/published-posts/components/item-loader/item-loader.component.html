@@ -1,0 +1,58 @@
+<div class="mod-item-loader">
+  <div class="m-wrapper">
+    <div class="m-table">
+      <div class="m-container">
+        <div class="m-header">
+          <div class="m-icon">
+            <nz-skeleton-element
+              nzType="avatar"
+              [nzActive]="true"
+              [nzSize]="16"
+            ></nz-skeleton-element>
+          </div>
+          <div class="m-image">
+            <nz-skeleton-element
+              nzType="image"
+              [nzActive]="true"
+            ></nz-skeleton-element>
+          </div>
+          <div class="m-content">
+            <div>
+              <nz-skeleton
+                [nzActive]="true"
+                [nzParagraph]="false"
+              ></nz-skeleton>
+            </div>
+
+            <div class="m-account">
+              <div class="m-image">
+                <nz-skeleton-element
+                  nzType="avatar"
+                  [nzActive]="true"
+                  [nzSize]="32"
+                ></nz-skeleton-element>
+              </div>
+
+              <div class="m-name">
+                <nz-skeleton
+                  [nzActive]="true"
+                  [nzParagraph]="false"
+                ></nz-skeleton>
+              </div>
+            </div>
+          </div>
+          <div class="m-status">
+            <nz-skeleton [nzActive]="true" [nzParagraph]="false"></nz-skeleton>
+          </div>
+          <div class="m-date">
+            <nz-skeleton
+              [nzTitle]="false"
+              [nzActive]="true"
+              [nzParagraph]="paragraph"
+            ></nz-skeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

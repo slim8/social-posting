@@ -4,7 +4,7 @@ import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
 import {importFileandPreview , generateVideoThumbnails} from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -114,20 +114,25 @@ export class CreatePostComponent implements OnInit  {
         private activatedRoute: ActivatedRoute,
         private postService: PostService ,
         private modal: NzModalService,
-        private notification: NzNotificationService
+        private notification: NzNotificationService,
+        private router: Router,
+        private sharedModule: SharedModule
     ) { }
 
     ngOnInit(): void {
-        this.getPages('mixed');
-        const mentioned = document.querySelector('.mentioned');
+      this.getPages('mixed');
+      const mentioned = document.querySelector('.mentioned');
 
-        mentioned?.addEventListener('click', this.edit);
-        this.postId = this.activatedRoute.snapshot.params['id'];
-        // if (this.postId) {
-        //     if (this.postdata.post.status === 'PUBLISH') {
-        //         this.prepareform()
-        //     }
-        // }
+      mentioned?.addEventListener('click', this.edit);
+      this.postId = this.activatedRoute.snapshot.params['id'];
+      // if (this.postId) {
+      //     if (this.postdata.post.status === 'PUBLISH') {
+      //         this.prepareform()
+      //     }
+      // }
+      if (this.router.url.includes('create-post')) {
+        this.sharedModule.initSideMenu('create-post');
+      }
     }
 
     getPages(param: string) {
