@@ -1,11 +1,11 @@
 <div class="mod-register">
   <div class="m-wrapper">
     <div class="m-subtitle">
-      <h2 i18n>REGISTRATION</h2>
+      <h2 i18n="registration|Title for the registration @@registration">REGISTRATION</h2>
     </div>
 
     <div class="m-title">
-      <h1 i18n>Social Media Publisher</h1>
+      <h1 i18n="Social Media Publisher|subTitle for the registration @@Social Media Publisher">Social Media Publisher</h1>
     </div>
 
     <div class="m-para">
@@ -19,7 +19,7 @@
           [nzXs]="24"
           nzFor="firstName"
           nzRequired
-          i18n
+          i18n="FirstName|Title for the FirstName @@FirstName"
           >FirstName</nz-form-label
         >
         <nz-form-control
@@ -37,7 +37,7 @@
           [nzXs]="24"
           nzFor="lastName"
           nzRequired
-          i18n
+          i18n="lastName|Title for the lastName @@lastName"
           >LastName</nz-form-label
         >
         <nz-form-control
@@ -55,7 +55,7 @@
           [nzXs]="24"
           nzFor="phoneNumber"
           nzRequired
-          i18n
+          i18n="Phone Number|Title for the Phone Number @@Phone Number"
           >Phone Number</nz-form-label
         >
         <nz-form-control
@@ -74,7 +74,7 @@
           [nzXs]="24"
           nzRequired
           nzFor="email"
-          i18n
+          i18n="E-mail|Title for the E-mail @@E-mail"
           >E-mail</nz-form-label
         >
         <nz-form-control
@@ -92,7 +92,7 @@
           [nzXs]="24"
           nzFor="adress"
           nzRequired
-          i18n
+          i18n="Adress|Title for the Adress @@Adress"
           >Adress</nz-form-label
         >
         <nz-form-control
@@ -111,7 +111,7 @@
             [nzXs]="24"
             nzFor="Postcode"
             nzRequired
-            i18n
+            i18n="Postcode|Title for the Postcode @@Postcode"
             >Postcode</nz-form-label
           >
           <nz-form-control
@@ -130,7 +130,7 @@
             [nzXs]="24"
             nzFor="city"
             nzRequired
-            i18n
+            i18n="City|Title for the City @@City"
             >City</nz-form-label
           >
           <nz-form-control
@@ -150,7 +150,7 @@
           [nzXs]="24"
           nzFor="companyName"
           nzRequired
-          i18n
+          i18n="Company Name|Title for the Company Name @@Company Name"
           >Company Name</nz-form-label
         >
         <nz-form-control
@@ -168,7 +168,7 @@
           [nzXs]="24"
           nzFor="website"
           nzRequired
-          i18n
+          i18n="Website|Title for the Website @@Website"
           >Website</nz-form-label
         >
         <nz-form-control
@@ -186,6 +186,7 @@
             type="submit"
             nz-button
             [nzLoading]="isLoading"
+            i18n="Registrieren|Title for the Registrieren @@Registrieren"
           >
             Registrieren
           </button>
