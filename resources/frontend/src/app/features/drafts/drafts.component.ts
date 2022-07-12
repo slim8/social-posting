@@ -56,7 +56,7 @@ console.log(event)
         this.draftsList.forEach((draft:any)=>{
            formData.append('postsIds[]', draft);
         })
-
+        confirm('Are you sure you want to delete this item?');
         this.accountsService.removeDrafts(formData).subscribe({
           next: (event: any) => {
           },
