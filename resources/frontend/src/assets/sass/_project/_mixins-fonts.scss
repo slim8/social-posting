@@ -66,6 +66,16 @@
     }
 }
 
+@mixin textstyle-size-32-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(32px);
+    @include line-height(60/32);
+    @include mq(desktop) {
+        @include font-size(32px);
+        @include line-height(60/32);
+    }
+}
+
 @mixin textstyle-size-12 {
     @include fontfamily-primary;
     @include font-size(12px);

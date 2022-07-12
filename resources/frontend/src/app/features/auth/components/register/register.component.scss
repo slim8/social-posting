@@ -1,11 +1,12 @@
-@import '../../../../../assets/sass/_project/_config.scss';
-@import '../../../../../assets/sass/_global/_mixins.scss';
-@import '../../../../../assets/sass/_project/base.scss';
+@import "../../../../../assets/sass/_project/_config.scss";
+@import "../../../../../assets/sass/_global/_mixins.scss";
+@import "../../../../../assets/sass/_project/base.scss";
 
 .mod-register {
-    min-width: 650px;
-    @media screen and (max-width : 700px) {
-        min-width: auto;
+    min-width: auto;
+
+    @include mq(desktop) {
+        min-width: 650px;
     }
 
     //TODO: place it in the right place and add multi-devices check
@@ -26,10 +27,10 @@
 
         > .m-title {
             > h1 {
-                @include textstyle-size-44-bold();
+                @include textstyle-size-32-bold();
                 margin-bottom: 5px;
-                @media screen and (max-width : 570px) {
-                    font-size: 2rem;
+                @include mq(mobilebig) {
+                    @include textstyle-size-44-bold();
                 }
             }
         }
@@ -41,50 +42,57 @@
 
         > .m-form {
             nz-form-item {
-                width: 57%;
-                margin: auto;
-                margin-bottom: 10px;
-                @media screen and (max-width : 570px) {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    padding: 10px;
-                    margin-bottom: 0px;
+
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                margin-bottom: 0px;
+
+                @include mq(mobilebig) {
+                    width: 85%;
+                    margin: auto;
+                    flex-direction: row;
+                    margin-bottom: 10px;
                 }
 
-                @media screen and (min-width : 570px) and (max-width : 1024px) {
-                    width: 85%;
+                @include mq(desktop) {
+                    width: 57%;
+                    margin: auto;
+                    margin-bottom: 10px;
                 }
+
             }
             nz-form-control {
-                max-width: 50%;
-                @media screen and (max-width : 570px) {
-                    max-width: 100%;
-                    margin-left: 0;
+                max-width: 100%;
+                margin-left: 0;
+
+                @include mq(mobilebig) {
+                    max-width: 50%;
                 }
             }
             nz-form-label {
-                max-width: 25%;
                 display: flex;
-                justify-content: flex-end;
                 align-items: center;
-                margin-bottom: 10px;
                 margin-right: 10px;
+                justify-content: flex-start;
+                margin-bottom: -10px;
+                max-width: 100%;
 
-                @media screen and (max-width : 570px) {
-                    justify-content: flex-start;
-                    margin-bottom: -10px;
-                    max-width: 100%;
+                @include mq(mobilebig) {
+                    max-width: 25%;
+                    justify-content: flex-end;
+                    margin-bottom: 10px;
                 }
-
             }
             input {
                 height: 45px;
                 width: 100%;
                 border: 1px solid #ff8d69;
-                margin-bottom: 10px;
-                @media screen and (max-width : 570px) {
-                    margin-bottom: 0px;
+                margin-bottom: 0px;
+
+                @include mq(mobilebig) {
+                    margin-bottom: 10px;
                 }
             }
             button {
@@ -94,43 +102,39 @@
                     @include textstyle-size-14-bold();
                 }
             }
-           
-            >.m-two-column {
-                @media screen and (min-width : 1200px) {
-                  
-                width: 38%;
-                margin: auto;
-                display: flex;
 
-                >.m-form-field-1{
-                    display : flex;
-                    justify-content:start ;
+            > .m-two-column {
+                @include mq(ml) {
+                    width: 38%;
+                    margin: auto;
+                    display: flex;
 
-                    >.m-form-label{
-                        max-width: 25%;
-                        margin: 0px 20px 0px -10px;
+                    > .m-form-field-1 {
+                        display: flex;
+                        justify-content: start;
+
+                        > .m-form-label {
+                            max-width: 25%;
+                            margin: 0px 20px 0px -10px;
+                        }
+
+                        > .m-form-control {
+                            max-width: 65%;
+                        }
                     }
+                    > .m-form-field-2 {
+                        display: flex;
+                        justify-content: start;
 
-                    >.m-form-control{
-                        max-width: 65%;
+                        > .m-form-label {
+                            max-width: 15%;
+                        }
+
+                        > .m-form-control {
+                            max-width: 60%;
+                        }
                     }
                 }
-                >.m-form-field-2{
-                    display : flex;
-                    justify-content:start ;
-
-                    >.m-form-label{
-                        max-width: 15%;
-                    }
-
-                    >.m-form-control{
-                        max-width: 60%;
-                    }
-                }
-
-                  
-                }
-
             }
         }
     }
