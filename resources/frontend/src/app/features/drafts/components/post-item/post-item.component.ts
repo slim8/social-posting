@@ -26,7 +26,6 @@ export class PostItemComponent implements OnInit {
          }
      }
 
-   console.log(this.draftsList);
   }
 updateList() {
    this.newItemEvent.emit(this.draftsList);

@@ -27,7 +27,6 @@ export class DraftsComponent implements OnInit {
 
   update(event:any) {
     this.draftsList= event;
-console.log(event)
   }
 
 
@@ -38,7 +37,6 @@ console.log(event)
 
         this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
-                console.log(event)
                 this.posts = event.posts;
             },
             error: (err) => {
