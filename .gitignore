@@ -20,3 +20,4 @@ resources/views/angular.blade.php
 config.toml
 /builds
 deploy.sh
+deploy.bat

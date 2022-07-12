@@ -60,8 +60,8 @@
                     },
                     "configurations": {
                         "production": {
-                            "outputPath": "public/assets/angular",
-                            "deployUrl": "/assets/angular/",
+                            "outputPath": "public/angular",
+                            "deployUrl": "/angular/",
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -83,8 +83,8 @@
                             "outputHashing": "all"
                         },
                         "devlocal": {
-                            "outputPath": "public/assets/angular",
-                            "deployUrl": "/assets/angular/",
+                            "outputPath": "public/angular",
+                            "deployUrl": "/angular/",
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -115,12 +115,12 @@
                         },
                         "fr": {
                             "localize": ["fr"],
-                            "outputPath": "/assets/angular/fr/",
+                            "outputPath": "/angular/fr/",
                             "i18nMissingTranslation": "error"
                         },
                         "de": {
                             "localize": ["de"],
-                            "outputPath": "/assets/angular/de/",
+                            "outputPath": "/angular/de/",
                             "i18nMissingTranslation": "error"
                         }
                     },
