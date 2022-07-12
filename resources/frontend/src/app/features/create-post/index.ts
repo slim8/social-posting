@@ -55,12 +55,10 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
             }
             // the array of promises
             let promiseArray = fractions.map((time, index) => getVideoThumbnail(videoFile, index >= fractions.length - 1 ? time - 2 : time));
-            console.log('promiseArray', promiseArray)
             // console.log('duration', duration)
             // console.log('fractions', fractions)
             await Promise.all(promiseArray).then((res) => {
                 res.forEach((res , key) => {
-                    console.log('res', key , fractions[key] )
                     thumbnail.push({ imgB64 : res , time : fractions[key] });
                 });
                 // console.log('thumbnail', thumbnail)
@@ -136,8 +134,8 @@ const getVideoThumbnail = (file: File | string, videoTimeInSeconds: number): Pro
 
 /**
  * @ref - https://stackoverflow.com/questions/23640869/create-thumbnail-from-video-file-via-file-input
- * 
- * @param {string} urlOfFIle 
+ *
+ * @param {string} urlOfFIle
  * @param {number} seekTo - sktip to the frame by default
  * @returns {string} base64 image string
  */
@@ -198,8 +196,8 @@ export const getVideoCover = (urlOfFIle: string, seekTo = 0.0): Promise<string> 
 
 /**
  * This method may not work sometimes because some browser blocks browser fingerprinting
- * @param {string} urlOfFIle 
- * @param {number} videoTimeInSeconds 
+ * @param {string} urlOfFIle
+ * @param {number} videoTimeInSeconds
  * @returns {string} base64 image string
  */
 

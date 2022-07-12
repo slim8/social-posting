@@ -15,8 +15,6 @@ export class FacebookPreviewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.ThumbnailImg);
-
   }
 
 }

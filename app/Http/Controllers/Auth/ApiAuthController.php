@@ -100,7 +100,7 @@ class ApiAuthController extends Controller
 
         $user->attachRole('companyadmin');
 
-        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
+       // MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
 
         return RequestsTrait::processResponse(true, ['password' => $password,
         'message' => trans('message.company_created_sucess').$request->email, ]);

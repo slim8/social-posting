@@ -40,29 +40,29 @@
                 </div>
             </div>
             <div class="" *ngIf="imgList.length == 2" >
-                <img [src]="imgList[0]" class="m-post-image-preview" />
+                <img [src]="imgList[1].url" class="m-post-image-preview" />
             </div>
             <div class="" *ngIf="imgList.length == 3" >
-                <img [src]="imgList[0].url" class="m-post-image-preview-2" />
                 <img [src]="imgList[1].url" class="m-post-image-preview-2" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-2" />
             </div>
             <div class="" *ngIf="imgList.length == 4" >
-                <img [src]="imgList[0].url" class="m-post-image-preview-2" />
-                <img [src]="imgList[1].url" class="m-post-image-preview-3" />
-                <img [src]="imgList[2].url" class="m-post-image-preview-3" />
-            </div>
-            <div class="" *ngIf="imgList.length == 5" >
-                <img [src]="imgList[0].url" class="m-post-image-preview-3" />
-                <img [src]="imgList[1].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[1].url" class="m-post-image-preview-2" />
                 <img [src]="imgList[2].url" class="m-post-image-preview-3" />
                 <img [src]="imgList[3].url" class="m-post-image-preview-3" />
             </div>
-            <div class="" *ngIf="imgList.length >= 6" >
-                <img [src]="imgList[0].url" class="m-post-image-preview-3" />
+            <div class="" *ngIf="imgList.length == 5" >
                 <img [src]="imgList[1].url" class="m-post-image-preview-3" />
-                <img [src]="imgList[2].url" class="m-post-image-preview-4" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[3].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[4].url" class="m-post-image-preview-3" />
+            </div>
+            <div class="" *ngIf="imgList.length >= 6" >
+                <img [src]="imgList[1].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-3" />
                 <img [src]="imgList[3].url" class="m-post-image-preview-4" />
                 <img [src]="imgList[4].url" class="m-post-image-preview-4" />
+                <img [src]="imgList[5].url" class="m-post-image-preview-4" />
                 <div class="m-post-image-preview-4 m-more-img-layout" *ngIf="imgList.length > 6" > <div > +{{imgList.length - 6}} </div> </div>
             </div>
 

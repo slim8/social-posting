@@ -86,3 +86,9 @@ figure {
         @include textstyle-size-14-bold();
     }
 }
+
+// behaviours
+
+.is-blocked {
+  cursor: not-allowed!important;
+}

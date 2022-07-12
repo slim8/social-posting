@@ -1,0 +1,57 @@
+<div  class="mod-instagram-device">
+  <div class="m-instagram">
+      <main class="m-post-content">
+          <div class="m-post">
+              <div class="m-post-header">
+                  <img class="m-user-thumb" src="../../../../../assets/img/instapic.jpg" alt="Walter">
+                  <div class="m-user-details">
+                      <strong class="m-name">My page</strong>
+                      <span class="m-location">location</span>
+                  </div>
+                  <div class="m-post-menu">
+                      <span class="m-menu">&nbsp;</span>
+                  </div>
+              </div>
+              <div id="postView">
+                <div class="m-carousel" id="carousel" data-carousel>
+                  <img class="m-no-image" src="../../../../assets/img/no-image.png" alt="no-image"/>
+                  <button class="m-carousel-button m-prev" id="prev" data-carousel-button="prev"><img src="../../../../assets/img/svgs/left-arrow.svg"></button>
+                  <button class="m-carousel-button m-next" id="next" data-carousel-button="next"><img src="../../../../assets/img/svgs/right-arrow.svg"></button>
+                  <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect()">
+                      <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
+                  </nz-mention>
+                  <div id="tooltip" class="m-tooltip" i18n="Whos this|title for whos this tooltip@@whosThis">who's this?</div>
+
+                  <ul id="data-slides" data-slides>
+                      <li *ngFor="let item of mediaList; let index = index;" class="m-slide-insta active {{item.type}}" data-active>
+                          <img *ngIf="item.url!=''"  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()"  src="{{item.url}}" alt="image #{{index}}">
+                        </li>
+                  </ul>
+
+                  <ul id="dots" class="m-dots">
+                  </ul>
+                </div>
+
+              </div>
+              <div class="m-post-footer">
+                  <br>
+                  <div class="m-buttons">
+                      <div class="m-post-btn"><span (click)="liked($event)" class="like">&nbsp;</span></div>
+                      <div class="m-post-btn"><span class="comn">&nbsp;</span></div>
+                      <div class="m-spacer">&nbsp;</div>
+                      <div class="m-post-btn"><span class="save">&nbsp;</span></div>
+                  </div>
+
+                  <div class="m-likes" *ngIf="isliked">
+                      <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
+                      <strong>1 like</strong>
+                  </div>
+                   <div class="m-message">{{message}}</div>
+                  <br>
+                  <span class="m-time">à l'instant</span>
+
+              </div>
+          </div>
+      </main>
+  </div>
+</div>
