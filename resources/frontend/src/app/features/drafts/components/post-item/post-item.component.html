@@ -1,0 +1,66 @@
+<div class="mod-draft-item">
+  <div class="m-wrapper">
+    <div class="m-table">
+      <div class="m-container">
+        <div class="m-header">
+          <input type="checkbox" (click)="check($event,itemValue.value)" [value]="post.id" class="m-checkbox" #itemValue/>
+          <div class="m-icon">
+            <img src="/assets/img/test-images/image.svg" alt=""/>
+          </div>
+          <div class="m-image">
+            <img src="/assets/img/test-images/my-post.png" alt=""/>
+          </div>
+          <div class="m-content">
+            <h6
+              i18n="
+                Drafts Post Title|Drafts Post Title @@DraftsPostTitle"
+            >
+              Titel des Postings
+            </h6>
+
+            <div class="m-account">
+              <div class="m-image">
+                <img src="/assets/img/test-images/ttl.png" alt=""/>
+                <div class="m-provider-logo">
+                  <img src="/assets/img/test-images/instagram.svg" alt=""/>
+                </div>
+              </div>
+
+              <div class="m-name">accountname.test</div>
+            </div>
+          </div>
+          <div class="m-date">
+            <div class="m-create-date">{{post.createdAt}}</div>
+            <br/>
+            <span class="m-text"> Max Mustermann </span>
+          </div>
+          <div class="m-action">
+            <div class="m-left">
+              <a
+                href="{{ post.url }}"
+                target="_blank"
+                class="m-button is-disabled"
+              >
+                <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
+
+                <span>Weiter bearbeiten</span>
+              </a>
+            </div>
+            <div class="m-right">
+              <button class="m-button is-primary">
+                <img
+                  i18n-alt
+                  src="/assets/img/svgs/icons/send.svg"
+                  alt="send icon"
+                  class="m-icon"
+                />
+                <span>Veröffentlichen</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { sharedConstants } from 'src/app/shared/sharedConstants';
+import{HttpClient}from'@angular/common/http';
+import {Injectable}from '@angular/core';
+import {sharedConstants}from 'src/app/shared/sharedConstants';
 
 @Injectable({
-    providedIn: 'root'
+providedIn: 'root'
 })
 export class AccountsService {
 
@@ -25,11 +25,12 @@ export class AccountsService {
       return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/status/1/' + id, {});
   }
 
-  getRecentPosts(params : any = []) {
-      return this.http.get(sharedConstants.API_ENDPOINT+ 'posts', {params});
+  getPosts(params : any = []) {
+      return this.http.get(sharedConstants.API_ENDPOINT+ 'posts', {params})
   }
 
-  deleteAccount(params : any = []) {
-    // return this.http.get(sharedConstants.API_ENDPOINT+ 'posts', {params})
+  removeDrafts(params : any = []) {
+      return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/delete' , params);
   }
+
 }

@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit {
             .set("limit", "4")
             .set("status", "PUBLISH")
             .set("getStat", true);
-        this.accountsService.getRecentPosts(params).subscribe({
+        this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
                 console.log(event)
                 this.posts = event.posts;
