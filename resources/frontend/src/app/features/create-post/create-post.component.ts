@@ -38,6 +38,7 @@ export class CreatePostComponent implements OnInit  {
     //available media test
     availableVideos: boolean = false;
     availableImages: boolean = false;
+    wasMixedTypes: boolean = false;
 
     url1 = '';
     urlImages: string[] = [];
@@ -70,7 +71,7 @@ export class CreatePostComponent implements OnInit  {
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
     selectedFile: any = [];
-    inputValue2 = '@';
+    inputValue2 = '';
     posX = 0;
     posY = 0;
     postId = null;
@@ -179,6 +180,7 @@ export class CreatePostComponent implements OnInit  {
         accountId: "",
         videoTitle: ""
       }
+
       this.accountsValue.forEach((accountId: any) => {
         let arr = accountId.split("|");
         let id = arr[0];
@@ -205,14 +207,14 @@ export class CreatePostComponent implements OnInit  {
       }
 
       if (this.mentions.length > 0) {
-        this.mentions.forEach((mention: any) => {
-          formData.append('mention[]', mention);
-        });
+        formData.append('mentions', JSON.stringify(this.mentions));
       }
 
       if (this.urlLinks.length > 0) {
         this.urlLinks.forEach((media: any) => {
-          formData.append('images[]', media.url);
+          if(media.url!=""){
+            formData.append('images[]', media.url);
+          }
         });
       }
 
@@ -221,7 +223,6 @@ export class CreatePostComponent implements OnInit  {
       this.videoList.forEach((video: any) => {
         this.postService.uploadFile(video.file).subscribe({
           next: (response ) => {
-            console.log(response.files , this.selectedThumbnail , this.selectedVideo);
             let videoUrl = response.files
             let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
             listOfVideos.push({url : videoUrl , seconde : thumbnail.time , thumbnail : null , imgB64 : thumbnail.imgB64});
@@ -230,24 +231,28 @@ export class CreatePostComponent implements OnInit  {
             this.shared.createMessage('error', err);
           },
           complete: () => {
-            listOfVideos.forEach((videoObject) => {
-              this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                next: (response ) => {
-                  console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-                  formData.append('videos[]', JSON.stringify({...videoObject , thumbnail : response.files }));
-                },
-                error: (err) => {
-                  this.shared.createMessage('error', err);
-                },
-                complete: () => {
 
-                }
-              });
-            })
           },
         });
       })
+      console.log("------------------------");
+      listOfVideos.forEach((videoObject) => {
+        console.log("videoObject");
+        console.log(videoObject);
+        this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+          next: (response ) => {
 
+            console.log(response.files , this.selectedThumbnail , this.selectedVideo);
+            formData.append('videos[]', JSON.stringify({...videoObject , thumbnail : response.files }));
+          },
+          error: (err) => {
+            this.shared.createMessage('error', err);
+          },
+          complete: () => {
+
+          }
+        });
+      })
       formData.append('status', param);
       formData.append('message', this.message);
 
@@ -347,7 +352,7 @@ export class CreatePostComponent implements OnInit  {
           img.url = elem.response.files.url;
           img.type = elem.response.files.type;
           this.urlLinks.push(img);
-          this.refreshCarousel();
+          this.refreshPreview();
         })
         this.refreshPages();
       }
@@ -367,7 +372,7 @@ export class CreatePostComponent implements OnInit  {
           img.url = elem.response.files.url;
           img.type = elem.response.files.type;
           this.urlLinks.push(img);
-          this.refreshCarousel();
+          this.refreshPreview();
         })
       }
       this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
@@ -449,7 +454,7 @@ export class CreatePostComponent implements OnInit  {
     }
 
     removeLink(index: number) {
-        this.refreshCarousel();
+        this.refreshPreview();
         this.urlLinks.forEach((element: any, i: any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
@@ -485,7 +490,7 @@ export class CreatePostComponent implements OnInit  {
         // this.message = this.postdata.post.message;
     }
 
-    refreshCarousel() {
+    refreshPreview() {
         // looking for a better solution
         this.refresh = true;
         setTimeout(() => {
@@ -564,6 +569,7 @@ export class CreatePostComponent implements OnInit  {
         this.currentTimePosition = -10;
         setTimeout(() => {
           this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+          this.refreshPreview();
         }, 2500);
       }
 
@@ -585,7 +591,7 @@ export class CreatePostComponent implements OnInit  {
         }
         this.leadThumbnail = false ;
       })
-      this.refreshCarousel();
+      this.refreshPreview();
     }
 
     selectThumbnail(item : {imgB64 : '' , time : 0 } ){
@@ -658,9 +664,12 @@ export class CreatePostComponent implements OnInit  {
         .onClick.subscribe(() => {
           console.log('notification clicked!');
         });
+        this.wasMixedTypes = true;
       } else {
         fbTab?.classList.remove('is-blocked');
-        this.getPages('mixed');
+        if(this.wasMixedTypes) {
+          this.getPages('mixed');
+        }
       }
     }
 
@@ -678,6 +687,7 @@ export class CreatePostComponent implements OnInit  {
 
   addMentions(event:any[]) {
     this.mentions = event;
+    console.log(this.mentions)
   }
 
   addToPost(event : any){

@@ -301,7 +301,7 @@
                         um hier eine Vorschau zu sehen. </p>
                 </div>
 
-                <app-instagram-preview *ngIf="!refresh && mediaList.length > 1 && instagramPreview"  [mediaList]="mediaList" (newItemEvent)="addMentions($event)"></app-instagram-preview>
+                <app-instagram-preview *ngIf="!refresh && mediaList.length > 1 && instagramPreview"  [mediaList]="mediaList" [message]="instagramMessage" (newItemEvent)="addMentions($event)"></app-instagram-preview>
 
                 <app-facebook-preview *ngIf="mediaList.length > 1 && facebookPreview && !refresh"  [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="mediaList"></app-facebook-preview>
 

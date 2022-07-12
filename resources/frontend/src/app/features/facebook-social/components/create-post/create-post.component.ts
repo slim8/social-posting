@@ -356,7 +356,7 @@ export class CreatePostComponent implements OnInit {
         }
     }
 
-    //Images preview from upload file 
+    //Images preview from upload file
     handlePreview = async (file: NzUploadFile): Promise<void> => {
         if (!file.url && !file['preview']) {
             file['preview'] = await getBase64(file.originFileObj!);
@@ -436,7 +436,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     removeLink(index: number) {
-        this.refreshCarousel();
+        this.refreshPreview();
         this.urlLinks.forEach((element: any, i: any) => {
             if (element == index) {
                 this.urlLinks.splice(i, 1);
@@ -478,7 +478,7 @@ export class CreatePostComponent implements OnInit {
         this.message = this.postdata.post.message;
     }
 
-    refreshCarousel() {
+    refreshPreview() {
         // waiting for better solution
         this.refresh = true;
         setTimeout(() => {

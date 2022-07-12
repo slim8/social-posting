@@ -9,6 +9,7 @@ import { Mention } from 'ng-zorro-antd/mention';
 export class InstagramPreviewComponent implements  OnChanges {
     //preview images variable
     @Input() mediaList: any[] = [{url: ""}];
+    @Input() message: string = "";
     @Output() newItemEvent = new EventEmitter<any[]>();
     mentions: any = [];
     isliked: boolean = false;
@@ -300,10 +301,10 @@ export class InstagramPreviewComponent implements  OnChanges {
     }
 
     tag(event: any) {
-        this.taggedImage = event.path[1];
-        this.imageHeight = event.path[0].clientHeight;
-        this.imageWidth = event.path[0].clientWidth;
-        this.inputValue2 = '@';
+        this.taggedImage = event.target.closest('li');
+        this.imageHeight = event.target.clientHeight;
+        this.imageWidth = event.target.clientWidth;
+        this.inputValue2 = '';
         let post = event.target;
         let input = document.getElementsByClassName(
             'm-input-tag'

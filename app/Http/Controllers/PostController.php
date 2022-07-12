@@ -226,7 +226,6 @@ class PostController extends Controller
      */
     public function deletePostById($postId)
     {
-        d($postId);
         Mentions::where('postId', $postId)->delete();
         PostMedia::where('postId', $postId)->delete();
         $accountPosts = AccountPost::where('postId', $postId)->get();

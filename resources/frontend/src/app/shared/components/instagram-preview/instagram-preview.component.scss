@@ -1,3 +1,8 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../assets/sass/_project/base.scss';
+
+
 .mod-instagram-device {
   width: 100%;
   max-width: 360px;
@@ -139,6 +144,11 @@
                       padding: 0 1em;
                       color: #c0c0c0;
                       font-size: 0.75em;
+                  }
+
+                  > .m-message {
+                    padding-left: 11px;
+                    @include textstyle-size-12();
                   }
               }
 
