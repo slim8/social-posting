@@ -10,6 +10,7 @@ use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Hashtag;
+use App\Models\Mentions;
 use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
@@ -153,18 +154,38 @@ class GeneralSocialController extends Controller
                     } else {
                         $postId = Post::where('id', $requestPostId)->update($postObject);
                         $postId = Post::where('id', $requestPostId)->first();
-
                         // Delete All Saved Post Media
+                        Mentions::where('postId', $postId->id)->delete();
                         PostMedia::where('postId', $postId->id)->delete();
                     }
 
                     if ($images) {
+                        $imgInc = 0;
                         foreach ($images as $image) {
-                            PostMedia::create([
+                            $postMedia = PostMedia::create([
                                 'url' => $image,
                                 'postId' => $postId->id,
                                 'type' => 'image',
                             ]);
+
+                            // Save Mentions to database
+                            if ($mentions) {
+                                foreach ($mentions as $mention) {
+                                    if ($mention['image'] == $imgInc) {
+                                        Mentions::create([
+                                            'postMediaId' => $postMedia->id,
+                                            'username' => $mention['username'],
+                                            'postId' => $postId->id,
+                                            'posX' => $mention['x'],
+                                            'posY' => $mention['y'],
+                                            'provider' => 'instagram',
+                                            'companyId' => UserTrail::getCompanyId(),
+                                        ]);
+                                    }
+                                }
+                            }
+
+                            ++$imgInc;
                         }
                     }
 
@@ -231,6 +252,7 @@ class GeneralSocialController extends Controller
                             if (!$hashtagId) {
                                 $hashtagId = Hashtag::create([
                                 'name' => $hashtag,
+                                'companyId' => UserTrail::getCompanyId(),
                                 ]);
                             }
 
@@ -429,5 +451,38 @@ class GeneralSocialController extends Controller
         } else {
             return RequestsTrait::processResponse(false, ['message' => 'No page autorized']);
         }
+    }
+
+    /**
+     * Search Users Mentions by Key.
+     */
+    public function searchUsers(Request $request)
+    {
+        $searchQuery = $request->q;
+        if (!$searchQuery) {
+            return RequestsTrait::processResponse(false);
+        }
+
+        $mentions = Mentions::where('companyId', UserTrait::getCompanyId())->where('username', 'like', '%'.$searchQuery.'%')->distinct('username')->get('username');
+
+        if (!$mentions) {
+            return RequestsTrait::processResponse(false);
+        }
+
+        return RequestsTrait::processResponse(true, ['mentions' => $mentions]);
+    }
+
+    /**
+     * Search Tags by Key.
+     */
+    public function searchTags(Request $request)
+    {
+        $searchQuery = $request->q;
+        if (!$searchQuery) {
+            return RequestsTrait::processResponse(false);
+        }
+        $hashtags = Hashtag::where('companyId', UserTrait::getCompanyId())->where('name', 'like', '%'.str_replace(' ','_' , $searchQuery).'%')->distinct('name')->get('name');
+
+        return RequestsTrait::processResponse(count($hashtags) > 0 ? true : false, ['hashtags' => $hashtags]);
     }
 }

@@ -35,7 +35,7 @@
     > .m-title {
         > h1 {
             @include textstyle-size-44-bold();
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
     }
 
@@ -70,11 +70,14 @@
             text-align: center;
 
             > button {
-                border-radius: 0%;
-                width: 118px;
-                height: 39px;
-                @include textstyle-size-14();
-                padding: 10px 40px;
+              margin: auto;
+              border-radius: 0%;
+              width: 118px;
+              height: 39px;
+              @include textstyle-size-14();
+              display: flex;
+              justify-content: center;
+              padding: 10px 0;
             }
         }
     }

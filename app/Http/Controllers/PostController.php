@@ -9,9 +9,11 @@ use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Hashtag;
+use App\Models\Mentions;
 use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -132,7 +134,7 @@ class PostController extends Controller
 
         $posts = $postId ? null : [];
         foreach ($postRequest as $postContent) {
-            $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
+            $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->with('mentions')->get();
 
             if ($filterByAccounts) {
                 $postContent->provider = $postContent->accounts[0]->provider;
@@ -171,5 +173,73 @@ class PostController extends Controller
         } else {
             return RequestsTrait::processResponse(false, ['message' => 'No posts found Or some account are disconnected']);
         }
+    }
+
+    /**
+     * Delete Drafts By Ids.
+     */
+    public function deleteDraft(Request $request)
+    {
+        $errorLog = [];
+        if (!$request->postsIds) {
+            return RequestsTrait::processResponse(false, ['No Draft Sent']);
+        }
+
+        if (gettype($request->postsIds) !== 'array') {
+            return RequestsTrait::processResponse(false, ['Draft post musrt be array']);
+        }
+
+        $isCompanyAdmin = UserTrait::getUserObject()->hasRole('companyadmin') ? true : false;
+        $userCompanyId = UserTrait::getUserObject()->companyId;
+
+        foreach ($request->postsIds as $postId) {
+            $currentPost = Post::where('id', $postId)->first();
+
+            $isDraft = $currentPost->status === 'DRAFT';
+            $createdBy = $currentPost->createdBy;
+            $postCompany = User::where('id', $createdBy)->first()->companyId;
+
+            if (!$isDraft) {
+                $errorLog[] = 'Post '.$postId.' Could not be deleted because is not DRAFT';
+            }
+            if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
+                $errorLog[] = "You don't have right to delete Post ".$postId;
+            }
+            if (!$isCompanyAdmin && $createdBy !== UserTrait::getCurrentId()) {
+                $errorLog[] = "You don't have right to delete Post ".$postId;
+            }
+        }
+
+        if ($errorLog) {
+            return RequestsTrait::processResponse(false, ['errors' => $errorLog]);
+        }
+
+        foreach ($request->postsIds as $postId) {
+            $this->deletePostById($postId);
+        }
+
+        return RequestsTrait::processResponse(true);
+    }
+
+    /**
+     * Delete Post By Id.
+     */
+    public function deletePostById($postId)
+    {
+        Mentions::where('postId', $postId)->delete();
+        PostMedia::where('postId', $postId)->delete();
+        $accountPosts = AccountPost::where('postId', $postId)->get();
+
+        if ($accountPosts) {
+            foreach ($accountPosts as $accountPost) {
+                $accountPostId = $accountPost->id;
+                PostHashtag::where('accountPostId', $accountPostId)->delete();
+
+                AccountPost::where('postId', $postId)->delete();
+            }
+        }
+
+        $test = Post::where('id', $postId)->delete();
+        return true;
     }
 }

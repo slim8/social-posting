@@ -54,10 +54,10 @@ class ApiAuthController extends Controller
         //     'adress' => 'string|max:255',
         //     'website' => 'string|max:255',
         //      'address' => 'required|string|max:255',
-        // 'postCode' => 'required|string|max:255',
-        // 'city' => 'required|string|max:255',
+        //     'postCode' => 'required|string|max:255',
+        //     'city' => 'required|string|max:255',
         //     'email' => 'required|string|email|max:255|unique:users|unique:companies',
-        //     'phoneNumber' => 'required|string|max:255|unique:companies',
+        //     'phone_number' => 'required|string|max:255|unique:companies',
         //     'isSubscriber' => '',
         // ], [
         //     'companyName.required' => 'This is a required message for company name',
@@ -66,6 +66,13 @@ class ApiAuthController extends Controller
         //     return response(['errors' => $validator->errors()->all()], 422);
         // }
 
+        if (Company::where('phoneNumber', $request->phoneNumber)->first()) {
+            return RequestsTrait::processResponse(false, ['message' => 'This Phone Number is Already exist']);
+        }
+
+        if (Company::where('email', $request->email)->first()) {
+            return RequestsTrait::processResponse(false, ['message' => 'This Email is Already exist']);
+        }
         $company = Company::create([
             'name' => $request->companyName,
             'email' => $request->email,
@@ -93,7 +100,7 @@ class ApiAuthController extends Controller
 
         $user->attachRole('companyadmin');
 
-        // MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
+        MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
 
         return RequestsTrait::processResponse(true, ['password' => $password,
         'message' => trans('message.company_created_sucess').$request->email, ]);

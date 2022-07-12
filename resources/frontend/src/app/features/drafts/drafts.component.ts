@@ -42,6 +42,7 @@ console.log(event)
                 this.posts = event.posts;
             },
             error: (err) => {
+                this.posts = []
             },
             complete: () => {
             }
@@ -52,16 +53,17 @@ console.log(event)
      if(this.draftsList.length > 0) {
 
         const formData : FormData = new FormData();
-        formData.append('postIds[]', this.draftsList);
+        this.draftsList.forEach((draft:any)=>{
+           formData.append('postsIds[]', draft);
+        })
 
         this.accountsService.removeDrafts(formData).subscribe({
           next: (event: any) => {
-              console.log(event)
-              this.posts = event.posts;
           },
           error: (err) => {
           },
           complete: () => {
+                this.getDrafts();
           }
       })
      }else {

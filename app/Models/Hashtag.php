@@ -13,6 +13,7 @@ class Hashtag extends ExtendedModel
 
     protected $fillable = [
         'name',
+        'companyId',
     ];
 
     public function posts()
