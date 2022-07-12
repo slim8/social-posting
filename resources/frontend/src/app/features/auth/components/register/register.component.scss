@@ -28,6 +28,9 @@
             > h1 {
                 @include textstyle-size-44-bold();
                 margin-bottom: 5px;
+                @media screen and (max-width : 570px) {
+                    font-size: 2rem;
+                }
             }
         }
 
