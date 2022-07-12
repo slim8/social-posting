@@ -8,6 +8,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { AuthLayoutComponent } from './components/auth-layout/auth-layout.component';
 import { DemoNgZorroAntdModule } from 'src/app/shared/ng-zorro-antd.module';
 import { FormsModule } from '@angular/forms';
+import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
         AuthLayoutComponent,
         LoginComponent,
         RegisterComponent,
-        ResetPasswordComponent
+        ResetPasswordComponent,
+        ForgetPasswordComponent
     ],
     imports: [
         CommonModule,
