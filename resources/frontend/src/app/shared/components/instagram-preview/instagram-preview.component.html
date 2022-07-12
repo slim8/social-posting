@@ -1,7 +1,6 @@
 <div  class="mod-instagram-device">
   <div class="m-instagram">
       <main class="m-post-content">
-
           <div class="m-post">
               <div class="m-post-header">
                   <img class="m-user-thumb" src="../../../../../assets/img/instapic.jpg" alt="Walter">
@@ -14,7 +13,6 @@
                   </div>
               </div>
               <div id="postView">
-
                 <div class="m-carousel" id="carousel" data-carousel>
                   <img class="m-no-image" src="../../../../assets/img/no-image.png" alt="no-image"/>
                   <button class="m-carousel-button m-prev" id="prev" data-carousel-button="prev"><img src="../../../../assets/img/svgs/left-arrow.svg"></button>
@@ -22,7 +20,7 @@
                   <nz-mention id="tagPerson" class="m-input-tag" nzPlacement="top" [nzSuggestions]="suggestions" (nzOnSelect)="onSelect()">
                       <input nzMentionTrigger nz-input [(ngModel)]="inputValue2" (ngModelChange)="onChange($event)" />
                   </nz-mention>
-                  <div id="tooltip" class="m-tooltip">who's this?</div>
+                  <div id="tooltip" class="m-tooltip" i18n="Whos this|title for whos this tooltip@@whosThis">who's this?</div>
 
                   <ul id="data-slides" data-slides>
                       <li *ngFor="let item of mediaList; let index = index;" class="m-slide-insta active {{item.type}}" data-active>
@@ -54,7 +52,6 @@
 
               </div>
           </div>
-
       </main>
   </div>
 </div>
