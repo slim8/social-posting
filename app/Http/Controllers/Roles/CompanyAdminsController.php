@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Roles;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\User;
@@ -69,7 +69,7 @@ class CompanyAdminsController extends Controller
     }
 
 
-/**
+    /**
      * Remove Account Pages/Group From User.
      */
     public function removeAccountFromUser(Request $request)
@@ -104,6 +104,4 @@ class CompanyAdminsController extends Controller
 
         return RequestsTrait::processResponse(true);
     }
-
-
 }

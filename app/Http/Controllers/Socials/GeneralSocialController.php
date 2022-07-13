@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\Services\FacebookService;
 use App\Http\Traits\UserTrait;
@@ -252,8 +252,8 @@ class GeneralSocialController extends Controller
 
                             if (!$hashtagId) {
                                 $hashtagId = Hashtag::create([
-                                'name' => $hashtag,
-                                'companyId' => \App\Http\Traits\UserTrait::getCompanyId(),
+                                    'name' => $hashtag,
+                                    'companyId' => \App\Http\Traits\UserTrait::getCompanyId(),
                                 ]);
                             }
 
@@ -267,7 +267,7 @@ class GeneralSocialController extends Controller
                     $errorLog[] = $postResponse['message'];
                 }
             } else {
-                $errorLog[] = 'Cannot find a connected account Or permissions denied for ID  '.$post['accountId'];
+                $errorLog[] = 'Cannot find a connected account Or permissions denied for ID  ' . $post['accountId'];
             }
         }
 
@@ -308,7 +308,7 @@ class GeneralSocialController extends Controller
      */
     public function getAccountPagesAccount($facebookUserId, $tokenKey)
     {
-        $facebookUri = envValue('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
+        $facebookUri = envValue('FACEBOOK_ENDPOINT') . $facebookUserId . '/accounts?access_token=' . $tokenKey;
 
         $response = Http::get($facebookUri);
 
@@ -464,7 +464,7 @@ class GeneralSocialController extends Controller
             return RequestsTrait::processResponse(false);
         }
 
-        $mentions = Mentions::where('companyId', UserTrait::getCompanyId())->where('username', 'like', '%'.$searchQuery.'%')->distinct('username')->get('username');
+        $mentions = Mentions::where('companyId', UserTrait::getCompanyId())->where('username', 'like', '%' . $searchQuery . '%')->distinct('username')->get('username');
 
         if (!$mentions) {
             return RequestsTrait::processResponse(false);
@@ -482,7 +482,7 @@ class GeneralSocialController extends Controller
         if (!$searchQuery) {
             return RequestsTrait::processResponse(false);
         }
-        $hashtags = Hashtag::where('companyId', UserTrait::getCompanyId())->where('name', 'like', '%'.str_replace(' ','_' , $searchQuery).'%')->distinct('name')->get('name');
+        $hashtags = Hashtag::where('companyId', UserTrait::getCompanyId())->where('name', 'like', '%' . str_replace(' ', '_', $searchQuery) . '%')->distinct('name')->get('name');
 
         return RequestsTrait::processResponse(count($hashtags) > 0 ? true : false, ['hashtags' => $hashtags]);
     }

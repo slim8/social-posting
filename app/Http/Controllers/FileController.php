@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
 use File;
@@ -38,14 +38,14 @@ class FileController extends Controller
     public function convertToJpeg($image, int $isOnDisk = 0, string $filePathName = null)
     {
         if (!$isOnDisk) {
-            $object = $image->store('temporar'.'s/'.date('Y').'/'.date('m').'/'.date('d'));
+            $object = $image->store('temporar' . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
         }
 
-        $object = $isOnDisk ? $filePathName : storage_path().'/app/public/'.$object;
+        $object = $isOnDisk ? $filePathName : storage_path() . '/app/public/' . $object;
         $exploded = explode('/', $object);
         $fileName = $exploded[count($exploded) - 1];
         $newFileName = explode('.', $fileName)[0];
-        $newFile = storage_path().'/app/public/temporarStored/'.$newFileName.'.jpeg';
+        $newFile = storage_path() . '/app/public/temporarStored/' . $newFileName . '.jpeg';
         $this->imageManager->make($object)->encode('jpg', 80)->save($newFile);
 
         unlink($object);
@@ -71,18 +71,18 @@ class FileController extends Controller
         $fileObject = new \stdClass();
 
         if ($request->file) {
-            $type = explode(',' , $request->file)[0];
-            if(!strpos($type , 'image')){
-                return RequestsTrait::processResponse(false , ['message' => 'file must be image']);
+            $type = explode(',', $request->file)[0];
+            if (!strpos($type, 'image')) {
+                return RequestsTrait::processResponse(false, ['message' => 'file must be image']);
             }
             $base64_str = substr($request->file, strpos($request->file, ',') + 1);
             $image = base64_decode($base64_str);
-            $imageName = $token = Str::random(20).'.png';
-            $newImagePath = Storage::disk('public')->put('temporarStored/'.$imageName, $image);
+            $imageName = $token = Str::random(20) . '.png';
+            $newImagePath = Storage::disk('public')->put('temporarStored/' . $imageName, $image);
             if (!$newImagePath) {
                 return RequestsTrait::processResponse(false);
             }
-            $newImagePath = storage_path().'/app/public/temporarStored/'.$imageName;
+            $newImagePath = storage_path() . '/app/public/temporarStored/' . $imageName;
             $fileObject->type = 'image';
 
             if (envValue('APP_ENV') == 'local') {
@@ -138,9 +138,9 @@ class FileController extends Controller
      */
     public function uploadLocalImage($file, $type)
     {
-        $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
+        $object = $file->store($type . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
 
-        return envValue('APP_URL').'/'.$object;
+        return envValue('APP_URL') . '/' . $object;
     }
 
     /**
@@ -151,7 +151,7 @@ class FileController extends Controller
         if ($type == 'image') {
             $imageLink = $this->convertToJpeg($image, $isOnDisk, $filePathName);
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
-            $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/'.$imageName);
+            $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/' . $imageName);
         }
 
         if (envValue('UPLOAD_PROVIDER') == 'hoster') {
@@ -180,15 +180,15 @@ class FileController extends Controller
                 RequestsTrait::processResponse(false, ['message' => 'Upload Failed']);
             }
         } else {
-            $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images/'.$imageName : 'others', $image);
+            $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images/' . $imageName : 'others', $image);
 
             if ($type == 'image') {
                 unlink($imageLink);
 
-                return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').'images/'.$imageName;
+                return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER') . 'images/' . $imageName;
             }
 
-            return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
+            return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER') . $ftpFile;
         }
     }
 }
