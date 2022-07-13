@@ -12,7 +12,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-public/assets/angular
+public/angular
+public/assets
 resources/views/angular.blade.php
 /docs
 /.angular
