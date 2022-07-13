@@ -287,6 +287,13 @@
                             }
                         }
                     }
+                    .m-linked-accounts{
+                      display: flex;
+                      justify-content: center;
+                      @include mq(desktop) {
+
+                    }
+                    }
                 }
 
                 > .m-news {
