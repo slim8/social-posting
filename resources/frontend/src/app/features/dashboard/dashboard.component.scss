@@ -290,7 +290,7 @@
                     .m-linked-accounts{
                       display: flex;
                       justify-content: center;
-                      @include mq(tablet) {
+                      @include mq(desktop) {
                         justify-content: flex-start;
                     }
                     }
