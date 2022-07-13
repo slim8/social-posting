@@ -11,8 +11,8 @@
         i18n="add Account or page |add account or page@@addAccountPage"
         class="m-button is-primary"
       >
-        <span><i nz-icon nzType="ng-zorro:add"></i></span> Weiteres Konto
-        verknüpfen
+        <span><i nz-icon nzType="ng-zorro:add"></i></span> Link another account
+
       </button>
     </div>
     <div class="m-accounts-container">
@@ -25,15 +25,15 @@
             i18n="
               No account|No connected account title@@NoConnectedAccountTitle"
           >
-            Noch keine Beiträge vorhanden.
+          No posts yet.
           </h4>
           <p
             i18n="
               No account message|No connected account
               message@@NoConnectedAccountMessage"
           >
-            Verknüpfe Deine Social Media Kanäle mit der mediafactory, um
-            Beiträge zu gestalten und direkt zu veröffenltichen.
+          Link your social media channels with the mediafactory to
+          Design and publish posts directly.
           </p>
         </div>
         <div class="m-login-button">
@@ -42,7 +42,7 @@
             class="m-button is-primary"
             i18n="Login button|Login account button@@LoginAccount"
           >
-            <span><i nz-icon nzType="ng-zorro:add"></i></span>Konto verknüpfen
+            <span><i nz-icon nzType="ng-zorro:add"></i></span>Link account
           </button>
         </div>
       </div>
@@ -66,9 +66,9 @@
               [nzActive]="true"
               [nzSize]="16"
             ></nz-skeleton-element>
-            <div class="m-title-hover">
-              Wir können aktuell nicht auf dein Konto zugreifen. Bitte überprüfe
-              dein Konto und deine Zugangsdaten bei Facebook direkt.
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
+              We are currently unable to access your account. Please check
+               your account and your access data on Facebook directly.
             </div>
           </div>
           <div class="m-action">
@@ -103,7 +103,7 @@
         *ngIf="!isLoading && connectedAccounts != ''"
         class="m-connected-accounts"
       >
-        <h2>Personnal Accounts</h2>
+        <h2 i18n="Personnel Account|Personnel account title@@personnelAccount">Personnal Accounts</h2>
 
         <div
           *ngFor="let account of connectedAccounts"
@@ -125,17 +125,17 @@
           </div>
           <div class="m-alert">
             <img src="../../../assets/img/exclamation.png" alt="" />
-            <div class="m-title-hover">
-              Wir können aktuell nicht auf dein Konto zugreifen. Bitte überprüfe
-              dein Konto und deine Zugangsdaten bei Facebook direkt.
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
+              We are currently unable to access your account. Please check
+               your account and your access data on Facebook directly.
             </div>
           </div>
           <div class="m-action">
-            <button class="m-button is-primary">
-              <span><i nz-icon nzType="ng-zorro:edit"></i></span> Zum Beitrag
+            <button class="m-button is-primary" i18n="Create Post|Text for create post@@createPost">
+              <span><i nz-icon nzType="ng-zorro:edit"></i></span> To the post
             </button>
-            <button class="m-button is-disabled">
-              <span><i nz-icon nzType="ng-zorro:pencil"></i></span> Daten ändern
+            <button class="m-button is-disabled" i18n="Edit Account|Text edit account@@editAccount">
+              <span><i nz-icon nzType="ng-zorro:pencil"></i></span> Edit account
             </button>
           </div>
           <div class="m-action-manager">
@@ -161,7 +161,7 @@
       </div>
 
       <div *ngIf="!isLoading && listOfPages != ''" class="m-connected-accounts">
-        <h2>Connected Social Media Accounts</h2>
+        <h2 i18n="Connected pages|Title for connected pages@@connectedPages">Connected Social Media Accounts</h2>
         <!-- category: "Science et technologie"
                 id: 21
                 isConnected: true
@@ -209,20 +209,20 @@
               src="../../../assets/img/exclamation.png"
               alt=""
             />
-            <div class="m-title-hover">
-              Wir können aktuell nicht auf dein Konto zugreifen. Bitte überprüfe
-              dein Konto und deine Zugangsdaten bei Facebook direkt.
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
+              We are currently unable to access your account. Please check
+               your account and your access data on Facebook directly.
             </div>
           </div>
           <div
             [ngClass]="{ 'is-disconnected': !page.isConnected }"
             class="m-action"
           >
-            <button class="m-button is-primary">
-              <span><i nz-icon nzType="ng-zorro:edit"></i></span> Zum Beitrag
+            <button class="m-button is-primary" i18n="Create Post|Text for create post@@createPost">
+              <span><i nz-icon nzType="ng-zorro:edit"></i></span> To the post
             </button>
-            <button class="m-button is-disabled">
-              <span><i nz-icon nzType="ng-zorro:pencil"></i></span> Daten ändern
+            <button class="m-button is-disabled" i18n="Edit Account|Text edit account@@editAccount">
+              <span><i nz-icon nzType="ng-zorro:pencil"></i></span> Edit account
             </button>
           </div>
           <div class="m-action-manager">
@@ -253,13 +253,13 @@
         <img src="../../../assets/img/close.png" alt="close" />
       </div>
       <div class="m-modal-header">
-        <div class="m-title">Instagram & Business Seiten hinzufügen</div>
-        <div class="m-text">
-          Wähle deine verbundenen Business Konten und Facebook Seiten aus, die
-          du mit der mediafactory verknüpfen möchtest.
+        <div class="m-title" i18n="Add pages|Title for adding pages@@addPages">Add Instagram & Business Pages</div>
+        <div class="m-text" i18n="Add Pages Text|Text for add pages@@addPagesText">
+          Select your connected business accounts and Facebook Pages that
+           you want to link to the mediafactory.
         </div>
-        <div *ngIf="this.currentUser != ''" class="m-list-title">
-          Mit <strong>accountname.test</strong> verknüpfte Konten:
+        <div *ngIf="this.currentUser != ''" class="m-list-title" i18n="Pages Linked To Accountname|Text for pages linked to accountname@@pagesLinkedToAccount">
+          Pages Linked To <strong>accountname.test</strong>:
         </div>
       </div>
 
@@ -286,8 +286,8 @@
         </tr>
       </form>
       <div class="m-submit-button">
-        <button (click)="onSubmit()" class="m-button is-primary">
-          Verknüpfen
+        <button (click)="onSubmit()" class="m-button is-primary" i18n="Link|Link@@link">
+          Link
         </button>
       </div>
     </div>
@@ -298,11 +298,11 @@
       </div>
       <div class="m-success">
         <img src="../../../assets/img/Group.png" alt="refreshing" />
-        <div class="m-success-title">
+        <div class="m-success-title" i18n="Logged In|Logged in successfully@@loggedIn">
           <img src="../../../assets/img/Check.png" alt="success" />
-          Erfolgreich angemeldet.
+          Logged in successfully.
         </div>
-        <p>
+        <p i18n="Redirect Message Success|Text for redirection after success@@redirectMessageSuccess">
           Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
           mediafactory Social Media Publisher hinzuzufügen.
         </p>
