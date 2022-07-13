@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AngularController;
-use App\Http\Controllers\functions\RoutersController;
+use App\Http\Controllers\Functions\RoutersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,4 +34,4 @@ Route::any('/{any}', [AngularController::class, 'index'])->where('any', '^(?!api
 //     Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
 // });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

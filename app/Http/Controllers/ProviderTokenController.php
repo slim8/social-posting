@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\Services\FacebookService;
@@ -110,7 +110,7 @@ class ProviderTokenController extends Controller
      */
     public function refreshToken(Request $request, int $accountId = null)
     {
-        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%'.Account::$STATUS_DISCONNECTED.'%')->where('provider', 'facebook');
+        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%' . Account::$STATUS_DISCONNECTED . '%')->where('provider', 'facebook');
 
         if ($accountId) {
             $providerAcounts = $providerAcounts->where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $accountId);
@@ -153,7 +153,7 @@ class ProviderTokenController extends Controller
      */
     public function checkSingleProviderToken($accessToken, $uid, $providerTokenId)
     {
-        $facebookUri = envValue('FACEBOOK_ENDPOINT').$uid.'/accounts?access_token='.$accessToken;
+        $facebookUri = envValue('FACEBOOK_ENDPOINT') . $uid . '/accounts?access_token=' . $accessToken;
 
         $response = Http::get($facebookUri);
         $jsonResponse = $response->json();
@@ -184,7 +184,7 @@ class ProviderTokenController extends Controller
      */
     public function checkAccountToken()
     {
-        $accounts = Account::select(['provider_token_id'])->groupBy('provider_token_id')->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('companyId', UserTrait::getCompanyId())->whereBetween('provider', ['facebook' , 'instagram'])->get();
+        $accounts = Account::select(['provider_token_id'])->groupBy('provider_token_id')->where('status', 1)->where('accessToken', 'not like', Account::$STATUS_DISCONNECTED)->where('companyId', UserTrait::getCompanyId())->whereBetween('provider', ['facebook', 'instagram'])->get();
         foreach ($accounts as $account) {
             $this->checkTokenAvailablity($account->providerTokenId);
         }

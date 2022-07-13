@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\functions;
+namespace App\Http\Controllers\Functions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
-use Illuminate\Http\Request;
 
 class ExempleController extends Controller
 {

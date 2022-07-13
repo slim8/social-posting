@@ -4,7 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\Functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;

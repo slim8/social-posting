@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\functions;
+namespace App\Http\Controllers\Functions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\RequestsTrait;
@@ -72,7 +72,7 @@ class UtilitiesController extends Controller
         $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
         $days = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
 
-        return $months.' months and '.$days.' days';
+        return $months . ' months and ' . $days . ' days';
     }
 
     /**
