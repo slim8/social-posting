@@ -86,8 +86,12 @@ export class CreatePostComponent implements OnInit  {
     currentTimePosition = -10;
     duration = 10;
 
+    videosList: NzUploadFile[] = [];
+    listOfVideos : { url : string , seconde : number , thumbnail : any}[] = []
+
+
     videoCounter = 0;
-    videoList: {id : number ,file : File }[] = [];
+    videoList: {id : number ,file : File , videoUrl : string }[] = [];
     selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
     mediaList:any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     showAlbum : boolean = false;
@@ -164,6 +168,36 @@ export class CreatePostComponent implements OnInit  {
       });
     }
 
+    async uploadThumbnail(param: string){
+      let list = this.videoList.map(video => {
+        let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
+        return { url : video.videoUrl , ...thumbnail , thumbnail: '' };
+      })
+
+      await list.forEach((videoObject) => {
+        console.log("videoObject");
+        console.log(videoObject);
+         this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+          next: (response ) => {
+            console.log(response.files.url);
+            
+            this.listOfVideos.push({url : videoObject.url , seconde : videoObject.time ,thumbnail : response.files.url }) ;
+          },
+          error: (err) => {
+            this.shared.createMessage('error', err);
+          },
+          complete: () => {
+            
+          }
+        });
+      })
+      console.log("------------------------" , this.listOfVideos );
+      setTimeout(() => {
+        this.submitForm(param)
+      }, 2000);
+      
+    }
+
     submitForm(param: string) {
       let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
       let btnSubmit = document.getElementById('btn-submit');
@@ -173,6 +207,11 @@ export class CreatePostComponent implements OnInit  {
       let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
 
       const formData: FormData = new FormData();
+
+      this.listOfVideos.forEach((videoObject)=> {
+        formData.append('videos[]', JSON.stringify(videoObject));
+      })
+
       let post: any = {
         message: "",
         hashtags: [],
@@ -218,41 +257,6 @@ export class CreatePostComponent implements OnInit  {
         });
       }
 
-      // // TODO:: for video upload
-      let listOfVideos: {url : any , seconde : any , thumbnail : any , imgB64 : string }[] = [];
-      this.videoList.forEach((video: any) => {
-        this.postService.uploadFile(video.file).subscribe({
-          next: (response ) => {
-            let videoUrl = response.files
-            let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id = video.id)[0];
-            listOfVideos.push({url : videoUrl , seconde : thumbnail.time , thumbnail : null , imgB64 : thumbnail.imgB64});
-          },
-          error: (err) => {
-            this.shared.createMessage('error', err);
-          },
-          complete: () => {
-
-          },
-        });
-      })
-      console.log("------------------------");
-      listOfVideos.forEach((videoObject) => {
-        console.log("videoObject");
-        console.log(videoObject);
-        this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-          next: (response ) => {
-
-            console.log(response.files , this.selectedThumbnail , this.selectedVideo);
-            formData.append('videos[]', JSON.stringify({...videoObject , thumbnail : response.files }));
-          },
-          error: (err) => {
-            this.shared.createMessage('error', err);
-          },
-          complete: () => {
-
-          }
-        });
-      })
       formData.append('status', param);
       formData.append('message', this.message);
 
@@ -534,44 +538,44 @@ export class CreatePostComponent implements OnInit  {
     }
 
     // TODO:: comment line for video display
-    loadFile(e : Event) {
-      let target = e.target as HTMLInputElement;
-      // let video = document.getElementById("video") as HTMLVideoElement;
-      if(target.files){
-        this.availableVideos = true;
-        let loadedFile = {id : this.videoCounter ,file :target.files[0]};
-        this.videoList.push(loadedFile)
-        this.selectedVideo = loadedFile;
-        this.videoCounter++;
+    // loadFile(e : Event) {
+    //   let target = e.target as HTMLInputElement;
+    //   // let video = document.getElementById("video") as HTMLVideoElement;
+    //   if(target.files){
+    //     this.availableVideos = true;
+    //     let loadedFile = {id : this.videoCounter ,file :target.files[0]};
+    //     this.videoList.push(loadedFile)
+    //     this.selectedVideo = loadedFile;
+    //     this.videoCounter++;
 
-      }else {
-        this.availableVideos = false;
-      }
+    //   }else {
+    //     this.availableVideos = false;
+    //   }
 
-        // if (target.files?.length) {
-            // this.selectedVideo = target.files[0];
-            // var source = document.createElement('source');
-            // importFileandPreview(this.selectedVideo).then((url) => {
-                // source.setAttribute('src', url);
-                // source.setAttribute('type', this.selectedVideo.type);
-                // generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-                    // video.style.width = "auto";
-                    // video.style.height = "auto"
-                    // video.style.transform = "scale(1)"
-                // })
-                // video.style.transform = "scale(1)"
-                // video.innerHTML = "";
-                // video.appendChild(source);
-            // });
-        // }
-        this.refreshPages();
-        this.generatethumbnails('next' , true);
-        this.currentTimePosition = -10;
-        setTimeout(() => {
-          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-          this.refreshPreview();
-        }, 2500);
-      }
+    //     // if (target.files?.length) {
+    //         // this.selectedVideo = target.files[0];
+    //         // var source = document.createElement('source');
+    //         // importFileandPreview(this.selectedVideo).then((url) => {
+    //             // source.setAttribute('src', url);
+    //             // source.setAttribute('type', this.selectedVideo.type);
+    //             // generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
+    //                 // video.style.width = "auto";
+    //                 // video.style.height = "auto"
+    //                 // video.style.transform = "scale(1)"
+    //             // })
+    //             // video.style.transform = "scale(1)"
+    //             // video.innerHTML = "";
+    //             // video.appendChild(source);
+    //         // });
+    //     // }
+    //     this.refreshPages();
+    //     this.generatethumbnails('next' , true);
+    //     this.currentTimePosition = -10;
+    //     setTimeout(() => {
+    //       this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+    //       this.refreshPreview();
+    //     }, 2500);
+    //   }
 
     generatethumbnails(action : string , newVideo = false ){
       this.leadThumbnail = true
@@ -608,38 +612,66 @@ export class CreatePostComponent implements OnInit  {
           // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
     }
 
+    //upload image changes
+    uploadVideo(event: any): void {
+      if(event.type === "success"){
+        console.log(this.videosList , event);
+        if(event.file){
+          this.availableVideos = true;
+          let loadedFile = {id : this.videoCounter ,file :event.file.originFileObj , videoUrl : event.file.response.files.url  };
+          this.videoList.push(loadedFile)
+          this.selectedVideo = loadedFile;
+          this.videoCounter++;
+          console.log(this.videosList , event , this.videoList);
+        }else {
+          this.availableVideos = false;
+        }
+        this.refreshPages();
+        this.generatethumbnails('next' , true);
+        this.currentTimePosition = -10;
+        setTimeout(() => {
+          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+          this.refreshPreview();
+        }, 2500);
+      }
+    }
+
+    changeSelectedVideos = (file: any ) => {
+      console.log(file);
+    };
+
     changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
       this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
       this.generatethumbnails('next');
       this.currentTimePosition = -10;
     }
 
-    deleteVideo(item : {id : number ,imgB64 : string , time : number}){
-      this.modal.confirm({
-          nzTitle: 'Are you sure delete this video?',
-          nzContent: '<b style="color: red;">remove video </b>',
-          nzOkText: 'Yes',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          nzOnOk: () => {
-              this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
-              this.videoList = this.videoList.filter((video) => item.id != video.id  )
-              if(this.selectedVideo.id == item.id){
-                  this.listThumbnail = [];
-              }
+    // deleteVideo(item : {id : number ,imgB64 : string , time : number}){
+    //   this.modal.confirm({
+    //       nzTitle: 'Are you sure delete this video?',
+    //       nzContent: '<b style="color: red;">remove video </b>',
+    //       nzOkText: 'Yes',
+    //       nzOkType: 'primary',
+    //       nzOkDanger: true,
+    //       nzOnOk: () => {
+    //           this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
+    //           this.videoList = this.videoList.filter((video) => item.id != video.id  )
+    //           if(this.selectedVideo.id == item.id){
+    //               this.listThumbnail = [];
+    //           }
 
-              if(this.videoList.length>0) {
-                this.availableVideos = true;
-              }else {
-                this.availableVideos = false;
-              }
-              this.refreshPages();
-              this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-          },
-          nzCancelText: 'No',
-          nzOnCancel: () => console.log('Cancel', item)
-      });
-    }
+    //           if(this.videoList.length>0) {
+    //             this.availableVideos = true;
+    //           }else {
+    //             this.availableVideos = false;
+    //           }
+    //           this.refreshPages();
+    //           this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+    //       },
+    //       nzCancelText: 'No',
+    //       nzOnCancel: () => console.log('Cancel', item)
+    //   });
+    // }
 
     removeImage(event: any) {
       console.log('it finally worked!!!');

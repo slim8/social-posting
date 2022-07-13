@@ -154,7 +154,7 @@ class FileController extends Controller
             $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/'.$imageName);
         }
 
-        if (envValue('UPLOAD_PROVIDER') == 'hoster') {
+        if (envValue('UPLOAD_PROVIDER') == 'hoster' && $type == 'image') {
             $client = new Client();
 
             $response = $client->request('POST', envValue('IMAGE_HOSTER_URL'), [
