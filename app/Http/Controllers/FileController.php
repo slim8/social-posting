@@ -170,7 +170,6 @@ class FileController extends Controller
 
             if ($response->getStatusCode() == 200) {
                 $arrayResponse = json_decode($response->getBody(), true);
-
                 if ($arrayResponse['success']) {
                     return $arrayResponse['data']['media'];
                 } else {

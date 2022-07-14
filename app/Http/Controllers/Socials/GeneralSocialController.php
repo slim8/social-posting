@@ -103,22 +103,6 @@ class GeneralSocialController extends Controller
             if ($request->mentions) {
                 $mentions = $request->mentions;
 
-
-                $mentions = '[
-                    {
-                        "image": 0,
-                        "username": "z.i.e.d.m",
-                        "x": 0.39,
-                        "y": 0.55
-                    },
-                    {
-                        "image": 1,
-                        "username": "z.i.e.d.m",
-                        "x": 0.56,
-                        "y": 0.26
-                    }
-                ]';
-
                 $mentions = json_decode($mentions, true);
 
                 // if($mentions){

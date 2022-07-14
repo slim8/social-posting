@@ -1,5 +1,9 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
 .m-mod-blog-posts{
-    background: #fff;
+    background: $color-base-0;
     padding: 33px 42px ;
     
     >.m-wrapper{
@@ -49,7 +53,7 @@
                             font-weight: 400;
                             font-size: 12px;
                             line-height: 138.68%;
-                            color: rgba(0, 0, 0, 0.5);
+                            color: $color-media-black-opacity-half;
                         }
 
                         >.m-post-title{
@@ -98,7 +102,7 @@
                             font-weight: 400;
                             font-size: 12px;
                             line-height: 138.68%;
-                            color: rgba(0, 0, 0, 0.5);
+                            color: $color-media-black-opacity-half;
                         }
 
                         >.m-post-title{
@@ -126,7 +130,7 @@
                 }
 
                 >.m-post-line{
-                    border: 1px solid #000000;
+                    border: 1px solid $color-media-black;
                     width: 608px;
                     margin-left: 0px;
                 }

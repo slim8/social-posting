@@ -42,7 +42,7 @@
                             [nzVisible]="previewVisible"
                             [nzContent]="modalContent"
                             [nzFooter]="null"
-                            (nzOnCancel)="previewVisible = false; removeImage($event)"
+                            (nzOnCancel)="previewVisible = false"
                             >
                             <ng-template #modalContent>
                                 <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
@@ -50,25 +50,33 @@
                             </nz-modal>
                         </div>
                     </div>
+                    <div  *ngIf="showUploadVideo">
+                      <div class="clearfix">
+                          <nz-upload
+                          [nzAction]="uploadFileAPIURL"
+                          nzListType="picture-card"
+                          [(nzFileList)]="videosList"
+                          (nzChange)="uploadVideo($event)"
+                          nzAccept = "video/*"
+                          [nzShowButton]="videosList.length < 8"
+                          >
+                          <div>
+                              <i nz-icon nzType="plus"></i>
+                              <div style="margin-top: 8px">Upload</div>
+                          </div>
+                          </nz-upload>
+                      </div>
+                    </div>
                     <div  *ngIf="showUploadVideo" class="m-upload-video" >
-                        <div class="clearfix">
-                            <video poster="" controls id="video">
-                                Your browser does not support the video tag.
-                            </video>
-                            <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
-                                <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
-                                <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
-                            </div>
-                            <label for="inputfile" class="m-img-container">
-                                <span ><i nz-icon nzType="ng-zorro:video" style="font-size : 40px"></i></span>
-                            </label>
+                      <div class="clearfix">
+                          <div class="m-thumb-container">
+                              <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
+                                  <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
+                                  <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                              </div>
+                          </div>
 
-                        </div>
-                        <div class="m-custom-file-input" id="fileControls">
-                            <input type="file" id="inputfile"  accept="video/*" (change)="loadFile($event)" />
-                            <!-- TODO::for next change upload video from url -->
-                            <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
-                        </div>
+                      </div>
                     </div>
                     <div class="m-form-field">
                         <div class="m-choose-media">
@@ -103,25 +111,9 @@
                         <h4>Hashtags</h4>
                     </div>
                     <div class="m-form-field">
-                        <nz-tag
-                            *ngFor="let tag of tags; let i = index"
-                            [nzMode]="'closeable'"
-                            (nzOnClose)="handleCloseMain(tag)"
-                            >{{ sliceTagName(tag) }}</nz-tag>
-                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                            <i nz-icon nzType="plus"></i>  New tag
-                        </nz-tag>
-                        <input
-                            #inputElement
-                            nz-input
-                            nzSize="small"
-                            *ngIf="inputVisible"
-                            type="text"
-                            [(ngModel)]="inputValue"
-                            style="width: 78px;"
-                            (blur)="handleInputConfirm()"
-                            (keydown.enter)="handleInputConfirm()"
-                        />
+                      <nz-select class="general" (ngModelChange)="mergeHashtags($event)" nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptions">
+                        <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                      </nz-select>
                     </div>
                 </div>
 
@@ -141,11 +133,11 @@
                 <div class="m-sidemenu is-active">
                     <div class="m-tab">
                         <ul>
-                            <li id="instagram-tab-title" class="is-active" (click)="tabChange1('instagram-tab-title', $event)">
+                            <li id="instagram-tab-title" class="is-active" (click)="tabChange('instagram-tab-title', $event)">
                                 <span><i class="instagram"  nz-icon nzType="ng-zorro:instagram"></i></span>
                                 Instagram
                             </li>
-                            <li id="facebook-tab-title" (click)="tabChange1('facebook-tab-title', $event)">
+                            <li id="facebook-tab-title" (click)="tabChange('facebook-tab-title', $event)">
                                 <span><i class="facebook" nz-icon nzType="ng-zorro:facebook"></i></span>
                                 Facebook
                             </li>
@@ -170,25 +162,9 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                        <nz-tag
-                                            *ngFor="let tag of instaTags; let i = index"
-                                            [nzMode]="'closeable'"
-                                            (nzOnClose)="handleCloseInsta(tag)"
-                                            >{{ sliceTagName(tag) }}</nz-tag>
-                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                                            <i nz-icon nzType="plus"></i>  New tag
-                                        </nz-tag>
-                                        <input
-                                            #inputElement
-                                            nz-input
-                                            nzSize="small"
-                                            *ngIf="inputVisible"
-                                            type="text"
-                                            [(ngModel)]="inputValueInsta"
-                                            style="width: 78px;"
-                                            (blur)="handleInputConfirmInsta()"
-                                            (keydown.enter)="handleInputConfirmInsta()"
-                                        />
+                                      <nz-select nzMode="tags" class="instagram" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsInsta">
+                                        <nz-option *ngFor="let option of listOfOptionInsta" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                                      </nz-select>
                                     </div>
                                 </div>
 
@@ -239,25 +215,9 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                        <nz-tag
-                                            *ngFor="let tag of fbTags; let i = index"
-                                            [nzMode]="'closeable'"
-                                            (nzOnClose)="handleCloseFb(tag)"
-                                            >{{ sliceTagName(tag) }}</nz-tag>
-                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                                            <i nz-icon nzType="plus"></i>  New tag
-                                        </nz-tag>
-                                        <input
-                                            #inputElement
-                                            nz-input
-                                            nzSize="small"
-                                            *ngIf="inputVisible"
-                                            type="text"
-                                            [(ngModel)]="inputValueFb"
-                                            style="width: 78px;"
-                                            (blur)="handleInputConfirmFb()"
-                                            (keydown.enter)="handleInputConfirmFb()"
-                                        />
+                                      <nz-select nzMode="tags" class="facebook" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsFacebook">
+                                        <nz-option *ngFor="let option of listOfOptionFacebook" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                                      </nz-select>
                                     </div>
                                 </div>
 
@@ -309,7 +269,7 @@
         </div>
         <div class="m-action-buttons">
             <button class="m-button is-secondary" (click)="submitForm('DRAFT')"><span class="m-button-icon-save"><i nz-icon nzType="ng-zorro:folder"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Als Entwurf speichern</button>
-            <button class="m-button is-primary" (click)="submitForm('PUBLISH')"><span class="m-button-icon-publish"><i nz-icon nzType="ng-zorro:send"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Veröffentlichen</button>
+            <button class="m-button is-primary" (click)="uploadThumbnail('PUBLISH')"><span class="m-button-icon-publish"><i nz-icon nzType="ng-zorro:send"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Veröffentlichen</button>
         </div>
     </div>
 </div>
