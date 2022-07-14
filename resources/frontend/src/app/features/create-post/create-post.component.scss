@@ -56,7 +56,7 @@
                         width: 306px;
 
                         nz-select {
-                            width: 100%;
+                          width: 100%;
                         }
 
                         > .m-choose-media {
@@ -267,6 +267,9 @@
                                     }
 
                                     > .m-form-field {
+                                        > nz-select {
+                                          width: 100%;
+                                        }
                                         > .m-textarea-message {
                                             height: 132px;
                                             resize: none;

@@ -107,25 +107,9 @@
                         <h4>Hashtags</h4>
                     </div>
                     <div class="m-form-field">
-                        <nz-tag
-                            *ngFor="let tag of tags; let i = index"
-                            [nzMode]="'closeable'"
-                            (nzOnClose)="handleCloseMain(tag)"
-                            >{{ sliceTagName(tag) }}</nz-tag>
-                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                            <i nz-icon nzType="plus"></i>  New tag
-                        </nz-tag>
-                        <input
-                            #inputElement
-                            nz-input
-                            nzSize="small"
-                            *ngIf="inputVisible"
-                            type="text"
-                            [(ngModel)]="inputValue"
-                            style="width: 78px;"
-                            (blur)="handleInputConfirm()"
-                            (keydown.enter)="handleInputConfirm()"
-                        />
+                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptions">
+                        <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                      </nz-select>
                     </div>
                 </div>
 
@@ -174,13 +158,16 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                        <nz-tag
+                                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsInsta">
+                                        <nz-option *ngFor="let option of listOfOptionInsta" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                                      </nz-select>
+                                      <!-- <nz-tag
                                             *ngFor="let tag of instaTags; let i = index"
                                             [nzMode]="'closeable'"
                                             (nzOnClose)="handleCloseInsta(tag)"
                                             >{{ sliceTagName(tag) }}</nz-tag>
                                         <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                                            <i nz-icon nzType="plus"></i>  New tag
+                                            <i nz-icon nzType="plus"></i>  New ta
                                         </nz-tag>
                                         <input
                                             #inputElement
@@ -192,7 +179,7 @@
                                             style="width: 78px;"
                                             (blur)="handleInputConfirmInsta()"
                                             (keydown.enter)="handleInputConfirmInsta()"
-                                        />
+                                        /> -->
                                     </div>
                                 </div>
 
@@ -243,7 +230,10 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                        <nz-tag
+                                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsFacebook">
+                                        <nz-option *ngFor="let option of listOfOptionFacebook" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+                                      </nz-select>
+                                        <!-- <nz-tag
                                             *ngFor="let tag of fbTags; let i = index"
                                             [nzMode]="'closeable'"
                                             (nzOnClose)="handleCloseFb(tag)"
@@ -261,7 +251,7 @@
                                             style="width: 78px;"
                                             (blur)="handleInputConfirmFb()"
                                             (keydown.enter)="handleInputConfirmFb()"
-                                        />
+                                        /> -->
                                     </div>
                                 </div>
 
