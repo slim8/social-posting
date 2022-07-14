@@ -97,7 +97,7 @@ class InstagramController extends Controller
 
             foreach ($mentions as $mention) {
                 if ($mention['image'] == $orderMention) {
-                    $object['user_tags'][] = ['username' => $mention['username'], 'x' => $mention['x'], 'y' => $mention['y']];
+                    $object['user_tags'][] = ['username' => trim(str_replace('@' , '' , $mention['username'])), 'x' => $mention['x'], 'y' => $mention['y']];
                 }
             }
         }
@@ -106,14 +106,31 @@ class InstagramController extends Controller
             $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT') . $igUser . '/media', [
                 'multipart' => RequestsTrait::prepareMultiPartForm($object),
             ]);
+
+
             if ($response->getStatusCode() == 200) {
+                if($type == 'image'){
+                    $responseObject['status'] = true;
+                    $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+                    return  $responseObject;
+                }
                 return json_decode($response->getBody(), true)['id'];
             } else {
+                if($type == 'image'){
+                    $responseObject['status'] = false;
+                    $responseObject['message'] = 'an error occured';
+                    return  $responseObject;
+                }
                 return 'an error occured';
             }
-        } catch (\Exception $e) {
+         } catch (\Exception $e) {
+            if($type == 'image'){
+                $responseObject['status'] = false;
+                $responseObject['message'] = $e->getMessage();
+                return  $responseObject;
+            }
             return $e->getMessage();
-        }
+         }
     }
 
     /**
@@ -253,7 +270,14 @@ class InstagramController extends Controller
             if ($imagesUrls) {
                 $incImages = 0;
                 foreach ($imagesUrls as $image) {
-                    $images[] = $this->postMediaUrl($igUser, $object['access_token'], $image, $mentions, $incImages);
+                    $mediaResponse = $this->postMediaUrl($igUser, $object['access_token'], $image, $mentions, $incImages);
+
+
+                    if(!$mediaResponse['status']){
+                        return $mediaResponse;
+                    }
+                    $images[] =$mediaResponse['id'];
+
                     ++$incImages;
                 }
             }

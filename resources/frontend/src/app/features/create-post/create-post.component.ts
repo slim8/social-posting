@@ -1,15 +1,14 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
-import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Router } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
-import {importFileandPreview , generateVideoThumbnails} from './index';
+import { generateVideoThumbnails} from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Observable } from 'rxjs';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -24,7 +23,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.scss'],
 })
-export class CreatePostComponent implements OnInit, OnChanges  {
+export class CreatePostComponent implements OnInit {
     //upload file apiURL
     uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
 
@@ -55,15 +54,8 @@ export class CreatePostComponent implements OnInit, OnChanges  {
     mentions: any[] = [];
     mediaId: number = 0;
     urlLinks: any[] = [{ id: 0, url: "", type:"" }];
-    urlLinksIndex = 0;
-    tags: string[] = [];
     instaTags: string[] = [];
     fbTags: string[] = [];
-    inputVisible = false;
-    inputValue = '';
-    inputValueInsta = '';
-    inputValueFb = '';
-    @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
     tabId1: any = 'instagram-tab-title';
     message: string = '';
     facebookMessage: string = '';
@@ -88,7 +80,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
     videosList: NzUploadFile[] = [];
     listOfVideos : { url : string , seconde : number , thumbnail : any}[] = []
 
-
     videoCounter = 0;
     videoList: {id : number ,file : File , videoUrl : string }[] = [];
     selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
@@ -111,10 +102,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
       if (this.router.url.includes('create-post')) {
         this.sharedModule.initSideMenu('create-post');
       }
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-      console.log(changes)
     }
 
     getPages(param: string) {
@@ -216,10 +203,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
       }
 
       if (this.mentions.length > 0) {
-        this.mentions.forEach((element:any) => {
-          element.username.replace('@', '');
-          element.username.replace(' ', '');
-        });
         formData.append('mentions', JSON.stringify(this.mentions));
       }
 
@@ -355,19 +338,7 @@ export class CreatePostComponent implements OnInit, OnChanges  {
       this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     }
 
-    sliceTagName(tag: string): string {
-        const isLongTag = tag.length > 20;
-        return isLongTag ? `${tag.slice(0, 20)}...` : tag;
-    }
-
-    showInput(): void {
-        this.inputVisible = true;
-        setTimeout(() => {
-            this.inputElement?.nativeElement.focus();
-        }, 10);
-    }
-
-    tabChange1(id: any, event: any) {
+    tabChange(id: any, event: any) {
       if(!event.target.closest('li').classList.contains('is-blocked')) {
         let list = [].slice.call(event.target.closest('li').parentNode.children);
         list.forEach((elem: any) => {
@@ -385,38 +356,9 @@ export class CreatePostComponent implements OnInit, OnChanges  {
       }
     }
 
-    addLink() {
-        this.urlLinksIndex++;
-        this.urlLinks[this.urlLinksIndex] = { url: '' };
-    }
-
-    removeLink(index: number) {
-        this.refreshPreview();
-        this.urlLinks.forEach((element: any, i: any) => {
-            if (element == index) {
-                this.urlLinks.splice(i, 1);
-                this.urlLinksIndex--;
-            }
-        });
-    }
-
     resetSuccess() {
         let successDialog = document.getElementById('successDialog');
         successDialog?.classList.add('is-hidden');
-    }
-
-    prepareform() {
-        // this.postdata.post.post_media.forEach((el: any) => {
-        //     let media: any = {
-        //         url: el.url,
-        //     }
-        //     this.fileList.push(media);
-        // })
-
-        // this.postdata.post.tags.forEach((t: any) => {
-        //     this.listOfTagOptions.push(t.name);
-        // })
-        // this.message = this.postdata.post.message;
     }
 
     refreshPreview() {
@@ -462,46 +404,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
         this.uploadImageActive = false;
     }
 
-    // TODO:: comment line for video display
-    // loadFile(e : Event) {
-    //   let target = e.target as HTMLInputElement;
-    //   // let video = document.getElementById("video") as HTMLVideoElement;
-    //   if(target.files){
-    //     this.availableVideos = true;
-    //     let loadedFile = {id : this.videoCounter ,file :target.files[0]};
-    //     this.videoList.push(loadedFile)
-    //     this.selectedVideo = loadedFile;
-    //     this.videoCounter++;
-
-    //   }else {
-    //     this.availableVideos = false;
-    //   }
-
-    //     // if (target.files?.length) {
-    //         // this.selectedVideo = target.files[0];
-    //         // var source = document.createElement('source');
-    //         // importFileandPreview(this.selectedVideo).then((url) => {
-    //             // source.setAttribute('src', url);
-    //             // source.setAttribute('type', this.selectedVideo.type);
-    //             // generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-    //                 // video.style.width = "auto";
-    //                 // video.style.height = "auto"
-    //                 // video.style.transform = "scale(1)"
-    //             // })
-    //             // video.style.transform = "scale(1)"
-    //             // video.innerHTML = "";
-    //             // video.appendChild(source);
-    //         // });
-    //     // }
-    //     this.refreshPages();
-    //     this.generatethumbnails('next' , true);
-    //     this.currentTimePosition = -10;
-    //     setTimeout(() => {
-    //       this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-    //       this.refreshPreview();
-    //     }, 2500);
-    //   }
-
     generatethumbnails(action : string , newVideo = false ){
       this.leadThumbnail = true
       if(action == "previous"){
@@ -534,7 +436,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
               }
           })
           this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-          // (document.getElementById("video") as HTMLVideoElement).setAttribute("poster", item.imgB64);
     }
 
     //upload image changes
@@ -558,7 +459,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
         }, 2500);
       }
     }
-
 
     changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
       this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
@@ -593,10 +493,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
           nzCancelText: 'No',
           nzOnCancel: () => console.log('Cancel', item)
       });
-    }
-
-    removeImage(event: any) {
-      console.log('it finally worked!!!');
     }
 
     refreshPages() {
@@ -641,7 +537,6 @@ export class CreatePostComponent implements OnInit, OnChanges  {
 
   addMentions(event:any[]) {
     this.mentions = event;
-    console.log(this.mentions)
   }
 
   addToPost(event : any){
