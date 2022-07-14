@@ -133,15 +133,14 @@ export class CreatePostComponent implements OnInit {
     }
 
     async uploadThumbnail(param: string){
-      let list = this.videoList.map(video => {
-        let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-        return { url : video.videoUrl , ...thumbnail , thumbnail: '' };
-      })
+        let list = this.videoList.map(video => {
+          let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
+          return { url : video.videoUrl , ...thumbnail , thumbnail: '' };
+        })
 
-      await list.forEach((videoObject) => {
-         this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+      await list.forEach(async (videoObject) => {
+        await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
           next: (response ) => {
-
             this.listOfVideos.push({url : videoObject.url , seconde : videoObject.time ,thumbnail : response.files.url }) ;
           },
           error: (err) => {
@@ -152,7 +151,9 @@ export class CreatePostComponent implements OnInit {
           }
         });
       })
-      this.submitForm(param);
+      setTimeout(() => {
+        this.submitForm(param);
+      }, 2000);
     }
 
     submitForm(param: string) {
