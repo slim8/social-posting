@@ -332,11 +332,12 @@ export class InstagramPreviewComponent implements  OnChanges {
         let input = document.getElementsByClassName('m-input-tag')[0] as HTMLElement;
         let tagOption = document.getElementsByClassName('tag-option');
         let tooltip = document.getElementById('tooltip') as HTMLElement;
+
         if (
-            !e.path?.includes(instaPost) &&
-            !e.path?.includes(tagPerson) &&
-            !e.path?.includes(tagOption) &&
-            !e.path?.includes(tooltip)
+            !e.composedPath()?.includes(instaPost) &&
+            !e.composedPath()?.includes(tagPerson) &&
+            !e.composedPath()?.includes(tagOption) &&
+            !e.composedPath()?.includes(tooltip)
         ) {
             input?.classList.remove('is-shown');
             tooltip?.classList.remove('is-shown');
@@ -344,7 +345,6 @@ export class InstagramPreviewComponent implements  OnChanges {
                 element?.children[0]?.setAttribute('style', 'filter: brightness(1);')
             });
         }
-
     }
 
     passToParentComponent(value: any[]) {
