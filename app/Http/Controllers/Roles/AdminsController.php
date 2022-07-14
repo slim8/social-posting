@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Roles;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\repositories\CompanyRepository;
-use App\Http\Controllers\repositories\PlanRepository;
-use App\Http\Controllers\repositories\UserRepository;
+use App\Http\Controllers\Repositories\CompanyRepository;
+use App\Http\Controllers\Repositories\PlanRepository;
+use App\Http\Controllers\Repositories\UserRepository;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Company;

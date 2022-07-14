@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Account;
@@ -36,7 +36,7 @@ class InstagramController extends Controller
             return $responseObject;
         }
         sleep(15);
-        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$creationId.'?fields=status,status_code&access_token='.$object['access_token']);
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT') . $creationId . '?fields=status,status_code&access_token=' . $object['access_token']);
 
         if ($response->json('status_code') == 'ERROR') {
             $responseObject['status'] = false;
@@ -103,9 +103,9 @@ class InstagramController extends Controller
         }
 
         try {
-            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$igUser.'/media', [
-            'multipart' => RequestsTrait::prepareMultiPartForm($object),
-        ]);
+            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT') . $igUser . '/media', [
+                'multipart' => RequestsTrait::prepareMultiPartForm($object),
+            ]);
             if ($response->getStatusCode() == 200) {
                 return json_decode($response->getBody(), true)['id'];
             } else {
@@ -122,9 +122,9 @@ class InstagramController extends Controller
     public function genPublicUrl($mediaId, $object)
     {
         $parameter = RequestsTrait::prepareParameters(['access_token' => $object['access_token'], 'fields' => 'shortcode']);
-        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$mediaId.'?'.$parameter);
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT') . $mediaId . '?' . $parameter);
         if ($response->json('shortcode')) {
-            return envValue('INSTAGRAM_ROOT_LINK').$response->json('shortcode');
+            return envValue('INSTAGRAM_ROOT_LINK') . $response->json('shortcode');
         } else {
             return false;
         }
@@ -137,7 +137,7 @@ class InstagramController extends Controller
     {
         $parameter = RequestsTrait::prepareParameters($object);
 
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media_publish?'.$parameter);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT') . $igUser . '/media_publish?' . $parameter);
         if ($response->json('id')) {
             $responseObject['id'] = $response->json('id');
             $responseObject['status'] = true;
@@ -175,9 +175,9 @@ class InstagramController extends Controller
         }
 
         try {
-            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$igUser.'/media', [
-            'multipart' => RequestsTrait::prepareMultiPartForm($object),
-        ]);
+            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT') . $igUser . '/media', [
+                'multipart' => RequestsTrait::prepareMultiPartForm($object),
+            ]);
             if ($response->getStatusCode() == 200) {
                 $responseObject['status'] = true;
                 $responseObject['id'] = json_decode($response->getBody(), true)['id'];
@@ -199,7 +199,7 @@ class InstagramController extends Controller
     public function postContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$igUser.'/media?'.$parameter);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT') . $igUser . '/media?' . $parameter);
 
         return $response->json('id');
     }
@@ -222,11 +222,11 @@ class InstagramController extends Controller
 
         if ($tags) {
             foreach ($tags as $tag) {
-                $tagsString = $tagsString.'%23'.RequestsTrait::formatTags($tag).' ';
+                $tagsString = $tagsString . '%23' . RequestsTrait::formatTags($tag) . ' ';
             }
         }
 
-        $object['caption'] = $object['caption'].$tagsString;
+        $object['caption'] = $object['caption'] . $tagsString;
 
         if ($counts == 1) {
             if (!$location) {
@@ -340,23 +340,23 @@ class InstagramController extends Controller
 
         if (!$page) {
             Account::create([
-                        'name' => $name,
-                        'provider' => 'instagram',
-                        'status' => true,
-                        'expiryDate' => date('Y-m-d'),
-                        'scoope' => '',
-                        'authorities' => '',
-                        'link' => '',
-                        'companyId' => UserTrait::getCompanyId(),
-                        'uid' => $id,
-                        'profilePicture' => $pageinstagramAccountLink,
-                        'category' => 'NA',
-                        'providerType' => 'page',
-                        'accessToken' => $token,
-                        'relatedAccountId' => $relatedAccountId,
-                        'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
-                        'relatedUid' => $relatedUid,
-                    ]);
+                'name' => $name,
+                'provider' => 'instagram',
+                'status' => true,
+                'expiryDate' => date('Y-m-d'),
+                'scoope' => '',
+                'authorities' => '',
+                'link' => '',
+                'companyId' => UserTrait::getCompanyId(),
+                'uid' => $id,
+                'profilePicture' => $pageinstagramAccountLink,
+                'category' => 'NA',
+                'providerType' => 'page',
+                'accessToken' => $token,
+                'relatedAccountId' => $relatedAccountId,
+                'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
+                'relatedUid' => $relatedUid,
+            ]);
         }
     }
 
@@ -369,7 +369,7 @@ class InstagramController extends Controller
             return false;
         }
 
-        $url = envValue('FACEBOOK_ENDPOINT').$businessId.'?fields=name,username,profile_picture_url,biography&access_token='.$accessToken;
+        $url = envValue('FACEBOOK_ENDPOINT') . $businessId . '?fields=name,username,profile_picture_url,biography&access_token=' . $accessToken;
         $response = Http::get($url);
 
         return $response->json();
@@ -380,7 +380,7 @@ class InstagramController extends Controller
      */
     public function getBusinessAccountId($pageId, $accessToken)
     {
-        $response = Http::get(envValue('FACEBOOK_ENDPOINT').$pageId.'?fields=instagram_business_account&access_token='.$accessToken);
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT') . $pageId . '?fields=instagram_business_account&access_token=' . $accessToken);
 
         if ($response->json('instagram_business_account')) {
             return $response->json('instagram_business_account')['id'];
@@ -438,7 +438,7 @@ class InstagramController extends Controller
         $acountPost = AccountPost::where('id', $accountPostId)->first();
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=engagement,impressions,saved');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT') . $acountPost->postIdProvider . '/insights?access_token=' . $accessToken . '&metric=engagement,impressions,saved');
         $response = $request->json('data');
 
         // Start Fetching Statistics
