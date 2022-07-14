@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzIconService } from 'ng-zorro-antd/icon';
 
 
@@ -10,6 +10,7 @@ const externalLinkIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="
     styleUrls: ['./collapse-item.component.scss']
 })
 export class CollapseItemComponent implements OnInit {
+    @Input() item: any;
     public isCollapsed = false;
     constructor(private iconService: NzIconService) {
         this.iconService.addIconLiteral('ng-zorro:external-link', externalLinkIcon);

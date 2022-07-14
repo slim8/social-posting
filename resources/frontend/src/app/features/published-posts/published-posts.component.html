@@ -111,8 +111,8 @@
         </div>
 
         <div *ngIf="!isLoading">
-          <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
-            <app-collapse-item></app-collapse-item>
+          <div class="m-item" *ngFor="let item of posts">
+            <app-collapse-item [item]="item"></app-collapse-item>
           </div>
         </div>
 

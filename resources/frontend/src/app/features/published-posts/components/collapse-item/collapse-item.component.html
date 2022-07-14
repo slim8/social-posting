@@ -7,34 +7,45 @@
             <img src="/assets/img/test-images/image.svg" alt="" />
           </div>
           <div class="m-image">
-            <img src="/assets/img/test-images/my-post.png" alt="" />
+            <img src="{{ item.postMedia[0].url }}" alt="" />
           </div>
           <div class="m-content">
             <h6
               i18n="
                 Published Post Title|Published Post Title @@publishedPostTitle"
             >
-              Title Of The Post
+              {{ item.message }}
             </h6>
 
             <div class="m-account">
               <div class="m-image">
-                <img src="/assets/img/test-images/ttl.png" alt="" />
+                <img src="{{ item.profilePicture }}" alt="" />
                 <div class="m-provider-logo">
-                  <img src="/assets/img/test-images/instagram.svg" alt="" />
+                  <img
+                    class="instagram"
+                    src="{{
+                      '/assets/img/test-images/' + item.provider + '.svg'
+                    }}"
+                    alt=""
+                  />
                 </div>
               </div>
 
-              <div class="m-name">accountname.test</div>
+              <div class="m-name">{{ item.accountName }}</div>
             </div>
           </div>
           <div class="m-status">
-            <nz-badge nzStatus="success">
+            <nz-badge nzStatus="warning" *ngIf="item.isScheduled">
+              <span class="m-text">Planned</span>
+            </nz-badge>
+            <nz-badge nzStatus="success" *ngIf="!item.isScheduled">
               <span class="m-text">Success</span>
             </nz-badge>
           </div>
           <div class="m-date">
-            <div class="m-create-date">12.05.2022 15:30</div>
+            <div class="m-create-date">
+              {{ item.createdAt | date: "dd-MM-yyyy HH:mm" }}
+            </div>
             <br />
             <span class="m-text"> Max Mustermann </span>
           </div>
@@ -47,17 +58,17 @@
 
         <div class="m-details" [ngClass]="{ 'is-active': isCollapsed }">
           <div class="m-item">
-            <span class="m-number">367</span>
+            <span class="m-number">{{ item.stats.shares }}</span>
             <span
               class="m-text"
               i18n="
                 Published Post Reached People|Published Post Reached People
-                @@publishedPostReachedPeople"
-              >Reached People</span
+                @@publishedPostShares"
+              >Shares</span
             >
           </div>
           <div class="m-item">
-            <span class="m-number">58</span>
+            <span class="m-number">{{ item.stats.likes }}</span>
             <span
               class="m-text"
               i18n="
@@ -66,17 +77,17 @@
             >
           </div>
           <div class="m-item">
-            <span class="m-number">8</span>
+            <span class="m-number">{{ item.stats.comments }}</span>
             <span
               class="m-text"
               i18n="
                 Published Post Comments|Published Post Comments
-                @@publishedPostAccountName"
+                @@publishedPostComments"
               >Comments</span
             >
           </div>
           <div class="m-item">
-            <button class="m-button is-grey">
+            <a class="m-button is-grey" href="{{ item.url }}">
               <span><i nz-icon nzType="ng-zorro:external-link"></i></span>
               <span
                 i18n="
@@ -84,7 +95,7 @@
               >
                 Go to
               </span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
