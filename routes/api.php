@@ -72,6 +72,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::post('/searchusers', [GeneralSocialController::class, 'searchUsers'])->name('search.users.api');
     Route::post('/searchtags', [GeneralSocialController::class, 'searchTags'])->name('search.tags.api');
     Route::post('/drafts/delete', [PostController::class, 'deleteDraft'])->name('delete.draft.api');
+    Route::post('/drafts/publish/{postId}', [PostController::class, 'publishDraft'])->name('publish.draft.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
