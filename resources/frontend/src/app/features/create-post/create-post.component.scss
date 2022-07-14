@@ -113,35 +113,38 @@
                     > .m-upload-video {
                         > .clearfix {
                             display: flex;
+                            flex-direction: column;
                             overflow: auto;
-                            align-items: center;
 
-                            > video {
-                                display: none;
-                                max-width: 150px;
-                                max-height: 100px;
-                                transform: scale(0);
-                                transition: all 0.3s;
-                            }
-                            > .m-img-container {
-                                cursor: pointer;
+                            >.m-thumb-container{
                                 display: flex;
-                                flex-direction: column;
-                                margin: 0 6px 7px 0;
+                                overflow: auto;
+                                align-items: center;
+                                position: absolute;
+                                z-index: 10;
+                                max-width: 309px;
+                                flex-wrap: wrap;
+                                
+                                > .m-img-container {
+                                    cursor: pointer;
+                                    display: flex;
+                                    flex-direction: column;
+                                    margin: 0 6px 7px 0;
 
-                                > img {
-                                    width: 51px;
-                                    height: 40px;
-                                }
+                                    > img {
+                                        width: 51px;
+                                        height: 40px;
+                                    }
 
-                                > i {
-                                    position: absolute;
-                                    margin: 0px 0px 0px 31px;
-                                    padding: 3px;
+                                    > i {
+                                        position: absolute;
+                                        margin: 0px 0px 0px 31px;
+                                        padding: 3px;
 
-                                    &:hover {
-                                        background: #fff;
-                                        border-radius: 40%;
+                                        &:hover {
+                                            background: #fff;
+                                            border-radius: 40%;
+                                        }
                                     }
                                 }
                             }

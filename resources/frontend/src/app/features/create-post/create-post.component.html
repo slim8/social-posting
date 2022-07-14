@@ -52,22 +52,26 @@
                     </div>
                     <div  *ngIf="showUploadVideo" class="m-upload-video" >
                         <div class="clearfix">
-                            <video poster="" controls id="video">
-                                Your browser does not support the video tag.
-                            </video>
-                            <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
-                                <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
-                                <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                            <nz-upload
+                            [nzAction]="uploadFileAPIURL"
+                            nzListType="picture-card"
+                            [(nzFileList)]="videosList"
+                            (nzChange)="uploadVideo($event)"
+                            nzAccept = "video/*"
+                            [nzShowButton]="videosList.length < 8"
+                            >
+                            <div>
+                                <i nz-icon nzType="plus"></i>
+                                <div style="margin-top: 8px">Upload</div>
                             </div>
-                            <label for="inputfile" class="m-img-container">
-                                <span ><i nz-icon nzType="ng-zorro:video" style="font-size : 40px"></i></span>
-                            </label>
+                            </nz-upload>
+                            <div class="m-thumb-container">
+                                <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
+                                    <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
+                                    <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                                </div>
+                            </div>
 
-                        </div>
-                        <div class="m-custom-file-input" id="fileControls">
-                            <input type="file" id="inputfile"  accept="video/*" (change)="loadFile($event)" />
-                            <!-- TODO::for next change upload video from url -->
-                            <!-- <input type="url" id="videoUrl" placeholder="Enter the url of video" style="width: 300px; height: 30px" /> -->
                         </div>
                     </div>
                     <div class="m-form-field">
@@ -309,7 +313,7 @@
         </div>
         <div class="m-action-buttons">
             <button class="m-button is-secondary" (click)="submitForm('DRAFT')"><span class="m-button-icon-save"><i nz-icon nzType="ng-zorro:folder"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Als Entwurf speichern</button>
-            <button class="m-button is-primary" (click)="submitForm('PUBLISH')"><span class="m-button-icon-publish"><i nz-icon nzType="ng-zorro:send"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Veröffentlichen</button>
+            <button class="m-button is-primary" (click)="uploadThumbnail('PUBLISH')"><span class="m-button-icon-publish"><i nz-icon nzType="ng-zorro:send"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Veröffentlichen</button>
         </div>
     </div>
 </div>

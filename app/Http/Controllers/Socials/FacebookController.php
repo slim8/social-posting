@@ -140,7 +140,7 @@ class FacebookController extends Controller
             'multipart' => $multiPart,
         ]);
 
-        if ($object['thumb']) {
+        if ($object['thumb'] && envValue('UPLOAD_PROVIDER') !== 'hoster' && envValue('APP_ENV') == 'local') {
             unlink($object['thumb']);
         }
         if ($response->getStatusCode() == 200) {
@@ -182,13 +182,15 @@ class FacebookController extends Controller
             $object['file_url'] = $videos['url'];
             $object['publihshed'] = true;
 
-            if ($videos['thumbnail']) {
+            if ($videos['thumbnail'] && envValue('UPLOAD_PROVIDER') !== 'hoster' && envValue('APP_ENV') == 'local') {
                 $fileUrl = $videos['thumbnail'];
                 $fileUrl = explode('/', $fileUrl)[count(explode('/', $fileUrl)) - 1];
                 $temporarFile = Storage::disk('custom-ftp')->get('images/'.$fileUrl);
                 $temporarFile = Storage::disk('temporar-video')->put($fileUrl, $temporarFile);
                 $temporarFile = Storage::disk('temporar-video')->path($fileUrl);
-                $object['thumb'] = $temporarFile;
+                $object['thumb'] =  $temporarFile;
+            } else {
+                $object['thumb'] =  $videos['thumbnail'];
             }
 
             $object['description'] = $object['message'];
