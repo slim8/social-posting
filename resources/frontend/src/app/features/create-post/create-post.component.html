@@ -65,9 +65,11 @@
                                 <div style="margin-top: 8px">Upload</div>
                             </div>
                             </nz-upload>
-                            <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
-                                <!-- <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i> -->
-                                <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                            <div class="m-thumb-container">
+                                <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
+                                    <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
+                                    <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                                </div>
                             </div>
 
                         </div>

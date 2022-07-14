@@ -9,6 +9,7 @@ import { FacebookSocialService } from '../facebook-social/services/facebook-soci
 import {importFileandPreview , generateVideoThumbnails} from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Observable } from 'rxjs';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -175,11 +176,8 @@ export class CreatePostComponent implements OnInit  {
       })
 
       await list.forEach((videoObject) => {
-        console.log("videoObject");
-        console.log(videoObject);
          this.postService.uploadFileB64(videoObject.imgB64).subscribe({
           next: (response ) => {
-            console.log(response.files.url);
             
             this.listOfVideos.push({url : videoObject.url , seconde : videoObject.time ,thumbnail : response.files.url }) ;
           },
@@ -191,7 +189,6 @@ export class CreatePostComponent implements OnInit  {
           }
         });
       })
-      console.log("------------------------" , this.listOfVideos );
       setTimeout(() => {
         this.submitForm(param)
       }, 2000);
@@ -615,14 +612,12 @@ export class CreatePostComponent implements OnInit  {
     //upload image changes
     uploadVideo(event: any): void {
       if(event.type === "success"){
-        console.log(this.videosList , event);
         if(event.file){
           this.availableVideos = true;
           let loadedFile = {id : this.videoCounter ,file :event.file.originFileObj , videoUrl : event.file.response.files.url  };
           this.videoList.push(loadedFile)
           this.selectedVideo = loadedFile;
           this.videoCounter++;
-          console.log(this.videosList , event , this.videoList);
         }else {
           this.availableVideos = false;
         }
@@ -636,9 +631,6 @@ export class CreatePostComponent implements OnInit  {
       }
     }
 
-    changeSelectedVideos = (file: any ) => {
-      console.log(file);
-    };
 
     changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
       this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
@@ -646,32 +638,34 @@ export class CreatePostComponent implements OnInit  {
       this.currentTimePosition = -10;
     }
 
-    // deleteVideo(item : {id : number ,imgB64 : string , time : number}){
-    //   this.modal.confirm({
-    //       nzTitle: 'Are you sure delete this video?',
-    //       nzContent: '<b style="color: red;">remove video </b>',
-    //       nzOkText: 'Yes',
-    //       nzOkType: 'primary',
-    //       nzOkDanger: true,
-    //       nzOnOk: () => {
-    //           this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
-    //           this.videoList = this.videoList.filter((video) => item.id != video.id  )
-    //           if(this.selectedVideo.id == item.id){
-    //               this.listThumbnail = [];
-    //           }
+    deleteVideo(item : {id : number ,imgB64 : string , time : number}){
+      this.modal.confirm({
+          nzTitle: 'Are you sure delete this video?',
+          nzContent: '<b style="color: red;">remove video </b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => {
+              this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
+              let removedVideo = this.videoList.filter((video) => item.id == video.id  )[0]
+              this.videoList = this.videoList.filter((video) => item.id != video.id  )
+              this.videosList = this.videosList.filter((video) => removedVideo.videoUrl != video.response.files.url  )
+              if(this.selectedVideo.id == item.id){
+                  this.listThumbnail = [];
+              }
 
-    //           if(this.videoList.length>0) {
-    //             this.availableVideos = true;
-    //           }else {
-    //             this.availableVideos = false;
-    //           }
-    //           this.refreshPages();
-    //           this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-    //       },
-    //       nzCancelText: 'No',
-    //       nzOnCancel: () => console.log('Cancel', item)
-    //   });
-    // }
+              if(this.videoList.length>0) {
+                this.availableVideos = true;
+              }else {
+                this.availableVideos = false;
+              }
+              this.refreshPages();
+              this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+          },
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel', item)
+      });
+    }
 
     removeImage(event: any) {
       console.log('it finally worked!!!');
