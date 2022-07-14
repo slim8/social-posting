@@ -50,29 +50,33 @@
                             </nz-modal>
                         </div>
                     </div>
+                    <div  *ngIf="showUploadVideo">
+                      <div class="clearfix">
+                          <nz-upload
+                          [nzAction]="uploadFileAPIURL"
+                          nzListType="picture-card"
+                          [(nzFileList)]="videosList"
+                          (nzChange)="uploadVideo($event)"
+                          nzAccept = "video/*"
+                          [nzShowButton]="videosList.length < 8"
+                          >
+                          <div>
+                              <i nz-icon nzType="plus"></i>
+                              <div style="margin-top: 8px">Upload</div>
+                          </div>
+                          </nz-upload>
+                      </div>
+                    </div>
                     <div  *ngIf="showUploadVideo" class="m-upload-video" >
-                        <div class="clearfix">
-                            <nz-upload
-                            [nzAction]="uploadFileAPIURL"
-                            nzListType="picture-card"
-                            [(nzFileList)]="videosList"
-                            (nzChange)="uploadVideo($event)"
-                            nzAccept = "video/*"
-                            [nzShowButton]="videosList.length < 8"
-                            >
-                            <div>
-                                <i nz-icon nzType="plus"></i>
-                                <div style="margin-top: 8px">Upload</div>
-                            </div>
-                            </nz-upload>
-                            <div class="m-thumb-container">
-                                <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
-                                    <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
-                                    <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
-                                </div>
-                            </div>
+                      <div class="clearfix">
+                          <div class="m-thumb-container">
+                              <div class="m-img-container" *ngFor="let item of selectedThumbnailList">
+                                  <i nz-icon nzType="delete" nzTheme="outline" (click)="deleteVideo(item)"></i>
+                                  <img *ngIf="item" [src]="item.imgB64" (click)="changeSelectedVideo(item)" />
+                              </div>
+                          </div>
 
-                        </div>
+                      </div>
                     </div>
                     <div class="m-form-field">
                         <div class="m-choose-media">
