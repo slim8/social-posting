@@ -17,15 +17,15 @@
               i18n="Message Title|Title for the message alert@@messageTitle"
               class="m-alert-title"
             >
-              Herzlich Willkommen im Social Media Publisher
+            Welcome to the Social Media Publisher
             </div>
             <div
               i18n="Message Body|Body of the alert message@@messageBody"
               class="m-alert-text"
             >
-              Dank des neuen Social Media Publishers können Sie ganz einfach
-              Ihre Social Media Kanäle verknüpfen und Beiträge gestalten und
-              direkt veröffentlichen.
+            Thanks to the new social media publisher, you can easily
+            Link your social media channels and design posts and
+            publish directly.
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
                 container@@dashboardContainerTitle"
               class="m-message"
             >
-              Meine Beiträge
+            My posts
             </div>
             <div
               i18n="
@@ -45,7 +45,7 @@
                 container@@dashboardContainerNote"
               class="m-note"
             >
-              Alle Beiträge ansehen
+            View all posts
             </div>
           </div>
           <div
@@ -60,15 +60,15 @@
                 i18n="
                   No account|No connected account title@@NoConnectedAccountTitle"
               >
-                Noch keine Beiträge vorhanden.
+              No posts yet.
               </h4>
               <p
                 i18n="
                   No account message|No connected account
                   message@@NoConnectedAccountMessage"
               >
-                Verknüpfe Deine Social Media Kanäle mit der mediafactory, um
-                Beiträge zu gestalten und direkt zu veröffenltichen.
+              Link your social media channels with the mediafactory to
+              Design and publish posts directly.
               </p>
             </div>
             <div class="m-login-button">
@@ -77,8 +77,7 @@
                 class="m-button is-primary"
                 i18n="Login button|Login account button@@LoginAccount"
               >
-                <span><i nz-icon nzType="ng-zorro:add"></i></span>Konto
-                verknüpfen
+                <span><i nz-icon nzType="ng-zorro:add"></i></span>Link account
               </button>
             </div>
           </div>
@@ -123,18 +122,18 @@
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-like-count">{{ post.stats.likes }}</div>
-                      <div class="m-text">erreichte Personen</div>
+                      <div class="m-text" i18n="Reached People |reached people @@reachedPeople">reached people</div>
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-share-count">{{ post.stats.shares }}</div>
-                      <div class="m-text">Gefällt mir-Angaben</div>
+                      <div class="m-text" i18n="Likes |Likes @@likes">likes</div>
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.comments }}
                       </div>
-                      <div i18n="Comment|Comment@@Commment" class="m-text">
-                        Kommentare
+                      <div i18n="Comment|Comment@@Commment" class="m-text" i18n="Comments |Comments @@comments">
+                        comments
                       </div>
                     </td>
 
@@ -142,17 +141,17 @@
                       <div class="m-like-count">
                         {{ post.stats.engagement }}
                       </div>
-                      <div class="m-text">engagement</div>
+                      <div class="m-text" i18n="Engagement |Engagement @@engagement">engagement</div>
                     </td>
                     <td *ngIf="post.provider == 'instagram'" class="m-stats">
                       <div class="m-share-count">{{ post.stats.saves }}</div>
-                      <div class="m-text">saves</div>
+                      <div class="m-text" i18n="Saves |Saves @@saves">saves</div>
                     </td>
                     <td *ngIf="post.provider == 'instagram'" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.impressions }}
                       </div>
-                      <div i18n="Comment|Comment@@Commment" class="m-text">
+                      <div i18n="Comment|Comment@@Commment" class="m-text" i18n="Impressions |Impressions @@impressions">
                         impressions
                       </div>
                     </td>
@@ -161,8 +160,8 @@
                         href="{{ post.url }}"
                         target="_blank"
                         class="m-button is-disabled"
-                        ><span><i nz-icon nzType="ng-zorro:open"></i></span> Zum
-                        Beitrag</a
+                        i18n="To the Post |To the Post or create post @@toThePost"
+                        ><span><i nz-icon nzType="ng-zorro:open"></i></span> To the post</a
                       >
                     </td>
                   </tr>
@@ -171,8 +170,8 @@
 
               <div *ngIf="posts == ''" class="m-no-data">
                 <i nz-icon nzType="cloud" nzTheme="outline"></i>
-                <h3>No posts found</h3>
-                <div class="">start creating yoru posts now</div>
+                <h3 i18n="No Posts Found |Text for no posts found @@noPostsFound">No posts found</h3>
+                <div class="" i18n="Start Creating Posts |Text for start creating your posts now @@startCreatingPosts">start creating your posts now</div>
               </div>
             </div>
           </div>
@@ -187,9 +186,9 @@
               'is-primary': listOfPages != '',
               'is-disabled': listOfPages == ''
             }"
+            i18n="Create Post |Create Post @@createPost"
           >
-            <span><i nz-icon nzType="ng-zorro:edit"></i></span> Beitrag
-            erstellen
+            <span><i nz-icon nzType="ng-zorro:edit"></i></span> Create post
           </button>
         </div>
       </div>
@@ -261,13 +260,13 @@
         <img src="../../../assets/img/close.png" alt="close" />
       </div>
       <div class="m-modal-header">
-        <div class="m-title">Instagram & Business Seiten hinzufügen</div>
-        <div class="m-text">
-          Wähle deine verbundenen Business Konten und Facebook Seiten aus, die
-          du mit der mediafactory verknüpfen möchtest.
+        <div class="m-title" i18n="Add pages|Title for adding pages@@addPages">Add Instagram & Business Pages</div>
+        <div class="m-text" i18n="Add Pages Text|Text for add pages@@addPagesText">
+          Select your connected business accounts and Facebook Pages that
+           you want to link to the mediafactory.
         </div>
-        <div *ngIf="this.currentUser != ''" class="m-list-title">
-          Mit <strong>accountname.test</strong> verknüpfte Konten:
+        <div *ngIf="this.currentUser != ''" class="m-list-title" i18n="Pages Linked To Accountname|Text for pages linked to accountname@@pagesLinkedToAccount">
+          Pages Linked To <strong>accountname.test</strong>:
         </div>
       </div>
 
@@ -294,10 +293,9 @@
         </tr>
       </form>
       <div class="m-submit-button">
-        <button (click)="onSubmit()" class="m-button is-primary">
-          Verknüpfen
+        <button (click)="onSubmit()" class="m-button is-primary" i18n="Link|Link@@link">
+          Link
         </button>
-      </div>
     </div>
 
     <div class="m-success-modal">
@@ -306,11 +304,11 @@
       </div>
       <div class="m-success">
         <img src="../../../assets/img/Group.png" alt="refreshing" />
-        <div class="m-success-title">
+        <div class="m-success-title" i18n="Logged In|Logged in successfully@@loggedIn">
           <img src="../../../assets/img/Check.png" alt="success" />
-          Erfolgreich angemeldet.
+          Logged in successfully.
         </div>
-        <p>
+        <p i18n="Redirect Message Success|Text for redirection after success@@redirectMessageSuccess">
           Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
           mediafactory Social Media Publisher hinzuzufügen.
         </p>
