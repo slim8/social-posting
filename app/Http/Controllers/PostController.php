@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\functions\UtilitiesController;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\InstagramController;
 use App\Http\Traits\RequestsTrait;
@@ -422,11 +422,6 @@ class PostController extends Controller
 
         $publishStatus = $this->publishPostById($postId);
 
-
-        if (isset($publishStatus['errorLog'])) {
-            return RequestsTrait::processResponse(false, $publishStatus);
-        }
-
-        return RequestsTrait::processResponse(true , $publishStatus);
+        return RequestsTrait::processResponse(isset($publishStatus['errorLog']) ? false :true , $publishStatus);
     }
 }
