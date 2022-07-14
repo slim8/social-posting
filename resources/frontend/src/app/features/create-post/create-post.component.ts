@@ -534,7 +534,6 @@ export class CreatePostComponent implements OnInit  {
     //upload image changes
     uploadVideo(event: any): void {
       if(event.type === "success"){
-        console.log(event)
         if(event.file){
           this.availableVideos = true;
           let loadedFile = {id : this.videoCounter ,file :event.file.originFileObj , videoUrl : event.file.response.files.url  };
@@ -572,13 +571,7 @@ export class CreatePostComponent implements OnInit  {
               this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
               let removedVideo = this.videoList.filter((video) => item.id == video.id  )[0]
               this.videoList = this.videoList.filter((video) => item.id != video.id  )
-
-              console.log(this.videosList);
-              
               this.videosList = this.videosList.filter((video) => removedVideo.videoUrl != video.response.files.url  )
-
-              console.log(this.videosList);
-
               if(this.selectedVideo.id == item.id){
                   this.listThumbnail = [];
               }
