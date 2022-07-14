@@ -107,7 +107,10 @@
           border-left: 1px solid $color-base-25;
           height: 100%;
           position: absolute;
-          left: 10%;
+          left: 77px;
+          @include mq(desktop) {
+            left: 105px;
+          }
         }
 
         > .m-array-header {
@@ -144,16 +147,19 @@
             }
 
             > .m-date {
-              right: 23.5%;
+              left: 324px;
+              @include mq(tablet) {
+                left: 327px;
+              }
               @include mq(desktop) {
-                right: 50.5%;
+                left: 415px;
               }
             }
 
             > .m-activity {
-              right: 23.5%;
-              @include mq(desktop) {
-                right: 30.5%;
+              right: 0;
+              @include mq(tablet) {
+                left: 650px;
               }
             }
           }

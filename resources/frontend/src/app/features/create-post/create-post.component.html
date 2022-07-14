@@ -42,7 +42,7 @@
                             [nzVisible]="previewVisible"
                             [nzContent]="modalContent"
                             [nzFooter]="null"
-                            (nzOnCancel)="previewVisible = false; removeImage($event)"
+                            (nzOnCancel)="previewVisible = false"
                             >
                             <ng-template #modalContent>
                                 <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
@@ -111,7 +111,7 @@
                         <h4>Hashtags</h4>
                     </div>
                     <div class="m-form-field">
-                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptions">
+                      <nz-select class="general" (ngModelChange)="mergeHashtags($event)" nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptions">
                         <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
                       </nz-select>
                     </div>
@@ -133,11 +133,11 @@
                 <div class="m-sidemenu is-active">
                     <div class="m-tab">
                         <ul>
-                            <li id="instagram-tab-title" class="is-active" (click)="tabChange1('instagram-tab-title', $event)">
+                            <li id="instagram-tab-title" class="is-active" (click)="tabChange('instagram-tab-title', $event)">
                                 <span><i class="instagram"  nz-icon nzType="ng-zorro:instagram"></i></span>
                                 Instagram
                             </li>
-                            <li id="facebook-tab-title" (click)="tabChange1('facebook-tab-title', $event)">
+                            <li id="facebook-tab-title" (click)="tabChange('facebook-tab-title', $event)">
                                 <span><i class="facebook" nz-icon nzType="ng-zorro:facebook"></i></span>
                                 Facebook
                             </li>
@@ -162,28 +162,9 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsInsta">
+                                      <nz-select nzMode="tags" class="instagram" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsInsta">
                                         <nz-option *ngFor="let option of listOfOptionInsta" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
                                       </nz-select>
-                                      <!-- <nz-tag
-                                            *ngFor="let tag of instaTags; let i = index"
-                                            [nzMode]="'closeable'"
-                                            (nzOnClose)="handleCloseInsta(tag)"
-                                            >{{ sliceTagName(tag) }}</nz-tag>
-                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                                            <i nz-icon nzType="plus"></i>  New ta
-                                        </nz-tag>
-                                        <input
-                                            #inputElement
-                                            nz-input
-                                            nzSize="small"
-                                            *ngIf="inputVisible"
-                                            type="text"
-                                            [(ngModel)]="inputValueInsta"
-                                            style="width: 78px;"
-                                            (blur)="handleInputConfirmInsta()"
-                                            (keydown.enter)="handleInputConfirmInsta()"
-                                        /> -->
                                     </div>
                                 </div>
 
@@ -234,28 +215,9 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsFacebook">
+                                      <nz-select nzMode="tags" class="facebook" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsFacebook">
                                         <nz-option *ngFor="let option of listOfOptionFacebook" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
                                       </nz-select>
-                                        <!-- <nz-tag
-                                            *ngFor="let tag of fbTags; let i = index"
-                                            [nzMode]="'closeable'"
-                                            (nzOnClose)="handleCloseFb(tag)"
-                                            >{{ sliceTagName(tag) }}</nz-tag>
-                                        <nz-tag *ngIf="!inputVisible" class="editable-tag" nzNoAnimation (click)="showInput()">
-                                            <i nz-icon nzType="plus"></i>  New tag
-                                        </nz-tag>
-                                        <input
-                                            #inputElement
-                                            nz-input
-                                            nzSize="small"
-                                            *ngIf="inputVisible"
-                                            type="text"
-                                            [(ngModel)]="inputValueFb"
-                                            style="width: 78px;"
-                                            (blur)="handleInputConfirmFb()"
-                                            (keydown.enter)="handleInputConfirmFb()"
-                                        /> -->
                                     </div>
                                 </div>
 

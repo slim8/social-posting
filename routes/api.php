@@ -4,7 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FileController;
-use App\Http\Controllers\functions\ExempleController;
+use App\Http\Controllers\Functions\ExempleController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -72,6 +72,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], functio
     Route::post('/searchusers', [GeneralSocialController::class, 'searchUsers'])->name('search.users.api');
     Route::post('/searchtags', [GeneralSocialController::class, 'searchTags'])->name('search.tags.api');
     Route::post('/drafts/delete', [PostController::class, 'deleteDraft'])->name('delete.draft.api');
+    Route::post('/drafts/publish/{postId}', [PostController::class, 'publishDraft'])->name('publish.draft.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
