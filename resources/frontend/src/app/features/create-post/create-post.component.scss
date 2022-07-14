@@ -39,6 +39,7 @@
                 border-right: 1px solid $color-media-black-opacity-half;
 
                 > .m-form-group {
+                    position: relative;
                     padding: 0 21px;
                     width: 100%;
                     > .m-form-label {
@@ -56,7 +57,7 @@
                         width: 306px;
 
                         nz-select {
-                            width: 100%;
+                          width: 100%;
                         }
 
                         > .m-choose-media {
@@ -111,6 +112,11 @@
                     }
 
                     > .m-upload-video {
+                        position: absolute;
+                        top: 28px;
+                        width: 305px;
+                        flex-wrap: wrap;
+
                         > .clearfix {
                             display: flex;
                             flex-direction: column;
@@ -124,12 +130,12 @@
                                 z-index: 10;
                                 max-width: 309px;
                                 flex-wrap: wrap;
-                                
+
                                 > .m-img-container {
                                     cursor: pointer;
                                     display: flex;
                                     flex-direction: column;
-                                    margin: 0 6px 7px 0;
+                                    margin: 0 8px 7px 0;
 
                                     > img {
                                         width: 51px;
@@ -252,6 +258,7 @@
                                 }
 
                                 > .m-form-group {
+                                    position: relative;
                                     padding: 10px 0;
                                     width: 100%;
                                     > .m-form-label {
@@ -267,6 +274,9 @@
                                     }
 
                                     > .m-form-field {
+                                        > nz-select {
+                                          width: 100%;
+                                        }
                                         > .m-textarea-message {
                                             height: 132px;
                                             resize: none;

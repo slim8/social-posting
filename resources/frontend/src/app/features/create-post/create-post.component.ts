@@ -1,10 +1,10 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
-import { Component, Input, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
 import {importFileandPreview , generateVideoThumbnails} from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -41,14 +41,17 @@ export class CreatePostComponent implements OnInit  {
     availableImages: boolean = false;
     wasMixedTypes: boolean = false;
 
-    url1 = '';
-    urlImages: string[] = [];
-    bool: boolean = false;
-    imageWidth = 0;
-    imageHeight = 0;
-    mentionIndex = 0;
+    //hashtags
+    listOfOption: Array<{ label: string; value: string }> = [];
+    listOfTagOptions = [];
+
+    listOfOptionInsta: Array<{ label: string; value: string }> = [];
+    listOfTagOptionsInsta = [];
+
+    listOfOptionFacebook: Array<{ label: string; value: string }> = [];
+    listOfTagOptionsFacebook = [];
+
     mentions: any = [];
-    selectedValue = [];
     mediaId: number = 0;
     urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
@@ -61,7 +64,6 @@ export class CreatePostComponent implements OnInit  {
     inputValueFb = '';
     @ViewChild('inputElement', { static: false }) inputElement?: ElementRef;
     tabId1: any = 'instagram-tab-title';
-    tabId: any = 'images';
     message: string = '';
     facebookMessage: string = '';
     instagramMessage: string = '';
@@ -71,11 +73,6 @@ export class CreatePostComponent implements OnInit  {
     listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =[];
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
-    selectedFile: any = [];
-    inputValue2 = '';
-    posX = 0;
-    posY = 0;
-    postId = null;
     showUploadVideo = false;
     selectedVideo :any = null;
     selectedThumbnail = {
@@ -97,27 +94,9 @@ export class CreatePostComponent implements OnInit  {
     mediaList:any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     showAlbum : boolean = false;
 
-
-    //tags variables.
-    displaMentions: boolean = false;
-    taggedImage: any;
-    suggestions = [
-        'Ali_werghemmi',
-        'z.i.e.d.m',
-        'oussemakassis',
-        'amalrk',
-        '中文',
-        'にほんご',
-    ];
-    // carousel slider variables
-    slideNbr = 0;
-    nbrSlides: any = 1;
-
-
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
-        private activatedRoute: ActivatedRoute,
         private postService: PostService ,
         private modal: NzModalService,
         private notification: NzNotificationService,
@@ -128,14 +107,6 @@ export class CreatePostComponent implements OnInit  {
     ngOnInit(): void {
       this.getPages('mixed');
       const mentioned = document.querySelector('.mentioned');
-
-      mentioned?.addEventListener('click', this.edit);
-      this.postId = this.activatedRoute.snapshot.params['id'];
-      // if (this.postId) {
-      //     if (this.postdata.post.status === 'PUBLISH') {
-      //         this.prepareform()
-      //     }
-      // }
       if (this.router.url.includes('create-post')) {
         this.sharedModule.initSideMenu('create-post');
       }
@@ -294,7 +265,6 @@ export class CreatePostComponent implements OnInit  {
                   btnSubmit?.classList.remove('m-btn-submit');
             },
             complete: () => {
-                this.selectedFile = [];
                 this.message = '';
                 this.accountsValue = [];
                 loadingScreen.classList.remove('m-loading-screen-active');
@@ -467,14 +437,6 @@ export class CreatePostComponent implements OnInit  {
     resetSuccess() {
         let successDialog = document.getElementById('successDialog');
         successDialog?.classList.add('is-hidden');
-    }
-
-    edit() {
-        alert('hello');
-    }
-
-    test() {
-
     }
 
     prepareform() {
