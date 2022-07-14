@@ -15,7 +15,7 @@ export class FacebookPreviewComponent implements OnInit {
   @Input() accountName! : string;
 
   constructor( private iconService: NzIconService, ) {
-    this.iconService.addIconLiteral('ng-zorro:dashboard', threeDot);
+    this.iconService.addIconLiteral('ng-zorro:threeDot', threeDot);
    }
 
   ngOnInit(): void {
