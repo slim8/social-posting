@@ -496,46 +496,6 @@ export class CreatePostComponent implements OnInit  {
         this.uploadImageActive = false;
     }
 
-    // TODO:: comment line for video display
-    // loadFile(e : Event) {
-    //   let target = e.target as HTMLInputElement;
-    //   // let video = document.getElementById("video") as HTMLVideoElement;
-    //   if(target.files){
-    //     this.availableVideos = true;
-    //     let loadedFile = {id : this.videoCounter ,file :target.files[0]};
-    //     this.videoList.push(loadedFile)
-    //     this.selectedVideo = loadedFile;
-    //     this.videoCounter++;
-
-    //   }else {
-    //     this.availableVideos = false;
-    //   }
-
-    //     // if (target.files?.length) {
-    //         // this.selectedVideo = target.files[0];
-    //         // var source = document.createElement('source');
-    //         // importFileandPreview(this.selectedVideo).then((url) => {
-    //             // source.setAttribute('src', url);
-    //             // source.setAttribute('type', this.selectedVideo.type);
-    //             // generateVideoThumbnails(this.selectedVideo , 1 , this.selectedVideo.type).then((thumbnails) => {
-    //                 // video.style.width = "auto";
-    //                 // video.style.height = "auto"
-    //                 // video.style.transform = "scale(1)"
-    //             // })
-    //             // video.style.transform = "scale(1)"
-    //             // video.innerHTML = "";
-    //             // video.appendChild(source);
-    //         // });
-    //     // }
-    //     this.refreshPages();
-    //     this.generatethumbnails('next' , true);
-    //     this.currentTimePosition = -10;
-    //     setTimeout(() => {
-    //       this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-    //       this.refreshPreview();
-    //     }, 2500);
-    //   }
-
     generatethumbnails(action : string , newVideo = false ){
       this.leadThumbnail = true
       if(action == "previous"){
@@ -574,6 +534,7 @@ export class CreatePostComponent implements OnInit  {
     //upload image changes
     uploadVideo(event: any): void {
       if(event.type === "success"){
+        console.log(event)
         if(event.file){
           this.availableVideos = true;
           let loadedFile = {id : this.videoCounter ,file :event.file.originFileObj , videoUrl : event.file.response.files.url  };
@@ -611,7 +572,13 @@ export class CreatePostComponent implements OnInit  {
               this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
               let removedVideo = this.videoList.filter((video) => item.id == video.id  )[0]
               this.videoList = this.videoList.filter((video) => item.id != video.id  )
+
+              console.log(this.videosList);
+              
               this.videosList = this.videosList.filter((video) => removedVideo.videoUrl != video.response.files.url  )
+
+              console.log(this.videosList);
+
               if(this.selectedVideo.id == item.id){
                   this.listThumbnail = [];
               }
