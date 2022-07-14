@@ -111,7 +111,7 @@
                         <h4>Hashtags</h4>
                     </div>
                     <div class="m-form-field">
-                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptions">
+                      <nz-select class="general" (ngModelChange)="mergeHashtags($event)" nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptions">
                         <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
                       </nz-select>
                     </div>
@@ -162,7 +162,7 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsInsta">
+                                      <nz-select nzMode="tags" class="instagram" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsInsta">
                                         <nz-option *ngFor="let option of listOfOptionInsta" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
                                       </nz-select>
                                       <!-- <nz-tag
@@ -234,7 +234,7 @@
                                         <h4>Hashtags</h4>
                                     </div>
                                     <div class="m-form-field">
-                                      <nz-select nzMode="tags" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsFacebook">
+                                      <nz-select nzMode="tags" class="facebook" nzPlaceHolder="#hashtags" [(ngModel)]="listOfTagOptionsFacebook">
                                         <nz-option *ngFor="let option of listOfOptionFacebook" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
                                       </nz-select>
                                         <!-- <nz-tag

@@ -154,7 +154,7 @@ class FileController extends Controller
             $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/'.$imageName);
         }
 
-        if (envValue('UPLOAD_PROVIDER') == 'hoster' && $type == 'image') {
+        if (envValue('UPLOAD_PROVIDER') == 'hoster') {
             $client = new Client();
 
             $response = $client->request('POST', envValue('IMAGE_HOSTER_URL'), [
@@ -170,7 +170,6 @@ class FileController extends Controller
 
             if ($response->getStatusCode() == 200) {
                 $arrayResponse = json_decode($response->getBody(), true);
-
                 if ($arrayResponse['success']) {
                     return $arrayResponse['data']['media'];
                 } else {

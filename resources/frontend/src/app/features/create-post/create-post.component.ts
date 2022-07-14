@@ -1,6 +1,6 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -24,7 +24,7 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     templateUrl: './create-post.component.html',
     styleUrls: ['./create-post.component.scss'],
 })
-export class CreatePostComponent implements OnInit  {
+export class CreatePostComponent implements OnInit, OnChanges  {
     //upload file apiURL
     uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
 
@@ -42,16 +42,17 @@ export class CreatePostComponent implements OnInit  {
     wasMixedTypes: boolean = false;
 
     //hashtags
+    listBeforeChange : any[] = [];
     listOfOption: Array<{ label: string; value: string }> = [];
     listOfTagOptions = [];
 
     listOfOptionInsta: Array<{ label: string; value: string }> = [];
-    listOfTagOptionsInsta = [];
+    listOfTagOptionsInsta : any[] = [];
 
     listOfOptionFacebook: Array<{ label: string; value: string }> = [];
-    listOfTagOptionsFacebook = [];
+    listOfTagOptionsFacebook : any[] = [];
 
-    mentions: any = [];
+    mentions: any[] = [];
     mediaId: number = 0;
     urlLinks: any[] = [{ id: 0, url: "", type:"" }];
     urlLinksIndex = 0;
@@ -112,6 +113,10 @@ export class CreatePostComponent implements OnInit  {
       }
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+      console.log(changes)
+    }
+
     getPages(param: string) {
       this.listOfPages=[];
       this.accountsValue = [];
@@ -149,21 +154,18 @@ export class CreatePostComponent implements OnInit  {
       await list.forEach((videoObject) => {
          this.postService.uploadFileB64(videoObject.imgB64).subscribe({
           next: (response ) => {
-            
+
             this.listOfVideos.push({url : videoObject.url , seconde : videoObject.time ,thumbnail : response.files.url }) ;
           },
           error: (err) => {
             this.shared.createMessage('error', err);
           },
           complete: () => {
-            
+
           }
         });
       })
-      setTimeout(() => {
-        this.submitForm(param)
-      }, 2000);
-      
+      this.submitForm(param);
     }
 
     submitForm(param: string) {
@@ -193,13 +195,13 @@ export class CreatePostComponent implements OnInit  {
         let id = arr[0];
         if (accountId.includes('facebook')) {
           post.message = this.facebookMessage;
-          post.hashtags = this.fbTags;
+          post.hashtags = this.listOfTagOptionsFacebook;
           post.mentions = this.mentions;
           post.accountId = id;
           post.videoTitle = "";
         } else if (accountId.includes('instagram')) {
           post.message = this.instagramMessage;
-          post.hashtags = this.instaTags;
+          post.hashtags = this.listOfTagOptionsInsta;
           post.mentions = this.mentions;
           post.accountId = id;
           post.videoTitle = "";
@@ -207,13 +209,17 @@ export class CreatePostComponent implements OnInit  {
         formData.append('posts[]', JSON.stringify(post));
       });
 
-      if (this.tags.length > 0) {
-        this.tags.forEach((tag: any) => {
+      if (this.listOfTagOptions.length > 0) {
+        this.listOfTagOptions.forEach((tag: any) => {
           formData.append('tags[]', tag);
         });
       }
 
       if (this.mentions.length > 0) {
+        this.mentions.forEach((element:any) => {
+          element.username.replace('@', '');
+          element.username.replace(' ', '');
+        });
         formData.append('mentions', JSON.stringify(this.mentions));
       }
 
@@ -349,20 +355,6 @@ export class CreatePostComponent implements OnInit  {
       this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     }
 
-    handleCloseInsta(removedTag: {}): void {
-        this.instaTags = this.instaTags.filter((tag) => tag !== removedTag);
-    }
-
-    handleCloseFb(removedTag: {}): void {
-        this.fbTags = this.fbTags.filter((tag) => tag !== removedTag);
-    }
-
-    handleCloseMain(removedTag: {}): void {
-        this.tags = this.tags.filter((tag) => tag !== removedTag);
-        this.instaTags = this.instaTags.filter((tag) => tag !== removedTag);
-        this.fbTags = this.fbTags.filter((tag) => tag !== removedTag);
-    }
-
     sliceTagName(tag: string): string {
         const isLongTag = tag.length > 20;
         return isLongTag ? `${tag.slice(0, 20)}...` : tag;
@@ -373,32 +365,6 @@ export class CreatePostComponent implements OnInit  {
         setTimeout(() => {
             this.inputElement?.nativeElement.focus();
         }, 10);
-    }
-
-    handleInputConfirm(): void {
-        if (this.inputValue) {
-            this.tags = [...this.tags, this.inputValue];
-            this.instaTags = [...this.instaTags, this.inputValue];
-            this.fbTags = [...this.fbTags, this.inputValue];
-        }
-        this.inputValue = '';
-        this.inputVisible = true;
-    }
-
-    handleInputConfirmInsta(): void {
-        if (this.inputValueInsta) {
-            this.instaTags = [...this.instaTags, this.inputValueInsta];
-        }
-        this.inputValueInsta = '';
-        this.inputVisible = true;
-    }
-
-    handleInputConfirmFb(): void {
-        if (this.inputValueFb) {
-            this.fbTags = [...this.fbTags, this.inputValueFb];
-        }
-        this.inputValueFb = '';
-        this.inputVisible = true;
     }
 
     tabChange1(id: any, event: any) {
@@ -448,7 +414,7 @@ export class CreatePostComponent implements OnInit  {
         // })
 
         // this.postdata.post.tags.forEach((t: any) => {
-        //     this.tags.push(t.name);
+        //     this.listOfTagOptions.push(t.name);
         // })
         // this.message = this.postdata.post.message;
     }
@@ -683,4 +649,26 @@ export class CreatePostComponent implements OnInit  {
     console.log(event);
   }
 
+  mergeHashtags(e:any) {
+    if(this.listBeforeChange.length > e.length) {
+      let diffValue = this.listBeforeChange.filter(res => (!e.includes(res)));
+      this.listOfTagOptionsFacebook = this.listOfTagOptionsFacebook.filter(res => (!diffValue.includes(res)))
+      this.listOfTagOptionsInsta = this.listOfTagOptionsInsta.filter(res => (!diffValue.includes(res)))
+    }
+    else {
+      this.listOfTagOptionsFacebook = this.uniqByForEach([...e, ...this.listOfTagOptionsFacebook]);
+      this.listOfTagOptionsInsta = this.uniqByForEach([...e, ...this.listOfTagOptionsInsta]);
+    }
+    this.listBeforeChange = e;
+  }
+
+  uniqByForEach<T>(array: T[]) {
+    const result: T[] = [];
+    array.forEach((item) => {
+        if (!result.includes(item)) {
+            result.push(item);
+        }
+    })
+    return result;
+  }
 }
