@@ -295,53 +295,17 @@
                 </div>
             </div>
             <div class="m-right-col">
-                <div *ngIf="urlLinks.length <= 1" class="m-no-preview">
+                <div *ngIf="mediaList.length <= 1" class="m-no-preview">
                     <h3>Vorschau nicht verfügbar</h3>
                     <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu,
                         um hier eine Vorschau zu sehen. </p>
                 </div>
-                <div *ngIf="urlLinks.length > 1 && instagramPreview" class="m-instagram-device">
-                    <div class="m-instagram">
-                        <main class="m-post-content">
 
-                            <div class="m-post">
-                                <div class="m-post-header">
-                                    <img class="m-user-thumb" src="../../../../../assets/img/instapic.jpg" alt="Walter">
-                                    <div class="m-user-details">
-                                        <strong class="m-name">My page</strong>
-                                        <span class="m-location">location</span>
-                                    </div>
-                                    <div class="m-post-menu">
-                                        <span class="m-menu">&nbsp;</span>
-                                    </div>
-                                </div>
-                                <div id="postView">
-                                    <app-carousel *ngIf="!refresh" [urlLinks]="urlLinks"></app-carousel>
-                                </div>
-                                <div class="m-post-footer">
-                                    <br>
-                                    <div class="m-buttons">
-                                        <div class="m-post-btn"><span (click)="liked($event)" class="like">&nbsp;</span></div>
-                                        <div class="m-post-btn"><span class="comn">&nbsp;</span></div>
-                                        <div class="m-spacer">&nbsp;</div>
-                                        <div class="m-post-btn"><span class="save">&nbsp;</span></div>
-                                    </div>
+                <app-instagram-preview *ngIf="!refresh && mediaList.length > 1 && instagramPreview"  [mediaList]="mediaList" [message]="instagramMessage" (newItemEvent)="addMentions($event)"></app-instagram-preview>
 
-                                    <div class="m-likes" *ngIf="isliked">
-                                        <img class="m-user-like" src="../../../../../assets/img/instapic.jpg" alt="user">
-                                        <strong>1 like</strong>
-                                    </div>
-                                    <br>
-                                    <span class="m-time">à l'instant</span>
+                <app-facebook-preview *ngIf="mediaList.length > 1 && facebookPreview && !refresh"  [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="mediaList"></app-facebook-preview>
 
-                                </div>
-                            </div>
-
-                        </main>
-                    </div>
-                </div>
-                <app-facebook-preview *ngIf="urlLinks.length > 1 && facebookPreview && !refresh"  [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="urlLinks"></app-facebook-preview>
-            </div>
+              </div>
         </div>
         <div class="m-action-buttons">
             <button class="m-button is-secondary" (click)="submitForm('DRAFT')"><span class="m-button-icon-save"><i nz-icon nzType="ng-zorro:folder"></i></span> <div class="m-loading-spin"><nz-spin nzsimple></nz-spin></div> Als Entwurf speichern</button>

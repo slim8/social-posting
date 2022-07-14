@@ -1,9 +1,13 @@
-@import '../../../../../assets/sass/_project/_config.scss';
-@import '../../../../../assets/sass/_global/_mixins.scss';
-@import '../../../../../assets/sass/_project/base.scss';
+@import "../../../../../assets/sass/_project/_config.scss";
+@import "../../../../../assets/sass/_global/_mixins.scss";
+@import "../../../../../assets/sass/_project/base.scss";
 
 .mod-register {
-    min-width: 650px;
+    min-width: auto;
+
+    @include mq(desktop) {
+        min-width: 650px;
+    }
 
     //TODO: place it in the right place and add multi-devices check
     button {
@@ -23,49 +27,114 @@
 
         > .m-title {
             > h1 {
-                @include textstyle-size-44-bold();
-                margin-bottom: 24px;
+                @include textstyle-size-32-bold();
+                margin-bottom: 5px;
+                @include mq(mobilebig) {
+                    @include textstyle-size-44-bold();
+                }
             }
         }
 
         > .m-para {
             @include textstyle-size-12();
-            margin-bottom: 39px;
+            margin-bottom: 22px;
         }
 
         > .m-form {
-           
-            >.m-two-column {
-                width: 38%;
-                margin: auto;
+            nz-form-item {
+
+                width: 100%;
                 display: flex;
+                flex-direction: column;
+                padding: 10px;
+                margin-bottom: 0px;
 
-                >.m-form-field-1{
-                    display : flex;
-                    justify-content:start ;
-
-                    >.m-form-label{
-                        max-width: 25%;
-                        margin: 0px 10px 0px -10px;
-                    }
-
-                    >.m-form-control{
-                        max-width: 65%;
-                    }
-                }
-                >.m-form-field-2{
-                    display : flex;
-                    justify-content:start ;
-
-                    >.m-form-label{
-                        max-width: 15%;
-                    }
-
-                    >.m-form-control{
-                        max-width: 60%;
-                    }
+                @include mq(mobilebig) {
+                    width: 85%;
+                    margin: auto;
+                    flex-direction: row;
+                    margin-bottom: 10px;
                 }
 
+                @include mq(desktop) {
+                    width: 57%;
+                    margin: auto;
+                    margin-bottom: 10px;
+                }
+
+            }
+            nz-form-control {
+                max-width: 100%;
+                margin-left: 0;
+
+                @include mq(mobilebig) {
+                    max-width: 50%;
+                }
+            }
+            nz-form-label {
+                display: flex;
+                align-items: center;
+                margin-right: 10px;
+                justify-content: flex-start;
+                margin-bottom: -10px;
+                max-width: 100%;
+
+                @include mq(mobilebig) {
+                    max-width: 25%;
+                    justify-content: flex-end;
+                    margin-bottom: 10px;
+                }
+            }
+            input {
+                height: 45px;
+                width: 100%;
+                border: 1px solid #ff8d69;
+                margin-bottom: 0px;
+
+                @include mq(mobilebig) {
+                    margin-bottom: 10px;
+                }
+            }
+            button {
+                padding: 10px 40px;
+                margin: auto;
+                > span {
+                    @include textstyle-size-14-bold();
+                }
+            }
+
+            > .m-two-column {
+                @include mq(ml) {
+                    width: 38%;
+                    margin: auto;
+                    display: flex;
+
+                    > .m-form-field-1 {
+                        display: flex;
+                        justify-content: start;
+
+                        > .m-form-label {
+                            max-width: 25%;
+                            margin: 0px 20px 0px -10px;
+                        }
+
+                        > .m-form-control {
+                            max-width: 65%;
+                        }
+                    }
+                    > .m-form-field-2 {
+                        display: flex;
+                        justify-content: start;
+
+                        > .m-form-label {
+                            max-width: 15%;
+                        }
+
+                        > .m-form-control {
+                            max-width: 60%;
+                        }
+                    }
+                }
             }
         }
     }

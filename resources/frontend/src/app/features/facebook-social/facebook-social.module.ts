@@ -15,7 +15,6 @@ import { CreatePostComponent } from './components/create-post/create-post.compon
 import { } from '../../shared/ng-zorro-antd.module'
 import { SharedModule } from 'src/app/shared/shared.module';
 import { AccountsPostsComponent } from "./components/accounts-posts/accounts-posts.component";
-import { CarouselComponent } from 'src/app/shared/components/carousel/carousel.component';
 
 
 @NgModule({
