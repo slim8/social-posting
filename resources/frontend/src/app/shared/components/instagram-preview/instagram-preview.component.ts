@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter, OnInit } from '@angular/core';
 import { Mention } from 'ng-zorro-antd/mention';
 
 @Component({
@@ -6,9 +6,9 @@ import { Mention } from 'ng-zorro-antd/mention';
     templateUrl: './instagram-preview.component.html',
     styleUrls: ['./instagram-preview.component.scss']
 })
-export class InstagramPreviewComponent implements  OnChanges {
+export class InstagramPreviewComponent implements  OnInit, OnChanges {
     //preview images variable
-    @Input() mediaList: any[] = [{url: ""}];
+    @Input() mediaList: any[] = [];
     @Input() message: string = "";
     @Output() newItemEvent = new EventEmitter<any[]>();
     mentions: any = [];
@@ -31,39 +31,56 @@ export class InstagramPreviewComponent implements  OnChanges {
         '中文',
         'にほんご',
     ];
+
     // carousel slider variables
     slideNbr = 0;
     nbrSlides: any = 1;
+
     constructor() { }
 
     ngOnChanges(changes: SimpleChanges) {
+    /**
+     *  empty mentions because when adding new media to preview,
+     *  the html get reset, mentions can't be visible anymore but
+     *  the mentions object still have the data, so we'll have to
+     *  empty it to avoid compromises and duplicates.
+     */
+
+      this.mentions = [];
       document.addEventListener('click', this.resetPostView);
-      this.nbrSlides = changes['mediaList'].currentValue.length;
-      this.mediaList = changes['mediaList'].currentValue;
+      if(changes['mediaList']) {
+        this.nbrSlides = changes['mediaList'].currentValue.length;
+        this.mediaList = changes['mediaList'].currentValue;
+      }
       setTimeout(() => {
         this.refreshDots();
-        this.initCarousel();
         this.initCarouselDots();
+        this.initCarouselNextButton();
       }, 200);
     }
 
+    ngOnInit(): void {
+      setTimeout(() => {
+        this.initCarousel();
+      }, 202);
+    }
+
     initCarouselDots() {
-        this.nbrSlides = 0;
-        let carouselDotsContainer = document.getElementById("dots") as any;
-        setTimeout(() => {
-            this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
-            for (let i = 0; i < this.nbrSlides; i++) {
-                let dotElem = document.createElement("li");
-                let dotImg = document.createElement("img");
-                dotElem.setAttribute("style", "filter: opacity(0.3);");
-                dotImg.setAttribute("src", "../../../../assets/img/svgs/dot.svg");
-                dotImg.setAttribute("alt", "#dot" + i);
-                dotImg.setAttribute("style", "width: 7px;");
-                dotElem.appendChild(dotImg);
-                carouselDotsContainer?.appendChild(dotElem);
-            }
+      this.nbrSlides = 0;
+      let carouselDotsContainer = document.getElementById("dots") as any;
+      setTimeout(() => {
+        this.nbrSlides = document.querySelectorAll("[data-slides] > li > img")?.length;
+        for (let i = 0; i < this.nbrSlides; i++) {
+          let dotElem = document.createElement("li");
+          let dotImg = document.createElement("img");
+          dotElem.setAttribute("style", "filter: opacity(0.3);");
+          dotImg.setAttribute("src", "../../../../assets/img/svgs/dot.svg");
+          dotImg.setAttribute("alt", "#dot" + i);
+          dotImg.setAttribute("style", "width: 7px;");
+          dotElem.appendChild(dotImg);
+          carouselDotsContainer?.appendChild(dotElem);
         }
-            , 50);
+      }, 50);
     }
 
     initCarousel() {
@@ -102,6 +119,13 @@ export class InstagramPreviewComponent implements  OnChanges {
           if (prev != null) {
             prev.style.display = "block";
           }
+
+          if (prev != null) {
+            prev.style.display = "block";
+          }
+          if (next != null) {
+            next.style.display = "block";
+          }
           const stride = button.dataset.carouselButton === 'next' ? 1 : -1;
           const offsetStride = button.dataset.carouselButton === 'next' ? -360 : 360;
           offset += offsetStride;
@@ -110,7 +134,8 @@ export class InstagramPreviewComponent implements  OnChanges {
             carousel.style.transform = "translateX(" + offset + "px)";
           }
           const slides = button.closest("[data-carousel]").querySelectorAll("[data-slides]>li>img");
-          this.slideNbr += stride
+          this.slideNbr += stride;
+
           if (this.slideNbr < 1) {
             if (prev != null) {
               prev.style.display = "none";
@@ -156,41 +181,39 @@ export class InstagramPreviewComponent implements  OnChanges {
         let next = document.getElementById("next");
         if (this.nbrSlides >=2 && this.nbrSlides > this.slideNbr) {
             // next is possibly null (can't use next?.style in this case so i had to use if not null)
-            if (next != null) next.style.display = "block";
+            if (next != null) {
+              next.style.display = "block";
+            }
         }
     }
 
     refreshDots() {
-        let carouselDotsContainer = document.getElementById("dots") as HTMLElement;
-        carouselDotsContainer.innerHTML = "";
-    }
-
-    onChange(event: any) {
-
+      let carouselDotsContainer = document.getElementById("dots") as HTMLElement;
+      carouselDotsContainer.innerHTML = "";
     }
 
     onSelect() {
+        this.mentionIndex=this.mentions.length;
         let tooltip = document.createElement('div');
-        // let mentioned = document.querySelector('.mentioned');
         tooltip.setAttribute('data-index', this.mentionIndex.toString());
         tooltip.setAttribute('class', 'mentioned');
         let close = document.createElement('div');
         let imagetop = this.posY;
         let imageleft = this.posX;
         let mention = {
-            image: 0,
-            username: '',
-            x: 0,
-            y: 0,
+          id: 0,
+          image: 0,
+          username: '',
+          x: 0,
+          y: 0,
         };
-
         mention.username = this.inputValue2;
+        mention.id = this.mentionIndex;
         mention.x = Math.round((this.posX / this.imageWidth) * 100) / 100;
         mention.y = Math.round((this.posY / this.imageHeight) * 100) / 100;
         mention.image = this.slideNbr;
         this.mentions.push(mention);
         this.passToParentComponent(this.mentions);
-        // mentioned?.addEventListener('click', this.edit);
 
         close.classList.add('m-close');
         close.innerHTML = 'x';
@@ -206,6 +229,21 @@ export class InstagramPreviewComponent implements  OnChanges {
             this.posX +
             'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
         );
+
+        //create remove mention button
+        close.classList.add('m-close');
+        close.innerHTML = 'x';
+        close?.setAttribute('style', 'padding:0 4px 0 10px;');
+        tooltip.innerHTML = this.inputValue2;
+        this.taggedImage?.appendChild(tooltip);
+        tooltip.appendChild(close);
+
+        // add function remove mention
+        let mentioned = document.querySelectorAll('.mentioned');
+        mentioned.forEach((elem:any)=>{
+          let that = this;
+          elem.children[0].addEventListener('click', function(){ that.removeMention(elem) });
+        })
 
         let tooltipwidth = tooltip.offsetWidth;
         let tooltipheight = tooltip.offsetHeight;
@@ -278,9 +316,7 @@ export class InstagramPreviewComponent implements  OnChanges {
                 'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
             );
         }
-
         this.mentionIndex++;
-        // this.mentionsList.emit({mention:this.mentions})
     }
 
     viewMentions() {
@@ -355,5 +391,16 @@ export class InstagramPreviewComponent implements  OnChanges {
       event.target.classList.toggle('like');
       event.target.classList.toggle('is-liked');
       this.isliked = !this.isliked;
-  }
+    }
+
+    removeMention(elem:HTMLDivElement) {
+      let index = elem.dataset['index'];
+      elem.remove();
+      this.mentions = this.mentions.filter((r:any) => r.id!=index);
+    }
+
+    // mentions on change
+    onChange(e:any) {
+      //todo
+    }
 }
