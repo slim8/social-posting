@@ -383,7 +383,7 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
         }
     }
 
-    passToParentComponent(value: any[], value2:any[] = []) {
+    passToParentComponent(value: any[]) {
       this.newItemEvent.emit(value);
     }
 
