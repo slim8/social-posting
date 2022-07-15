@@ -17,15 +17,14 @@
               i18n="Message Title|Title for the message alert@@messageTitle"
               class="m-alert-title"
             >
-            Welcome to the Social Media Publisher
+              Welcome to the Social Media Publisher
             </div>
             <div
               i18n="Message Body|Body of the alert message@@messageBody"
               class="m-alert-text"
             >
-            Thanks to the new social media publisher, you can easily
-            Link your social media channels and design posts and
-            publish directly.
+              Thanks to the new social media publisher, you can easily Link your
+              social media channels and design posts and publish directly.
             </div>
           </div>
         </div>
@@ -37,7 +36,7 @@
                 container@@dashboardContainerTitle"
               class="m-message"
             >
-            My posts
+              My posts
             </div>
             <div
               i18n="
@@ -45,7 +44,7 @@
                 container@@dashboardContainerNote"
               class="m-note"
             >
-            View all posts
+              View all posts
             </div>
           </div>
           <div
@@ -60,15 +59,15 @@
                 i18n="
                   No account|No connected account title@@NoConnectedAccountTitle"
               >
-              No posts yet.
+                No posts yet.
               </h4>
               <p
                 i18n="
                   No account message|No connected account
                   message@@NoConnectedAccountMessage"
               >
-              Link your social media channels with the mediafactory to
-              Design and publish posts directly.
+                Link your social media channels with the mediafactory to Design
+                and publish posts directly.
               </p>
             </div>
             <div class="m-login-button">
@@ -96,21 +95,15 @@
                   <tr *ngFor="let post of posts">
                     <td class="m-media-preview">
                       <div class="m-media-small">
-                        <img
-                          src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"
-                          alt=""
-                        />
+                        <img src="{{ post.postMedia[0].url }}" alt="" />
                         <div class="m-provider-logo">
                           <img
-                            *ngIf="post.provider == 'instagram'"
                             class="instagram"
-                            src="../../../assets/img/svgs/icons/instagram.svg"
-                            alt=""
-                          />
-                          <img
-                            *ngIf="post.provider == 'facebook'"
-                            class="facebook"
-                            src="../../../assets/img/svgs/icons/facebook.svg"
+                            src="{{
+                              '/assets/img/test-images/' +
+                                post.provider +
+                                '.svg'
+                            }}"
                             alt=""
                           />
                         </div>
@@ -122,17 +115,28 @@
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-like-count">{{ post.stats.likes }}</div>
-                      <div class="m-text" i18n="Reached People |reached people @@reachedPeople">reached people</div>
+                      <div
+                        class="m-text"
+                        i18n="Reached People |reached people @@reachedPeople"
+                      >
+                        reached people
+                      </div>
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-share-count">{{ post.stats.shares }}</div>
-                      <div class="m-text" i18n="Likes |Likes @@likes">likes</div>
+                      <div class="m-text" i18n="Likes |Likes @@likes">
+                        likes
+                      </div>
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.comments }}
                       </div>
-                      <div i18n="Comment|Comment@@Commment" class="m-text" i18n="Comments |Comments @@comments">
+                      <div
+                        i18n="Comment|Comment@@Commment"
+                        class="m-text"
+                        i18n="Comments |Comments @@comments"
+                      >
                         comments
                       </div>
                     </td>
@@ -141,17 +145,28 @@
                       <div class="m-like-count">
                         {{ post.stats.engagement }}
                       </div>
-                      <div class="m-text" i18n="Engagement |Engagement @@engagement">engagement</div>
+                      <div
+                        class="m-text"
+                        i18n="Engagement |Engagement @@engagement"
+                      >
+                        engagement
+                      </div>
                     </td>
                     <td *ngIf="post.provider == 'instagram'" class="m-stats">
                       <div class="m-share-count">{{ post.stats.saves }}</div>
-                      <div class="m-text" i18n="Saves |Saves @@saves">saves</div>
+                      <div class="m-text" i18n="Saves |Saves @@saves">
+                        saves
+                      </div>
                     </td>
                     <td *ngIf="post.provider == 'instagram'" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.impressions }}
                       </div>
-                      <div i18n="Comment|Comment@@Commment" class="m-text" i18n="Impressions |Impressions @@impressions">
+                      <div
+                        i18n="Comment|Comment@@Commment"
+                        class="m-text"
+                        i18n="Impressions |Impressions @@impressions"
+                      >
                         impressions
                       </div>
                     </td>
@@ -160,8 +175,10 @@
                         href="{{ post.url }}"
                         target="_blank"
                         class="m-button is-disabled"
-                        i18n="To the Post |To the Post or create post @@toThePost"
-                        ><span><i nz-icon nzType="ng-zorro:open"></i></span> To the post</a
+                        i18n="
+                          To the Post |To the Post or create post @@toThePost"
+                        ><span><i nz-icon nzType="ng-zorro:open"></i></span> To
+                        the post</a
                       >
                     </td>
                   </tr>
@@ -170,8 +187,19 @@
 
               <div *ngIf="posts == ''" class="m-no-data">
                 <i nz-icon nzType="cloud" nzTheme="outline"></i>
-                <h3 i18n="No Posts Found |Text for no posts found @@noPostsFound">No posts found</h3>
-                <div class="" i18n="Start Creating Posts |Text for start creating your posts now @@startCreatingPosts">start creating your posts now</div>
+                <h3
+                  i18n="No Posts Found |Text for no posts found @@noPostsFound"
+                >
+                  No posts found
+                </h3>
+                <div
+                  class=""
+                  i18n="
+                    Start Creating Posts |Text for start creating your posts now
+                    @@startCreatingPosts"
+                >
+                  start creating your posts now
+                </div>
               </div>
             </div>
           </div>
@@ -250,7 +278,9 @@
               </li>
             </ul>
           </div>
-            <a class="m-see-more" href="/application/dashboard/blog-posts">Mehr lesen</a>
+          <a class="m-see-more" href="/application/dashboard/blog-posts"
+            >Mehr lesen</a
+          >
         </div>
       </div>
     </div>
@@ -260,12 +290,23 @@
         <img src="../../../assets/img/close.png" alt="close" />
       </div>
       <div class="m-modal-header">
-        <div class="m-title" i18n="Add pages|Title for adding pages@@addPages">Add Instagram & Business Pages</div>
-        <div class="m-text" i18n="Add Pages Text|Text for add pages@@addPagesText">
-          Select your connected business accounts and Facebook Pages that
-           you want to link to the mediafactory.
+        <div class="m-title" i18n="Add pages|Title for adding pages@@addPages">
+          Add Instagram & Business Pages
         </div>
-        <div *ngIf="this.currentUser != ''" class="m-list-title" i18n="Pages Linked To Accountname|Text for pages linked to accountname@@pagesLinkedToAccount">
+        <div
+          class="m-text"
+          i18n="Add Pages Text|Text for add pages@@addPagesText"
+        >
+          Select your connected business accounts and Facebook Pages that you
+          want to link to the mediafactory.
+        </div>
+        <div
+          *ngIf="this.currentUser != ''"
+          class="m-list-title"
+          i18n="
+            Pages Linked To Accountname|Text for pages linked to
+            accountname@@pagesLinkedToAccount"
+        >
           Pages Linked To <strong>accountname.test</strong>:
         </div>
       </div>
@@ -293,25 +334,37 @@
         </tr>
       </form>
       <div class="m-submit-button">
-        <button (click)="onSubmit()" class="m-button is-primary" i18n="Link|Link@@link">
+        <button
+          (click)="onSubmit()"
+          class="m-button is-primary"
+          i18n="Link|Link@@link"
+        >
           Link
         </button>
-    </div>
-
-    <div class="m-success-modal">
-      <div (click)="closeSuccessModal()" class="m-close-icon">
-        <img src="../../../assets/img/close.png" alt="close" />
       </div>
-      <div class="m-success">
-        <img src="../../../assets/img/Group.png" alt="refreshing" />
-        <div class="m-success-title" i18n="Logged In|Logged in successfully@@loggedIn">
-          <img src="../../../assets/img/Check.png" alt="success" />
-          Logged in successfully.
+
+      <div class="m-success-modal">
+        <div (click)="closeSuccessModal()" class="m-close-icon">
+          <img src="../../../assets/img/close.png" alt="close" />
         </div>
-        <p i18n="Redirect Message Success|Text for redirection after success@@redirectMessageSuccess">
-          Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
-          mediafactory Social Media Publisher hinzuzufügen.
-        </p>
+        <div class="m-success">
+          <img src="../../../assets/img/Group.png" alt="refreshing" />
+          <div
+            class="m-success-title"
+            i18n="Logged In|Logged in successfully@@loggedIn"
+          >
+            <img src="../../../assets/img/Check.png" alt="success" />
+            Logged in successfully.
+          </div>
+          <p
+            i18n="
+              Redirect Message Success|Text for redirection after
+              success@@redirectMessageSuccess"
+          >
+            Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
+            mediafactory Social Media Publisher hinzuzufügen.
+          </p>
+        </div>
       </div>
     </div>
   </div>

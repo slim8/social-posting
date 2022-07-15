@@ -160,10 +160,8 @@
                 </p>
                 <span class="m-text"> Max Mustermann </span>
               </td>
-              <!-- [ngClass]="{ 'is-active': isCollapsed }" (click)="collapse()" -->
               <td class="m-collapse" (click)="collapse($event)">collapse</td>
             </tr>
-            <!-- [ngClass]="{ 'is-active': isCollapsed }" -->
             <tr class="m-details">
               <td></td>
               <td class="m-item">
@@ -216,14 +214,7 @@
               </td>
             </tr>
           </tbody>
-          <!-- <app-collapse-item [item]="item" ></app-collapse-item> -->
         </table>
-
-        <!-- <div *ngIf="!isLoading">
-          <div class="m-item" *ngFor="let item of posts">
-            <app-collapse-item [item]="item"></app-collapse-item>
-          </div>
-        </div> -->
 
         <div *ngIf="isLoading">
           <div class="m-item is-full" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
