@@ -35,7 +35,7 @@ class FileController extends Controller
     /**
      * Convert Image To Jpeg.
      */
-    public function convertToJpeg($image, int $isOnDisk = 0, string $filePathName = null)
+    public function convertToJpeg($folderName , $image, int $isOnDisk = 0, string $filePathName = null)
     {
         if (!$isOnDisk) {
             $object = $image->store('temporar' . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
@@ -45,7 +45,7 @@ class FileController extends Controller
         $exploded = explode('/', $object);
         $fileName = $exploded[count($exploded) - 1];
         $newFileName = explode('.', $fileName)[0];
-        $newFile = storage_path() . '/app/public/temporarStored/' . $newFileName . '.jpeg';
+        $newFile = storage_path() . '/app/public/'.$folderName.'/' . $newFileName . '.jpeg';
         $this->imageManager->make($object)->encode('jpg', 80)->save($newFile);
 
         unlink($object);
@@ -134,11 +134,23 @@ class FileController extends Controller
     }
 
     /**
-     * Start Local Image Upload.
+     * Start Local Upload.
      */
-    public function uploadLocalImage($file, $type)
+    public function uploadLocal($file, $type)
     {
-        $object = $file->store($type . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
+        if ($type == 'image') {
+            $imageLink = $this->convertToJpeg('postedImages' , $file);
+            $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
+            return Storage::url('postedImages/'.$imageName);
+        } else {
+            $object = $file->store($type . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
+            dd($object);
+        }
+
+
+
+
+
 
         return envValue('APP_URL') . '/' . $object;
     }
@@ -149,7 +161,7 @@ class FileController extends Controller
     public function uploadToDistant($image, $type, int $isOnDisk = 0, string $filePathName = null)
     {
         if ($type == 'image') {
-            $imageLink = $this->convertToJpeg($image, $isOnDisk, $filePathName);
+            $imageLink = $this->convertToJpeg('temporarStored', $image, $isOnDisk, $filePathName);
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
             $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/' . $imageName);
         }
