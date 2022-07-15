@@ -31,7 +31,11 @@
                 height: 83px;
                 display: flex;
                 justify-content: space-between;
-                padding: 25px;
+                padding: 15px;
+
+                @include mq(tablet) {
+                    padding: 25px;
+                }
 
                 > .m-left {
                     display: flex;
@@ -88,7 +92,7 @@
 
             > .m-content {
                 padding: 25px;
-
+                width: 100%;
                 max-width: 100%;
                 overflow-y: hidden;
                 overflow-x: auto;
@@ -136,6 +140,180 @@
                             right: 5%;
                             @include mq(desktop) {
                                 right: 22%;
+                            }
+                        }
+                    }
+                }
+
+                > table {
+                    width: max-content;
+
+                    border-collapse: separate;
+                    border-spacing: 0 20px;
+                    @include mq(tablet) {
+                        width: 100%;
+                    }
+                    > .m-post {
+                        > .m-headline {
+                            position: relative;
+
+                            &:before {
+                                content: '';
+                                border-bottom: 1px solid $color-media-black-opacity-30;
+                                position: absolute;
+                                width: 100%;
+                            }
+                            > .m-image {
+                                padding-top: 16px;
+                                > img {
+                                    max-width: 170px;
+                                    max-height: 70px;
+                                    width: 100%;
+                                    object-fit: cover;
+                                }
+                            }
+
+                            > .m-content {
+                                display: flex;
+                                flex-wrap: wrap;
+                                row-gap: 10px;
+                                max-width: 270px;
+                                padding-left: 10px;
+                                padding-top: 16px;
+
+                                > h6 {
+                                    font-weight: bold;
+                                    width: 100%;
+                                    margin: 0;
+                                }
+
+                                > .m-account {
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: center;
+                                    > .m-image {
+                                        position: relative;
+                                        &.is-disconnected {
+                                            filter: opacity(0.2);
+                                        }
+
+                                        > img {
+                                            border-radius: 50%;
+                                            display: block;
+                                            object-fit: cover;
+                                            width: 40px;
+                                            height: 40px;
+                                        }
+
+                                        > .m-provider-logo {
+                                            position: absolute;
+                                            bottom: -5px;
+                                            right: -5px;
+                                            display: flex;
+
+                                            > img {
+                                                width: 20px;
+                                                height: 20px;
+
+                                                &.facebook {
+                                                    background-color: $color-base-0;
+                                                    padding: 3px;
+                                                    box-shadow: 0 0 5px $color-media-light-grey;
+                                                    width: 25px;
+                                                    @include mq(tablet) {
+                                                        width: 54px;
+                                                        padding: 6px;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    > .m-name {
+                                        @include textstyle-size-10();
+                                        color: $color-media-black-opacity-half;
+                                    }
+                                }
+                            }
+
+                            > .m-status {
+                                padding-top: 16px;
+                                @include mq(desktop) {
+                                    min-width: 180px;
+                                }
+
+                                .m-text {
+                                    @include textstyle-size-10();
+                                }
+                            }
+
+                            > .m-date {
+                                padding-top: 16px;
+                                padding-right: 30px;
+                                flex-wrap: wrap;
+                                @include textstyle-size-10();
+                                max-width: 150px;
+                                > .m-create-date {
+                                    @include textstyle-size-10-bold();
+                                    width: 100%;
+                                }
+                            }
+
+                            > .m-collapse {
+                                position: absolute;
+                                right: 0;
+                                top: 30px;
+                                content: url('/assets/img/test-images/arrow-down.svg');
+                                background-size: cover;
+                                height: 20px;
+                                width: 20px;
+                                transition: all 0.5s ease-out;
+                                &.is-active {
+                                    transform: rotate(180deg);
+                                }
+                            }
+                        }
+
+                        > .m-details {
+                            &.is-active {
+                                visibility: visible;
+                                opacity: 1;
+                                height: auto;
+                                padding-top: 30px;
+                                padding-bottom: 15px;
+                            }
+                            transition: all 0.5s ease-out;
+                            visibility: collapse;
+                            opacity: 0;
+                            height: 0;
+
+                            > .m-item {
+                                > .m-container {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    > .m-number {
+                                        width: 100%;
+                                        @include textstyle-size-10-bold();
+                                    }
+
+                                    > .m-text {
+                                        width: 100%;
+                                        @include textstyle-size-10();
+                                        color: $color-media-black-opacity-half;
+                                    }
+                                }
+
+                                > .m-button {
+                                    width: max-content;
+                                }
+                                svg {
+                                    fill: $color-base-100;
+                                }
+
+                                &:last-child {
+                                    width: 20%;
+                                    flex-direction: row-reverse;
+                                }
                             }
                         }
                     }
