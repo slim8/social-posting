@@ -1,3 +1,8 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+
 div {
     div.button-container {
         text-align: end;
@@ -5,16 +10,16 @@ div {
         >button{
             margin : 0 0 0 20px;
             &.m-primary-button{
-                background: rgba(0, 0, 0, 0.3);
-                color: #fff;
-                border-color: rgba(0, 0, 0, 0.3);
+                background: $color-media-black-opacity-30;
+                color: $color-base-0;
+                border-color: $color-media-black-opacity-30;
                 &:hover{
-                    background: rgba(0, 0, 0, 0.4);
-                    border-color: rgba(0, 0, 0, 0.6);
+                    background: $color-media-secondary-button;
+                    border-color: $color-media-black-opacity-half;
                 }
                 &[Disabled]{
                     background: rgba(0, 0, 0, 0.1);
-                    color: #fff;
+                    color: $color-base-0;
                     border-color: rgba(0, 0, 0, 0.15);
                 }
             }

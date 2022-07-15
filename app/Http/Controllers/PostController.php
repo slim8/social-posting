@@ -270,9 +270,22 @@ class PostController extends Controller
         $images = [];
         $videos = [];
         $mentions = [];
-        $postObject = Post::where('id', $postId)->first();
-        $postImage = PostMedia::where('type', 'image')->where('postId', $postId)->get();
-        if ($postImage) {
+        $postObject = Post::where('id' , $postId)->first();
+        $postImage = PostMedia::where('type','image')->where('postId' , $postId)->get();
+        $postVideo = PostMedia::where('type','video')->where('postId' , $postId)->get();
+
+
+        if($postVideo){
+            foreach($postVideo as $video){
+                $videoObject = [];
+                $videoObject['url'] = $video->url;
+                $videoObject['seconde'] = null;
+                $videoObject['thumbnail'] = null;
+                $videos[] = $videoObject;
+            }
+        }
+
+        if($postImage){
             $incImage = 0;
             foreach ($postImage as $image) {
                 $mediaMentions = Mentions::where('postId', $postId)->where('postMediaId', $image->id)->get();

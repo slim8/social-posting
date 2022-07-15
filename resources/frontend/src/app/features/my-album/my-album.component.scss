@@ -43,14 +43,14 @@
                         margin-right: 10px;
                         height: 36px;
                         padding: 5px;
-                        background: #e2e2e2;
+                        background: $color-media-background-light-grey;
                         align-items: center;
                         display: flex;
                         justify-content: center;
 
                         > .m-button-icon {
                             font-size: 19px;
-                            color: #e2e2e2;
+                            color: $color-media-background-light-grey;
                             padding-top: 3px;
                         }
 
@@ -60,13 +60,13 @@
                             font-weight: 400;
                             font-size: 12px;
                             line-height: 16px;
-                            color: #000000;
+                            color: $color-media-black;
                             margin: 0 10px;
                         }
 
                         > .m-button-arrow {
                             font-size: 14px;
-                            color: #000;
+                            color: $color-media-black;
                         }
                     }
                 }
@@ -78,14 +78,14 @@
                         margin-right: 10px;
                         height: 36px;
                         padding: 5px;
-                        background: #ff8d69;
+                        background: $color-media-primary-orange;
                         align-items: center;
                         display: flex;
                         justify-content: center;
 
                         > .m-button-icon {
                             font-size: 19px;
-                            color: #e2e2e2;
+                            color: $color-media-background-light-grey;
                             padding-top: 3px;
                         }
                         > .m-button-text {
@@ -99,7 +99,7 @@
                     }
 
                     > .m-search-form {
-                        border: 1px solid #e2e2e2;
+                        border: 1px solid $color-media-background-light-grey;
                         margin-right: 25px;
                         height: 36px;
                         padding: 5px;
@@ -120,23 +120,23 @@
                 }
 
                 &::-webkit-scrollbar-track {
-                    background: #fff;
+                    background: $color-base-0;
                 }
 
                 &::-webkit-scrollbar-thumb {
                     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
                     border-radius: 14px;
-                    background: #eaeaea;
+                    background: $color-media-lighter-red;
                 }
 
                 &::-webkit-scrollbar-thumb:hover {
-                    background: #c7c7c7;
+                    background: $color-media-light-red;
                 }
 
                 > .m-album-item-container {
                     width: 136px;
                     height: 136px;
-                    background: #e2e2e2;
+                    background: $color-media-background-light-grey;
 
                     > .m-album-item-image {
                         width: 136px;
@@ -181,14 +181,14 @@
                     margin-right: 10px;
                     height: 36px;
                     padding: 5px;
-                    background: #e2e2e2;
+                    background: $color-media-background-light-grey;
                     align-items: center;
                     display: flex;
                     justify-content: center;
 
                     > .m-button-icon {
                         font-size: 19px;
-                        color: #e2e2e2;
+                        color: $color-media-background-light-grey;
                     }
 
                     > .m-button-text {
@@ -197,12 +197,12 @@
                         font-weight: 400;
                         font-size: 12px;
                         line-height: 16px;
-                        color: #000000;
+                        color: $color-media-black;
                     }
 
                     > .m-button-arrow {
                         font-size: 14px;
-                        color: #000;
+                        color: $color-media-black;
                     }
                 }
             }
@@ -213,14 +213,14 @@
                 > .m-button {
                     height: 36px;
                     padding: 5px;
-                    background: #ff8d69;
+                    background: $color-media-primary-orange;
                     align-items: center;
                     display: flex;
                     justify-content: center;
 
                     > .m-button-icon {
                         font-size: 19px;
-                        color: #ff8d69;
+                        color: $color-media-primary-orange;
                     }
                     > .m-button-text {
                         font-family: 'Open Sans';
@@ -233,7 +233,7 @@
                 }
 
                 > .m-search-form {
-                    border: 1px solid #e2e2e2;
+                    border: 1px solid $color-media-background-light-grey;
                     margin-right: 25px;
                     height: 36px;
                     padding: 5px;
@@ -254,23 +254,23 @@
             }
 
             &::-webkit-scrollbar-track {
-                background: #fff;
+                background: $color-base-0;
             }
 
             &::-webkit-scrollbar-thumb {
                 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
                 border-radius: 14px;
-                background: #eaeaea;
+                background: $color-media-lighter-red;
             }
 
             &::-webkit-scrollbar-thumb:hover {
-                background: #c7c7c7;
+                background: $color-media-light-red;
             }
 
             > .m-album-item-container {
                 width: 136px;
                 height: 136px;
-                background: #e2e2e2;
+                background: $color-media-background-light-grey;
 
                 > .m-album-item-image {
                     width: 136px;

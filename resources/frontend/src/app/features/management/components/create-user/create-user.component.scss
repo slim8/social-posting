@@ -1,3 +1,8 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+
 .m-form {
     width : 50%;
     @media screen and (max-width : 1000px){
@@ -14,7 +19,7 @@
             display : flex;
             justify-content:center;
             align-items: center;
-            border: 0.5px solid rgba(0, 0, 0, 0.5);
+            border: 0.5px solid $color-media-black-opacity-half;
             margin: 10px 0 0 0;
             >i{
                 padding: 10px ;
@@ -25,7 +30,7 @@
             display : flex;
             justify-content:center;
             align-items: center;
-            border: 0.5px solid rgba(0, 0, 0, 0.5);
+            border: 0.5px solid $color-media-black-opacity-half;
             margin: 10px 0 0 0;
             >i{
                 padding: 10px ;
@@ -41,12 +46,12 @@
     >button{
         margin : 20px;
         &.m-primary-button{
-            background: rgba(0, 0, 0, 0.3);
+            background: $color-media-black-opacity-30;
             color: #fff;
-            border-color: rgba(0, 0, 0, 0.3);
+            border-color: $color-media-black-opacity-30;
             &:hover{
-                background: rgba(0, 0, 0, 0.4);
-                border-color: rgba(0, 0, 0, 0.6);
+                background: $color-media-secondary-button;
+                border-color: $color-media-black-opacity-half;
             }
         }
     }

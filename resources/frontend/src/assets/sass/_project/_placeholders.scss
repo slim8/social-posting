@@ -176,12 +176,12 @@ z-select {
     top: 0;
     left: 0;
     position: absolute;
-    width: 300vw;
-    height: 300vh;
+    width: 100vw;
+    height: 100vh;
     left: 50%;
     top: 50%;
     transform: translate3d(-50%, -50%, 0);
-    background-color: black;
+    background-color: $color-base-100;
     opacity: 0.25;
     z-index: 1;
 }
@@ -224,7 +224,7 @@ z-select {
     input {
         height: 45px;
         width: 100%;
-        border: 1px solid #ff8d69;
+        border: 1px solid $color-media-primary-orange;
         margin-bottom: 10px;
     }
     button {
