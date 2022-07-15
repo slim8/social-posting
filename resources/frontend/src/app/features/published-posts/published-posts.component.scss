@@ -100,50 +100,6 @@
                 @include mq(desktop) {
                     overflow-x: hidden;
                 }
-                > .m-array-header {
-                    > .m-titles {
-                        margin-top: 10px;
-                        position: relative;
-                        min-width: 625px;
-                        width: 100%;
-                        display: flex;
-                        flex-wrap: nowrap;
-                        justify-content: center;
-                        height: 20px;
-                        gap: 10px;
-
-                        @include mq(desktop) {
-                            gap: 25px;
-                        }
-
-                        > .m-image,
-                        > .m-status,
-                        > .m-date {
-                            position: absolute;
-                            top: 0;
-                            @include textstyle-size-10-bold();
-                            color: $color-media-black-opacity-half;
-                        }
-
-                        > .m-image {
-                            left: 50px;
-
-                            @include mq(desktop) {
-                                left: 100px;
-                            }
-                        }
-
-                        > .m-status {
-                        }
-
-                        > .m-date {
-                            right: 5%;
-                            @include mq(desktop) {
-                                right: 22%;
-                            }
-                        }
-                    }
-                }
 
                 > table {
                     width: max-content;
@@ -152,6 +108,19 @@
                     border-spacing: 0 20px;
                     @include mq(tablet) {
                         width: 100%;
+                    }
+
+                    > thead {
+                        > tr {
+                            > td {
+                                @include textstyle-size-10-bold();
+                                color: $color-media-black-opacity-half;
+
+                                &:first-child {
+                                    padding-left: 90px;
+                                }
+                            }
+                        }
                     }
                     > .m-post {
                         > .m-headline {
@@ -263,6 +232,7 @@
                                 position: absolute;
                                 right: 0;
                                 top: 30px;
+                                cursor: pointer;
                                 content: url('/assets/img/test-images/arrow-down.svg');
                                 background-size: cover;
                                 height: 20px;
@@ -288,6 +258,9 @@
                             height: 0;
 
                             > .m-item {
+                                &:first-child {
+                                    padding-left: 90px;
+                                }
                                 > .m-container {
                                     display: flex;
                                     flex-wrap: wrap;

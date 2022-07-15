@@ -81,36 +81,33 @@
       </div>
       <hr />
       <div class="m-content">
-        <div class="m-array-header">
-          <div class="m-titles">
-            <div
-              class="m-image"
-              i18n="
-                My Published Posts Contribution|Contribution Title for My Posts
-                Page@@myPublishedPostsContribution"
-            >
-              Contribution
-            </div>
-            <div
-              class="m-status"
-              i18n="
-                My Published Posts Status|Status Title for My Posts
-                Page@@myPublishedPostsStatus"
-            >
-              Status
-            </div>
-            <div
-              class="m-date"
-              i18n="
-                My Published Posts Date|Date Title for My Posts
-                Page@@myPublishedPostsDate"
-            >
-              Published At
-            </div>
-          </div>
-        </div>
-
         <table *ngIf="!isLoading">
+          <thead class="m-array-header">
+            <tr class="m-titles">
+              <td
+                colspan="4"
+                i18n="
+                  My Published Posts Contribution|Contribution Title for My
+                  Posts Page@@myPublishedPostsContribution"
+              >
+                Contribution
+              </td>
+              <td
+                i18n="
+                  My Published Posts Status|Status Title for My Posts
+                  Page@@myPublishedPostsStatus"
+              >
+                Status
+              </td>
+              <td
+                i18n="
+                  My Published Posts Date|Date Title for My Posts
+                  Page@@myPublishedPostsDate"
+              >
+                Published At
+              </td>
+            </tr>
+          </thead>
           <tbody *ngFor="let item of posts" class="m-post">
             <tr class="m-headline">
               <td class="m-icon">
@@ -163,8 +160,7 @@
               <td class="m-collapse" (click)="collapse($event)">collapse</td>
             </tr>
             <tr class="m-details">
-              <td></td>
-              <td class="m-item">
+              <td class="m-item" colspan="3">
                 <div class="m-container">
                   <span class="m-number">{{ item.stats.shares }}</span>
                   <span
