@@ -22,6 +22,7 @@
     "start:swagger": "php artisan lrd:generate",
     "start:migrate": "php artisan migrate --seed",
     "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --prod && node ./build.js && php artisan migrate",
+    "deploy:dev": "php81 /usr/bin/composer install && php81 artisan config:clear && php81 artisan cache:clear && php81 artisan storage:link && npm i && ng build --prod && node ./build.js && php81 artisan migrate",
     "deploy-on-local": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration devlocal && node ./build.js && php artisan migrate"
   },
   "dependencies": {
