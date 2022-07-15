@@ -26,8 +26,11 @@
         height: 83px;
         display: flex;
         justify-content: space-between;
+        flex-direction: column ;
         padding: 25px;
-
+        @include mq(tablet) {
+          flex-direction: row ;
+        }
         > .m-left {
           display: flex;
           flex-direction: row;
@@ -82,6 +85,10 @@
         }
 
         > .m-right {
+          margin-top: 20px;
+          @include mq(tablet) {
+            margin-top: 0;
+          }
           > .m-button {
             gap: 3px;
           }
@@ -90,6 +97,11 @@
 
       > hr {
         border: 1px solid $color-media-black-opacity-30;
+        margin-top: 40px;
+        @include mq(tablet) {
+          margin-top: 0;
+        }
+
       }
 
       > .m-content {
@@ -97,7 +109,7 @@
         padding: 25px;
         max-width: 100%;
         overflow-y: hidden;
-        overflow-x: auto;
+       // overflow-x: auto;
 
         @include mq(desktop) {
           overflow-x: hidden;
