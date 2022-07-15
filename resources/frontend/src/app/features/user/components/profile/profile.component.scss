@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css?family=Maven+Pro|Oswald');
+$border-color: #1a233d;
+$animation-duration: 0.5s;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a1022;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  overflow: hidden;
+  font-family: "Maven Pro";
+}
+
+.main-container {
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+  @media screen and (max-width : 1000px) {
+    flex-direction: column;
+    }
+  .left-sidebar {
+    flex-grow: 2;
+    max-width: 320px;
+    border-right: 1px solid $border-color;
+    position: relative;
+    transition: all $animation-duration;
+    box-shadow: 2px 0px 5px #03050a;
+    //background: #0e121f;
+    @media screen and (max-width : 1000px) {
+        border-right: 0px;
+        border-bottom: 1px solid $border-color;
+        box-shadow: 0px 2px 0px -5px #03050a;       
+        max-height: min-content;
+        width:100%;
+        max-width: none;
+    }
+    
+    .inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      
+      .user-profile {
+        flex-grow: 2;
+        max-height: 345px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all $animation-duration;
+        border: $border-color;
+        position: relative;
+        overflow: hidden;
+        
+        .user-background {
+          position: absolute;
+          background: url('https://gravatar.com/avatar/de84db04b0c7b43efdc840391ffe56ff');
+          background-size: cover;
+          width: 100%;
+          height: 100%;
+          filter: blur(25px);
+          z-index: -1;
+          
+        //   &::after {
+        //     display: block;
+        //     position: relative;
+        //     background-image: linear-gradient(to bottom, rgba(23, 32, 61, 0.3) 0, #0a1022 95%);
+        //     height: 100%;
+        //     width: 100%;
+        //     content: '';
+        //   }
+        }
+        
+        .user-image {
+          margin: 50px 0 25px 0;
+          border-color: $border-color;
+          transition: all $animation-duration;
+          img {
+            width: 90px;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.1);
+            transition: all $animation-duration;
+          }
+        }
+        
+        .user-info {
+          text-align: center;
+          
+          .user-name {
+            font-family: 'Oswald';
+            font-weight: 400;
+            text-transform: uppercase;
+          }
+        }
+      }
+    }  
+      
+  }
+  
+  .main-content {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    padding : 1rem ;
+    width: 50%;
+    @media screen and (max-width : 1000px) {
+        width:100%;
+    }
+    > ul {
+        list-style: none;
+        width: 100%;
+        > li{
+            text-transform: capitalize;
+            font-size: 1rem ;
+            line-height: 1.2;
+            border-bottom: 2px solid;
+            padding: 5px;
+            margin: 20px 0;
+            >.label {
+                font-weight: 500;
+            }
+            >.anticon-check {
+                color : green !important;
+            }
+        }
+    }
+    > button{
+        width: fit-content;
+        margin: 40px 0 0 40px;
+        &.m-primary-button{
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border-color: rgba(0, 0, 0, 0.3);
+            &:hover{
+                background: rgba(0, 0, 0, 0.4);
+                border-color: rgba(0, 0, 0, 0.6);
+            }
+        }
+    }
+    }
+}
+    

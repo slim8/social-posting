@@ -1,0 +1,72 @@
+<div class="mod-facebook-preview" >
+    <div class="m-wrapper" >
+        <div class="m-post-header">
+            <div class="m-user-post">
+                <nz-avatar class="m-user-avatar" nzSrc="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+                <div class="m-user-info">
+                    <div class="m-username">{{accountName}} </div>
+                    <div class="m-post-date">8 Std.</div>
+                </div>
+            </div>
+            <div class="m-header-dots">
+                <i nz-icon nzType="dash" nzTheme="outline"></i>
+            </div>
+        </div>
+        <div class="m-post-description" [innerHTML]="postDescription.length < 150 ? postDescription : postDescription.slice(0, 150) + '<span > ... Mehr anzeigen </span>' ">
+
+        </div>
+        <div class="m-post-image-container">
+            <div class="" *ngIf="ThumbnailImg" >
+                <img [src]="ThumbnailImg" class="m-post-image-preview" />
+                <div class="m-post-image-play-icon">
+                    <i nz-icon nzType="ng-zorro:threeDot"></i>
+                </div>
+            </div>
+            <div class="" *ngIf="imgList.length == 2" >
+                <img [src]="imgList[1].url" class="m-post-image-preview" />
+            </div>
+            <div class="" *ngIf="imgList.length == 3" >
+                <img [src]="imgList[1].url" class="m-post-image-preview-2" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-2" />
+            </div>
+            <div class="" *ngIf="imgList.length == 4" >
+                <img [src]="imgList[1].url" class="m-post-image-preview-2" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[3].url" class="m-post-image-preview-3" />
+            </div>
+            <div class="" *ngIf="imgList.length == 5" >
+                <img [src]="imgList[1].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[3].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[4].url" class="m-post-image-preview-3" />
+            </div>
+            <div class="" *ngIf="imgList.length >= 6" >
+                <img [src]="imgList[1].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[2].url" class="m-post-image-preview-3" />
+                <img [src]="imgList[3].url" class="m-post-image-preview-4" />
+                <img [src]="imgList[4].url" class="m-post-image-preview-4" />
+                <img [src]="imgList[5].url" class="m-post-image-preview-4" />
+                <div class="m-post-image-preview-4 m-more-img-layout" *ngIf="imgList.length > 6" > <div > +{{imgList.length - 6}} </div> </div>
+            </div>
+
+        </div>
+        <div class="m-post-action-section">
+            <button class="m-like-button">
+                <img src="assets/img/facebook-icons/like.svg" />
+                like
+            </button>
+            <button class="m-comment-button">
+                <img src="assets/img/facebook-icons/comment.svg" />
+                comment
+            </button>
+            <button class="m-share-button">
+                <img src="assets/img/facebook-icons/share.svg" />
+                share
+            </button>
+        </div>
+        <div class="m-post-comment-section">
+            <nz-avatar class="m-comment-avatar" nzSrc="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+            <input class="m-comment-input" nz-input placeholder="Write a comment..." />
+        </div>
+    </div>
+</div>

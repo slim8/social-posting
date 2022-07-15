@@ -1,0 +1,146 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../assets/sass/_project/base.scss';
+
+.mod-facebook-preview {
+    height: 100%;
+    >.m-wrapper{
+        width : 360px;
+        min-height: 556px;
+        background : white ;
+        margin: 35px auto;
+
+        >.m-post-header {
+        width: 100% ;
+        justify-content: space-between ;
+        display: flex;
+        padding : 10px;
+        height: 78px;
+        align-items: center;
+
+            >.m-user-post{
+                display: flex;
+
+                >.m-user-avatar{
+                    margin: 2px;
+                }
+
+                >.m-user-info{
+                    margin: auto 10px 5px 8px;
+                    >.m-username{
+                      @include textstyle-size-12-bold();
+                    }
+
+                    >.m-post-date{
+                      @include textstyle-size-12();
+                    }
+                }
+            }
+
+            >.m-header-dots{
+                color : #D9D9D9;
+            }
+        }
+
+        >.m-post-description{
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 8.44147px;
+            line-height: 11px;
+
+            /* black */
+            color: #000000;
+            padding : 15px;
+
+            > span {
+              font-weight: 700;
+            }
+        }
+
+        >.m-post-image-container{
+          min-height: 350px;
+          width : 100%;
+
+          > div {
+            >.m-post-image-preview{
+                object-fit: cover;
+                height: 350px;
+                width : 100% ;
+              }
+
+              >.m-post-image-preview-2{
+                  height: 175px;
+                  width : 100% ;
+                  object-fit: cover;
+                  object-position: center;
+              }
+
+              >.m-post-image-preview-3{
+                  height: 175px;
+                  width : 50% ;
+                  object-fit: cover;
+                  object-position: center;
+              }
+
+              >.m-post-image-preview-4{
+                  height: 175px;
+                  width : 33.3% ;
+                  object-fit: cover;
+                  object-position: center;
+                  &.m-more-img-layout{
+                      margin: -48.6157% 239px;
+                      background-color: rgba(0,0,0,.3);
+                      position: relative;
+                      >div{
+                          padding: 40px;
+                          color: white;
+                          font-size: 28px;
+                          font-weight: 700;
+                      }
+                  }
+              }
+
+              >.m-post-image-play-icon{
+                  position: absolute;
+                  margin-top: -150px;
+                  margin-left: 120px;
+              }
+          }
+        }
+
+        >.m-post-action-section{
+            margin : 10px ;
+            border-top: 1.06667px solid #707070;
+            border-bottom: 1.06667px solid #707070;
+            text-align: center;
+            opacity: 0.5;
+
+            > button {
+                margin : 2px 10px ;
+                border : none ;
+                background-color : white ;
+                color: #636468;
+            }
+        }
+
+        >.m-post-comment-section{
+            display: flex;
+            margin : 10px ;
+            padding-bottom: 15px;
+
+            >.m-comment-avatar{
+                height: 21px;
+            }
+
+            >.m-comment-input{
+                background: #F1F2F6;
+                border-radius: 20px;
+                margin: 2px;
+                height: 21px;
+                border : none;
+            }
+        }
+
+    }
+}

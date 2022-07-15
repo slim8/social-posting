@@ -1,0 +1,63 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_project/_mixins-fonts.scss';
+@import '../../../../assets/sass/_project/_mixins-mk.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+
+// todo
+.m-wrapper {
+    > .m-menu {
+        background-color: $color-media-dark-grey;
+        padding-top: 10px;
+
+        > .m-item {
+            padding: 0 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            overflow: hidden;
+
+            > .m-icon {
+                position: relative;
+                padding: 20px;
+
+                > i {
+                    font-size: 24px;
+                    > svg {
+                        > path {
+                            fill: $color-base-0;
+                        }
+                    }
+                }
+
+                &.is-selected {
+                    i {
+                        svg {
+                            > path {
+                                fill: $color-media-primary-orange !important;
+                            }
+                        }
+                    }
+                }
+            }
+
+            > .m-label {
+                user-select: none;
+                opacity: 0;
+                font-size: 0;
+                color: $color-base-0;
+                transition: 0.2s all;
+                position: relative;
+                text-decoration: none;
+
+                .is-active & {
+                    opacity: 1;
+                    @include textstyle-size-14();
+                }
+
+                &.is-selected {
+                    color: $color-media-primary-orange;
+                }
+            }
+        }
+    }
+}

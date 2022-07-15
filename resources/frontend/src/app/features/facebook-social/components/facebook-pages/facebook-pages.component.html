@@ -1,0 +1,59 @@
+<div class="mod-meta-pages">
+    <div class="m-facebook-info" *ngIf="fbPageCount > 0">
+        <div class="m-title">Facebook pages</div>
+        <div class="m-facebook-pages" >
+            <div class="m-page" *ngFor="let page of facebookPages">
+                <nz-card (click)="getPostsBypageId(page.id)" style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                    <nz-card-meta
+                        nzTitle="{{page.pageName}}"
+                        nzDescription="{{page.category}}"
+                        [nzAvatar]="avatarTemplate"
+                    ></nz-card-meta>
+                </nz-card>
+                <ng-template #avatarTemplate>
+                    <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
+                </ng-template>
+                <ng-template #actionSetting>
+                    <i  nz-icon nzType="facebook" nzTheme="outline"></i>{{page.provider}}
+                </ng-template>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i nz-icon nzType="ellipsis"></i>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <div class="m-instagram-info" *ngIf="instaPageCount > 0">
+        <div class="m-title">Instagram pages</div>
+        <div class="m-instagram-pages" >
+            <div class="m-page" *ngFor="let page of instaPages">
+        
+                <nz-card (click)="getPostsBypageId(page.id)" style="width:300px;" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
+                    <nz-card-meta
+                        nzTitle="{{page.pageName}}"
+                        nzDescription="{{page.category}}"
+                        [nzAvatar]="avatarTemplate"
+                    ></nz-card-meta>
+                </nz-card>
+                <ng-template #avatarTemplate>
+                    <nz-avatar nzSrc="{{page.pagePictureUrl}}"></nz-avatar>
+                </ng-template>
+                <ng-template #actionSetting>
+                    <i nz-icon nzType="instagram" zTheme="outline"></i>{{page.provider}}
+                </ng-template>
+                <ng-template #actionEdit>
+                    <i nz-icon nzType="edit"></i>
+                </ng-template>
+                <ng-template #actionEllipsis>
+                    <i nz-icon nzType="ellipsis"></i>
+                </ng-template>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>
+

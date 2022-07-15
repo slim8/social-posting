@@ -1,0 +1,312 @@
+<div class="mod-accounts">
+  <div class="m-wrapper">
+    <div class="m-accounts-header">
+      <h1 i18n="Accounts Title|Title for the Accounts Page@@accountsTitle">
+        Social Media Profile
+      </h1>
+
+      <button
+        *ngIf="!isLoading && connectedAccounts != ''"
+        (click)="loginWithFacebook('add')"
+        i18n="add Account or page |add account or page@@addAccountPage"
+        class="m-button is-primary"
+      >
+        <span><i nz-icon nzType="ng-zorro:add"></i></span> Link another account
+
+      </button>
+    </div>
+    <div class="m-accounts-container">
+      <div *ngIf="!isLoading && connectedAccounts == ''" class="m-login">
+        <span class="m-login-icon">
+          <i nz-icon nzType="ng-zorro:add"></i>
+        </span>
+        <div class="m-message-info">
+          <h4
+            i18n="
+              No account|No connected account title@@NoConnectedAccountTitle"
+          >
+          No posts yet.
+          </h4>
+          <p
+            i18n="
+              No account message|No connected account
+              message@@NoConnectedAccountMessage"
+          >
+          Link your social media channels with the mediafactory to
+          Design and publish posts directly.
+          </p>
+        </div>
+        <div class="m-login-button">
+          <button
+            (click)="loginWithFacebook()"
+            class="m-button is-primary"
+            i18n="Login button|Login account button@@LoginAccount"
+          >
+            <span><i nz-icon nzType="ng-zorro:add"></i></span>Link account
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="m-connected-accounts">
+        <!-- Begin Skeleton -->
+        <div *ngFor="let item of [0, 1, 2]" class="m-account-container">
+          <div class="m-media-small">
+            <nz-skeleton-element
+              nzType="avatar"
+              [nzActive]="true"
+              [nzSize]="64"
+            ></nz-skeleton-element>
+          </div>
+          <div class="m-page-info">
+            <nz-skeleton [nzActive]="true"></nz-skeleton>
+          </div>
+          <div class="m-alert">
+            <nz-skeleton-element
+              nzType="avatar"
+              [nzActive]="true"
+              [nzSize]="16"
+            ></nz-skeleton-element>
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
+              We are currently unable to access your account. Please check
+               your account and your access data on Facebook directly.
+            </div>
+          </div>
+          <div class="m-action">
+            <nz-skeleton-element
+              nzType="button"
+              [nzActive]="true"
+              [nzSize]="'large'"
+            ></nz-skeleton-element>
+
+            <nz-skeleton-element
+              nzType="button"
+              [nzActive]="true"
+              [nzSize]="'large'"
+            ></nz-skeleton-element>
+          </div>
+          <div class="m-action-manager">
+            <nz-skeleton-element
+              nzType="avatar"
+              [nzActive]="true"
+              [nzSize]="16"
+            ></nz-skeleton-element>
+            <nz-skeleton-element
+              nzType="avatar"
+              [nzActive]="true"
+              [nzSize]="16"
+            ></nz-skeleton-element>
+          </div>
+        </div>
+        <!-- End Skeleton -->
+      </div>
+      <div
+        *ngIf="!isLoading && connectedAccounts != ''"
+        class="m-connected-accounts"
+      >
+        <h2 i18n="Personnel Account|Personnel account title@@personnelAccount">Personnal Accounts</h2>
+
+        <div
+          *ngFor="let account of connectedAccounts"
+          class="m-account-container"
+        >
+          <div class="m-media-small">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"
+              alt=""
+            />
+            <div class="m-provider-logo">
+              <img src="../../../assets/img/svgs/icons/instagram.svg" alt="" />
+            </div>
+          </div>
+          <div class="m-page-info">
+            <div class="m-page">{{ account.profileName }}</div>
+            <div class="m-date">hinzugefügt am 23.04.22</div>
+            <div class="m-followers">Follower: <strong> 4967</strong></div>
+          </div>
+          <div class="m-alert">
+            <img src="../../../assets/img/exclamation.png" alt="" />
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
+              We are currently unable to access your account. Please check
+               your account and your access data on Facebook directly.
+            </div>
+          </div>
+          <div class="m-action">
+            <button class="m-button is-primary" i18n="Create Post|Text for create post@@createPost">
+              <span><i nz-icon nzType="ng-zorro:edit"></i></span> To the post
+            </button>
+            <button class="m-button is-disabled" i18n="Edit Account|Text edit account@@editAccount">
+              <span><i nz-icon nzType="ng-zorro:pencil"></i></span> Edit account
+            </button>
+          </div>
+          <div class="m-action-manager">
+            <button (click)="deletePage(account.id)" class="m-icon-button">
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+            <button
+              *ngIf="!account.isConnected"
+              (click)="reconnectPage($event, account.id)"
+              class="m-icon-button"
+            >
+              <i nz-icon nzType="login" nzTheme="outline"></i>
+            </button>
+            <button
+              *ngIf="account.isConnected"
+              (click)="showDisconnectConfirm(account.id)"
+              class="m-icon-button"
+            >
+              <i nz-icon nzType="logout" nzTheme="outline"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && listOfPages != ''" class="m-connected-accounts">
+        <h2 i18n="Connected pages|Title for connected pages@@connectedPages">Connected Social Media Accounts</h2>
+        <!-- category: "Science et technologie"
+                id: 21
+                isConnected: true
+                pageId: "100683432659619"
+                pageName: "Test api"
+                pagePictureUrl: "https://scontent.ftun1-2.fna.fbcdn.net/v/t39.30808-1/281098725_100683475992948_5314342680384228185_n.png?stp=cp0_dst-png_p50x50&_nc_cat=106&ccb=1-7&_nc_sid=dbb9e7&_nc_ohc=iUcTpp4RovUAX_785sX&_nc_ht=scontent.ftun1-2.fna&edm=AOf6bZoEAAAA&oh=00_AT-DPQKONMTH2_waKCZFqSWMAzS9UfeF-zOcwLX29_sYdw&oe=62B6FFA9"
+                provider: "facebook" -->
+        <div *ngFor="let page of listOfPages" class="m-account-container">
+          <div
+            [ngClass]="{ 'is-disconnected': !page.isConnected }"
+            class="m-media-small"
+          >
+            <img src="{{ page.pagePictureUrl }}" alt="" />
+            <div class="m-provider-logo">
+              <img
+                *ngIf="page.provider == 'facebook'"
+                class="facebook"
+                src="../../../assets/img/svgs/icons/facebook.svg"
+                alt=""
+              />
+              <img
+                *ngIf="page.provider == 'instagram'"
+                class="instagram"
+                src="../../../assets/img/svgs/icons/instagram.svg"
+                alt=""
+              />
+            </div>
+          </div>
+          <div
+            [ngClass]="{ 'is-disconnected': !page.isConnected }"
+            class="m-page-info"
+          >
+            <div class="m-page">{{ page.pageName }}</div>
+            <div class="m-date">hinzugefügt am 23.04.22</div>
+            <div class="m-followers">
+              Follower: <strong> {{ page.followers }}</strong>
+            </div>
+          </div>
+          <div
+            [ngClass]="{ 'is-disconnected': !page.isConnected }"
+            class="m-alert"
+          >
+            <img
+              *ngIf="!page.isConnected"
+              src="../../../assets/img/exclamation.png"
+              alt=""
+            />
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
+              We are currently unable to access your account. Please check
+               your account and your access data on Facebook directly.
+            </div>
+          </div>
+          <div
+            [ngClass]="{ 'is-disconnected': !page.isConnected }"
+            class="m-action"
+          >
+            <button class="m-button is-primary" i18n="Create Post|Text for create post@@createPost">
+              <span><i nz-icon nzType="ng-zorro:edit"></i></span> To the post
+            </button>
+            <button class="m-button is-disabled" i18n="Edit Account|Text edit account@@editAccount">
+              <span><i nz-icon nzType="ng-zorro:pencil"></i></span> Edit account
+            </button>
+          </div>
+          <div class="m-action-manager">
+            <button (click)="deletePage(page.id)" class="m-icon-button">
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+            <button
+              *ngIf="!page.isConnected"
+              (click)="reconnectPage($event, page.id)"
+              class="m-icon-button"
+            >
+              <i nz-icon nzType="login" nzTheme="outline"></i>
+            </button>
+            <button
+              *ngIf="page.isConnected"
+              (click)="showDisconnectConfirm(page.id)"
+              class="m-icon-button"
+            >
+              <i nz-icon nzType="logout" nzTheme="outline"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-modal-pages">
+      <div (click)="closeModal()" class="m-close-icon">
+        <img src="../../../assets/img/close.png" alt="close" />
+      </div>
+      <div class="m-modal-header">
+        <div class="m-title" i18n="Add pages|Title for adding pages@@addPages">Add Instagram & Business Pages</div>
+        <div class="m-text" i18n="Add Pages Text|Text for add pages@@addPagesText">
+          Select your connected business accounts and Facebook Pages that
+           you want to link to the mediafactory.
+        </div>
+        <div *ngIf="this.currentUser != ''" class="m-list-title" i18n="Pages Linked To Accountname|Text for pages linked to accountname@@pagesLinkedToAccount">
+          Pages Linked To <strong>accountname.test</strong>:
+        </div>
+      </div>
+
+      <form class="m-form-pages" nz-form [formGroup]="validateForm">
+        <tr *ngFor="let page of listpages">
+          <td>
+            <label>
+              <input
+                class="m-checkbox"
+                type="checkbox"
+                [value]="page.pageId"
+                (change)="onCheckChange($event)"
+              />
+
+              <nz-avatar
+                nzIcon="user"
+                [nzSrc]="page.pagePictureUrl"
+                style="margin: 8px 26px; width: 36px; height: 36px"
+              ></nz-avatar>
+
+              {{ page.pageName }}
+            </label>
+          </td>
+        </tr>
+      </form>
+      <div class="m-submit-button">
+        <button (click)="onSubmit()" class="m-button is-primary" i18n="Link|Link@@link">
+          Link
+        </button>
+      </div>
+    </div>
+
+    <div class="m-success-modal">
+      <div (click)="closeSuccessModal()" class="m-close-icon">
+        <img src="../../../assets/img/close.png" alt="close" />
+      </div>
+      <div class="m-success">
+        <img src="../../../assets/img/Group.png" alt="refreshing" />
+        <div class="m-success-title" i18n="Logged In|Logged in successfully@@loggedIn">
+          <img src="../../../assets/img/Check.png" alt="success" />
+          Logged in successfully.
+        </div>
+        <p i18n="Redirect Message Success|Text for redirection after success@@redirectMessageSuccess">
+          Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
+          mediafactory Social Media Publisher hinzuzufügen.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

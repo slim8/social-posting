@@ -1,0 +1,236 @@
+.m-icon {
+    position: relative;
+    padding: 20px;
+
+    &.dashboard,
+    &.published-posts,
+    &.accounts {
+        > i {
+            font-size: 21px;
+            > svg {
+                > path {
+                    fill: $color-base-0;
+                    stroke: transparent;
+                }
+            }
+        }
+    }
+
+    &.drafts,
+    &.my-album,
+    &.create-post {
+        i {
+            svg {
+                > path {
+                    stroke: $color-base-0;
+                    fill: transparent;
+                }
+            }
+        }
+    }
+
+    &.is-selected {
+        &.dashboard,
+        &.published-posts,
+        &.accounts {
+            i {
+                svg {
+                    > path {
+                        fill: $color-media-primary-orange !important;
+                    }
+                }
+            }
+        }
+
+        &.drafts,
+        &.my-album,
+        &.create-post {
+            i {
+                svg {
+                    > path {
+                        stroke: $color-media-primary-orange !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.m-login-icon {
+    > i {
+        font-size: 60px;
+        > svg {
+            > path {
+                fill: $color-media-background-light-grey;
+                stroke: $color-media-background-light-grey;
+
+                .m-accounts-header & {
+                    display: none;
+                    fill: $color-base-0;
+                    stroke: $color-base-0;
+                }
+            }
+        }
+    }
+}
+
+svg {
+    .m-logout &,
+    .m-user & {
+        font-size: 18px;
+    }
+    .m-home &,
+    .m-collapse-menu-button & {
+        font-size: 16px;
+    }
+
+    .m-gallery & {
+        > path {
+            stroke: $color-base-100;
+        }
+    }
+
+    .m-gallery &,
+    .m-image &,
+    .m-video & {
+        font-size: 15px;
+    }
+
+    > path {
+        .m-accounts-header & {
+            fill: $color-base-0;
+            stroke: $color-base-0;
+        }
+    }
+}
+
+.m-loading {
+    > i {
+        > svg {
+            width: 60px;
+            height: 60px;
+        }
+    }
+}
+
+.m-alert-container {
+    &.is-closed {
+        animation: 0.3s closing;
+    }
+
+    @keyframes closing {
+        0% {
+            height: 141px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        100% {
+            height: 0;
+            opacity: 0;
+            transform: translateY(-200px);
+        }
+    }
+
+    > .m-alert {
+        position: relative;
+        .mod-dashboard & {
+            background-color: $color-base-0;
+            border: 0;
+            padding: 27px 29px;
+            height: 141px;
+
+            > .m-alert-title {
+                width: 216px;
+                @include textstyle-size-16-bold();
+                padding-bottom: 11px;
+            }
+
+            > .m-alert-text {
+                @include textstyle-size-16();
+            }
+
+            > .m-close-icon {
+                position: absolute;
+                right: 19px;
+                top: 21px;
+                width: 10px;
+                height: 10px;
+                cursor: pointer;
+
+                > img {
+                    position: absolute;
+                    z-index: 9;
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+        }
+    }
+}
+
+z-select {
+    width: 100%;
+}
+
+.m-loading-screen-active {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    background-color: $color-base-100;
+    opacity: 0.25;
+    z-index: 1;
+}
+
+.m-loading-spin {
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 25px;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.wide {
+    width: 200px;
+}
+
+.mod-register {
+    nz-form-item {
+        width: 57%;
+        margin: auto;
+        margin-bottom: 10px;
+    }
+    nz-form-control {
+        max-width: 50%;
+    }
+    nz-form-label {
+        max-width: 25%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    input {
+        height: 45px;
+        width: 100%;
+        border: 1px solid $color-media-primary-orange;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 40px;
+        > span {
+            @include textstyle-size-14-bold();
+        }
+    }
+}

@@ -1,0 +1,73 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+.mod-dictionary {
+    .m-button-container {
+        text-align: end;
+        margin: 0 0 20px 0;
+        > button {
+            &.m-primary-button {
+                background: $color-media-black-opacity-30;
+                color: $color-base-0;
+                border-color: $color-media-black-opacity-30;
+                &:hover {
+                    background: $color-media-secondary-button;
+                    border-color: $color-media-black-opacity-half;
+                }
+            }
+
+            &.m-default-button {
+                &:hover {
+                    color: $color-media-black-opacity-half;
+                    border-color: $color-media-black-opacity-30;
+                }
+            }
+        }
+    }
+
+    .m-action-buttons {
+        text-align: end;
+        > button {
+            margin: 0 10px;
+            &.m-edit-button {
+                background: $color-media-black-opacity-30;
+                color: $color-base-0;
+                border-color: $color-media-black-opacity-30;
+            }
+
+            &.m-delete-button {
+                background: $color-media-primary-orange;
+                color: $color-base-0;
+                border-color: $color-media-primary-orange;
+            }
+        }
+    }
+
+    .m-form {
+        width: 100%;
+        > .m-form-group {
+            margin: 20px;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 16px;
+            font-style: normal;
+            > div.m-form-input {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 0.5px solid $color-media-black-opacity-half;
+                margin: 10px 0 0 0;
+                > i {
+                    padding: 10px;
+                    cursor: pointer;
+                }
+            }
+            > .error {
+                color: red;
+                padding: 5px 0;
+            }
+        }
+    }
+}

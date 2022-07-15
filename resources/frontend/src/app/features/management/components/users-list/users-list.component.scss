@@ -1,0 +1,35 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+
+div {
+    div.button-container {
+        text-align: end;
+        margin : 0 0 20px 0;
+        >button{
+            margin : 0 0 0 20px;
+            &.m-primary-button{
+                background: $color-media-black-opacity-30;
+                color: $color-base-0;
+                border-color: $color-media-black-opacity-30;
+                &:hover{
+                    background: $color-media-secondary-button;
+                    border-color: $color-media-black-opacity-half;
+                }
+                &[Disabled]{
+                    background: rgba(0, 0, 0, 0.1);
+                    color: $color-base-0;
+                    border-color: rgba(0, 0, 0, 0.15);
+                }
+            }
+        }
+    }
+} 
+
+.m-permission-block{
+    >.m-permission-tag{
+        width:max-content ;
+    }
+}
+

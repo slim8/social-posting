@@ -1,0 +1,94 @@
+@import '../../../../assets/sass/_project/_config.scss';
+@import '../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../assets/sass/_project/base.scss';
+.mod-header {
+    height: 60px;
+
+    @include mq(desktop) {
+        height: 90px;
+    }
+    > .m-wrapper {
+        height: 60px;
+        background-color: $color-base-0;
+
+        @include mq(desktop) {
+            height: 90px;
+        }
+        > .m-header-container {
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            margin-left: 85px;
+            gap: 20px;
+
+            @include mq(tablet) {
+                margin-left: 244px;
+            }
+            > .m-logo {
+                user-select: none;
+
+                > .m-button {
+                }
+            }
+
+            //todo
+            > .m-home {
+                > i {
+                    > svg {
+                        font-size: 16px;
+                        > path {
+                            fill: $color-base-0;
+                        }
+                    }
+                }
+            }
+
+            > .m-title {
+                user-select: none;
+
+                > h5 {
+                    margin: 0;
+                }
+            }
+
+            > .m-control-buttons {
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+                gap: 24px;
+                padding-right: 5%;
+                @include mq(tablet) {
+                  padding-right: 20%;
+                  gap: 63px;
+              }
+
+                > .m-logout {
+                    cursor: pointer;
+
+                    > i {
+                        svg {
+                            font-size: 18px;
+                        }
+                    }
+                }
+
+                > .m-user {
+                    cursor: pointer;
+
+                    > i {
+                        svg {
+                            font-size: 18px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+nz-header {
+    padding: 0;
+    width: 100%;
+    z-index: 2;
+}

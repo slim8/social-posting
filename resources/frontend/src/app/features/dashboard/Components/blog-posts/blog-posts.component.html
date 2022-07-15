@@ -1,0 +1,31 @@
+<div class="m-mod-blog-posts">
+    <div class="m-wrapper">
+        <div class="m-header">
+            <h3 class="m-title" i18n="news|Title for the news@@news">news</h3>
+            <p class="m-description" i18n="new Features|subTitle for the new Features@@newFeatures">Neue Features, Updates und Ankündigungen findest Du hier.</p>
+        </div>
+        <div class="m-container">
+            <div class="m-posts-container" *ngFor="let post of posts ; let index = index">
+                <div [class]="index == 0 ? 'm-first-post' : 'm-post-item'" >
+                    <div class="m-post-img" *ngIf="post.img">
+                        <img [src]="post.img" alt="" class="">
+                    </div>
+                    <div class="m-post-description">
+                        <h6 class="m-post-date">{{post.createdAt}}</h6>
+                        <div class="m-post-title" >
+                            <h3>{{post.title}}</h3>
+                            <div class="m-redirect-icon">
+                                <a [routerLink]="['/application/dashboard/post', 1]" class="">
+                                    <i nz-icon nzType="ng-zorro:show-view" style="font-size: 16px;"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <p class="m-post-teaser">{{post.teaser}}</p>
+                    </div>
+                    
+                </div>
+                <hr class="m-post-line" />
+            </div>
+        </div>
+    </div>
+</div>

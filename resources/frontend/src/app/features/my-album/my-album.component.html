@@ -1,0 +1,113 @@
+<div class="mod-gallery">
+  <div class="m-wrapper">
+    <div class="m-header">
+      <h1 i18n="MyAlbum|Title for the My album@@myAlbum">My album</h1>
+      <h3
+        i18n="
+          MyAlbum|subTitle for the album @@chooseMediafactory"
+      >
+        Choose a meme you designed from the mediafactory and publish it.
+      </h3>
+    </div>
+    <div class="m-container">
+      <div class="m-filter-panel">
+        <div class="m-left">
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postType"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i nz-icon nzType="ng-zorro:image"></i>
+            </div>
+            <div
+              class="m-button-text"
+              i18n="postType|Title for the post type@@postType"
+            >
+              Post type
+            </div>
+            <div class="m-button-arrow">
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postType="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postings"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i nz-icon nzType="ng-zorro:calender"></i>
+            </div>
+            <div
+              class="m-button-text"
+              i18n="AllPostings|Title for the All Postings@@allPostings"
+            >
+              All Postings
+            </div>
+            <div class="m-button-arrow">
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postings="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+        <div class="m-right">
+          <input type="text" class="m-search-form" placeholder="Suchen" />
+          <button class="m-button">
+            <div class="m-button-icon">
+              <i nz-icon nzType="ng-zorro:costum-edit"></i>
+            </div>
+            <div
+              class="m-button-text"
+              i18n="CreateNew|Title for the Create new@@createNew"
+            >
+              Create new
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="m-album-items-container" *ngIf="!isLoading">
+        <div class="m-album-item-container" *ngFor="let item of images">
+          <img nz-image [nzSrc]="item" alt="" class="m-album-item-image" />
+        </div>
+        <br />
+        <br />
+      </div>
+      <div class="m-album-items-container" *ngIf="isLoading">
+        <div *ngFor="let item of [].constructor(30)">
+          <nz-skeleton-element
+            nzType="avatar"
+            [nzActive]="true"
+            [nzShape]="'square'"
+            [nzSize]="136"
+          ></nz-skeleton-element>
+        </div>
+      </div>
+
+      <div class="m-gradient"></div>
+    </div>
+  </div>
+</div>

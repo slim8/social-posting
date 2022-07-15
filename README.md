@@ -15,9 +15,10 @@ Install the dependencies and devDependencies and start the server.
 
 ```sh
 npm install
-npm run start:build
+npm run start:migrate (must be only the first time : Migrate database and Upload required data)
+npm run deploy
 ```
-npm run start:build (pull from git + clear Laravel cache + composer install + npm install [Laravel + Angular])
+npm run deploy (pull from git + clear Laravel cache + composer install + npm install [Laravel + Angular] + Migrate database)
 
 ## Angular FrontEnd Path Source files
 
@@ -42,20 +43,21 @@ JWT_HASH_ALGORITHME={hash_algorithme (eg. HS512)}
 
 ## Migrate Database
 
-(Update on databse structure OR upload database) [This can delete your data] => TO BE FIXED
+(Update on databse structure OR upload database)
 
 
 ```sh
-npm run start:migrate
-```
-## Build Project on DEV
-
-```sh
-npm run start:dev
+npm run migrate
 ```
 
-## Build Project on PROD
+## Build Project on PROD / Deploy
 
 ```sh
-npm run start:build
+npm run deploy
+```
+## Generate Swagger Documentation
+
+```sh
+npm run start:swagger
+open /request-docs
 ```

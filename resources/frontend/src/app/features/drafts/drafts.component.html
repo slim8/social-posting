@@ -1,0 +1,128 @@
+<div class="mod-drafts">
+  <div class="m-wrapper">
+    <div class="m-title">
+      <h1
+        i18n="
+          My Drafts Posts Title|Title for My Posts
+          Page@@myDraftsPosts"
+      >
+        Entwürfe
+      </h1>
+      <br/>
+      <h3
+        i18n="
+          My Drafts Posts Sub Title|Title for My Posts
+          Page@@myDraftsPostsSubTitle"
+      >
+        Hier findest Du all deine bisherig veröffentlichten Beiträge
+      </h3>
+    </div>
+    <div class="m-container">
+      <div class="m-filter-panel">
+        <div class="m-left">
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postType"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i nz-icon nzType="ng-zorro:image"></i>
+            </div>
+            <div class="m-button-text">Beitragsart</div>
+            <div class="m-button-arrow">
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postType="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="postings"
+            class="m-button is-secondary"
+          >
+            <div class="m-button-icon">
+              <i
+                nz-icon
+                nzType="ng-zorro:customCalendar"
+                [nzTheme]="'outline'"
+              ></i>
+            </div>
+            <div class="m-button-text">Alle Postings</div>
+            <div class="m-button-arrow">
+              <i nz-icon nzType="ng-zorro:customArrow"></i>
+            </div>
+          </button>
+          <nz-dropdown-menu #postings="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>menu4 1st menu item</li>
+              <li nz-menu-item>menu4 2nd menu item</li>
+              <li nz-menu-item>menu4 3rd menu item</li>
+            </ul>
+          </nz-dropdown-menu>
+          <div class="m-remove" (click)="removeDraft()">
+            <img
+              i18n-alt
+              src="/assets/img/svgs/icons/remove.svg"
+              alt="send icon"
+              class="m-icon-remove"
+            />
+          </div>
+
+        </div>
+        <div class="m-right">
+          <button class="m-button is-primary">
+            <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
+            Neu erstellen
+          </button>
+        </div>
+      </div>
+
+      <hr/>
+      <div class="m-content">
+        <div class="m-border"></div>
+        <div class="m-array-header">
+          <div class="m-titles">
+            <div
+              class="m-image"
+              i18n="
+                My Drafts Posts Contribution|Contribution Title for My Posts
+                Page@@myDraftsPostsContribution"
+            >
+              Beitrag
+            </div>
+            <div
+              class="m-date"
+              i18n="
+                My Drafts Posts Status|Status Title for My Posts
+                Page@@myDraftsPosts"
+            >
+              Erstellt am/von
+            </div>
+            <div
+              class="m-activity"
+              i18n="
+                My Drafts Posts Date|Date Title for My Posts
+                Page@@myDraftsPosts"
+            >
+              Tätigkeiten
+            </div>
+          </div>
+        </div>
+        <div class="m-item" *ngFor="let post of posts">
+          <app-post-item [post]="post" [draftsList]="draftsList" (newItemEvent)="update($event)"></app-post-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,196 @@
+<div class="mod-register">
+  <div class="m-wrapper">
+    <div class="m-subtitle">
+      <h2 i18n="registration|Title for the registration @@registration">REGISTRATION</h2>
+    </div>
+
+    <div class="m-title">
+      <h1 i18n="Social Media Publisher|subTitle for the registration @@socialmediapublisher">Social Media Publisher</h1>
+    </div>
+
+    <div class="m-para">
+      Easily manage all your social media and get results with our application
+    </div>
+    <form class="m-form" nz-form [formGroup]="validateForm" (ngSubmit)="onSaveCompany()">
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="firstName"
+          nzRequired
+          i18n="FirstName|Title for the FirstName @@firstName"
+          >FirstName</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Please input FirstName!"
+        >
+          <input nz-input id="firstName" formControlName="firstName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="lastName"
+          nzRequired
+          i18n="lastName|Title for the lastName @@lastName"
+          >LastName</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Please input Last Name!"
+        >
+          <input nz-input id="lastName" formControlName="lastName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="phoneNumber"
+          nzRequired
+          i18n="Phone Number|Title for the Phone Number @@phoneNumber"
+          >Phone Number</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          [nzValidateStatus]="validateForm.controls['phoneNumber']"
+          nzErrorTip="Please input your phone number!"
+        >
+          <input formControlName="phoneNumber" id="'phoneNumber'" nz-input />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzRequired
+          nzFor="email"
+          i18n="E-mail|Title for the E-mail @@email"
+          >E-mail</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="The input is not valid E-mail!"
+        >
+          <input nz-input formControlName="email" id="email" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="adress"
+          nzRequired
+          i18n="Adress|Title for the Adress @@adress"
+          >Adress</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Please input adress!"
+        >
+          <input nz-input id="adress" formControlName="adress" />
+        </nz-form-control>
+      </nz-form-item>
+      <div class="m-two-column">
+        <nz-form-item class="m-form-field-1">
+          <nz-form-label
+            class="m-form-label"
+            [nzSm]="6"
+            [nzXs]="24"
+            nzFor="Postcode"
+            nzRequired
+            i18n="Postcode|Title for the Postcode @@postCode"
+            >Postcode</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            class="m-form-control"
+            nzErrorTip="Please input Postcode!"
+          >
+            <input nz-input id="Postcode" formControlName="postcode" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="m-form-field-2">
+          <nz-form-label
+            class="m-form-label"
+            [nzSm]="6"
+            [nzXs]="24"
+            nzFor="city"
+            nzRequired
+            i18n="City|Title for the City @@city"
+            >City</nz-form-label
+          >
+          <nz-form-control
+            [nzSm]="14"
+            [nzXs]="24"
+            class="m-form-control"
+            nzErrorTip="Please input city!"
+          >
+            <input nz-input id="city" formControlName="city" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="companyName"
+          nzRequired
+          i18n="Company Name|Title for the Company Name @@companyName"
+          >Company Name</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Please input Company Name!"
+        >
+          <input nz-input id="companyName" formControlName="companyName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="m-form-field">
+        <nz-form-label
+          class="m-form-label"
+          [nzSm]="6"
+          [nzXs]="24"
+          nzFor="website"
+          nzRequired
+          i18n="Website|Title for the Website @@website"
+          >Website</nz-form-label
+        >
+        <nz-form-control
+          [nzSm]="14"
+          [nzXs]="24"
+          nzErrorTip="Please input website!"
+        >
+          <input nz-input id="website" formControlName="website" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="m-form-field" nz-row class="register-area">
+        
+          <button
+            class="m-button is-primary"
+            type="submit"
+            nz-button
+            [nzLoading]="isLoading"
+            i18n="Registrieren|Title for the Registrieren @@registrieren"
+          >
+            Registrieren
+          </button>
+      </nz-form-item>
+    </form>
+  </div>
+</div>

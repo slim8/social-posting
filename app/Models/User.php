@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Extends\ExtendedUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends ExtendedUser
 {
     use LaratrustUserTrait;
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +25,15 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'firstName',
+        'lastName',
+        'status',
+        'autoRefresh',
+        'isSubscriber',
+        'companyId',
+        'address',
+        'postCode',
+        'city'
     ];
 
     /**
@@ -32,7 +43,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'rememberToken',
     ];
 
     /**
@@ -41,6 +52,26 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'emailVerifiedAt' => 'datetime',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'companyId');
+    }
+
+    public function providerToken()
+    {
+        return $this->hasMany(ProviderToken::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    public function accounts()
+    {
+        return $this->belongsToMany(Account::class);
+    }
 }

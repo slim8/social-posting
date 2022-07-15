@@ -1,0 +1,85 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+.mod-login {
+    width: 100%;
+    height: 100%;
+    background-color: $color-base-0;
+    border-top: 18px solid $color-media-border;
+    border-bottom: 18px solid $color-media-border;
+    border-right: 20px solid $color-media-border;
+    border-left: 20px solid $color-media-border;
+
+  > .m-wrapper {
+    padding-top: 50px;
+    @include mq(desktop) {
+        padding-top: 280px;
+    }
+    width: 500px;
+    margin: auto;
+    text-align: center;
+
+    i {
+      cursor: pointer;
+    }
+
+    > .m-subtitle {
+        > h2 {
+            @include textstyle-size-20();
+            letter-spacing: 0.4em;
+            margin-bottom: 7px;
+        }
+    }
+
+    > .m-title {
+        > h1 {
+            @include textstyle-size-44-bold();
+            margin-bottom: 20px;
+        }
+    }
+
+    > .m-para {
+        @include textstyle-size-12();
+        margin-bottom: 39px;
+    }
+
+    > .m-form {
+        nz-input-group {
+            height: 45px;
+            width: 400px;
+            border: 1px solid $color-media-primary-orange;
+            margin-bottom: 10px;
+        }
+
+        > .m-sign-up {
+          margin: 6px 0 17px;
+
+          >p {
+            margin: 0;
+            @include textstyle-size-12();
+
+            > a {
+              color: $color-base-100;
+              text-decoration: underline;
+            }
+          }
+        }
+
+        > .m-button-login {
+            text-align: center;
+
+            > button {
+              margin: auto;
+              border-radius: 0%;
+              width: 118px;
+              height: 39px;
+              @include textstyle-size-14();
+              display: flex;
+              justify-content: center;
+              padding: 10px 0;
+            }
+        }
+    }
+  }
+}

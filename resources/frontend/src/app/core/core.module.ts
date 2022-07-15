@@ -8,7 +8,7 @@ import { DemoNgZorroAntdModule } from '../shared/ng-zorro-antd.module';
 import { RouterModule } from '@angular/router';
 import { IconsProviderModule } from '../shared/icons-provider.module';
 import { CoreRoutingModule } from './core-routing.module';
-import { WelcomeComponent } from './components/welcome/welcome.component';
+import { PremiumComponent } from './components/premium/premium.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
     SidebarComponent,
     FooterComponent,
     MainComponent,
-    WelcomeComponent,
+    PremiumComponent,
 
   ],
   imports: [CommonModule, DemoNgZorroAntdModule, IconsProviderModule, RouterModule, CoreRoutingModule],

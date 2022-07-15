@@ -1,0 +1,32 @@
+////
+/// Project mixins
+///
+/// @group Project
+////
+// https://riptutorial.com/de/sass/example/16943/mischen-mit-variablen-argumenten
+
+@mixin button($width: null, $height: null) {
+    position: relative;
+    width: $width;
+    height: $height;
+
+    > button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: $width;
+        height: $height;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        outline: none;
+
+        > svg {
+            display: block;
+            margin: auto;
+        }
+    }
+}
+@function url-friendly-colour($colour) {
+    @return '%23' + str-slice('#{$colour}', 2, -1)
+}

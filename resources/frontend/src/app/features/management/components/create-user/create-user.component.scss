@@ -1,0 +1,58 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+
+.m-form {
+    width : 50%;
+    @media screen and (max-width : 1000px){
+        width : 100%;
+    }
+    >.m-form-group{
+        margin : 20px;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 16px;
+        font-style: normal;
+        >div.m-form-input{
+            display : flex;
+            justify-content:center;
+            align-items: center;
+            border: 0.5px solid $color-media-black-opacity-half;
+            margin: 10px 0 0 0;
+            >i{
+                padding: 10px ;
+                cursor: pointer;
+            }
+        }
+        >div.m-form-input-password{
+            display : flex;
+            justify-content:center;
+            align-items: center;
+            border: 0.5px solid $color-media-black-opacity-half;
+            margin: 10px 0 0 0;
+            >i{
+                padding: 10px ;
+                cursor: pointer;
+            }
+        }
+        >.error {
+            color : red;
+            padding: 5px 0;
+        }
+    }
+
+    >button{
+        margin : 20px;
+        &.m-primary-button{
+            background: $color-media-black-opacity-30;
+            color: #fff;
+            border-color: $color-media-black-opacity-30;
+            &:hover{
+                background: $color-media-secondary-button;
+                border-color: $color-media-black-opacity-half;
+            }
+        }
+    }
+}

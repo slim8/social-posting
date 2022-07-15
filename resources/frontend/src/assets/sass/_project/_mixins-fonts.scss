@@ -1,0 +1,203 @@
+// Fonts mixins
+// START: fontfamilys
+// primary
+@import 'fonts.scss';
+
+@mixin fontfamily-primary {
+    font-family: 'Open Sans';
+    // medium as default weight
+    font-weight: 400;
+}
+
+@mixin fontfamily-primary-bold {
+    font-family: 'Open Sans';
+    // medium as default weight
+    font-weight: 700;
+}
+
+@mixin fontfamily-primary-small {
+    font-family: 'Open Sans';
+    // medium as default weight
+    font-weight: 300;
+}
+
+// standard
+@mixin textstyle-size-30 {
+    @include fontfamily-primary;
+    @include font-size(14px);
+    @include line-height(20/14);
+    @include mq(desktop) {
+        @include font-size(16px);
+        @include line-height(24/16);
+    }
+}
+
+// START: textstyles
+// standard = textstyle-size-30
+@mixin textstyle-standard {
+    @include textstyle-size-30;
+}
+
+// h1 home + content
+@mixin textstyle-size-90 {
+    @include fontfamily-primary;
+    @include font-size(30px);
+    @include line-height(36/30);
+    @include mq(desktop) {
+        @include font-size(40px);
+        @include line-height(48/40);
+    }
+}
+
+// Button Text
+@mixin textstyle-size-45 {
+    @include fontfamily-primary-bold;
+    @include font-size(36px);
+    @include line-height(36/36);
+}
+
+@mixin textstyle-size-44-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(44px);
+    @include line-height(60/44);
+    @include mq(desktop) {
+        @include font-size(44px);
+        @include line-height(60/44);
+    }
+}
+
+@mixin textstyle-size-32-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(32px);
+    @include line-height(60/32);
+    @include mq(desktop) {
+        @include font-size(32px);
+        @include line-height(60/32);
+    }
+}
+
+@mixin textstyle-size-12 {
+    @include fontfamily-primary;
+    @include font-size(12px);
+    @include line-height(14/12);
+}
+
+@mixin textstyle-size-40 {
+    @include fontfamily-primary;
+    @include font-size(40px);
+    @include line-height(54.47/40);
+    @include mq(desktop) {
+        @include font-size(40px);
+        @include line-height(54.47/40);
+    }
+}
+
+@mixin textstyle-size-20 {
+    @include fontfamily-primary;
+    @include font-size(20px);
+    @include line-height(24/20);
+    @include mq(desktop) {
+        @include font-size(20px);
+        @include line-height(24/20);
+    }
+}
+
+@mixin textstyle-size-16-bold {
+  @include fontfamily-primary-bold;
+  @include font-size(16px);
+  @include line-height(21.79/16);
+  @include mq(desktop) {
+      @include font-size(16px);
+      @include line-height(21.79/16);
+  }
+}
+
+@mixin textstyle-size-16 {
+  @include fontfamily-primary;
+  @include font-size(16px);
+  @include line-height(26.27/16);
+  @include mq(desktop) {
+      @include font-size(16px);
+      @include line-height(26.27/16);
+  }
+}
+
+@mixin textstyle-size-18-bold {
+  @include fontfamily-primary-bold;
+  @include font-size(18px);
+  @include line-height(24.51/18);
+  @include mq(desktop) {
+      @include font-size(18px);
+      @include line-height(24.51/18);
+  }
+}
+
+@mixin textstyle-size-18 {
+  @include fontfamily-primary;
+  @include font-size(18px);
+  @include line-height(24.51/18);
+  @include mq(desktop) {
+      @include font-size(18px);
+      @include line-height(24.51/18);
+  }
+}
+
+@mixin textstyle-size-14 {
+    @include fontfamily-primary;
+    @include font-size(14px);
+    @include line-height(19.07/14);
+    @include mq(desktop) {
+        @include font-size(14px);
+        @include line-height(19.07/14);
+    }
+}
+
+@mixin textstyle-size-14-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(14px);
+    @include line-height(19.07/14);
+    @include mq(desktop) {
+        @include font-size(14px);
+        @include line-height(19.07/14);
+    }
+}
+
+@mixin textstyle-size-12 {
+    @include fontfamily-primary;
+    @include font-size(12px);
+    @include line-height(17/12);
+    @include mq(desktop) {
+        @include font-size(12px);
+        @include line-height(17/12);
+    }
+}
+
+@mixin textstyle-size-12-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(12px);
+    @include line-height(17/12);
+    @include mq(desktop) {
+        @include font-size(12px);
+        @include line-height(17/12);
+    }
+}
+
+@mixin textstyle-size-10 {
+    @include fontfamily-primary;
+    @include font-size(10px);
+    @include line-height(14/10);
+    @include mq(desktop) {
+        @include font-size(10px);
+        @include line-height(14/10);
+    }
+}
+
+@mixin textstyle-size-10-bold {
+    @include fontfamily-primary-bold;
+    @include font-size(10px);
+    @include line-height(14/10);
+    @include mq(desktop) {
+        @include font-size(10px);
+        @include line-height(14/10);
+    }
+}

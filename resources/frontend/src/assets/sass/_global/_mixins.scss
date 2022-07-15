@@ -1,0 +1,586 @@
+////
+/// Global mixins (DO NOT EDIT!)
+///
+/// @group Global
+/// @author Wladimir Eberts
+////
+
+
+/// Converts several units to em (supports px, pt, pc, in, mm, cm)
+///
+/// @see {function} rem
+///
+/// @param {number} $value  Number with unit
+///
+/// @return {number|null}   Converted number to em
+///
+@function em($size) {
+    @if not unitless($size) {
+        // we already have em
+        @if unit($size) == em {
+            @return $size;
+        }
+
+        // handle percentage
+        @if unit($size) == '%' {
+            @return 1em * ($size / 100%);
+        }
+
+        @return ((0px + $size) / 16px * 1em); // sass-lint:disable-line zero-unit
+    }
+
+    @return null;
+}
+
+
+/// Converts several units to rem (supports px, pt, pc, in, mm, cm)
+///
+/// @see {function} em
+/// @require {function} em
+///
+/// @param {number} $value  Number with unit
+///
+/// @return {number|null}   Converted number to em
+///
+@function rem($size) {
+    $size: em($size);
+
+    @if $size {
+        @return em($size) / 1em + rem;
+    }
+
+    @return null;
+}
+
+
+/// Embeds an base64 encoded image like SVG, JPG, PNG or GIF and is only available in our gulp build system
+///
+/// It works similar to `url()` except that the image is embeded directly into the CSS
+///
+/// Also relative paths resolve to the current `.scss` file not the minified `.css` file!
+///
+/// @example
+///     border-image: embed('/assets/svg/border-example.svg', (color: gold, size: 1)) 10 round;
+///
+/// @example
+///     background: embed('/assets/svg/form-checkbox.svg', (color: red, cross: false)) no-repeat;
+///
+/// @param {string} $path               Absolute or relative path to an image
+/// @param {map}    $variables [null]   Variables passed to a SVG. Obviously only works with specially prepared SVGs
+///
+/// @return {string}                    Returns url(data:image/mime;base64,...)
+///
+@function embed($path, $variables: null) {
+    // image-embed() is only available in our gulp build system!
+    // noinspection CssInvalidFunction
+    @return image-embed($path, $variables);
+}
+
+
+/// Explodes a string into a list
+///
+/// @example
+///     $list: explode('hello world', ' ');
+///
+///     // will output DEBUG: world
+///     @debug nth($list, 2);
+///
+/// @param {string}      $string
+/// @param {string}      $delimiter [',']
+/// @param {comma|space} $separator [space]
+///
+/// @return {list}
+///
+@function explode($string, $delimiter: ',', $separator: space) {
+    $list: ();
+    $index: str-index($string, $delimiter);
+
+    @while $index {
+        $new-string: '';
+
+        @if $index > 1 {
+            $new-string: str-slice($string, 1, $index - 1);
+        }
+
+        $list: append($list, $new-string, $separator);
+        $string: str-slice($string, $index + 1);
+        $index: str-index($string, $delimiter);
+    }
+
+    $list: append($list, $string, $separator);
+
+    @return $list;
+}
+
+
+@function _font-config-value($name, $type: font-size) {
+    @if global-variable-exists(font-config) {
+        @if map-has-key($font-config, $name) {
+            $list: map-get($font-config, $name);
+
+            @if $type == font-size {
+                @return nth($list, 1);
+            }
+
+            @else if $type == line-height {
+                @if length($list) >= 2 {
+                    @return nth($list, 2);
+                }
+
+                @return null;
+            }
+
+            @else if $type == letter-spacing {
+                @if length($list) >= 3 {
+                    @return nth($list, 3);
+                }
+
+                @return null;
+            }
+        }
+
+        @error '#{$name} is not defined in $font-config!';
+    }
+
+    @return null;
+}
+
+/// Sets `font-size` either by direct value or by lookup of the global `$font-config` variable
+///
+/// Units are converted to `rem`
+///
+/// @require {function} rem
+/// @require {variable} $font-config
+/// @throw Not defined in $font-config!
+///
+/// @example
+///     // results in 1.125rem
+///     @include font-size(18px);
+///
+/// @example
+///     // requires the $font-config variable in _config.scss
+///     @include font-size(headline);
+///
+/// @param {number|string} $size    Number with unit or name of the global `$font-config` variable
+///
+@mixin font-size($size) {
+    // get value from config
+    @if type-of($size) == string {
+        $size: _font-config-value($size, font-size);
+    }
+
+    @if $size != null {
+        font-size: rem($size);
+    }
+}
+
+/// Sets `line-height` either by direct value or by lookup of the global `$font-config` variable
+///
+/// Units are converted to `rem`
+///
+/// @require {function} rem
+/// @require {variable} $font-config
+/// @throw Not defined in $font-config!
+///
+/// @example
+///     // results in 1.125rem
+///     @include line-height(18px);
+///
+/// @example
+///     // requires the $font-config variable in _config.scss
+///     @include line-height(headline);
+///
+/// @param {number|string} $size    Number with unit or name of the global `$font-config` variable
+///
+@mixin line-height($size) {
+    // get value from config
+    @if type-of($size) == string {
+        $size: _font-config-value($size, line-height);
+    }
+
+    @if $size != null {
+        @if not unitless($size) {
+            $size: rem($size);
+        }
+
+        line-height: $size;
+    }
+}
+
+/// Sets `letter-spacing` either by direct value or by lookup of the global `$font-config` variable
+///
+/// Unitless Photoshop values like -25 are supported. Units are converted to `em`
+///
+/// @require {function} em
+/// @require {variable} $font-config
+/// @throw Not defined in $font-config!
+///
+/// @example
+///     // value taken from Photoshop results in 0.025em
+///     @include letter-spacing(25);
+///
+/// @example
+///     // results in 0.125em
+///     @include letter-spacing(2px);
+///
+/// @example
+///     // requires the $font-config variable in _config.scss
+///     @include letter-spacing(headline);
+///
+/// @param {number|string} $size    Unitless number, number with unit or name of the global `$font-config` variable
+///
+@mixin letter-spacing($size) {
+    // get value from config
+    @if type-of($size) == string {
+        $size: _font-config-value($size, letter-spacing);
+    }
+
+    @if $size != null {
+        // Photoshop uses per mille values
+        @if unitless($size) {
+            $size: $size / 1000 * 1em;
+        }
+        @else {
+            $size: em($size);
+        }
+
+        letter-spacing: $size;
+    }
+}
+
+/// Shortcut to `font-size()`, optional `line-height()` and `letter-spacing()`
+///
+/// Always converts to rem unit
+///
+/// @require {function} rem
+/// @require {variable} $font-config
+/// @throw Not defined in $font-config!
+///
+/// @example
+///     @include font(18px);
+///
+///     // is the same as
+///     @include font-size(18px);
+///
+/// @example
+///     @include font(18px, 15px, -25);
+///
+///     // is the same as
+///     @include font-size(18px);
+///     @include line-height(15px);
+///     @include letter-spacing(-25);
+///
+/// @example
+///     // requires the $font-config variable in _config.scss
+///     @include font(headline);
+///
+///     // is the same as
+///     @include font-size(headline);
+///     @include line-height(headline);
+///     @include letter-spacing(headline);
+///
+/// @param {number|string} $font-size                           Number with unit or name of the global `$font-config` variable
+/// @param {number|string} $line-height    [null|$font-size]    Number with unit or name of the global `$font-config` variable
+/// @param {number|string} $letter-spacing [null|$font-size]    Number with unit or name of the global `$font-config` variable
+///
+@mixin font($font-size, $line-height: null, $letter-spacing: null) {
+    // propagate name to line-height and letter-spacing
+    @if type-of($font-size) == string {
+        @if $line-height == null {
+            $line-height: $font-size;
+        }
+
+        @if $letter-spacing == null {
+            $letter-spacing: $font-size;
+        }
+    }
+
+    @include font-size($font-size);
+    @include line-height($line-height);
+    @include letter-spacing($letter-spacing);
+}
+
+
+/// Responsive image
+///
+/// @author Peter Dobetsberger
+///
+/// @param {number} $max-width [null]   Optional: max-width
+///
+@mixin img($max-width: null) {
+    width: 100%;
+    height: auto;
+    max-width: $max-width;
+}
+
+
+@mixin _position($position: absolute, $top: null, $left: null, $bottom: null, $right: null) {
+    top: $top;
+    left: $left;
+    right: $right;
+    bottom: $bottom;
+    position: $position;
+}
+
+/// Absolute position shortcut
+///
+/// Left and right is swapped on purpose because top/left positioning is more common
+///
+/// @example
+///     // absolute position this element with offset: top 10px and left 20px
+///     @include absolute(10px, 20px);
+///
+/// @param {number} $top    [null]
+/// @param {number} $left   [null]
+/// @param {number} $bottom [null]
+/// @param {number} $right  [null]
+///
+@mixin absolute($top: null, $left: null, $bottom: null, $right: null) {
+    @include _position(absolute, $top, $left, $bottom, $right);
+}
+
+/// Fixed position shortcut
+///
+/// Left and right is swapped on purpose because top/left positioning is more common
+///
+/// @see {mixin} absolute
+///
+/// @param {number} $top    [null]
+/// @param {number} $left   [null]
+/// @param {number} $bottom [null]
+/// @param {number} $right  [null]
+///
+@mixin fixed($top: null, $left: null, $bottom: null, $right: null) {
+    @include _position(fixed, $top, $left, $bottom, $right);
+}
+
+/// Relative position shortcut
+///
+/// Left and right is swapped on purpose because top/left positioning is more common
+///
+/// @see {mixin} absolute
+///
+/// @param {number} $top    [null]
+/// @param {number} $left   [null]
+/// @param {number} $bottom [null]
+/// @param {number} $right  [null]
+///
+@mixin relative($top: null, $left: null, $bottom: null, $right: null) {
+    @include _position(relative, $top, $left, $bottom, $right);
+}
+
+
+/// Sets `opacity` and `visibilitiy`. Useful in combination with `transition`
+///
+/// @example
+///     @include autoalpha(0);
+///     transition: opacity 1s ease;
+///
+///     &.is-active {
+///         @include autoalpha(1);
+///     }
+///
+/// @param {number} $alpha  Opacity value between 0..1
+///
+@mixin autoalpha($alpha) {
+    opacity: $alpha;
+    visibility: if($alpha <= 0, hidden, visible);
+}
+
+
+/// Generates a media query for a block by lookup of the global `$breakpoints` variable
+///
+/// @require {variable} $breakpoints
+/// @require {function} explode
+/// @throw Unknown breakpoint
+/// @content
+///
+/// @example
+///     .mod-example {
+///         // mobile first
+///         padding: 10px;
+///
+///         @include mq(tablet) {
+///             padding: 15px;
+///         }
+///
+///         @include mq(desktop) {
+///             padding: 20px;
+///         }
+///     }
+///
+/// @param {string}  $type              Media query name in global `$breakpoints` variable
+/// @param {boolean} $inverse [false]   Inverse the media query
+///
+@mixin mq($type, $inverse: false) {
+    @if map-has-key($breakpoints, $type) {
+        $list: map-get($breakpoints, $type);
+
+        @if $inverse {
+            $list: explode($list, ',', comma);
+
+            @for $i from 1 through length($list) {
+                $mq: nth($list, $i);
+                $index: str-index($mq, 'only');
+
+                @if $index {
+                    // replace the 'only' keyword with 'not'
+                    $mq: 'not#{str-slice($mq, $index + 4)}';
+                }
+                @else {
+                    // prepend the 'not' keyword
+                    $mq: 'not #{$mq}';
+                }
+
+                $list: set-nth($list, $i, $mq);
+            }
+        }
+
+        @media #{$list} {
+            @content;
+        }
+    }
+    @else {
+        @error 'Unknown breakpoint #{$type}!';
+    }
+}
+
+/// Generates an inversed media query. It is a shortcut to `mq()`
+///
+/// @see {mixin} mq
+/// @throw Unknown breakpoint
+/// @content
+///
+/// @param {string} $type   Media query name in global `$breakpoints` variable
+///
+@mixin not-mq($type) {
+    @include mq($type, true) {
+        @content;
+    }
+}
+
+
+@function _if-parent-to-dummy($selector) {
+    @if type-of($selector) == string and str-index($selector, '%') {
+        @return $selector;
+    }
+
+    @return selector-replace(selector-replace($selector, ':before', '.dummy-before'), ':after', '.dummy-after');
+}
+
+@function _if-parent-from-dummy($selector) {
+    @if type-of($selector) == string and str-index($selector, '%') {
+        @return $selector;
+    }
+
+    @return selector-replace(selector-replace($selector, '.dummy-before', ':before'), '.dummy-after', ':after');
+}
+
+/// Test hierarchical SCSS parents for state- or pseudo-classes
+///
+/// @throw Could not match all parents
+/// @content
+///
+/// @example
+///     .mod-example {
+///         > .m-inner {
+///             > .m-box {
+///                 background: gray;
+///
+///                 // if the 'variant' modifier class is set
+///                 @include if-parent('.mod-example--variant') {
+///                     background: red;
+///                 }
+///
+///                 // if .m-inner has the .is-active class OR .m-inner has the :hover pseudo-class (logical OR)
+///                 @include if-parent('.m-inner.is-active, .m-inner:hover') {
+///                     background: green;
+///                 }
+///
+///                 // if both apply (locical AND)
+///                 @include if-parent('.mod-example--variant .m-inner.is-active') {
+///                     background: blue;
+///                 }
+///             }
+///         }
+///     }
+///
+/// @param {string}  $parent-selectors          CSS selectors matching one or more parents
+/// @param {boolean} $debug            [false]  Outputs debug comment block
+///
+@mixin if-parent($parent-selectors, $debug: false) {
+    $rules: &;
+    $new-rules: ();
+    $matched: false;
+    $parent-selectors: selector-parse($parent-selectors);
+
+    // allow multiple parent selectors
+    @each $parent-selector in $parent-selectors {
+        // rules are separated by commas
+        @each $rule in $rules {
+            $new-rule: ();
+            $parent-index: 1;
+            $parent-matched: 0;
+            $selector-index: 1;
+
+            // selectors are separated by spaces
+            @each $selector in $rule {
+                @if $parent-index <= length($parent-selector) {
+                    $parent-super: nth(simple-selectors(nth($parent-selector, $parent-index)), 1);
+                    $parent-modifier: str-index($parent-super, '--');
+
+                    // selector is a modifier "--modifier"
+                    @if $selector-index == 1 and $parent-modifier == 1 {
+                        $selector-super: nth(simple-selectors($selector), 1);
+                        $selector: str-insert($selector, $parent-super, str-length($selector-super) + 1);
+                        $parent-selector: nth(selector-replace($parent-selector, $parent-super, '#{$selector-super}#{$parent-super}'), 1);
+                        $parent-super: '#{$selector-super}#{$parent-super}';
+                    }
+
+                        // selector contains a modifier "mod-test--modifier"
+                    @else if $parent-modifier != null {
+                        $parent-modifier-super: str-slice($parent-super, 1, $parent-modifier - 1);
+
+                        @if is-superselector($parent-modifier-super, _if-parent-to-dummy($selector)) {
+                            $selector: '#{$parent-super}#{str-slice($selector, $parent-modifier)}';
+                        }
+                    }
+
+                    // this is our super selector, merge the selector
+                    @if is-superselector($parent-super, _if-parent-to-dummy($selector)) {
+                        $selector: _if-parent-from-dummy(selector-unify(_if-parent-to-dummy($selector), nth($parent-selector, $parent-index)));
+                        $parent-index: $parent-index + 1;
+                        $parent-matched: $parent-matched + 1;
+                    }
+                }
+
+                $new-rule: append($new-rule, $selector, space);
+                $selector-index: $selector-index + 1;
+            }
+
+            @if $parent-matched == length($parent-selector) {
+                $matched: true;
+            }
+
+            $new-rules: append($new-rules, $new-rule, comma);
+        }
+    }
+
+    // report error if we couldn't match all parents
+    @if not $matched {
+        @error 'Could not match all parents: #{$parent-selectors}';
+    }
+
+    @at-root #{$new-rules} {
+        @if $debug {
+            // sass-lint:disable-block no-css-comments
+            /**************************************************************
+             * Debug:  if-parent('#{$parent-selectors}')
+             * Before: #{$rules}
+             * After:  #{$new-rules}
+             **************************************************************/
+        }
+
+        @content;
+    }
+}

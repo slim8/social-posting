@@ -1,0 +1,203 @@
+@import '../../../assets/sass/_project/_config.scss';
+@import '../../../assets/sass/_global/_mixins.scss';
+@import '../../../assets/sass/_project/base.scss';
+
+.mod-drafts {
+  height: 100%;
+
+  > .m-wrapper {
+    height: 100%;
+
+    > .m-title {
+      padding: 0 0 28px 51px;
+    }
+
+    .m-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      width: 100%;
+      overflow-x: auto;
+      background-color: $color-base-0;
+      max-width: 1070px;
+
+      > .m-filter-panel {
+        width: 100%;
+        height: 83px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column ;
+        padding: 25px;
+        @include mq(tablet) {
+          flex-direction: row ;
+        }
+        > .m-left {
+          display: flex;
+          flex-direction: row;
+
+          > .m-button {
+            margin-right: 10px;
+            height: 36px;
+            padding: 5px;
+            background: $color-media-background-light-grey;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+
+            > .m-button-icon {
+              font-size: 19px;
+              color: $color-media-background-light-grey;
+              padding-top: 3px;
+            }
+
+            > .m-button-text {
+              font-family: 'Open Sans';
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 16px;
+              color: $color-base-100;
+            }
+
+            > .m-button-arrow {
+              font-size: 14px;
+              color: $color-base-100;
+
+              > i {
+                svg {
+                  fill: transparent;
+                }
+              }
+            }
+          }
+
+          > .m-remove {
+            display: flex;
+            align-items: center;
+            margin-left: 27px;
+            padding-top: 5px;
+
+            > .m-icon-remove {
+              width: 14px;
+              height: 15px;
+            }
+          }
+        }
+
+        > .m-right {
+          margin-top: 20px;
+          @include mq(tablet) {
+            margin-top: 0;
+          }
+          > .m-button {
+            gap: 3px;
+          }
+        }
+      }
+
+      > hr {
+        border: 1px solid $color-media-black-opacity-30;
+        margin-top: 40px;
+        @include mq(tablet) {
+          margin-top: 0;
+        }
+
+      }
+
+      > .m-content {
+        position: relative;
+        padding: 25px;
+        max-width: 100%;
+        overflow-y: hidden;
+       // overflow-x: auto;
+
+        @include mq(desktop) {
+          overflow-x: hidden;
+        }
+
+        > .m-border {
+          border-left: 1px solid $color-base-25;
+          height: 100%;
+          position: absolute;
+          left: 77px;
+          @include mq(desktop) {
+            left: 105px;
+          }
+        }
+
+        > .m-array-header {
+          > .m-titles {
+            margin-top: 10px;
+            position: relative;
+            min-width: 625px;
+            width: 100%;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            height: 20px;
+            gap: 10px;
+
+            @include mq(desktop) {
+              gap: 25px;
+            }
+
+            > .m-image,
+            > .m-activity,
+            > .m-date {
+              position: absolute;
+              top: 0;
+              @include textstyle-size-10-bold();
+              color: $color-media-black-opacity-half;
+            }
+
+            > .m-image {
+              left: 82px;
+
+              @include mq(desktop) {
+                left: 135px;
+              }
+            }
+
+            > .m-date {
+              left: 324px;
+              @include mq(tablet) {
+                left: 327px;
+              }
+              @include mq(desktop) {
+                left: 415px;
+              }
+            }
+
+            > .m-activity {
+              right: 0;
+              @include mq(tablet) {
+                left: 650px;
+              }
+            }
+          }
+        }
+
+        > .m-item {
+          width: fit-content;
+          padding: 10px 0;
+          position: relative;
+
+          @include mq(desktop) {
+            padding: 0 20px 16px;
+          }
+
+          &:before {
+            content: '';
+            border-bottom: 1px solid $color-media-black-opacity-30;
+            position: absolute;
+            width: 100%;
+          }
+        }
+      }
+
+      > hr {
+        width: 100%;
+      }
+    }
+  }
+}

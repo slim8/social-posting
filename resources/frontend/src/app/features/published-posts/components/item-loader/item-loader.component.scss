@@ -1,0 +1,72 @@
+@import '../../../../../assets/sass/_global/mixins';
+@import '../../../../../assets/sass/_project/_mixins-fonts.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+.mod-item-loader {
+    > .m-wrapper {
+        padding: 16px 24px 0;
+        > .m-table {
+            > .m-container {
+                > .m-header {
+                    min-width: 600px;
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: nowrap;
+                    align-items: center;
+                    gap: 10px;
+
+                    @include mq(desktop) {
+                        gap: 35px;
+                    }
+                    > .m-icon {
+                        padding: 0;
+                    }
+
+                    > .m-image {
+                        > img {
+                            height: 70px;
+                        }
+                    }
+
+                    > .m-content {
+                        display: flex;
+                        flex-wrap: wrap;
+                        row-gap: 10px;
+
+                        @include mq(desktop) {
+                            padding-left: 10px;
+                        }
+
+                        > div {
+                            font-weight: bold;
+                            width: 100%;
+                            margin: 0;
+                        }
+
+                        > .m-account {
+                            display: flex;
+                            gap: 10px;
+                            align-items: end;
+
+                            > .m-name {
+                                min-width: 120px;
+                            }
+                        }
+                    }
+                    > .m-status {
+                        min-width: 180px;
+
+                        .m-text {
+                            @include textstyle-size-10();
+                        }
+                    }
+
+                    > .m-date {
+                        display: flex;
+                        flex-wrap: wrap;
+                        min-width: 200px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,7 @@
+deploy:
+  script:
+    - cd /var/www/media-posting/
+    - ./deploy.sh
+  only:
+    - developp
+    - master

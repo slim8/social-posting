@@ -1,0 +1,38 @@
+.m-buttons-container {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    > .m-button {
+        width: 100px;
+        height: 50px;
+        background-color: crimson;
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+            transition: 0.15s all;
+            width: 104px;
+            height: 54px;
+            margin-top: 48px;
+            cursor: pointer;
+            background-color: rgb(219, 30, 68);
+            border-bottom: 4px solid rgb(139, 19, 43);
+            border-left: 4px solid rgb(139, 19, 43);
+        }
+
+        > span {
+            color: white;
+            font-weight: 700;
+        }
+    }
+
+    > span {
+        color: white;
+        font-weight: 700;
+    }
+}

@@ -1,0 +1,200 @@
+<!-- Begin Accounts List Modal  -->
+<nz-page-header nzTitle="Connected facebook accounts"></nz-page-header>
+<nz-page-header-subtitle
+  >Manage your connected accounts</nz-page-header-subtitle
+>
+
+<div class="m-add-account">
+  <div>
+    <button
+      nz-button
+      (click)="loginWithFacebook()"
+      nzType="primary"
+      [nzLoading]="isWaiting"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      add pages or connect account
+    </button>
+  </div>
+</div>
+<!-- End Accounts List Modal  -->
+
+<div class="m-accounts">
+  <!-- Begin Accounts Cards -->
+  <div
+    class="m-account-card"
+    *ngFor="let account of connectedAccounts"
+    [@accountsManagementAnimation]
+  >
+    <div
+      class="m-menu-header"
+      [ngClass]="{ disconnected: !account.isConnected }"
+    >
+      <div class="m-user-image">
+        <nz-avatar
+          *ngIf="account.isConnected"
+          [nzSize]="64"
+          nzIcon="user"
+        ></nz-avatar>
+        <i
+          *ngIf="!account.isConnected"
+          nz-icon
+          nzType="disconnect"
+          nzTheme="outline"
+        ></i>
+      </div>
+      <div class="m-user-info">
+        <div
+          class="m-user-name"
+          [ngClass]="{ disconnected: !account.isConnected }"
+        >
+          {{ account.profileName }}
+        </div>
+        <div class="m-user-mail">
+          <i nz-icon nzType="facebook" nzTheme="outline"></i>&nbsp;&nbsp;{{
+            account.provider
+          }}
+        </div>
+      </div>
+      <div
+        class="m-profile-btn"
+        [ngClass]="{ disconnected: !account.isConnected }"
+      >
+        <i nz-icon nzType="profile" nzTheme="outline"></i> profile
+      </div>
+      <div
+        class="m-profile-btn"
+        [ngClass]="{ disconnected: !account.isConnected }"
+      >
+        <i nz-icon nzType="menu" nzTheme="outline"></i>
+      </div>
+      <div
+        *ngIf="account.isConnected"
+        (click)="showDisconnectConfirm(account.providerId)"
+        class="m-profile-btn"
+      >
+        <i nz-icon nzType="disconnect" nzTheme="outline"></i> disconnect
+      </div>
+      <div
+        *ngIf="!account.isConnected"
+        (click)="loginWithFacebook()"
+        class="m-profile-btn reconnect"
+      >
+        <i nz-icon nzType="login" nzTheme="outline"></i> re-connect
+      </div>
+    </div>
+  </div>
+  <!-- End Accounts Cards -->
+
+  <!-- Begin No Data Card -->
+  <div
+    class="m-empty"
+    *ngIf="!isWaiting && connectedAccounts.length == 0"
+    [@accountsManagementAnimation]
+  >
+    <nz-empty
+      nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+      [nzNotFoundContent]="contentTpl"
+      [nzNotFoundFooter]="footerTpl"
+    >
+      <ng-template #contentTpl>
+        <span> No Data Found </span>
+      </ng-template>
+      <ng-template #footerTpl>
+        <button
+          nz-button
+          (click)="loginWithFacebook()"
+          [nzLoading]="isWaiting"
+          nzType="primary"
+        >
+          add pages or connect account
+        </button>
+      </ng-template>
+    </nz-empty>
+  </div>
+  <!-- End No Data Card -->
+
+  <!-- Begin Skeleton Cards -->
+  <div class="m-empty-items" *ngIf="isLoading" [@accountsManagementAnimation]>
+    <div class="m-account-card" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
+      <div class="m-menu-header">
+        <div class="m-user-image">
+          <nz-skeleton-element
+            nzType="avatar"
+            [nzActive]="elementActive"
+            [nzSize]="64"
+          ></nz-skeleton-element>
+        </div>
+        <div class="m-user-info">
+          <div class="m-user-name">
+            <nz-skeleton-element
+              nzType="input"
+              [nzActive]="elementActive"
+              [nzSize]="elementSize"
+              style="width: 170px"
+            ></nz-skeleton-element>
+          </div>
+          <div class="m-user-mail">
+            <nz-skeleton-element
+              nzType="input"
+              [nzActive]="elementActive"
+              [nzSize]="elementSize"
+              style="width: 110px"
+            ></nz-skeleton-element>
+          </div>
+        </div>
+        <div class="m-profile-btn">
+          <nz-skeleton-element
+            nzType="input"
+            [nzActive]="elementActive"
+            [nzSize]="elementSize"
+            style="width: 70px"
+          ></nz-skeleton-element>
+        </div>
+        <div class="m-profile-btn">
+          <i nz-icon nzType="menu" nzTheme="outline"></i>
+        </div>
+        <div class="m-profile-btn">
+          <nz-skeleton-element
+            nzType="input"
+            [nzActive]="elementActive"
+            [nzSize]="elementSize"
+            style="width: 70px"
+          ></nz-skeleton-element>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Skeleton Cards -->
+</div>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  nzTitle="Please select you accounts"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="onSubmit()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="validateForm">
+      <tr *ngFor="let page of listpages">
+        <td>
+          <label>
+            <input
+              type="checkbox"
+              [value]="page.pageId"
+              (change)="onCheckChange($event)"
+            />
+
+            <nz-avatar
+              nzIcon="user"
+              [nzSrc]="page.pagePictureUrl"
+              style="margin: 0 10px"
+            ></nz-avatar>
+
+            {{ page.pageName }}
+          </label>
+        </td>
+      </tr>
+    </form>
+  </ng-container>
+</nz-modal>

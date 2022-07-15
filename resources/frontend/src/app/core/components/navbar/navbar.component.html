@@ -1,1 +1,73 @@
-<p>navbar works!</p>
+<nz-header class="mod-header">
+  <div class="m-wrapper">
+    <div class="m-header-container">
+        <div class="m-logo">
+            <div class="m-button is-primary" i18n="Logo|Title for logo@@logo">Logo</div>
+        </div>
+        <div class="m-home">
+            <i nz-icon nzType="ng-zorro:home"></i>
+        </div>
+        <div class="m-title">
+            <h5 i18n="Media Factory|Title for media factory@@mediaFactory">Mediafactory</h5>
+        </div>
+        <div class="m-control-buttons">
+            <div class="m-user">
+                <i nz-icon nzType="ng-zorro:user"></i>
+            </div>
+            <div class="m-logout" routerLink="/auth/login">
+                <i nz-icon nzType="ng-zorro:logout"></i>
+            </div>
+        </div>
+        <div class="m-button user-menu-toggle">
+          <div class="m-menu-btn user-menu-toggle">
+            <i
+              nz-icon
+              nzType="down"
+              class="user-menu-toggle"
+              nzTheme="outline"
+            ></i>
+          </div>
+        </div>
+      </div>
+      <div id="loggedMenu" class="m-menu user-menu-toggle">
+        <div class="m-menu-header user-menu-toggle">
+          <div class="m-user-image user-menu-toggle">
+            <nz-avatar
+              class="user-menu-toggle"
+              [nzSize]="64"
+              nzIcon="user"
+            ></nz-avatar>
+          </div>
+          <div class="m-user-info user-menu-toggle">
+            <div class="m-user-name user-menu-toggle">
+              {{ userInfo.firstName }} {{ userInfo.lastName }}
+            </div>
+            <div class="m-user-mail user-menu-toggle">{{ userInfo.email }}</div>
+          </div>
+          <a
+            routerLink="/application/user/profile"
+            class="m-profile-btn"
+            i18n="Profile|Title for the prfile link@@profile"
+          >
+            profile
+          </a>
+        </div>
+        <div class="m-menu-items">
+          <a
+            routerLink="/application/user/change-password"
+            i18n="
+              Change Password|Title for the change password form@@changePassword"
+            >Change password</a
+          >
+        </div>
+        <div class="m-menu-items user-menu-toggle">
+          <a
+            routerLink="/auth/login"
+            i18n="Logout|Title for the logout action@@logout"
+            >logout</a
+          >
+        </div>
+      </div>
+    </div>
+
+</nz-header>

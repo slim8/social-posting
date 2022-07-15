@@ -1,0 +1,58 @@
+<div class="m-form">
+    <div class="m-form-group">
+        <label i18n="email|Title for the email@@email">E-mail</label>
+        <div class="m-form-input">
+            <input nz-input type="email" placeholder="email" [(ngModel)]="email" />
+        </div>
+        <small class="error" *ngIf="error && error.email" >{{error.email[0]}}</small>
+    </div>
+    <div class="m-form-group">
+        <label i18n="First Name|Title for the First Name@@firstName">First name</label>
+        <div class="m-form-input">
+            <input nz-input type="text" placeholder="First Name" [(ngModel)]="firstName" />
+        </div>
+        <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
+    </div>
+    <div class="m-form-group">
+        <label i18n="Last Name|Title for the Last Name@@lastName">Last Name</label>
+        <div class="m-form-input">
+            <input nz-input type="text" placeholder="Last Name" [(ngModel)]="lastName" />
+        </div>
+        <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
+    </div>
+    <div class="m-form-group">
+        <label i18n="Adress|Title for the Adress@@adress">Adress</label>
+        <div class="m-form-input">
+            <input nz-input type="text" placeholder="Adress" [(ngModel)]="adress" />
+        </div>
+        <small class="error" *ngIf="error && error.adress" >{{error.lastName[0]}}</small>
+    </div>
+    <div class="m-form-group">
+        <label i18n="Website|Title for the Website@@website">Website</label>
+        <div class="m-form-input">
+            <input nz-input type="text" placeholder="Website" [(ngModel)]="website" />
+        </div>
+        <small class="error" *ngIf="error && error.website" >{{error.website[0]}}</small>
+    </div>
+    
+    <div class="m-form-group">
+        <label i18n="new password|Title for the new password@@newPassword">new password</label>
+        <div class="m-form-input-password" >
+            <input nz-input [type]=" showNewPassword ? 'text' : 'password' " placeholder="new password" [(ngModel)]="newPassword" />
+            <i nz-icon nzType="eye" nzTheme="outline" *ngIf="!showNewPassword" (click)="showNewPasswordAction()"></i>
+            <i nz-icon nzType="eye-invisible" nzTheme="outline" *ngIf="showNewPassword" (click)="showNewPasswordAction()"></i>
+        </div>
+        <small class="error" *ngIf="error && error.password" >{{error.password[0]}}</small>
+    </div>
+
+    <div class="m-form-group">
+        <label i18n="Subscribe newsletter|Title for the Subscribe newsletter@@subscribeNewsletter">Subscribe newsletter</label>
+        <div>
+            <nz-switch [(ngModel)]="isSubscriber"></nz-switch>
+        </div>
+    </div>
+    <button nz-button nzType="primary" nzShape="round" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
+        <i nz-icon nzType="edit" nzTheme="outline"></i>
+        save
+    </button>
+</div>
