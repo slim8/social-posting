@@ -255,15 +255,15 @@
                 </div>
             </div>
             <div class="m-right-col">
-                <div *ngIf="mediaList.length <= 1" class="m-no-preview">
+                <div *ngIf="mediaList.length <= 0" class="m-no-preview">
                     <h3>Vorschau nicht verfügbar</h3>
                     <p>Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu,
                         um hier eine Vorschau zu sehen. </p>
                 </div>
 
-                <app-instagram-preview *ngIf="!refresh && mediaList.length > 1 && instagramPreview"  [mediaList]="mediaList" [message]="instagramMessage" (newItemEvent)="addMentions($event)"></app-instagram-preview>
+                <app-instagram-preview *ngIf="!refresh && mediaList.length > 0 && instagramPreview"  [mediaList]="mediaList" [message]="instagramMessage" (newItemEvent)="addMentions($event)"></app-instagram-preview>
 
-                <app-facebook-preview *ngIf="mediaList.length > 1 && facebookPreview && !refresh"  [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="mediaList"></app-facebook-preview>
+                <app-facebook-preview *ngIf="mediaList.length > 0 && facebookPreview && !refresh"  [postDescription]="facebookMessage" accountName="accountname.test" [imgList]="mediaList"></app-facebook-preview>
 
               </div>
         </div>

@@ -53,7 +53,7 @@ export class CreatePostComponent implements OnInit {
 
     mentions: any[] = [];
     mediaId: number = 0;
-    urlLinks: any[] = [{ id: 0, url: "", type:"" }];
+    urlLinks: any[] = [];
     instaTags: string[] = [];
     fbTags: string[] = [];
     tabId1: any = 'instagram-tab-title';
@@ -285,7 +285,6 @@ export class CreatePostComponent implements OnInit {
         if (!file.url && !file['preview']) {
             file['preview'] = await getBase64(file.originFileObj!);
         }
-
         this.previewImage = file.url || file['preview'];
         this.previewVisible = true;
     };
@@ -300,7 +299,7 @@ export class CreatePostComponent implements OnInit {
 
       if (event.type == 'success') {
         this.mediaId = 0;
-        this.urlLinks = [{ id: 0, url: "", type:"" }];
+        this.urlLinks = [];
         event.fileList.forEach((elem: any) => {
           let img = {
             id: 0,
@@ -312,14 +311,13 @@ export class CreatePostComponent implements OnInit {
           img.url = elem.response.files.url;
           img.type = elem.response.files.type;
           this.urlLinks.push(img);
-          this.refreshPreview();
         })
-        this.refreshPages();
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
       }
       else if (event.type == 'removed') {
         this.refreshPages();
         this.mediaId = 0;
-        this.urlLinks = [{ id: 0, url: "", type:"" }];
+        this.urlLinks = [];
 
         event.fileList.forEach((elem: any) => {
           let img = {
@@ -332,10 +330,9 @@ export class CreatePostComponent implements OnInit {
           img.url = elem.response.files.url;
           img.type = elem.response.files.type;
           this.urlLinks.push(img);
-          this.refreshPreview();
         })
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
       }
-      this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
     }
 
     tabChange(id: any, event: any) {
@@ -359,14 +356,6 @@ export class CreatePostComponent implements OnInit {
     resetSuccess() {
         let successDialog = document.getElementById('successDialog');
         successDialog?.classList.add('is-hidden');
-    }
-
-    refreshPreview() {
-        // looking for a better solution
-        this.refresh = true;
-        setTimeout(() => {
-            this.refresh = false;
-        }, 0.1)
     }
 
     collapse() {
@@ -422,7 +411,6 @@ export class CreatePostComponent implements OnInit {
         }
         this.leadThumbnail = false ;
       })
-      this.refreshPreview();
     }
 
     selectThumbnail(item : {imgB64 : '' , time : 0 } ){
@@ -455,7 +443,6 @@ export class CreatePostComponent implements OnInit {
         this.currentTimePosition = -10;
         setTimeout(() => {
           this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-          this.refreshPreview();
         }, 2500);
       }
     }
