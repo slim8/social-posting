@@ -114,6 +114,10 @@
                 grid-gap: 22px;
                 max-height: 600px;
                 overflow: auto;
+                @include mq(tablet) {
+                  margin-right: 34px;
+                }
+
 
                 &::-webkit-scrollbar {
                     width: 8px;
