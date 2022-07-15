@@ -63,10 +63,7 @@
                     > .m-date {
                         display: flex;
                         flex-wrap: wrap;
-
-                        @include mq(desktop) {
-                            min-width: 200px;
-                        }
+                        min-width: 200px;
                     }
                 }
             }
