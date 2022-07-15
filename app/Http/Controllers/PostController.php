@@ -75,7 +75,7 @@ class PostController extends Controller
             }
         } else {
             $response['status'] = false;
-            $response['errorMessage'] = 'No Account found with id '.$id;
+            $response['errorMessage'] = 'No Account found with id ' . $id;
         }
 
         if ($response['status']) {
@@ -113,9 +113,9 @@ class PostController extends Controller
         $postRequest = $filterByAccounts ? AccountPost::whereHas('account', function ($query) use ($companyId) {
             $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
         })->with('accounts') :
-                    Post::whereHas('accounts', function ($query) use ($companyId) {
-                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
-                    });
+            Post::whereHas('accounts', function ($query) use ($companyId) {
+                $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
+            });
 
         // $postId Used to return Single Post Id
 
@@ -144,6 +144,10 @@ class PostController extends Controller
                 $postContent->provider = $postContent->accounts[0]->provider;
                 unset($postContent->accounts);
                 $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
+                $account = Account::where('id', $postContent->accountId)->first();
+                $postContent['accountName'] = $account->name;
+                $postContent['profilePicture'] = $account->profilePicture;
+                $postContent['isScheduled'] = Post::where('id', $postContent->postId)->first()->isScheduled;
             } else {
                 $subPosts = [];
                 $subPostsAccounts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
@@ -164,7 +168,7 @@ class PostController extends Controller
                 } elseif ($postContent->provider == 'instagram') {
                     $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
                 }
-            }
+            };
 
             if ($postId) {
                 $posts = $postContent;
@@ -204,17 +208,17 @@ class PostController extends Controller
             $postCompany = User::where('id', $createdBy)->first()->companyId;
 
             if ($currentPost->deletedAt) {
-                $errorLog = 'Post '.$postId.' Not Found';
+                $errorLog = 'Post ' . $postId . ' Not Found';
             }
 
             if (!$isDraft) {
-                $errorLog[] = 'Post '.$postId.' Could not be deleted because is not DRAFT';
+                $errorLog[] = 'Post ' . $postId . ' Could not be deleted because is not DRAFT';
             }
             if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
-                $errorLog[] = "You don't have right to delete Post ".$postId;
+                $errorLog[] = "You don't have right to delete Post " . $postId;
             }
             if (!$isCompanyAdmin && $createdBy !== UserTrait::getCurrentId()) {
-                $errorLog[] = "You don't have right to delete Post ".$postId;
+                $errorLog[] = "You don't have right to delete Post " . $postId;
             }
         }
 
@@ -283,11 +287,11 @@ class PostController extends Controller
 
         if($postImage){
             $incImage = 0;
-            foreach($postImage as $image){
-                $mediaMentions = Mentions::where('postId' , $postId)->where('postMediaId' , $image->id)->get();
-                if($mediaMentions){
-                    foreach($mediaMentions as $mediaMention){
-                        $mentions[] = ['image' => $incImage , 'username' => $mediaMention->username , 'x' => $mediaMention->posX, 'y'=>$mediaMention->posY];
+            foreach ($postImage as $image) {
+                $mediaMentions = Mentions::where('postId', $postId)->where('postMediaId', $image->id)->get();
+                if ($mediaMentions) {
+                    foreach ($mediaMentions as $mediaMention) {
+                        $mentions[] = ['image' => $incImage, 'username' => $mediaMention->username, 'x' => $mediaMention->posX, 'y' => $mediaMention->posY];
                     }
                 }
                 $images[] = $image->url;
@@ -297,9 +301,9 @@ class PostController extends Controller
         // End Generate PostMedia , Mentions and Video
 
         // Get Account Posts
-        $accountsPost = AccountPost::where('postId' , $postId)->get();
+        $accountsPost = AccountPost::where('postId', $postId)->get();
 
-        foreach($accountsPost as $accountPost){
+        foreach ($accountsPost as $accountPost) {
             $postIds[] = $accountPost->accountId;
         }
 
@@ -314,28 +318,27 @@ class PostController extends Controller
         // Generate Posts Account To be Posted to Social Meida
 
 
-        foreach($accountsPost as $accountPost){
+        foreach ($accountsPost as $accountPost) {
             $hashtags = [];
-            $obj=[];
+            $obj = [];
             $currentAccountId = $accountPost->accountId;
-            $currentAccountObject = Account::where('id' ,$currentAccountId)->first();
+            $currentAccountObject = Account::where('id', $currentAccountId)->first();
             $currentaccountPostId = $accountPost->id;
             $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $currentAccountId) ? true : false;
 
-            if($accounPermission){
+            if ($accounPermission) {
                 $localisation = null;
                 $accountProvider = $currentAccountObject->provider;
                 $postResponse = [];
 
 
                 //Start Generate Hashtags
-                $postsHashTags = PostHashtag::where('accountPostId' , $currentaccountPostId)->get();
-                if($postsHashTags){
-                    foreach($postsHashTags as $postTags){
-                        $hashtagObject = Hashtag::where('id' , $postTags->hashtagId)->first();
+                $postsHashTags = PostHashtag::where('accountPostId', $currentaccountPostId)->get();
+                if ($postsHashTags) {
+                    foreach ($postsHashTags as $postTags) {
+                        $hashtagObject = Hashtag::where('id', $postTags->hashtagId)->first();
                         $hashtags[] = $hashtagObject->name;
                     }
-
                 }
                 //End Generate Hashtags
 
@@ -348,36 +351,33 @@ class PostController extends Controller
                     $obj['access_token'] = $currentAccountObject->accessToken;
 
                     $postResponse = $this->facebookController->postToFacebookMethod($obj, $currentAccountObject->uid, $images, $hashtags, $videos, $accountPost->videoTitle);
-                }elseif ($accountProvider == 'instagram') {
-                            $obj['caption'] = $message;
-                            if ($accountPost->message) {
-                                $obj['caption'] = $accountPost->message;
-                            }
-                            $BusinessIG = $currentAccountObject->uid;
-                            $obj['access_token'] = $this->instagramController->getAccessToken($currentAccountObject->id);
-                            $postResponse = $this->instagramController->postToInstagramMethod($obj, $BusinessIG, $images, $hashtags, $videos, $localisation, $mentions);
+                } elseif ($accountProvider == 'instagram') {
+                    $obj['caption'] = $message;
+                    if ($accountPost->message) {
+                        $obj['caption'] = $accountPost->message;
+                    }
+                    $BusinessIG = $currentAccountObject->uid;
+                    $obj['access_token'] = $this->instagramController->getAccessToken($currentAccountObject->id);
+                    $postResponse = $this->instagramController->postToInstagramMethod($obj, $BusinessIG, $images, $hashtags, $videos, $localisation, $mentions);
                 }
 
-                 if ((gettype($postResponse) == 'array' && $postResponse['status'])) {
+                if ((gettype($postResponse) == 'array' && $postResponse['status'])) {
                     $publishedPosts++;
-                    $accountPost->update(['url' => $postResponse['url'] , 'postIdProvider' =>$postResponse['id']]);
-                 }
-                 else {
+                    $accountPost->update(['url' => $postResponse['url'], 'postIdProvider' => $postResponse['id']]);
+                } else {
                     $errorPosts++;
-                    $accountPost->update(['url' => 'ERROR' , 'postIdProvider' => 'ERROR']);
+                    $accountPost->update(['url' => 'ERROR', 'postIdProvider' => 'ERROR']);
                     $errorLog[] = $postResponse['message'];
-                 }
-
+                }
             }
         }
 
-        if($publishedPosts > 0 && $errorPosts == 0){
+        if ($publishedPosts > 0 && $errorPosts == 0) {
             $postObject->update(['status' => 'PUBLISH']);
-
-        } else if($publishedPosts > 0 && $errorPosts > 0){
+        } else if ($publishedPosts > 0 && $errorPosts > 0) {
             $postObject->update(['status' => 'PUBLISH']);
-            $globalResponse['reportMessage'] = 'Only '.$errorPosts.' posts has not been posted ('.$publishedPosts.' Posts has been published)';
-        } else if ($publishedPosts == 0 && $errorPosts > 0){
+            $globalResponse['reportMessage'] = 'Only ' . $errorPosts . ' posts has not been posted (' . $publishedPosts . ' Posts has been published)';
+        } else if ($publishedPosts == 0 && $errorPosts > 0) {
             $globalResponse['reportMessage'] = 'All Posts has not been posted';
         } else {
             $globalResponse['reportMessage'] = 'All Posts has  been posted';
@@ -386,11 +386,10 @@ class PostController extends Controller
         $globalResponse['errorPosts'] = $errorPosts;
 
 
-        if($errorLog){
+        if ($errorLog) {
             $globalResponse['errorLog'] = $errorLog;
         }
         return $globalResponse;
-
     }
 
     /**
@@ -398,7 +397,7 @@ class PostController extends Controller
      */
     public function publishDraft(int $postId = 0)
     {
-        $publishStatus =[];
+        $publishStatus = [];
         $errorLog = [];
         if (!$postId) {
             return RequestsTrait::processResponse(false, ['No Draft Sent']);
@@ -415,16 +414,16 @@ class PostController extends Controller
         $postCompany = User::where('id', $createdBy)->first()->companyId;
 
         if ($currentPost->deletedAt) {
-            $errorLog = 'Post '.$postId.' Not Found';
+            $errorLog = 'Post ' . $postId . ' Not Found';
         }
         if (!$isDraft) {
-            $errorLog[] = 'Post '.$postId.' Could not be published because is not DRAFT';
+            $errorLog[] = 'Post ' . $postId . ' Could not be published because is not DRAFT';
         }
         if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
-            $errorLog[] = "You don't have right to published Post ".$postId;
+            $errorLog[] = "You don't have right to published Post " . $postId;
         }
         if (!$isCompanyAdmin && $createdBy !== UserTrait::getCurrentId()) {
-            $errorLog[] = "You don't have right to published Post ".$postId;
+            $errorLog[] = "You don't have right to published Post " . $postId;
         }
 
 
@@ -435,6 +434,6 @@ class PostController extends Controller
 
         $publishStatus = $this->publishPostById($postId);
 
-        return RequestsTrait::processResponse(isset($publishStatus['errorLog']) ? false :true , $publishStatus);
+        return RequestsTrait::processResponse(isset($publishStatus['errorLog']) ? false : true, $publishStatus);
     }
 }

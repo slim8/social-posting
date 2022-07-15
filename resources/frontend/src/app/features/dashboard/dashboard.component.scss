@@ -150,7 +150,6 @@
                                         }
 
                                         > .m-page-info {
-                                            text-align: center;
                                             > .m-page {
                                                 @include textstyle-size-12-bold();
                                             }
@@ -162,7 +161,6 @@
                                         }
 
                                         > .m-stats {
-                                            text-align: center;
                                             > .m-like-count,
                                             .m-comment-count,
                                             .m-share-count {
@@ -287,12 +285,12 @@
                             }
                         }
                     }
-                    .m-linked-accounts{
-                      display: flex;
-                      justify-content: center;
-                      @include mq(desktop) {
-                        justify-content: flex-start;
-                    }
+                    .m-linked-accounts {
+                        display: flex;
+                        justify-content: center;
+                        @include mq(desktop) {
+                            justify-content: flex-start;
+                        }
                     }
                 }
 

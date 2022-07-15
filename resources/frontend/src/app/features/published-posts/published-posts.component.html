@@ -81,40 +81,136 @@
       </div>
       <hr />
       <div class="m-content">
-        <div class="m-array-header">
-          <div class="m-titles">
-            <div
-              class="m-image"
-              i18n="
-                My Published Posts Contribution|Contribution Title for My Posts
-                Page@@myPublishedPostsContribution"
-            >
-              Contribution
-            </div>
-            <div
-              class="m-status"
-              i18n="
-                My Published Posts Status|Status Title for My Posts
-                Page@@myPublishedPostsStatus"
-            >
-              Status
-            </div>
-            <div
-              class="m-date"
-              i18n="
-                My Published Posts Date|Date Title for My Posts
-                Page@@myPublishedPostsDate"
-            >
-              Published At
-            </div>
-          </div>
-        </div>
+        <table *ngIf="!isLoading">
+          <thead class="m-array-header">
+            <tr class="m-titles">
+              <td
+                colspan="4"
+                i18n="
+                  My Published Posts Contribution|Contribution Title for My
+                  Posts Page@@myPublishedPostsContribution"
+              >
+                Contribution
+              </td>
+              <td
+                i18n="
+                  My Published Posts Status|Status Title for My Posts
+                  Page@@myPublishedPostsStatus"
+              >
+                Status
+              </td>
+              <td
+                i18n="
+                  My Published Posts Date|Date Title for My Posts
+                  Page@@myPublishedPostsDate"
+              >
+                Published At
+              </td>
+            </tr>
+          </thead>
+          <tbody *ngFor="let item of posts" class="m-post">
+            <tr class="m-headline">
+              <td class="m-icon">
+                <img src="/assets/img/test-images/image.svg" alt="" />
+              </td>
+              <td class="m-image">
+                <img src="{{ item.postMedia[0].url }}" alt="" />
+              </td>
 
-        <div *ngIf="!isLoading">
-          <div class="m-item" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
-            <app-collapse-item></app-collapse-item>
-          </div>
-        </div>
+              <td class="m-content">
+                <h6
+                  i18n="
+                    Published Post Title|Published Post Title
+                    @@publishedPostTitle"
+                >
+                  {{ item.message }}
+                </h6>
+
+                <div class="m-account">
+                  <div class="m-image">
+                    <img src="{{ item.profilePicture }}" alt="" />
+                    <div class="m-provider-logo">
+                      <img
+                        class="instagram"
+                        src="{{
+                          '/assets/img/test-images/' + item.provider + '.svg'
+                        }}"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+
+                  <div class="m-name">{{ item.accountName }}</div>
+                </div>
+              </td>
+              <td class="m-status">
+                <nz-badge nzStatus="warning" *ngIf="item.isScheduled">
+                  <span class="m-text">Planned</span>
+                </nz-badge>
+                <nz-badge nzStatus="success" *ngIf="!item.isScheduled">
+                  <span class="m-text">Success</span>
+                </nz-badge>
+              </td>
+              <td class="m-date">
+                <p class="m-create-date">
+                  {{ item.createdAt | date: "dd-MM-yyyy HH:mm" }}
+                </p>
+                <span class="m-text"> Max Mustermann </span>
+              </td>
+              <td class="m-collapse" (click)="collapse($event)">collapse</td>
+            </tr>
+            <tr class="m-details">
+              <td class="m-item" colspan="3">
+                <div class="m-container">
+                  <span class="m-number">{{ item.stats.shares }}</span>
+                  <span
+                    class="m-text"
+                    i18n="
+                      Published Post Reached People|Published Post Reached
+                      People @@publishedPostShares"
+                    >Shares</span
+                  >
+                </div>
+              </td>
+              <td class="m-item">
+                <div class="m-container">
+                  <span class="m-number">{{ item.stats.likes }}</span>
+                  <span
+                    class="m-text"
+                    i18n="
+                      Published Post Likes|Published Post Likes
+                      @@publishedPostLikes"
+                    >Likes</span
+                  >
+                </div>
+              </td>
+              <td class="m-item">
+                <div class="m-container">
+                  <span class="m-number">{{ item.stats.comments }}</span>
+                  <span
+                    class="m-text"
+                    i18n="
+                      Published Post Comments|Published Post Comments
+                      @@publishedPostComments"
+                    >Comments</span
+                  >
+                </div>
+              </td>
+              <td class="m-item">
+                <a class="m-button is-grey" href="{{ item.url }}">
+                  <span><i nz-icon nzType="ng-zorro:external-link"></i></span>
+                  <span
+                    i18n="
+                      Published Post Go To|Published Post Go
+                      To@@publishedPostGoTo"
+                  >
+                    Go to
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <div *ngIf="isLoading">
           <div class="m-item is-full" *ngFor="let item of [0, 1, 2, 3, 4, 5]">
