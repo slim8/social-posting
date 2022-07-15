@@ -32,7 +32,8 @@
                 display: flex;
                 justify-content: space-between;
                 padding: 15px;
-
+                flex-wrap: wrap;
+                row-gap: 6px;
                 @include mq(tablet) {
                     padding: 25px;
                 }
@@ -305,6 +306,7 @@
                     &.is-full {
                         width: 100%;
                     }
+
                     &:before {
                         content: '';
                         border-bottom: 1px solid $color-media-black-opacity-30;
