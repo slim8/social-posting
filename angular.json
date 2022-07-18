@@ -61,7 +61,7 @@
                     "configurations": {
                         "production": {
                             "outputPath": "public/angular",
-                            "deployUrl": "/angular/",
+                            "baseHref": "/angular/",
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -82,9 +82,9 @@
                             ],
                             "outputHashing": "all"
                         },
-                        "devlocal": {
+                        "dev": {
                             "outputPath": "public/angular",
-                            "deployUrl": "/angular/",
+                            "baseHref": "/angular/",
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -100,7 +100,47 @@
                             "fileReplacements": [
                                 {
                                     "replace": "resources/frontend/src/environments/environment.ts",
-                                    "with": "resources/frontend/src/environments/environment.ts"
+                                    "with": "resources/frontend/src/environments/environment.dev.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "dev-local": {
+                            "outputPath": "public/angular",
+                            "baseHref": "/angular/",
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "200mb",
+                                    "maximumError": "500mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "200kb",
+                                    "maximumError": "400kb"
+                                }
+                            ],
+                            "fileReplacements": [
+                                {
+                                    "replace": "resources/frontend/src/environments/environment.ts",
+                                    "with": "resources/frontend/src/environments/environment.dev-local.ts"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "local": {
+                            "outputPath": "public/angular",
+                            "baseHref": "/angular/",
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "200mb",
+                                    "maximumError": "500mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "200kb",
+                                    "maximumError": "400kb"
                                 }
                             ],
                             "outputHashing": "all"

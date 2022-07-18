@@ -1,15 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "dev": "npm run development",
-    "local": "npm run devlocal",
+    "prod": "mix --production",
+    "dev": "mix --dev",
+    "dev-local": "mix --dev-local",
+    "local": "mix --local",
     "i18n:extract": "ng extract-i18n --output-path resources/frontend/src/locale",
-    "development": "mix",
-    "devlocal": "mix --devlocal",
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production",
     "ng": "ng",
     "start": "ng serve -o",
     "start:fr": "ng serve --configuration=fr --port=4201 -o",
@@ -21,9 +19,11 @@
     "test": "ng test",
     "start:swagger": "php artisan lrd:generate",
     "start:migrate": "php artisan migrate --seed",
-    "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --prod && node ./build.js && php artisan migrate",
-    "deploy:dev": "php81 /usr/bin/composer install && php81 artisan config:clear && php81 artisan cache:clear && php81 artisan storage:link && npm i && ng build --prod && node ./build.js && php81 artisan migrate",
-    "deploy-on-local": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration devlocal && node ./build.js && php artisan migrate"
+    "deploy": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration production && node ./build.js && php artisan migrate",
+    "deploy:dev": "php81 /usr/bin/composer install && php81 artisan config:clear && php81 artisan cache:clear && php81 artisan storage:link && npm i && ng build --configuration dev && node ./build.js && php81 artisan migrate",
+    "deploy:prod": "php81 /usr/bin/composer install && php81 artisan config:clear && php81 artisan cache:clear && php81 artisan storage:link && npm i && ng build --configuration production && node ./build.js && php81 artisan migrate",
+    "deploy:dev-local": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration dev-local && node ./build.js && php artisan migrate",
+    "deploy:local": "composer install && php artisan config:clear && php artisan cache:clear && php artisan storage:link && npm i && ng build --configuration local && node ./build.js && php artisan migrate"
   },
   "dependencies": {
     "@angular/animations": "~13.2.0",

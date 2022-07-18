@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -29,6 +30,8 @@ class ForgotPasswordController extends Controller
 
         $token = Str::random(64);
 
+        Log::channel('info')->info('a forget password request for account '.$request->email);
+
         DB::table('password_resets')->insert(
             ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
         );
@@ -44,6 +47,7 @@ class ForgotPasswordController extends Controller
      */
     public function resetPassword(Request $request)
     {
+
         $validation = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
             'password' => 'required|string|min:6',
@@ -56,6 +60,7 @@ class ForgotPasswordController extends Controller
         }
 
         if ($request->password !== $request->passwordConfirmation) {
+            Log::channel('notice')->notice('reset password request for email : '.$request->email.' with mismatch password');
             return RequestsTrait::processResponse(false, ['passwordConfirmation' => ['Password did not match']]);
         }
 
@@ -64,6 +69,7 @@ class ForgotPasswordController extends Controller
                             ->first();
 
         if (!$updatePassword) {
+            Log::channel('notice')->notice('reset password request for email : '.$request->email.' with invalid token');
             return RequestsTrait::processResponse(false, ['message' => 'Inavlid Token']);
         }
 
@@ -71,7 +77,7 @@ class ForgotPasswordController extends Controller
                     ->update(['password' => Hash::make($request->password)]);
 
         DB::table('password_resets')->where(['email' => $request->email])->delete();
-
+        Log::channel('info')->info('success reset password request for email : '.$request->email);
         return RequestsTrait::processResponse(true, ['message' => 'Your password has been changed , you can now logged in']);
     }
 }

@@ -17,6 +17,7 @@ use App\Models\PostMedia;
 use App\Models\User;
 use App\Models\UsersAccounts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -45,6 +46,7 @@ class PostController extends Controller
         $account = RequestsTrait::findAccountByUid($id, 'id', 1);
 
         if ($account) {
+            Log::channel('info')->info('User : '.UserTrait::getCurrentId().' has requests all posts of account : '.$id);
             $posts = [];
             $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
@@ -74,6 +76,8 @@ class PostController extends Controller
                 $response['errorMessage'] = 'This Account has not any POSTS';
             }
         } else {
+            Log::channel('info')->notice('User : '.UserTrait::getCurrentId().' has requests all posts of account : '.$id.' but no account found ');
+
             $response['status'] = false;
             $response['errorMessage'] = 'No Account found with id ' . $id;
         }

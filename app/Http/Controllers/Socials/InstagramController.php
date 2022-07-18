@@ -11,6 +11,7 @@ use App\Models\AccountPost;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class InstagramController extends Controller
 {
@@ -109,6 +110,7 @@ class InstagramController extends Controller
 
 
             if ($response->getStatusCode() == 200) {
+                Log::channel('instagram')->info('[postMediaUrl] User Id : '.UserTrait::getCurrentId() . ' Instagram User : '.$igUser.' upload a new Media Id  ==> '.json_decode($response->getBody(), true)['id']);
                 if($type == 'image'){
                     $responseObject['status'] = true;
                     $responseObject['id'] = json_decode($response->getBody(), true)['id'];
@@ -116,6 +118,7 @@ class InstagramController extends Controller
                 }
                 return json_decode($response->getBody(), true)['id'];
             } else {
+                Log::channel('exception')->notice('[postMediaUrl] User Id : '.UserTrait::getCurrentId() . ' Instagram User : '.$igUser.' Message ==> an error occured');
                 if($type == 'image'){
                     $responseObject['status'] = false;
                     $responseObject['message'] = 'an error occured';
@@ -124,6 +127,8 @@ class InstagramController extends Controller
                 return 'an error occured';
             }
          } catch (\Exception $e) {
+            Log::channel('instagram')->error('[postMediaUrl] User Id : '.UserTrait::getCurrentId() . ' Instagram User : '.$igUser.' Message ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
             if($type == 'image'){
                 $responseObject['status'] = false;
                 $responseObject['message'] = $e->getMessage();
@@ -154,18 +159,29 @@ class InstagramController extends Controller
     {
         $parameter = RequestsTrait::prepareParameters($object);
 
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT') . $igUser . '/media_publish?' . $parameter);
-        if ($response->json('id')) {
-            $responseObject['id'] = $response->json('id');
-            $responseObject['status'] = true;
-            $responseObject['url'] = $this->genPublicUrl($response->json('id'), $object);
-        } else {
+        try{
+            $response = Http::post(envValue('FACEBOOK_ENDPOINT') . $igUser . '/media_publish?' . $parameter);
+            if ($response->json('id')) {
+                Log::channel('insatgram')->info('[publishContainer] User Id '.UserTrait::getCurrentId().' has Publish Container : '.$object['creation_id'].' success');
+                $responseObject['id'] = $response->json('id');
+                $responseObject['status'] = true;
+                $responseObject['url'] = $this->genPublicUrl($response->json('id'), $object);
+            } else {
+                Log::channel('insatgram')->notice('[publishContainer] User Id '.UserTrait::getCurrentId().' has Publish Container : '.$object['creation_id'].' success');
+                $responseObject['status'] = false;
+                $responseObject['url'] = '';
+                $responseObject['message'] = $response->json('error') ? $response->json('error')['error_user_msg'] : 'to be defined';
+            }
+            return $responseObject;
+        }
+        catch(\Exception $e){
+            Log::channel('insatgram')->error('[publishContainer] User Id '.UserTrait::getCurrentId().' cannot Publish Container : '.$object['creation_id'].' Message => '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
             $responseObject['status'] = false;
             $responseObject['url'] = '';
-            $responseObject['message'] = $response->json('error') ? $response->json('error')['error_user_msg'] : 'to be defined';
+            $responseObject['message'] = $e->getMessage();
+            return $responseObject;
         }
-
-        return $responseObject;
     }
 
     /**
@@ -196,18 +212,26 @@ class InstagramController extends Controller
                 'multipart' => RequestsTrait::prepareMultiPartForm($object),
             ]);
             if ($response->getStatusCode() == 200) {
+                Log::channel('instagram')->info('[postSingleMedia] User Id : '.UserTrait::getCurrentId(). 'has posted a new instagram Media to Ig User :'.$igUser);
                 $responseObject['status'] = true;
                 $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+                return $responseObject;
             } else {
+                Log::channel('instagram')->notice('[postSingleMedia] User Id : '.UserTrait::getCurrentId(). 'cannot posted a new instagram Media to Ig User :'.$igUser);
                 $responseObject['status'] = false;
                 $responseObject['message'] = 'an error occured';
+                return $responseObject;
             }
+
         } catch (\Exception $e) {
+            Log::channel('instagram')->error('[postSingleMedia] User Id : '.UserTrait::getCurrentId(). 'cannot posted a new instagram Media to Ig User :'.$igUser . ' Message ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
             $responseObject['status'] = false;
             $responseObject['message'] = $e->getMessage();
+            return $responseObject;
         }
 
-        return $responseObject;
+
     }
 
     /**
@@ -216,9 +240,16 @@ class InstagramController extends Controller
     public function postContainer($object, $igUser)
     {
         $parameter = RequestsTrait::prepareParameters($object);
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT') . $igUser . '/media?' . $parameter);
-
-        return $response->json('id');
+        try{
+            $response = Http::post(envValue('FACEBOOK_ENDPOINT') . $igUser . '/media?' . $parameter);
+            Log::channel('instagram')->info('[postContainer] User Id :'.UserTrait::getCurrentId().' has post container '.''.' to Ig User : '.$igUser);
+            return $response->json('id');
+        }
+        catch (\Exception $e){
+            Log::channel('instagram')->error('[postContainer] User Id :'.UserTrait::getCurrentId().' cannot post container '.''.' to Ig User : '.$igUser . '  Message ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -264,15 +295,12 @@ class InstagramController extends Controller
             if (!$checkContainer['status']) {
                 return $checkContainer;
             }
-
             return $this->publishContainer($object, $igUser);
         } else {
             if ($imagesUrls) {
                 $incImages = 0;
                 foreach ($imagesUrls as $image) {
                     $mediaResponse = $this->postMediaUrl($igUser, $object['access_token'], $image, $mentions, $incImages);
-
-
                     if(!$mediaResponse['status']){
                         return $mediaResponse;
                     }
@@ -319,7 +347,6 @@ class InstagramController extends Controller
                     return $checkContainer;
                 }
             }
-
             return $this->publishContainer($object, $igUser);
         }
     }
@@ -363,7 +390,7 @@ class InstagramController extends Controller
         $page = Account::where('uid', $id)->where('companyId', UserTrait::getCompanyId())->first();
 
         if (!$page) {
-            Account::create([
+            $account = Account::create([
                 'name' => $name,
                 'provider' => 'instagram',
                 'status' => true,
@@ -381,6 +408,7 @@ class InstagramController extends Controller
                 'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
                 'relatedUid' => $relatedUid,
             ]);
+            Log::channel('instagram')->info('User :'.UserTrait::getCurrentId().' add Account With UID : '.$id. 'to his company '.UserTrait::getCompanyId().' On local ID ==> '.$account->id);
         }
     }
 
@@ -462,28 +490,37 @@ class InstagramController extends Controller
         $acountPost = AccountPost::where('id', $accountPostId)->first();
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-        $request = Http::get(envValue('FACEBOOK_ENDPOINT') . $acountPost->postIdProvider . '/insights?access_token=' . $accessToken . '&metric=engagement,impressions,saved');
-        $response = $request->json('data');
 
-        // Start Fetching Statistics
-        foreach ($response as $statsData) {
-            // Start Fetching Engagments ==> Likes + Comments
-            if ($statsData['name'] == 'engagement') {
-                $obj['engagement'] = $statsData['values'][0]['value'];
+        try{
+            $request = Http::get(envValue('FACEBOOK_ENDPOINT') . $acountPost->postIdProvider . '/insights?access_token=' . $accessToken . '&metric=engagement,impressions,saved');
+            $response = $request->json('data');
+            Log::channel('instagram')->info('[getStatisticsByPost] User : '.UserTrait::getCurrentId().' fetch statistics from account '.$accountPostId);
+            // Start Fetching Statistics
+            foreach ($response as $statsData) {
+                // Start Fetching Engagments ==> Likes + Comments
+                if ($statsData['name'] == 'engagement') {
+                    $obj['engagement'] = $statsData['values'][0]['value'];
+                }
+                // Start Fetching Impressions
+                if ($statsData['name'] == 'impressions') {
+                    $obj['impressions'] = $statsData['values'][0]['value'];
+                }
+                // Start Fetching Saved
+                if ($statsData['name'] == 'saved') {
+                    $obj['saves'] = $statsData['values'][0]['value'];
+                }
+                // End Fetching Likes
             }
 
-            // Start Fetching Impressions
-            if ($statsData['name'] == 'impressions') {
-                $obj['impressions'] = $statsData['values'][0]['value'];
-            }
-
-            // Start Fetching Saved
-            if ($statsData['name'] == 'saved') {
-                $obj['saves'] = $statsData['values'][0]['value'];
-            }
-            // End Fetching Likes
+            return $obj;
+        }catch(\Exception $e){
+            Log::channel('instagram')->error('[getStatisticsByPost] User : '.UserTrait::getCurrentId().' fetch statistics from account '.$accountPostId.' Message  ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
+            $obj['engagement'] = 'NA';
+            $obj['impressions'] = 'NA';
+            $obj['saves'] = 'NA';
+            return $obj;
         }
 
-        return $obj;
     }
 }

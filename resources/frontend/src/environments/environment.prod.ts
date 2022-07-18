@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiURL: 'https://mediaposting.soft2do.de/api/'
+    apiURL: 'https://social-push.de/api/'
 };

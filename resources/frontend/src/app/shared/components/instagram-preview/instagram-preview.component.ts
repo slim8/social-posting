@@ -217,7 +217,7 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
 
         close.classList.add('m-close');
         close.innerHTML = 'x';
-        close?.setAttribute('style', 'padding:0 4px 0 10px;');
+        close?.setAttribute('style', 'border-radius: 50%; background-color: black; filter: invert(1); width: 12px; height: 12px; margin: 0 4px 0 10px;');
         tooltip.innerHTML = this.inputValue2;
         this.taggedImage?.appendChild(tooltip);
         tooltip.appendChild(close);
@@ -229,14 +229,6 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
             this.posX +
             'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
         );
-
-        //create remove mention button
-        close.classList.add('m-close');
-        close.innerHTML = 'x';
-        close?.setAttribute('style', 'padding:0 4px 0 10px;');
-        tooltip.innerHTML = this.inputValue2;
-        this.taggedImage?.appendChild(tooltip);
-        tooltip.appendChild(close);
 
         // add function remove mention
         let mentioned = document.querySelectorAll('.mentioned');

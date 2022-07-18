@@ -9,6 +9,7 @@ use App\Http\Traits\UserTrait;
 use App\Models\User;
 use App\Models\UsersAccounts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyAdminsController extends Controller
@@ -80,6 +81,7 @@ class CompanyAdminsController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::channel('notice')->notice('[removeAccountFromUser] User '.UserTrait::getCurrentId().' Try to remove Account From User but Request is Invalid');
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
@@ -87,10 +89,12 @@ class CompanyAdminsController extends Controller
         $users = $request->users;
 
         if (!$this->utilitiesController->checkIfAccountLinkedToCurrentAdmin($accounts)) {
+            Log::channel('notice')->notice('[removeAccountFromUser] User '.UserTrait::getCurrentId().' Try to remove Accounts : '.implode(", ", $accounts).' From Users : '.implode(", ", $accounts).' but One or more accounts are not linked to this admin');
             return RequestsTrait::processResponse(false, ['message' => 'One or more accounts are not linked to this admin']);
         }
 
         if (!$this->utilitiesController->checkIfUsersAreLinkedToActualCompany($users)) {
+            Log::channel('notice')->notice('[removeAccountFromUser] User '.UserTrait::getCurrentId().' Try to remove Accounts : '.implode(", ", $accounts).' From Users : '.implode(", ", $users).' but One or more users are not linked to this company');
             return RequestsTrait::processResponse(false, ['message' => 'One or more users are not linked to this company']);
         }
 

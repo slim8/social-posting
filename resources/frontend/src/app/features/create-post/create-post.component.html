@@ -23,7 +23,7 @@
                     <div class="m-form-label">
                         <h4>Medien</h4>
                     </div>
-                    <div *ngIf="uploadImageActive" class="m-upload-image">
+                    <div  class="m-upload" [ngClass]="{'is-shown': uploadImageActive}" >
                         <div class="clearfix">
                             <nz-upload
                             [nzAction]="uploadFileAPIURL"
@@ -50,7 +50,7 @@
                             </nz-modal>
                         </div>
                     </div>
-                    <div  *ngIf="showUploadVideo">
+                    <div class="m-upload" [ngClass]="{'is-shown': showUploadVideo}">
                       <div class="clearfix">
                           <nz-upload
                           [nzAction]="uploadFileAPIURL"
@@ -67,7 +67,7 @@
                           </nz-upload>
                       </div>
                     </div>
-                    <div  *ngIf="showUploadVideo" class="m-upload-video" >
+                    <div  class="m-upload-video" [ngClass]="{'is-shown': showUploadVideo}">
                       <div class="clearfix">
                           <div class="m-thumb-container">
                               <div class="m-img-container" *ngFor="let item of selectedThumbnailList">

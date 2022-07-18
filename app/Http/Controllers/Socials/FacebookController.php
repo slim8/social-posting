@@ -12,6 +12,7 @@ use App\Models\ProviderToken;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
@@ -84,7 +85,7 @@ class FacebookController extends Controller
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
         $providerObject->token = $response->json('access_token');
-
+        Log::channel('facebook')->info('[generateLongLifeToken] User : '.UserTrait::getCurrentId().' has generate long life token for facebook account id : '.$facebookUserId);
         return $providerObject;
     }
 
@@ -136,30 +137,52 @@ class FacebookController extends Controller
         foreach ($object as $key => $value) {
             array_push($multiPart, ['name' => $key, 'contents' => $key == 'thumb' ? fopen($value, 'rb') : $value]);
         }
-        $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/videos', [
-            'multipart' => $multiPart,
-        ]);
+        Log::channel('facebook')->info('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication to facebook page Id : '.$pageId);
 
-        if ($object['thumb'] && envValue('UPLOAD_PROVIDER') !== 'hoster' && envValue('APP_ENV') == 'local') {
-            unlink($object['thumb']);
+        try {
+            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/videos', [
+                'multipart' => $multiPart,
+            ]);
+
+            if ($object['thumb'] && envValue('UPLOAD_PROVIDER') !== 'hoster' && envValue('APP_ENV') == 'local') {
+                unlink($object['thumb']);
+            }
+            if ($response->getStatusCode() == 200) {
+                Log::channel('facebook')->info('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' has success  Post Video Publication to facebook page Id : '.$pageId);
+                $responseObject['status'] = true;
+                $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+                $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
+            } else {
+                Log::channel('facebook')->notice('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' cannot  Post Video Publication to facebook page Id : '.$pageId);
+                $responseObject['status'] = false;
+                $responseObject['message'] = 'to be defined';
+            }
+            return $responseObject;
         }
-        if ($response->getStatusCode() == 200) {
-            $responseObject['status'] = true;
-            $responseObject['id'] = json_decode($response->getBody(), true)['id'];
-            $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
-        } else {
+        catch(\Exception $e){
+            Log::channel('facebook')->error('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication to facebook page Id : '.$pageId . ' Message ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
             $responseObject['status'] = false;
-            $responseObject['message'] = 'to be defined';
+            $responseObject['message'] = $e->getMessage();
+            return $responseObject;
         }
 
-        return $responseObject;
+
+
     }
 
     public function postMediaFromUrl($pageId, $token, $url)
     {
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
-
-        return $response->json('id');
+        try{
+            $response = Http::post(envValue('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
+            Log::channel('facebook')->info('[postMediaFromUrl] User id : '.UserTrait::getCurrentId() . ' has Post media Publication from Url '.$url. 'to facebook page Id : '.$pageId);
+            return $response->json('id');
+        }
+        catch(\Exception $e){
+            Log::channel('facebook')->error('[postMediaFromUrl] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication from Url '.$url. 'to facebook page Id : '.$pageId.' Message ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -197,7 +220,7 @@ class FacebookController extends Controller
             if ($videoTitle) {
                 $object['title'] = $videoTitle;
             }
-
+            Log::channel('facebook')->info('[postToFacebookMethod] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication from Url '.$videos['url']. 'to facebook page Id : '.$pageId);
             return $this->postVideoPublicationFormUrl($pageId, $object);
         }
 
@@ -211,21 +234,30 @@ class FacebookController extends Controller
             $object['attached_media'] = json_encode($images);
         }
 
-        $client = new Client();
-        $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/feed', [
-            'form_params' => $object,
-        ]);
-
-        if ($response->getStatusCode() == 200) {
-            $responseObject['status'] = true;
-            $responseObject['id'] = json_decode($response->getBody(), true)['id'];
-            $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
-        } else {
-            $responseObject['status'] = false;
-            $responseObject['message'] = 'to be defined';
+        try {
+            $client = new Client();
+            $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/feed', [
+                'form_params' => $object,
+            ]);
+            if ($response->getStatusCode() == 200) {
+                Log::channel('facebook')->info('User Id: '.UserTrait::getCurrentId().' Has Post a publication to Facebook Account '.$pageId);
+                $responseObject['status'] = true;
+                $responseObject['id'] = json_decode($response->getBody(), true)['id'];
+                $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
+            } else {
+                Log::channel('facebook')->notice('User Id: '.UserTrait::getCurrentId().' cannot Post a publication to Facebook Account '.$pageId);
+                $responseObject['status'] = false;
+                $responseObject['message'] = 'to be defined';
+            }
+            return $responseObject;
         }
-
-        return $responseObject;
+        catch (\Exception $e){
+            Log::channel('facebook')->error('User Id: '.UserTrait::getCurrentId().' Has Post a publication to Facebook Account '.$pageId . ' Message ==>'.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
+            $responseObject['status'] = false;
+            $responseObject['message'] = $e->getMessage();
+            return $responseObject;
+        }
     }
 
     /**
@@ -269,7 +301,7 @@ class FacebookController extends Controller
         $page = Account::where('uid', $id)->where('companyId', $actualCompanyId)->first();
 
         if (!$page) {
-            Account::create([
+            $account = Account::create([
                         'name' => $name,
                         'provider' => 'facebook',
                         'status' => true,
@@ -285,6 +317,7 @@ class FacebookController extends Controller
                         'accessToken' => $pageToken,
                         'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
                     ]);
+            Log::channel('facebook')->info('User :'.UserTrait::getCurrentId().' add Page With UID : '.$id. 'to his company '.$actualCompanyId.' On local ID ==> '.$account->id);
         }
     }
 
@@ -410,10 +443,16 @@ class FacebookController extends Controller
      */
     public function commentCount($postIdProvider, $accessToken)
     {
-        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
-        $response = $request->json('summary');
-
-        return $response['total_count'];
+        try{
+            $request = Http::get(envValue('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
+            $response = $request->json('summary');
+            Log::channel('info')->info('User '.UserTrait::getCurrentId().' get comments counts from '.$postIdProvider);
+            return $response['total_count'];
+        } catch(\Exception $e){
+            Log::channel('facebook')->error('User '.UserTrait::getCurrentId().' get comments counts from '.$postIdProvider.' Message ==> '.$e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
+            return 'NA';
+        }
     }
 
     /**

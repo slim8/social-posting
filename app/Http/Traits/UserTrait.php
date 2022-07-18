@@ -6,6 +6,7 @@ use App\Models\ProviderToken;
 use App\Models\User;
 use App\Models\UsersAccounts;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 trait UserTrait
 {
@@ -119,6 +120,7 @@ trait UserTrait
      */
     public static function removePermissionaccountFromUser($userId, $accountId)
     {
+        Log::channel('info')->info('[removePermissionaccountFromUser] User '.UserTrait::getCurrentId().' has remove Account : '.$accountId.' From User '.$userId);
         UsersAccounts::where('accountId', $accountId)->where('userId', $userId)->delete();
     }
 

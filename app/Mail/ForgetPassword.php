@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -30,7 +29,7 @@ class ForgetPassword extends Mailable
      */
     public function build()
     {
-        return $this->from('maher.boughdiri@softtodo.com')
+        return $this->from(envValue('MAIL_FROM_ADRESS'), envValue('MAIL_FROM_NAME'))
         ->view('emails.forgetPassword');
     }
 }

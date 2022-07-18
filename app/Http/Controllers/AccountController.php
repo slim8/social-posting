@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\PostHashtag;
 use App\Models\PostMedia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
@@ -25,10 +26,12 @@ class AccountController extends Controller
     public function disconnectAccount(Request $request, int $action = null, int $accountId = null)
     {
         if ($action !== 0 && $action !== 1) {
+            Log::channel('notice')->notice('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect/Connect Account without Specify Action');
             return RequestsTrait::processResponse(false, ['message' => 'Please specify action 0 for disconnect and 1 for Connect']);
         }
 
         if (!$accountId) {
+            Log::channel('notice')->notice('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect/Connect Account without Account ID');
             return RequestsTrait::processResponse(false, ['message' => 'Please choose a valid account ID']);
         }
 
@@ -39,14 +42,18 @@ class AccountController extends Controller
         })->first();
 
         if (!$account) {
+            Log::channel('notice')->notice('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect/Connect Account Id : '.$accountId.' But could not find Account');
             return RequestsTrait::processResponse(false, ['messsage' => 'Cannot find account']);
         }
 
         $account->update(['status' => $action]);
 
         if ($action) {
+            Log::channel('info')->info('[disconnectAccount] User : '.UserTrait::getCurrentId().' has Connect Account Id : '.$accountId);
+
             $object['message'] = 'Your account has been connected';
         } else {
+            Log::channel('info')->info('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect Account Id : '.$accountId);
             $object['message'] = 'Your account has been disconnected';
         }
 
@@ -76,7 +83,7 @@ class AccountController extends Controller
 
             AccountPost::where('id', $accountPostId)->delete();
         }
-
+        Log::channel('info')->info('[deleteAccountAction] User : '.UserTrait::getCurrentId().' Delete Account Id : '.$accountId.' With hsi Mentions , PostMedia And Posts');
         Account::where('id', $accountId)->delete();
 
         return true;
@@ -90,6 +97,7 @@ class AccountController extends Controller
         $account = RequestsTrait::findAccountByUid($accountId, 'id', 1);
 
         if (!$account) {
+            Log::channel('notice')->notice('[deleteAccount] User : '.UserTrait::getCurrentId(). ' Try To delete Account :'.$accountId." But he don't have rights to delete this account");
             return RequestsTrait::processResponse(false, ['message' => "You don't have rights to delete this account"]);
         }
 
