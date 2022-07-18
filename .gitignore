@@ -22,3 +22,7 @@ config.toml
 /builds
 deploy.sh
 deploy.bat
+/.composer
+.htaccess
+.htpasswd
+
