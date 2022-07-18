@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { TokenInterceptorService } from './shared/services/token-interceptor.service'
 import { JwtModule } from '@auth0/angular-jwt';
 import { sharedConstants } from './shared/sharedConstants';
+import {APP_BASE_HREF} from '@angular/common';
 
 registerLocaleData(en);
 
@@ -50,6 +51,9 @@ registerLocaleData(en);
         provide: HTTP_INTERCEPTORS,
         useClass: TokenInterceptorService,
         multi: true
+    },
+    {
+      provide: APP_BASE_HREF, useValue: '/'
     }
     ],
     bootstrap: [AppComponent]
