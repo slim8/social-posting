@@ -10,6 +10,7 @@ use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class AdminsController extends Controller
 {
@@ -87,7 +88,7 @@ class AdminsController extends Controller
             $user->accounts = UserTrait::getAccountsLinkedToUser($user->id);
             $users[] = $user;
         }
-
+        Log::channel('info')->info('User : '.UserTrait::getCurrentId().' Has request All his sub users on his company');
         return RequestsTrait::processResponse(true, ['users' => $users]);
     }
 }

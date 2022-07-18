@@ -42,6 +42,11 @@
                     position: relative;
                     padding: 0 21px;
                     width: 100%;
+
+                    > .m-upload , .m-upload-video {
+                      display: none;
+                    }
+
                     > .m-form-label {
                         margin-bottom: 11px;
                         > h4 {

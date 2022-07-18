@@ -114,6 +114,32 @@ return [
             'handler' => NullHandler::class,
         ],
 
+        'info' => [
+            'driver' => 'daily',
+            'level' => 'info',
+            'path' => storage_path('logs/custom/info/info.log'),
+        ],
+
+        'notice' => [
+            'driver' => 'daily',
+            'level' => 'notice',
+            'path' => storage_path('logs/custom/notice/notice.log'),
+        ],
+        'facebook' => [
+            'driver' => 'daily',
+            'level' => 'notice',
+            'path' => storage_path('logs/custom/facebook/facebook.log'),
+        ],
+        'instagram' => [
+            'driver' => 'daily',
+            'level' => 'notice',
+            'path' => storage_path('logs/custom/instagram/instagram.log'),
+        ],
+        'exception' => [
+            'driver' => 'daily',
+            'level' => 'notice',
+            'path' => storage_path('logs/custom/exception/exception.log'),
+        ],
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],

@@ -19,6 +19,7 @@ use App\Models\UsersAccounts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class GeneralSocialController extends Controller
@@ -48,6 +49,7 @@ class GeneralSocialController extends Controller
             'status' => 'string|max:255',
         ]);
         if ($validator->fails()) {
+            Log::channel('notice')->notice('[sendToPost] User : '.UserTrait::getCurrentId().' Try To create a new post with Invalid Request');
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
@@ -59,6 +61,7 @@ class GeneralSocialController extends Controller
         // Check if post status is DRAFT
         if ($requestPostId) {
             if (Post::where('id', $requestPostId)->where('status', POST::$STATUS_PUBLISH)->first()) {
+                Log::channel('notice')->notice('[sendToPost] User : '.UserTrait::getCurrentId().' Try To edit a Published post Id '.$requestPostId);
                 return RequestsTrait::processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
             }
         }
@@ -91,6 +94,7 @@ class GeneralSocialController extends Controller
         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
 
         if (!$validator->status) {
+            Log::channel('exception')->notice('[sendToPost] User Id : '.UserTrait::getCurrentId().' ==> '.$validator->message);
             return RequestsTrait::processResponse(false, ['message' => $validator->message]);
         }
 
@@ -102,12 +106,7 @@ class GeneralSocialController extends Controller
             $mentions = [];
             if ($request->mentions) {
                 $mentions = $request->mentions;
-
                 $mentions = json_decode($mentions, true);
-
-                // if($mentions){
-                //     $mentions = json_decode($mentions, true);
-                // }
             }
 
             $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
@@ -201,7 +200,7 @@ class GeneralSocialController extends Controller
                         $obj['message'] = $message;
                     }
                     $obj['access_token'] = $account->accessToken;
-
+                    Log::channel('facebook')->info('[sendToPost] User Id : '.UserTrait::getCurrentId().' Try to post To facebook Uid :'.$account->uid . ' with account Id '.$account->id.' Post Id : '.$postId);
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $post['hashtags'], $videos, $post['videoTitle']) : POST::$STATUS_DRAFT;
                 } elseif ($accountProvider == 'instagram') {
                     if ($message) {
@@ -209,6 +208,7 @@ class GeneralSocialController extends Controller
                     }
                     $BusinessIG = $account->uid;
                     $obj['access_token'] = $this->instagramController->getAccessToken($account->id);
+                    Log::channel('instagarm')->info('[sendToPost] User Id : '.UserTrait::getCurrentId().' Try to post To Instagaram Uid :'.$BusinessIG . ' with account Id '.$account->id.' Post Id : '.$postId);
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos, $localisation, $mentions) : POST::$STATUS_DRAFT;
                 }
 
@@ -248,17 +248,20 @@ class GeneralSocialController extends Controller
                         }
                     }
                 } else {
+                    Log::channel('facebook')->error('[sendToPost] User : '.UserTrait::getCurrentId().' ==> Message : '.$postResponse['message']);
                     $errorLog[] = $postResponse['message'];
                 }
             } else {
-                $errorLog[] = 'Cannot find a connected account Or permissions denied for ID  ' . $post['accountId'];
+                $messageError = 'Cannot find a connected account Or permissions denied for ID  ' . $post['accountId'];
+                $errorLog[] =$messageError;
+                Log::channel('notice')->notice('[sendToPost] User : '.UserTrait::getCurrentId().' ==> Message : '.$messageError);
             }
         }
 
         if ($errorLog) {
             return RequestsTrait::processResponse(false, ['message' => $errorLog]);
         }
-
+        Log::channel('info')->info('[sendToPost] User : '.UserTrait::getCurrentId().' create or edit post : '.$postId->id.' successfuly');
         return RequestsTrait::processResponse(true);
     }
 
@@ -357,7 +360,7 @@ class GeneralSocialController extends Controller
     public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0, int $accountId = null)
     {
         $AllPages = RequestsTrait::getAllAccountsFromDB($accountId);
-
+        Log::channel('info')->info('User :'.UserTrait::getCurrentId().' has request all accounts from database');
         if ($returnJson) {
             if ($AllPages) {
                 return RequestsTrait::processResponse(true, [$accountId ? 'page' : 'pages' => $AllPages]);
@@ -391,12 +394,15 @@ class GeneralSocialController extends Controller
         /* Start Reconnect Block */
         if ($providerToken) {
             FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerToken->id);
-
+            Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' Try to reconnect Facebook user : '.$facebookUserId);
             return RequestsTrait::processResponse(true, ['message' => 'Your account and his sub pages has been Re-connected']);
+        } else {
+            Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' Try to add Facebook user : '.$facebookUserId);
         }
 
         /* End  Reconnect Block */
         if ($facebookResponse['AllPages']) {
+            Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' fetch his pages from Facebook user : '.$facebookUserId);
             return RequestsTrait::processResponse(true, ['pages' => $facebookResponse['AllPages']]);
         } else {
             return RequestsTrait::processResponse(true, ['message' => 'No unauthorized accounts found']);
@@ -412,6 +418,7 @@ class GeneralSocialController extends Controller
         $userUid = $request->json('user');
 
         if (!UserTrait::getUniqueProviderTokenByProvider($userUid)) {
+            Log::channel('facebook')->notice('User : '.UserTrait::getCurrentId(). 'after try to save new facebok pages :  No User Id Found in this Account');
             return RequestsTrait::processResponse(false, ['message' => 'No User Id Found in this Account']);
         }
 

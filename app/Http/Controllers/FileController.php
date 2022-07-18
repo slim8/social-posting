@@ -150,6 +150,26 @@ class FileController extends Controller
     }
 
     /**
+     * Upload Local Image and return Object
+     */
+    public function uploadLocalAndReturnObject($file, $type)
+    {
+        $response = new \stdClass;
+        if ($type == 'image') {
+            $imageLink = $this->convertToJpeg('images/' , $file);
+            $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
+            $response->url = Storage::url('images/'.$imageName);
+            $response->name = 'images/'.$imageName;
+        } else {
+            $object = $file->store($type . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
+            $response->url = Storage::url($object);
+            $response->name = $object;
+        }
+
+        return $response;
+    }
+
+    /**
      * Upload file to FTP.
      */
     public function uploadToDistant($image, $type, int $isOnDisk = 0, string $filePathName = null)

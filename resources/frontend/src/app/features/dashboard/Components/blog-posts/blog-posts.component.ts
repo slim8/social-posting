@@ -1,3 +1,4 @@
+import { NewsService } from './../../services/news.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,22 +11,38 @@ const showViewIcon = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none
 })
 export class BlogPostsComponent implements OnInit {
 
-  posts = [
-    {img: 'https://assets.keap.com/image/upload/b_rgb:FFFFFF,c_limit,dpr_1,f_auto,h_395,q_95,w_569/v1/learn/images/Zz1lOTI0YzgzNzI0NDI1NDljMzRiZWVjOTI1ODk4OTZmNg==.jpg' , createdAt : '23.06.2022' , title : 'Hervorgehobener Post' ,teaser : 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ' },
-    {img: '' , createdAt : '23.06.2022' , title : 'Gleichzeitig posten' ,teaser : 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ' },
-    {img: 'https://assets.keap.com/image/upload/b_rgb:FFFFFF,c_limit,dpr_1,f_auto,h_395,q_95,w_569/v1/learn/images/Zz1lOTI0YzgzNzI0NDI1NDljMzRiZWVjOTI1ODk4OTZmNg==.jpg' , createdAt : '23.06.2022' , title : 'Gleichzeitig posten' ,teaser : 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ' },
-    {img: 'https://assets.keap.com/image/upload/b_rgb:FFFFFF,c_limit,dpr_1,f_auto,h_395,q_95,w_569/v1/learn/images/Zz1lOTI0YzgzNzI0NDI1NDljMzRiZWVjOTI1ODk4OTZmNg==.jpg' , createdAt : '23.06.2022' , title : 'Gleichzeitig posten' ,teaser : 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ' },
-    {img: '' , createdAt : '23.06.2022' , title : 'Gleichzeitig posten' ,teaser : 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ' },
-    {img: 'https://assets.keap.com/image/upload/b_rgb:FFFFFF,c_limit,dpr_1,f_auto,h_395,q_95,w_569/v1/learn/images/Zz1lOTI0YzgzNzI0NDI1NDljMzRiZWVjOTI1ODk4OTZmNg==.jpg' , createdAt : '23.06.2022' , title : 'Gleichzeitig posten' ,teaser : 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. ' },
+  posts = [{
+    id: 1,
+    title: "",
+    teaser: "",
+    picture: "",
+    date: "2022-04-05 00:00:00",
+    template: '',
+    createdAt: "",
+    updatedAt: "",
+    img : ''
+    }
   ]
 
   constructor(
-    private iconService: NzIconService,
+    private iconService: NzIconService, private newsService : NewsService
   ) {
     this.iconService.addIconLiteral('ng-zorro:show-view', showViewIcon);
   }
 
   ngOnInit(): void {
+
+    this.newsService.getNewsList().subscribe({
+      next: (event: any) => {
+          console.log(event);
+          this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url}));
+        },
+      error: err => {
+        
+      },
+      complete: () => {
+      }
+    })
   }
 
 }

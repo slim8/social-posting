@@ -11,6 +11,7 @@ use App\Models\Account;
 use App\Models\ProviderToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProviderTokenController extends Controller
@@ -38,6 +39,7 @@ class ProviderTokenController extends Controller
         $providerToken = UserTrait::getProviderTByProviderUID($providerId);
 
         if (!$providerToken) {
+            Log::channel('facebook')->emergency('User : '.UserTrait::getCurrentId().' Try to Disconnect Token '.$providerToken.' But is not related to company');
             return RequestsTrait::processResponse(false, ['message' => 'No Account Found']);
         }
 
@@ -46,6 +48,7 @@ class ProviderTokenController extends Controller
         $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
         $providerToken = $providerToken->update();
         Account::where('providerTokenId', $id)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
+        Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' Disconnect Token '.$providerToken);
 
         return true;
     }
@@ -59,6 +62,7 @@ class ProviderTokenController extends Controller
             'id' => 'required',
         ]);
         if ($validator->fails()) {
+            Log::channel('exception')->notice('User : '.UserTrait::getCurrentId().' Try to disconnect tokens without Id [Invalid Request]');
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
@@ -70,7 +74,7 @@ class ProviderTokenController extends Controller
     /**
      * Return All Connected Provider Accounts.
      */
-    public function getConnectedAccounts(Request $request)
+    public function getConnectedAccounts()
     {
         $response = [];
         $userId = UserTrait::getCurrentId();
@@ -81,7 +85,7 @@ class ProviderTokenController extends Controller
             $expiry = strtotime('-5 days', strtotime($account->expiryDate));
             array_push($response, ['mustBeRefreshed' => (!UserTrait::getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profileName, 'userName' => $account->userName, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === Account::$STATUS_DISCONNECTED) ? false : true]);
         }
-
+        Log::channel('info')->info('User : '.$userId.' Fetch his Provider token accounts');
         if ($response) {
             return RequestsTrait::processResponse(true, ['accounts' => $response]);
         } else {
@@ -114,10 +118,12 @@ class ProviderTokenController extends Controller
 
         if ($accountId) {
             $providerAcounts = $providerAcounts->where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $accountId);
+            Log::channel('info')->info('[refreshToken] User '.UserTrait::getCurrentId().' Try to refresh token of account '.$accountId);
         }
         $providerAcounts = $providerAcounts->get();
 
         if ($providerAcounts) {
+            Log::channel('info')->info('[refreshToken] User '.UserTrait::getCurrentId().' Try to refresh token for his provider token');
             $now = strtotime(date('Y-m-d'));
             foreach ($providerAcounts as $providerAcount) {
                 $this->refreshTokenForAccount($providerAcount, $now); // Function To Refresh Token
@@ -127,11 +133,15 @@ class ProviderTokenController extends Controller
         return RequestsTrait::processResponse(true);
     }
 
+    /**
+     * Delete Token Provider
+     */
     public function deleteToken(int $tokenId)
     {
         $providerAcount = ProviderToken::where('createdBy', UserTrait::getCurrentId())->where('id', $tokenId)->first();
 
         if (!$providerAcount) {
+            Log::channel('facebook')->emergency('User : '.UserTrait::getCurrentId().' Try to Delete Token Provider Id : '.$tokenId.' But is not related to company');
             return RequestsTrait::processResponse(false, ['message' => "You don't have access right to delete this Account Provider"]);
         }
 
@@ -144,7 +154,7 @@ class ProviderTokenController extends Controller
         }
 
         ProviderToken::where('id', $tokenId)->delete();
-
+        Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' has deleted Token Provider Id : '.$tokenId);
         return RequestsTrait::processResponse(true);
     }
 
@@ -158,13 +168,13 @@ class ProviderTokenController extends Controller
         $response = Http::get($facebookUri);
         $jsonResponse = $response->json();
         if (isset($jsonResponse['error'])) {
-            if ($jsonResponse['error']['code'] == 190) {
-                if ($jsonResponse['error']['error_subcode'] == 460) {
-                    $providerToken = ProviderToken::where('id', $providerTokenId)->first();
-                    $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
-                    $providerToken = $providerToken->update();
-                    Account::where('providerTokenId', $providerTokenId)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
-                }
+            $providerToken = ProviderToken::where('id', $providerTokenId)->first();
+            $providerToken->longLifeToken = Account::$STATUS_DISCONNECTED;
+            $providerToken = $providerToken->update();
+            Account::where('providerTokenId', $providerTokenId)->update(['accessToken' => Account::$STATUS_DISCONNECTED, 'status' => 0]);
+            if (isset($jsonResponse['error']['error_subcode'])) {
+                Log::channel('exception')->error($jsonResponse['error']['message']);
+                Log::channel('facebook')->error('User '.UserTrait::getCurrentId().' - Uid : '.$uid.' Provider Token Id : '.$providerTokenId.'try to Login , Message ==> '.$jsonResponse['error']['message'] );
             }
         }
     }

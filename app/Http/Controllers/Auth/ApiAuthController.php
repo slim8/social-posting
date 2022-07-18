@@ -9,6 +9,7 @@ use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -101,6 +102,7 @@ class ApiAuthController extends Controller
         $user->attachRole('companyadmin');
 
         // MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
+        Log::channel('info')->info('New company has been registred with email '.$request->email);
 
         return RequestsTrait::processResponse(true, [
             'password' => $password,
@@ -145,6 +147,7 @@ class ApiAuthController extends Controller
 
         $user->attachRole('user');
 
+        Log::channel('info')->info('company admin Id :'.UserTrait::getCurrentId().' has add teh user '.$request->email.' to his company : '.$actualCompanyId);
         return RequestsTrait::processResponse(true, [
             'success' => true,
             'message' => trans('message.user_created_suceess') . $request->email,
@@ -164,6 +167,7 @@ class ApiAuthController extends Controller
         if ($user) {
             if ($user->status) {
                 if (Hash::check($request->password, $user->password)) {
+                    Log::channel('info')->info('User '.$request->email.' has been connected');
                     $token = $user->createToken('Laravel Password Grant Client')->accessToken;
                     $secret_key = envValue('JWT_SECRET_KEY');
                     $issuer_claim = envValue('JWT_ISSUER_CLAIMER'); // this can be the servername
@@ -200,18 +204,21 @@ class ApiAuthController extends Controller
                         'roles' => $this->userRepository->getCurrentRoles($user),
                     ]);
                 } else {
+                    Log::channel('notice')->notice('User '.$request->email.' try to connect with mismatch password');
+
                     $response = ['message' => trans('message.password_mismatch'), 'status' => false];
 
                     return response($response, 422);
                 }
             } else {
+                Log::channel('notice')->notice('User '.$request->email.' try to connect but is not activated');
                 $response = ['message' => trans('message.account_not_activated'), 'status' => false];
 
                 return response($response, 422);
             }
         } else {
             trans('messages.failed');
-
+            Log::channel('notice')->notice('User '.$request->email.' try to connect but is not exist');
             $response = ['message' => 'User does not exist', 'status' => false];
 
             return response($response, 422);
