@@ -12,4 +12,17 @@ export class NewsService {
   getNewsList(params : any = []) {
     return this.http.get(sharedConstants.API_ENDPOINT+ 'news',{params});
   }
+
+  addNews(data : any ,params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT+ 'news',data);
+  }
+
+  getNewsById( id : number , params : any = []) {
+    return this.http.get(sharedConstants.API_ENDPOINT+ 'news/'+id,{params});
+  }
+
+  updateNews(params : any = []) {
+    return this.http.get(sharedConstants.API_ENDPOINT+ 'news',{params});
+  }
+
 }
