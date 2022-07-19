@@ -46,7 +46,7 @@ class PostController extends Controller
         $account = RequestsTrait::findAccountByUid($id, 'id', 1);
 
         if ($account) {
-            Log::channel('info')->info('User : '.UserTrait::getCurrentId().' has requests all posts of account : '.$id);
+            Log::channel('info')->info('User : ' . UserTrait::getCurrentId() . ' has requests all posts of account : ' . $id);
             $posts = [];
             $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
@@ -76,7 +76,7 @@ class PostController extends Controller
                 $response['errorMessage'] = 'This Account has not any POSTS';
             }
         } else {
-            Log::channel('info')->notice('User : '.UserTrait::getCurrentId().' has requests all posts of account : '.$id.' but no account found ');
+            Log::channel('info')->notice('User : ' . UserTrait::getCurrentId() . ' has requests all posts of account : ' . $id . ' but no account found ');
 
             $response['status'] = false;
             $response['errorMessage'] = 'No Account found with id ' . $id;
@@ -149,6 +149,10 @@ class PostController extends Controller
                 unset($postContent->accounts);
                 $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
                 $account = Account::where('id', $postContent->accountId)->first();
+                $post = Post::where('id', $postContent->postId)->first();
+                $user = User::where('id', $post->createdBy)->first();
+                // $user->firstName . ' ' . $user->lastName
+                $postContent['createdBy'] = $user->firstName . ' ' . $user->lastName;
                 $postContent['accountName'] = $account->name;
                 $postContent['profilePicture'] = $account->profilePicture;
                 $postContent['isScheduled'] = Post::where('id', $postContent->postId)->first()->isScheduled;
@@ -274,13 +278,13 @@ class PostController extends Controller
         $images = [];
         $videos = [];
         $mentions = [];
-        $postObject = Post::where('id' , $postId)->first();
-        $postImage = PostMedia::where('type','image')->where('postId' , $postId)->get();
-        $postVideo = PostMedia::where('type','video')->where('postId' , $postId)->get();
+        $postObject = Post::where('id', $postId)->first();
+        $postImage = PostMedia::where('type', 'image')->where('postId', $postId)->get();
+        $postVideo = PostMedia::where('type', 'video')->where('postId', $postId)->get();
 
 
-        if($postVideo){
-            foreach($postVideo as $video){
+        if ($postVideo) {
+            foreach ($postVideo as $video) {
                 $videoObject = [];
                 $videoObject['url'] = $video->url;
                 $videoObject['seconde'] = null;
@@ -289,7 +293,7 @@ class PostController extends Controller
             }
         }
 
-        if($postImage){
+        if ($postImage) {
             $incImage = 0;
             foreach ($postImage as $image) {
                 $mediaMentions = Mentions::where('postId', $postId)->where('postMediaId', $image->id)->get();

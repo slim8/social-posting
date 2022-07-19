@@ -7,33 +7,35 @@ const calendarIcon = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none
 const arrowIcon = '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.08398 1.24992L5.41313 4.92077C5.18532 5.14858 4.81598 5.14858 4.58817 4.92077L0.917318 1.24992" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 @Component({
-  selector: 'app-drafts',
-  templateUrl: './drafts.component.html',
-  styleUrls: ['./drafts.component.scss']
+    selector: 'app-drafts',
+    templateUrl: './drafts.component.html',
+    styleUrls: ['./drafts.component.scss']
 })
 export class DraftsComponent implements OnInit {
-  posts : any[] = [];
-  draftsList : any = [];
+    posts: any[] = [];
+    draftsList: any = [];
 
-  constructor(private iconService: NzIconService, private accountsService: AccountsService) {
+    constructor(private iconService: NzIconService, private accountsService: AccountsService) {
         this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
         this.iconService.addIconLiteral('ng-zorro:customArrow', arrowIcon);
     }
 
 
-  ngOnInit(): void {
-    this.getDrafts();
-  }
+    ngOnInit(): void {
+        this.getDrafts();
+    }
 
-  update(event:any) {
-    this.draftsList= event;
-  }
+    update(event: any) {
+        this.draftsList = event;
+    }
 
 
-  getDrafts() {
+    getDrafts() {
         const params = new HttpParams()
-            .set("limit", "")
-            .set("status", "DRAFT");
+            .set("filterBy", "AccountsPosts")
+            .set("limit", "10")
+            .set("status", "DRAFT")
+            .set("getStat", false);
 
         this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
@@ -48,26 +50,26 @@ export class DraftsComponent implements OnInit {
     }
 
     removeDraft() {
-     if(this.draftsList.length > 0) {
+        if (this.draftsList.length > 0) {
 
-        const formData : FormData = new FormData();
-        this.draftsList.forEach((draft:any)=>{
-           formData.append('postsIds[]', draft);
-        })
-        confirm('Are you sure you want to delete this item?');
-        this.accountsService.removeDrafts(formData).subscribe({
-          next: (event: any) => {
-          },
-          error: (err) => {
-          },
-          complete: () => {
-                this.getDrafts();
-          }
-      })
-     }else {
-       alert('vide');
-     }
+            const formData: FormData = new FormData();
+            this.draftsList.forEach((draft: any) => {
+                formData.append('postsIds[]', draft);
+            })
+            confirm('Are you sure you want to delete this item?');
+            this.accountsService.removeDrafts(formData).subscribe({
+                next: (event: any) => {
+                },
+                error: (err) => {
+                },
+                complete: () => {
+                    this.getDrafts();
+                }
+            })
+        } else {
+            alert('vide');
+        }
 
-  }
+    }
 
 }
