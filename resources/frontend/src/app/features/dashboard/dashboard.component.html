@@ -95,7 +95,17 @@
                   <tr *ngFor="let post of posts">
                     <td class="m-media-preview">
                       <div class="m-media-small">
-                        <img src="{{ post.postMedia[0].url }}" alt="" />
+                        <img
+                          src="/assets/img/test-images/default.png"
+                          alt=""
+                          *ngIf="post.postMedia.length == 0"
+                        />
+
+                        <img
+                          src="{{ post.postMedia[0].url }}"
+                          alt=""
+                          *ngIf="post.postMedia.length > 0"
+                        />
                         <div class="m-provider-logo">
                           <img
                             class="instagram"
