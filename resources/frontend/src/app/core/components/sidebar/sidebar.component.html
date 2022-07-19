@@ -5,10 +5,11 @@
       nzTheme="dark"
       nzMode="inline"
       [nzInlineCollapsed]="isCollapsed"
-      class="m-menu">
+      class="m-menu"
+    >
       <li class="m-item">
         <span class="m-icon dashboard">
-            <i nz-icon nzType="ng-zorro:dashboard"></i>
+          <i nz-icon nzType="ng-zorro:dashboard"></i>
         </span>
         <a
           routerLink="./dashboard"
@@ -19,7 +20,7 @@
       </li>
       <li class="m-item">
         <span class="m-icon accounts">
-            <i nz-icon nzType="ng-zorro:profile"></i>
+          <i nz-icon nzType="ng-zorro:profile"></i>
         </span>
         <a
           routerLink="./accounts"
@@ -31,7 +32,7 @@
 
       <li class="m-item">
         <span class="m-icon drafts">
-            <i nz-icon nzType="ng-zorro:folder"></i>
+          <i nz-icon nzType="ng-zorro:folder"></i>
         </span>
         <a
           routerLink="./drafts"
@@ -43,7 +44,7 @@
 
       <li class="m-item">
         <span class="m-icon create-post">
-            <i nz-icon nzType="ng-zorro:edit"></i>
+          <i nz-icon nzType="ng-zorro:edit"></i>
         </span>
         <a
           routerLink="./create-post"
@@ -55,43 +56,45 @@
 
       <li class="m-item">
         <span class="m-icon my-album">
-            <i nz-icon nzType="ng-zorro:album"></i>
+          <i nz-icon nzType="ng-zorro:album"></i>
         </span>
         <a
           routerLink="./my-album"
           i18n="My Album|Title for the Album page@@myAlbum"
           class="m-label m-menu-item"
-          >My Album</a>
+          >My Album</a
+        >
       </li>
 
       <li class="m-item">
         <span class="m-icon published-posts">
-            <i nz-icon nzType="ng-zorro:send"></i>
+          <i nz-icon nzType="ng-zorro:send"></i>
         </span>
         <a
           routerLink="./published-posts"
-          i18n="Published Posts|Title for the Published Posts page@@publishedPosts"
+          i18n="
+            Published Posts|Title for the Published Posts page@@publishedPosts"
           class="m-label m-menu-item"
-          >Published Posts</a>
+          >Published Posts</a
+        >
       </li>
 
-      <li class="m-item" *ngIf="checkRole('companyadmin')" >
-        <img
-          i18n-alt
-          src="/assets/img/svgs/icons/send.svg"
-          alt="send icon"
+      <li class="m-item" *ngIf="checkRole('companyadmin')">
+        <i
+          nz-icon
+          [nzType]="'setting'"
+          [nzTheme]="'outline'"
           class="m-icon"
-        />
+        ></i>
         <a
           routerLink="./management/users-list"
-          i18n="
-          Managment Users|Title for the Managment Users@@managmentUsers"
+          i18n="Managment Users|Title for the Managment Users@@managmentUsers"
           class="m-label m-menu-item"
           >Managment Users</a
         >
       </li>
 
-      <li class="m-item" *ngIf="checkRole('admin')" >
+      <li class="m-item" *ngIf="checkRole('admin')">
         <img
           i18n-alt
           src="/assets/img/svgs/icons/send.svg"
@@ -100,13 +103,11 @@
         />
         <a
           routerLink="/application/administration/dictionaries"
-          i18n="
-          Dictionaries|Title for the Dictionaries@@dictionaries"
+          i18n="Dictionaries|Title for the Dictionaries@@dictionaries"
           class="m-label m-menu-item"
           >Dictionaries</a
         >
       </li>
-
     </ul>
   </div>
 </div>

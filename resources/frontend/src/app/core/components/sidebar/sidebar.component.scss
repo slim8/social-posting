@@ -16,6 +16,9 @@
             align-items: center;
             overflow: hidden;
 
+            > i {
+                font-size: 24px;
+            }
             > .m-icon {
                 position: relative;
                 padding: 20px;
