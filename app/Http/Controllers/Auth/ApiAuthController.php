@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\Repositories\UserRepository;
+use App\Http\Controllers\TraitController;
 use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
@@ -20,14 +21,12 @@ use Illuminate\Support\Str;
 
 class ApiAuthController extends Controller
 {
-    use MailTrait;
-    use RequestsTrait;
-    use UserTrait;
-
     protected $userRepository;
+    protected $traitController;
 
     public function __construct()
     {
+        $this->traitController = new TraitController();
         $this->userRepository = new UserRepository();
     }
 
@@ -70,11 +69,11 @@ class ApiAuthController extends Controller
         // }
 
         if (Company::where('phoneNumber', $request->phoneNumber)->first()) {
-            return RequestsTrait::processResponse(false, ['message' => 'This Phone Number is Already exist']);
+            return $this->traitController->processResponse(false, ['message' => 'This Phone Number is Already exist']);
         }
 
         if (Company::where('email', $request->email)->first()) {
-            return RequestsTrait::processResponse(false, ['message' => 'This Email is Already exist']);
+            return $this->traitController->processResponse(false, ['message' => 'This Email is Already exist']);
         }
         $company = Company::create([
             'name' => $request->companyName,
@@ -105,11 +104,11 @@ class ApiAuthController extends Controller
 
         // Start Email Configuration
         $mailBody = ["mail" => $request->email, "password" => $password , "simpleText" => 'This is a simple text for mailing'];
-        MailTrait::index($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+        $this->traitController->index($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
         // End Email Configuration
         Log::channel('info')->info('New company has been registred with email '.$request->email);
 
-        return RequestsTrait::processResponse(true, [
+        return $this->traitController->processResponse(true, [
             'password' => $password,
             'message' => trans('message.company_created_sucess') . $request->email,
         ]);
@@ -152,8 +151,8 @@ class ApiAuthController extends Controller
 
         $user->attachRole('user');
 
-        Log::channel('info')->info('company admin Id :'.UserTrait::getCurrentId().' has add teh user '.$request->email.' to his company : '.$actualCompanyId);
-        return RequestsTrait::processResponse(true, [
+        Log::channel('info')->info('company admin Id :'.$this->traitController->getCurrentId().' has add teh user '.$request->email.' to his company : '.$actualCompanyId);
+        return $this->traitController->processResponse(true, [
             'success' => true,
             'message' => trans('message.user_created_suceess') . $request->email,
         ]);
@@ -202,7 +201,7 @@ class ApiAuthController extends Controller
                     $providerTokenController = new ProviderTokenController();
                     $providerTokenController->checkAccountToken();
 
-                    return RequestsTrait::processResponse(true, [
+                    return $this->traitController->processResponse(true, [
                         'message' => trans('message.sucess_login'),
                         'token' => $jwt,
                         'expireAt' => $expire_claim,

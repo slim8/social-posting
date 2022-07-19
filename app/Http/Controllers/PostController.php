@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\InstagramController;
-use App\Http\Traits\RequestsTrait;
-use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Hashtag;
@@ -21,18 +19,17 @@ use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
-    use UserTrait;
-    use RequestsTrait;
-
     protected $facebookController;
     protected $instagramController;
     protected $utilitiesController;
+    protected $traitController;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
+        $this->traitController = new TraitController();
         $this->facebookController = new FacebookController();
         $this->instagramController = new InstagramController();
         $this->utilitiesController = new UtilitiesController();
@@ -43,10 +40,10 @@ class PostController extends Controller
      */
     public function getPostsByAccountId(Request $request, $id)
     {
-        $account = RequestsTrait::findAccountByUid($id, 'id', 1);
+        $account = $this->traitController->findAccountByUid($id, 'id', 1);
 
         if ($account) {
-            Log::channel('info')->info('User : '.UserTrait::getCurrentId().' has requests all posts of account : '.$id);
+            Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' has requests all posts of account : '.$id);
             $posts = [];
             $accountPosts = AccountPost::whereHas('account', function ($query) use ($id) {
                 $query->where('accounts.id', $id);
@@ -76,16 +73,16 @@ class PostController extends Controller
                 $response['errorMessage'] = 'This Account has not any POSTS';
             }
         } else {
-            Log::channel('info')->notice('User : '.UserTrait::getCurrentId().' has requests all posts of account : '.$id.' but no account found ');
+            Log::channel('info')->notice('User : '.$this->traitController->getCurrentId().' has requests all posts of account : '.$id.' but no account found ');
 
             $response['status'] = false;
-            $response['errorMessage'] = 'No Account found with id ' . $id;
+            $response['errorMessage'] = 'No Account found with id '.$id;
         }
 
         if ($response['status']) {
-            return RequestsTrait::processResponse(true, ['posts' => $response['posts']]);
+            return $this->traitController->processResponse(true, ['posts' => $response['posts']]);
         } else {
-            return RequestsTrait::processResponse(false, ['message' => $response['errorMessage']]);
+            return $this->traitController->processResponse(false, ['message' => $response['errorMessage']]);
         }
     }
 
@@ -108,7 +105,7 @@ class PostController extends Controller
      */
     public function getPosts(Request $request, int $postId = null)
     {
-        $companyId = UserTrait::getCompanyId();
+        $companyId = $this->traitController->getCompanyId();
         // filterBy is used to filter Posts using AcountsPosts
         $filterByAccounts = $request->filterBy === 'AccountsPosts' ? true : false;
 
@@ -158,7 +155,7 @@ class PostController extends Controller
                 // Append Tags and provider to Sub accounts
 
                 foreach ($subPostsAccounts as $subPost) {
-                    $subPost->provider = RequestsTrait::findAccountByUid($subPost->accountId, 'id', 1)->provider;
+                    $subPost->provider = $this->traitController->findAccountByUid($subPost->accountId, 'id', 1)->provider;
 
                     $subPost->hashtags = $this->getHashTagByPostOrAccountId($subPost->id);
                     $subPosts[] = $subPost;
@@ -172,7 +169,7 @@ class PostController extends Controller
                 } elseif ($postContent->provider == 'instagram') {
                     $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
                 }
-            };
+            }
 
             if ($postId) {
                 $posts = $postContent;
@@ -181,9 +178,9 @@ class PostController extends Controller
             }
         }
         if ($posts) {
-            return RequestsTrait::processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
+            return $this->traitController->processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
         } else {
-            return RequestsTrait::processResponse(false, ['message' => 'No posts found Or some account are disconnected']);
+            return $this->traitController->processResponse(false, ['message' => 'No posts found Or some account are disconnected']);
         }
     }
 
@@ -194,15 +191,15 @@ class PostController extends Controller
     {
         $errorLog = [];
         if (!$request->postsIds) {
-            return RequestsTrait::processResponse(false, ['No Draft Sent']);
+            return $this->traitController->processResponse(false, ['No Draft Sent']);
         }
 
         if (gettype($request->postsIds) !== 'array') {
-            return RequestsTrait::processResponse(false, ['Draft post musrt be array']);
+            return $this->traitController->processResponse(false, ['Draft post musrt be array']);
         }
 
-        $isCompanyAdmin = UserTrait::getUserObject()->hasRole('companyadmin') ? true : false;
-        $userCompanyId = UserTrait::getUserObject()->companyId;
+        $isCompanyAdmin = $this->traitController->getUserObject()->hasRole('companyadmin') ? true : false;
+        $userCompanyId = $this->traitController->getUserObject()->companyId;
 
         foreach ($request->postsIds as $postId) {
             $currentPost = Post::where('id', $postId)->first();
@@ -212,29 +209,29 @@ class PostController extends Controller
             $postCompany = User::where('id', $createdBy)->first()->companyId;
 
             if ($currentPost->deletedAt) {
-                $errorLog = 'Post ' . $postId . ' Not Found';
+                $errorLog = 'Post '.$postId.' Not Found';
             }
 
             if (!$isDraft) {
-                $errorLog[] = 'Post ' . $postId . ' Could not be deleted because is not DRAFT';
+                $errorLog[] = 'Post '.$postId.' Could not be deleted because is not DRAFT';
             }
             if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
-                $errorLog[] = "You don't have right to delete Post " . $postId;
+                $errorLog[] = "You don't have right to delete Post ".$postId;
             }
-            if (!$isCompanyAdmin && $createdBy !== UserTrait::getCurrentId()) {
-                $errorLog[] = "You don't have right to delete Post " . $postId;
+            if (!$isCompanyAdmin && $createdBy !== $this->traitController->getCurrentId()) {
+                $errorLog[] = "You don't have right to delete Post ".$postId;
             }
         }
 
         if ($errorLog) {
-            return RequestsTrait::processResponse(false, ['errors' => $errorLog]);
+            return $this->traitController->processResponse(false, ['errors' => $errorLog]);
         }
 
         foreach ($request->postsIds as $postId) {
             $this->deletePostById($postId);
         }
 
-        return RequestsTrait::processResponse(true);
+        return $this->traitController->processResponse(true);
     }
 
     /**
@@ -274,13 +271,12 @@ class PostController extends Controller
         $images = [];
         $videos = [];
         $mentions = [];
-        $postObject = Post::where('id' , $postId)->first();
-        $postImage = PostMedia::where('type','image')->where('postId' , $postId)->get();
-        $postVideo = PostMedia::where('type','video')->where('postId' , $postId)->get();
+        $postObject = Post::where('id', $postId)->first();
+        $postImage = PostMedia::where('type', 'image')->where('postId', $postId)->get();
+        $postVideo = PostMedia::where('type', 'video')->where('postId', $postId)->get();
 
-
-        if($postVideo){
-            foreach($postVideo as $video){
+        if ($postVideo) {
+            foreach ($postVideo as $video) {
                 $videoObject = [];
                 $videoObject['url'] = $video->url;
                 $videoObject['seconde'] = null;
@@ -289,7 +285,7 @@ class PostController extends Controller
             }
         }
 
-        if($postImage){
+        if ($postImage) {
             $incImage = 0;
             foreach ($postImage as $image) {
                 $mediaMentions = Mentions::where('postId', $postId)->where('postMediaId', $image->id)->get();
@@ -299,7 +295,7 @@ class PostController extends Controller
                     }
                 }
                 $images[] = $image->url;
-                $incImage++;
+                ++$incImage;
             }
         }
         // End Generate PostMedia , Mentions and Video
@@ -311,16 +307,14 @@ class PostController extends Controller
             $postIds[] = $accountPost->accountId;
         }
 
-
         // Post validator will be updated
         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
 
         if (!$validator->status) {
-            return RequestsTrait::processResponse(false, ['message' => $validator->message]);
+            return $this->traitController->processResponse(false, ['message' => $validator->message]);
         }
 
         // Generate Posts Account To be Posted to Social Meida
-
 
         foreach ($accountsPost as $accountPost) {
             $hashtags = [];
@@ -328,15 +322,14 @@ class PostController extends Controller
             $currentAccountId = $accountPost->accountId;
             $currentAccountObject = Account::where('id', $currentAccountId)->first();
             $currentaccountPostId = $accountPost->id;
-            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $currentAccountId) ? true : false;
+            $accounPermission = $this->traitController->getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission($this->traitController->getCurrentId(), $currentAccountId) ? true : false;
 
             if ($accounPermission) {
                 $localisation = null;
                 $accountProvider = $currentAccountObject->provider;
                 $postResponse = [];
 
-
-                //Start Generate Hashtags
+                // Start Generate Hashtags
                 $postsHashTags = PostHashtag::where('accountPostId', $currentaccountPostId)->get();
                 if ($postsHashTags) {
                     foreach ($postsHashTags as $postTags) {
@@ -344,7 +337,7 @@ class PostController extends Controller
                         $hashtags[] = $hashtagObject->name;
                     }
                 }
-                //End Generate Hashtags
+                // End Generate Hashtags
 
                 $message = $postObject->message;
                 if ($accountProvider == 'facebook') {
@@ -365,11 +358,11 @@ class PostController extends Controller
                     $postResponse = $this->instagramController->postToInstagramMethod($obj, $BusinessIG, $images, $hashtags, $videos, $localisation, $mentions);
                 }
 
-                if ((gettype($postResponse) == 'array' && $postResponse['status'])) {
-                    $publishedPosts++;
+                if (gettype($postResponse) == 'array' && $postResponse['status']) {
+                    ++$publishedPosts;
                     $accountPost->update(['url' => $postResponse['url'], 'postIdProvider' => $postResponse['id']]);
                 } else {
-                    $errorPosts++;
+                    ++$errorPosts;
                     $accountPost->update(['url' => 'ERROR', 'postIdProvider' => 'ERROR']);
                     $errorLog[] = $postResponse['message'];
                 }
@@ -378,10 +371,10 @@ class PostController extends Controller
 
         if ($publishedPosts > 0 && $errorPosts == 0) {
             $postObject->update(['status' => 'PUBLISH']);
-        } else if ($publishedPosts > 0 && $errorPosts > 0) {
+        } elseif ($publishedPosts > 0 && $errorPosts > 0) {
             $postObject->update(['status' => 'PUBLISH']);
-            $globalResponse['reportMessage'] = 'Only ' . $errorPosts . ' posts has not been posted (' . $publishedPosts . ' Posts has been published)';
-        } else if ($publishedPosts == 0 && $errorPosts > 0) {
+            $globalResponse['reportMessage'] = 'Only '.$errorPosts.' posts has not been posted ('.$publishedPosts.' Posts has been published)';
+        } elseif ($publishedPosts == 0 && $errorPosts > 0) {
             $globalResponse['reportMessage'] = 'All Posts has not been posted';
         } else {
             $globalResponse['reportMessage'] = 'All Posts has  been posted';
@@ -389,10 +382,10 @@ class PostController extends Controller
         $globalResponse['publishedPosts'] = $publishedPosts;
         $globalResponse['errorPosts'] = $errorPosts;
 
-
         if ($errorLog) {
             $globalResponse['errorLog'] = $errorLog;
         }
+
         return $globalResponse;
     }
 
@@ -404,12 +397,11 @@ class PostController extends Controller
         $publishStatus = [];
         $errorLog = [];
         if (!$postId) {
-            return RequestsTrait::processResponse(false, ['No Draft Sent']);
+            return $this->traitController->processResponse(false, ['No Draft Sent']);
         }
 
-
-        $isCompanyAdmin = UserTrait::getUserObject()->hasRole('companyadmin') ? true : false;
-        $userCompanyId = UserTrait::getUserObject()->companyId;
+        $isCompanyAdmin = $this->traitController->getUserObject()->hasRole('companyadmin') ? true : false;
+        $userCompanyId = $this->traitController->getUserObject()->companyId;
 
         $currentPost = Post::where('id', $postId)->first();
 
@@ -418,26 +410,24 @@ class PostController extends Controller
         $postCompany = User::where('id', $createdBy)->first()->companyId;
 
         if ($currentPost->deletedAt) {
-            $errorLog = 'Post ' . $postId . ' Not Found';
+            $errorLog = 'Post '.$postId.' Not Found';
         }
         if (!$isDraft) {
-            $errorLog[] = 'Post ' . $postId . ' Could not be published because is not DRAFT';
+            $errorLog[] = 'Post '.$postId.' Could not be published because is not DRAFT';
         }
         if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
-            $errorLog[] = "You don't have right to published Post " . $postId;
+            $errorLog[] = "You don't have right to published Post ".$postId;
         }
-        if (!$isCompanyAdmin && $createdBy !== UserTrait::getCurrentId()) {
-            $errorLog[] = "You don't have right to published Post " . $postId;
+        if (!$isCompanyAdmin && $createdBy !== $this->traitController->getCurrentId()) {
+            $errorLog[] = "You don't have right to published Post ".$postId;
         }
-
 
         if ($errorLog) {
-            return RequestsTrait::processResponse(false, ['errors' => $errorLog]);
+            return $this->traitController->processResponse(false, ['errors' => $errorLog]);
         }
-
 
         $publishStatus = $this->publishPostById($postId);
 
-        return RequestsTrait::processResponse(isset($publishStatus['errorLog']) ? false : true, $publishStatus);
+        return $this->traitController->processResponse(isset($publishStatus['errorLog']) ? false : true, $publishStatus);
     }
 }

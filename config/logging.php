@@ -121,6 +121,13 @@ return [
             'path' => storage_path('logs/custom/info/info.log'),
             'days' => 7,
         ],
+        'deprecations' => [
+            'driver' => 'daily',
+            'level' => 'info',
+            'tap' => [\App\Http\Helpers\AddUserInformation::class],
+            'path' => storage_path('logs/custom/deprecations/deprecations.log'),
+            'days' => 7,
+        ],
 
         'notice' => [
             'driver' => 'daily',

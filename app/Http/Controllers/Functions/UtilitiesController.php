@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Functions;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\RequestsTrait;
-use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use Intervention\Image\ImageManager;
+use App\Http\Controllers\TraitController;
 
 class UtilitiesController extends Controller
 {
-    use RequestsTrait;
-    use UserTrait;
     protected $imageManager;
+    protected $traitController;
 
     public function __construct()
     {
         $this->imageManager = new ImageManager();
+        $this->traitController = new TraitController();
     }
 
     /**
@@ -29,7 +28,7 @@ class UtilitiesController extends Controller
         $responseObject = new \stdClass();
 
         foreach ($accountIds as $singleAccountId) {
-            $account = RequestsTrait::findAccountByUid($singleAccountId, 'id', 1);
+            $account = $this->traitController->findAccountByUid($singleAccountId, 'id', 1);
             if ($account) {
                 array_push($providersType, $account->providerType);
                 array_push($providersName, $account->provider);
@@ -39,7 +38,7 @@ class UtilitiesController extends Controller
             }
         }
         $responseObject->status = true;
-        $isFacebookPage = (in_array('facebook', $providersName)) && (in_array('page', $providersType));
+        $isFacebookPage = in_array('facebook', $providersName) && in_array('page', $providersType);
         $isInstagramAccountPage = in_array('instagram', $providersName);
 
         if (!$videos && !$images && $isInstagramAccountPage) {
@@ -72,7 +71,7 @@ class UtilitiesController extends Controller
         $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
         $days = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
 
-        return $months . ' months and ' . $days . ' days';
+        return $months.' months and '.$days.' days';
     }
 
     /**
@@ -82,7 +81,7 @@ class UtilitiesController extends Controller
     {
         foreach ($accountIds as $accountId) {
             // TODO -> Add check with ProviderToken
-            $account = Account::where('id', $accountId)->where('CompanyId', UserTrait::getCompanyId())->first();
+            $account = Account::where('id', $accountId)->where('CompanyId', $this->traitController->getCompanyId())->first();
             if (!$account) {
                 return false;
             }
@@ -97,7 +96,7 @@ class UtilitiesController extends Controller
     public function checkIfUsersAreLinkedToActualCompany($users)
     {
         foreach ($users as $user) {
-            $account = UserTrait::isUserLinkedToActualCompany($user);
+            $account = $this->traitController->isUserLinkedToActualCompany($user);
             if (!$account) {
                 return false;
             }

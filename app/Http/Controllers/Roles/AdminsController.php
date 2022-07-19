@@ -6,26 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Repositories\CompanyRepository;
 use App\Http\Controllers\Repositories\PlanRepository;
 use App\Http\Controllers\Repositories\UserRepository;
-use App\Http\Traits\RequestsTrait;
-use App\Http\Traits\UserTrait;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class AdminsController extends Controller
 {
-    use RequestsTrait;
-    use UserTrait;
-
     protected $companyRepository;
     protected $planRepository;
     protected $userRepository;
+    protected $traitController;
 
     public function __construct()
     {
         $this->companyRepository = new CompanyRepository();
         $this->planRepository = new PlanRepository();
         $this->userRepository = new UserRepository();
+        $this->traitController = new TraitController();
     }
 
     /**
@@ -65,10 +62,10 @@ class AdminsController extends Controller
     {
         $companies = $this->getCompanies();
         if (!$companies) {
-            return RequestsTrait::processResponse(false, ['companies' => [], 'message' => 'No company Found']);
+            return $this->traitController->processResponse(false, ['companies' => [], 'message' => 'No company Found']);
         }
 
-        return RequestsTrait::processResponse(true, ['companies' => $companies]);
+        return $this->traitController->processResponse(true, ['companies' => $companies]);
     }
 
     /**
@@ -77,18 +74,19 @@ class AdminsController extends Controller
     public function getAllUsers()
     {
         $users = [];
-        $usersObject = UserTrait::getUserObject()->hasRole('companyadmin') ? User::where('companyId', UserTrait::getCompanyId())->where('id', 'not like', UserTrait::getCurrentId())->get() : $this->getUsers();
+        $usersObject = $this->traitController->getUserObject()->hasRole('companyadmin') ? User::where('companyId', $this->traitController->getCompanyId())->where('id', 'not like', $this->traitController->getCurrentId())->get() : $this->getUsers();
 
         if (!$usersObject) {
-            return RequestsTrait::processResponse(false, ['users' => [], 'message' => 'No User Found']);
+            return $this->traitController->processResponse(false, ['users' => [], 'message' => 'No User Found']);
         }
 
         // Return accounts for all user
         foreach ($usersObject as $user) {
-            $user->accounts = UserTrait::getAccountsLinkedToUser($user->id);
+            $user->accounts = $this->traitController->getAccountsLinkedToUser($user->id);
             $users[] = $user;
         }
-        Log::channel('info')->info('User : '.UserTrait::getCurrentId().' Has request All his sub users on his company');
-        return RequestsTrait::processResponse(true, ['users' => $users]);
+        Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' Has request All his sub users on his company');
+
+        return $this->traitController->processResponse(true, ['users' => $users]);
     }
 }
