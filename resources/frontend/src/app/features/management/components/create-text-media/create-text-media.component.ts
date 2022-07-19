@@ -9,17 +9,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateTextMediaComponent implements OnInit {
 
-//   {
-//     "id": 3,
-//     "title": "Lorem ipsum dolor",
-//     "subtitle": "Lorem ipsum dolor sit amet consectetur adipiscing",
-//     "description": "dignissim sollicitudin commodo litora conubia cum ornare duis quisque turpis quam odio",
-//     "picture": "{\"url\":\"http:\\/\\/posting.local\\/storage\\/images\\/gozzLbNNjtKB5JkkoyyfhmWtVzXA86M1ANj181BH.jpeg\",\"name\":\"images\\/gozzLbNNjtKB5JkkoyyfhmWtVzXA86M1ANj181BH.jpeg\"}",
-//     "newsId": 2,
-//     "createdAt": "2022-07-15 14:18:36",
-//     "updatedAt": "2022-07-15 14:18:36"
-// }
-
   title: string ="";
   subtitle: string = "";
   picture: string = "";
@@ -36,7 +25,6 @@ export class CreateTextMediaComponent implements OnInit {
   constructor( private newsService : NewsService , private router : Router , private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.paramMap.get('news'))
     this.news = this.route.snapshot.paramMap.get('news');
     this.textMediaToEditId = this.route.snapshot.paramMap.get('id');
     if(this.textMediaToEditId) {
@@ -49,13 +37,11 @@ export class CreateTextMediaComponent implements OnInit {
   getTextMediaNewsToEdit(textMediaToEditId : any){
     this.newsService.getTextMediaNewsById(textMediaToEditId).subscribe({
       next: (event: any) => {
-          console.log(event);
           this.title = event.textMedia.title;
           this.subtitle  = event.textMedia.subtitle;
           this.description =  event.textMedia.description;
         },
       error: err => {
-          console.log(err);
           this.error = err.error.error;
       },
       complete: () => {
@@ -67,7 +53,6 @@ export class CreateTextMediaComponent implements OnInit {
     let target = event.target as HTMLInputElement;
     if(target.files)
     this.image = target.files[0] ; 
-    // console.log(target.files[0]);
     
   }
 
@@ -80,7 +65,6 @@ export class CreateTextMediaComponent implements OnInit {
       image : this.picture, 
       description : this.description ,
     };
-    console.log( data );
     let formData = new FormData();
     formData.append('title',this.title);
     formData.append('subtitle',this.subtitle);
@@ -101,10 +85,8 @@ export class CreateTextMediaComponent implements OnInit {
     this.newsService.addNewsTextMedia(formData).subscribe({
       next: (event: any) => {
           this.router.navigate(['/application/management/news']);
-          console.log(event);
         },
       error: err => {
-          console.log(err);
           this.error = err.error.error;
       },
       complete: () => {
@@ -115,11 +97,9 @@ export class CreateTextMediaComponent implements OnInit {
   editTextMedia(formData : FormData){
     this.newsService.updateNewsTextMedia(this.textMediaToEditId , formData).subscribe({
       next: (event: any) => {
-          console.log(event);
           this.router.navigate(['/application/management/news']);
         },
       error: err => {
-          console.log(err);
           this.error = err.error.error;
       },
       complete: () => {

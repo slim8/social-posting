@@ -46,7 +46,6 @@ export class NewsComponent implements OnInit {
   getNewsList(){
     this.newsService.getNewsList().subscribe({
       next: (event: any) => {
-          console.log(event);
           this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url , text_media_news : item.text_media_news.map((media : any) => ({...media , img : JSON.parse(media.picture).url}))}));
         },
       error: err => {
@@ -67,7 +66,6 @@ export class NewsComponent implements OnInit {
   
 
   editNews(id : number ){
-    console.log(id)
     this.router.navigate(['/application/management/edit-news' , id]);
   }
 
@@ -80,10 +78,8 @@ export class NewsComponent implements OnInit {
       nzTitle: '<i>Do you Want to remove this news ?</i>',
       nzContent: '<b>'+ title + '</b>',
       nzOnOk: () => {
-        console.log('ok');
         this.newsService.deleteNews(id).subscribe({
           next: (event: any) => {
-              console.log(event);
               this.getNewsList();
             },
           error: err => {
@@ -102,10 +98,8 @@ export class NewsComponent implements OnInit {
       nzTitle: '<i>Do you Want to remove this text media ?</i>',
       nzContent: '<b>'+ title + '</b>',
       nzOnOk: () => {
-        console.log('ok');
         this.newsService.deleteNewsTextMedia(id).subscribe({
           next: (event: any) => {
-              console.log(event);
               this.getNewsList();
             },
           error: err => {

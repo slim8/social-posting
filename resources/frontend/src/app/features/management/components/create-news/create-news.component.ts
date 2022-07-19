@@ -25,7 +25,6 @@ export class CreateNewsComponent implements OnInit {
   constructor( private newsService : NewsService , private router : Router , private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.paramMap.get('id'))
     this.newsEditId = this.route.snapshot.paramMap.get('id');
     if(this.newsEditId) {
       this.editMode = true ;
@@ -37,14 +36,12 @@ export class CreateNewsComponent implements OnInit {
   getNewsToEdit(news : any){
     this.newsService.getNewsById(news).subscribe({
       next: (event: any) => {
-          console.log(event);
           this.title = event.new.title;
           this.teaser  = event.new.teaser;
           this.date =  event.new.date;
           this.template = event.new.template;
         },
       error: err => {
-          console.log(err);
           this.error = err.error.error;
       },
       complete: () => {
@@ -55,8 +52,7 @@ export class CreateNewsComponent implements OnInit {
   loadFile(event : Event){
     let target = event.target as HTMLInputElement;
     if(target.files)
-    this.image = target.files[0] ; 
-    // console.log(target.files[0]);
+    this.image = target.files[0] ;
     
   }
 
@@ -70,7 +66,6 @@ export class CreateNewsComponent implements OnInit {
       date : this.date , 
       template : this.template 
     };
-    console.log( data );
     let formData = new FormData();
     formData.append('title',this.title);
     formData.append('teaser',this.teaser);
@@ -90,11 +85,9 @@ export class CreateNewsComponent implements OnInit {
     this.newsService.addNews(formData).subscribe({
       next: (event: any) => {
           this.router.navigate(['/application/management/news']);
-          console.log(event);
           
         },
       error: err => {
-          console.log(err);
           this.error = err.error.error;
       },
       complete: () => {
@@ -105,11 +98,9 @@ export class CreateNewsComponent implements OnInit {
   editNews(formData : FormData){
     this.newsService.updateNews(this.newsEditId , formData).subscribe({
       next: (event: any) => {
-          console.log(event);
           this.router.navigate(['/application/management/news']);
         },
       error: err => {
-          console.log(err);
           this.error = err.error.error;
       },
       complete: () => {
