@@ -82,12 +82,13 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
     Route::apiResource('/dictionary', DictionaryController::class)->except(['show']);
+    Route::apiResource('/text-media-news', TextMediaNewsController::class)->except(['index']);
+    Route::apiResource('/news', NewsController::class);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('get-profile.api');
     Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
     Route::post('/change-password', [ProfileController::class, 'changePassword']);
-    Route::apiResource('/news', NewsController::class);
-    Route::apiResource('/text-media-news', TextMediaNewsController::class)->except(['index']);
+    Route::apiResource('/news', NewsController::class)->only(['index', 'show']);
 });
