@@ -134,7 +134,16 @@
                 <img src="/assets/img/test-images/image.svg" alt="" />
               </td>
               <td class="m-image">
-                <img src="{{ item.postMedia[0].url }}" alt="" />
+                <nz-skeleton-element
+                  nzType="image"
+                  *ngIf="item.postMedia.length == 0"
+                ></nz-skeleton-element>
+
+                <img
+                  src="{{ item.postMedia[0].url }}"
+                  alt=""
+                  *ngIf="item.postMedia.length > 0"
+                />
               </td>
 
               <td class="m-content">

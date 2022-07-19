@@ -12,6 +12,7 @@ const arrowIcon = '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xml
     styleUrls: ['./drafts.component.scss']
 })
 export class DraftsComponent implements OnInit {
+    isLoading = false;
     posts: any[] = [];
     draftsList: any = [];
 
@@ -31,6 +32,7 @@ export class DraftsComponent implements OnInit {
 
 
     getDrafts() {
+        this.isLoading = true;
         const params = new HttpParams()
             .set("filterBy", "AccountsPosts")
             .set("limit", "10")
@@ -40,11 +42,14 @@ export class DraftsComponent implements OnInit {
         this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
                 this.posts = event.posts;
+                this.isLoading = false;
             },
             error: (err) => {
-                this.posts = []
+                this.posts = [];
+                this.isLoading = false;
             },
             complete: () => {
+                this.isLoading = false;
             }
         })
     }
@@ -67,7 +72,7 @@ export class DraftsComponent implements OnInit {
                 }
             })
         } else {
-            alert('vide');
+            // empty
         }
 
     }

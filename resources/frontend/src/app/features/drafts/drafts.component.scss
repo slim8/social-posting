@@ -103,78 +103,219 @@
             }
 
             > .m-content {
-                position: relative;
                 padding: 25px;
+                width: 100%;
                 max-width: 100%;
                 overflow-y: hidden;
-                // overflow-x: auto;
+                overflow-x: auto;
 
+                > table {
+                    > .m-post {
+                        > tr {
+                            > td {
+                                &:first-child {
+                                    position: relative;
+                                    &:after {
+                                        content: '';
+                                        position: absolute;
+                                        border-right: 1px solid $color-media-black-opacity-30;
+                                        height: 120%;
+                                        right: 8px;
+                                        top: -40%;
+                                    }
+                                }
+                            }
+                        }
+
+                        &:last-child {
+                            > tr {
+                                > td {
+                                    &:first-child {
+                                        &:after {
+                                            height: 160%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 @include mq(desktop) {
                     overflow-x: hidden;
                 }
 
-                > .m-border {
-                    border-left: 1px solid $color-base-25;
-                    height: 100%;
-                    position: absolute;
-                    left: 77px;
-                    @include mq(desktop) {
-                        left: 105px;
-                    }
-                }
+                > table {
+                    width: max-content;
 
-                > .m-array-header {
-                    > .m-titles {
-                        margin-top: 10px;
-                        position: relative;
-                        min-width: 625px;
+                    border-collapse: separate;
+                    border-spacing: 0 20px;
+                    @include mq(tablet) {
                         width: 100%;
-                        display: flex;
-                        flex-wrap: nowrap;
-                        justify-content: center;
-                        height: 20px;
-                        gap: 10px;
+                    }
 
-                        @include mq(desktop) {
-                            gap: 25px;
-                        }
+                    > thead {
+                        > tr {
+                            > td {
+                                @include textstyle-size-10-bold();
+                                color: $color-media-black-opacity-half;
 
-                        > .m-image,
-                        > .m-activity,
-                        > .m-date {
-                            position: absolute;
-                            top: 0;
-                            @include textstyle-size-10-bold();
-                            color: $color-media-black-opacity-half;
-                        }
-
-                        > .m-image {
-                            left: 82px;
-
-                            @include mq(desktop) {
-                                left: 135px;
+                                &:nth-child(2) {
+                                    padding-left: 90px;
+                                }
                             }
                         }
+                    }
+                    > .m-post {
+                        > .m-headline {
+                            position: relative;
 
-                        > .m-date {
-                            left: 324px;
-                            @include mq(tablet) {
-                                left: 327px;
+                            &:before {
+                                content: '';
+                                border-bottom: 1px solid $color-media-black-opacity-30;
+                                position: absolute;
+                                width: 100%;
                             }
-                            @include mq(desktop) {
-                                left: 415px;
-                            }
-                        }
 
-                        > .m-activity {
-                            right: 0;
-                            @include mq(tablet) {
-                                left: 650px;
+                            > .m-icon {
+                                padding: 16px;
+
+                                @include mq(desktop) {
+                                    padding: 0;
+                                }
+                            }
+                            > .m-image {
+                                padding-top: 16px;
+
+                                > img {
+                                    max-width: 170px;
+                                    max-height: 70px;
+                                    width: 100%;
+                                    object-fit: cover;
+                                }
+                            }
+
+                            > .m-checkbox {
+                                > .m-checkbox-input {
+                                    -webkit-appearance: none;
+                                    outline: none;
+                                    position: relative;
+                                    margin-right: 28px;
+                                    margin-bottom: 15px;
+
+                                    &::after {
+                                        content: '';
+                                        position: absolute;
+                                        border: 1px solid rgba(0, 0, 0, 0.5);
+                                        border-radius: 5px;
+                                        width: 18px;
+                                        height: 18px;
+                                    }
+
+                                    &:checked::after {
+                                        content: url('/assets/img/check-icon.png');
+                                        position: absolute;
+                                        background: rgba(231, 231, 231, 0.5);
+                                        width: 18px;
+                                        height: 18px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    }
+                                }
+                            }
+                            > .m-content {
+                                display: flex;
+                                flex-wrap: wrap;
+                                row-gap: 10px;
+                                padding-left: 10px;
+                                padding-top: 16px;
+
+                                > h6 {
+                                    font-weight: bold;
+                                    width: 100%;
+                                    margin: 0;
+                                }
+
+                                > .m-account {
+                                    display: flex;
+                                    gap: 10px;
+                                    align-items: center;
+                                    > .m-image {
+                                        position: relative;
+                                        &.is-disconnected {
+                                            filter: opacity(0.2);
+                                        }
+
+                                        > img {
+                                            border-radius: 50%;
+                                            display: block;
+                                            object-fit: cover;
+                                            width: 40px;
+                                            height: 40px;
+                                        }
+
+                                        > .m-provider-logo {
+                                            position: absolute;
+                                            bottom: -5px;
+                                            right: -5px;
+                                            display: flex;
+
+                                            > img {
+                                                width: 20px;
+                                                height: 20px;
+
+                                                &.facebook {
+                                                    background-color: $color-base-0;
+                                                    padding: 3px;
+                                                    box-shadow: 0 0 5px $color-media-light-grey;
+                                                    width: 25px;
+                                                    @include mq(tablet) {
+                                                        width: 54px;
+                                                        padding: 6px;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    > .m-name {
+                                        @include textstyle-size-10();
+                                        color: $color-media-black-opacity-half;
+                                    }
+                                }
+                            }
+
+                            > .m-date {
+                                padding-top: 16px;
+                                padding-right: 30px;
+                                flex-wrap: wrap;
+                                @include textstyle-size-10();
+                                max-width: 150px;
+                                > .m-create-date {
+                                    @include textstyle-size-10-bold();
+                                    width: 100%;
+                                }
+                            }
+
+                            > .m-actions {
+                                display: flex;
+                                flex-wrap: wrap;
+                                gap: 24px;
+                                padding-left: 10px;
+                                padding-top: 40px;
+
+                                > .m-left,
+                                > .m-right {
+                                    > .m-button {
+                                        height: 36px;
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
+                > div > .m-item,
                 > .m-item {
                     width: fit-content;
                     padding: 10px 0;
@@ -182,6 +323,10 @@
 
                     @include mq(desktop) {
                         padding: 0 20px 16px;
+                    }
+
+                    &.is-full {
+                        width: 100%;
                     }
 
                     &:before {
