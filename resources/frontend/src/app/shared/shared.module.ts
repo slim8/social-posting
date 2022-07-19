@@ -7,12 +7,14 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
+import { ItemLoaderComponent } from './components/item-loader/item-loader.component';
 
 @NgModule({
     declarations: [
         NotFoundComponent,
         ServerErrorComponent,
         UnauthorizedComponent,
+        ItemLoaderComponent,
     ],
     imports: [
         DemoNgZorroAntdModule
@@ -22,7 +24,7 @@ import { ServerErrorComponent } from './components/server-error/server-error.com
         IconsProviderModule,
         FormsModule,
         ReactiveFormsModule,
-
+        ItemLoaderComponent,
         NotFoundComponent,
         ServerErrorComponent,
         UnauthorizedComponent

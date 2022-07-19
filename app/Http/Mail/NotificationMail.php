@@ -24,7 +24,6 @@ class NotificationMail extends Mailable
     public function __construct(array $content, string $mailto, string $mailsubject, string $template)
     {
         $this->mailData = $content;
-
         $this->mailto = $mailto;
         $this->template = $template;
         $this->mailsubject = $mailsubject;

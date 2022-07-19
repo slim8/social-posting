@@ -103,7 +103,7 @@ class ApiAuthController extends Controller
         $user->attachRole('companyadmin');
 
         // Start Email Configuration
-        $mailBody = ["mail" => $request->email, "password" => $password , "simpleText" => 'This is a simple text for mailing'];
+        $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
         $this->traitController->index($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
         // End Email Configuration
         Log::channel('info')->info('New company has been registred with email '.$request->email);
