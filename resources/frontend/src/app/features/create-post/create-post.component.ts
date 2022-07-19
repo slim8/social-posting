@@ -6,7 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Router } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
-import { generateVideoThumbnails} from './index';
+import { generateVideoThumbnails } from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
@@ -24,6 +24,8 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     styleUrls: ['./create-post.component.scss'],
 })
 export class CreatePostComponent implements OnInit {
+    isLoading = false;
+
     //upload file apiURL
     uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
 
@@ -41,15 +43,15 @@ export class CreatePostComponent implements OnInit {
     wasMixedTypes: boolean = false;
 
     //hashtags
-    listBeforeChange : any[] = [];
+    listBeforeChange: any[] = [];
     listOfOption: Array<{ label: string; value: string }> = [];
     listOfTagOptions = [];
 
     listOfOptionInsta: Array<{ label: string; value: string }> = [];
-    listOfTagOptionsInsta : any[] = [];
+    listOfTagOptionsInsta: any[] = [];
 
     listOfOptionFacebook: Array<{ label: string; value: string }> = [];
-    listOfTagOptionsFacebook : any[] = [];
+    listOfTagOptionsFacebook: any[] = [];
 
     mentions: any[] = [];
     mediaId: number = 0;
@@ -63,33 +65,33 @@ export class CreatePostComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     previewImage: string | undefined = '';
     previewVisible = false;
-    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> =[];
+    listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> = [];
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
     showUploadVideo = false;
-    selectedVideo :any = null;
+    selectedVideo: any = null;
     selectedThumbnail = {
-        imgB64 : '' ,
-        time : 0
+        imgB64: '',
+        time: 0
     };
-    listThumbnail : { imgB64 : any , time : any }[] = [];
-    leadThumbnail : Boolean = false;
+    listThumbnail: { imgB64: any, time: any }[] = [];
+    leadThumbnail: Boolean = false;
     currentTimePosition = -10;
     duration = 10;
 
     videosList: NzUploadFile[] = [];
-    listOfVideos : { url : string , seconde : number , thumbnail : any}[] = []
+    listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
 
     videoCounter = 0;
-    videoList: {id : number ,file : File , videoUrl : string }[] = [];
-    selectedThumbnailList : {id : number , imgB64 : string , time : number}[] = [];
-    mediaList:any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-    showAlbum : boolean = false;
+    videoList: { id: number, file: File, videoUrl: string }[] = [];
+    selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
+    mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+    showAlbum: boolean = false;
 
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
-        private postService: PostService ,
+        private postService: PostService,
         private modal: NzModalService,
         private notification: NzNotificationService,
         private router: Router,
@@ -97,188 +99,155 @@ export class CreatePostComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-      this.getPages('mixed');
-      const mentioned = document.querySelector('.mentioned');
-      if (this.router.url.includes('create-post')) {
-        this.sharedModule.initSideMenu('create-post');
-      }
+        this.getPages('mixed');
+        const mentioned = document.querySelector('.mentioned');
+        if (this.router.url.includes('create-post')) {
+            this.sharedModule.initSideMenu('create-post');
+        }
     }
 
     getPages(param: string) {
-      this.listOfPages=[];
-      this.accountsValue = [];
-      this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
-        next: (event: any) => {
-          this.listOfPages = new Array();
-          event.pages.forEach((page: any) => {
-            if(param == 'mixed') {
-              if (page.isConnected == true) {
-                this.listOfPages.push(page);
-              }
-            }
-            else if (param == 'instagram') {
-              if (page.isConnected == true && page.provider == 'instagram') {
-                this.listOfPages.push(page);
-              }
-            }
-          })
-        },
-        error: err => {
-          this.shared.createMessage('error', err.error.message);
-        },
-        complete: () => {
+        this.listOfPages = [];
+        this.accountsValue = [];
+        this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
+            next: (event: any) => {
+                this.listOfPages = new Array();
+                event.pages.forEach((page: any) => {
+                    if (param == 'mixed') {
+                        if (page.isConnected == true) {
+                            this.listOfPages.push(page);
+                        }
+                    }
+                    else if (param == 'instagram') {
+                        if (page.isConnected == true && page.provider == 'instagram') {
+                            this.listOfPages.push(page);
+                        }
+                    }
+                })
+            },
+            error: err => {
+                this.shared.createMessage('error', err.error.message);
+            },
+            complete: () => {
 
-        }
-      });
+            }
+        });
     }
 
-    async uploadThumbnail(param: string){
+    async uploadThumbnail(param: string) {
+        this.isLoading = true;
         let list = this.videoList.map(video => {
-          let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-          return { url : video.videoUrl , ...thumbnail , thumbnail: '' };
+            let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
+            return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
         })
 
-      await list.forEach(async (videoObject) => {
-        await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-          next: (response ) => {
-            this.listOfVideos.push({url : videoObject.url , seconde : videoObject.time ,thumbnail : response.files.url }) ;
-          },
-          error: (err) => {
-            this.shared.createMessage('error', err);
-          },
-          complete: () => {
+        await list.forEach(async (videoObject) => {
+            await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+                next: (response) => {
+                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+                },
+                error: (err) => {
+                    this.shared.createMessage('error', err);
+                },
+                complete: () => {
 
-          }
-        });
-      })
-      setTimeout(() => {
-        this.submitForm(param);
-      }, 2000);
+                }
+            });
+        })
+        setTimeout(() => {
+            this.submitForm(param);
+        }, 2000);
     }
 
     submitForm(param: string) {
-      let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
-      let btnSubmit = document.getElementById('btn-submit');
-      let iconSave = document.querySelector('.m-button-icon-save');
-      let iconPublish = document.querySelector('.m-button-icon-publish');
-      let spinningDraft = document.getElementsByClassName('m-loading-spin')[0];
-      let spinningPublish = document.getElementsByClassName('m-loading-spin')[1];
+        this.isLoading = true;
+        const formData: FormData = new FormData();
 
-      const formData: FormData = new FormData();
+        this.listOfVideos.forEach((videoObject) => {
+            formData.append('videos[]', JSON.stringify(videoObject));
+        })
 
-      this.listOfVideos.forEach((videoObject)=> {
-        formData.append('videos[]', JSON.stringify(videoObject));
-      })
-
-      let post: any = {
-        message: "",
-        hashtags: [],
-        mentions: [],
-        accountId: "",
-        videoTitle: ""
-      }
-
-      this.accountsValue.forEach((accountId: any) => {
-        let arr = accountId.split("|");
-        let id = arr[0];
-        if (accountId.includes('facebook')) {
-          post.message = this.facebookMessage;
-          post.hashtags = this.listOfTagOptionsFacebook;
-          post.mentions = this.mentions;
-          post.accountId = id;
-          post.videoTitle = "";
-        } else if (accountId.includes('instagram')) {
-          post.message = this.instagramMessage;
-          post.hashtags = this.listOfTagOptionsInsta;
-          post.mentions = this.mentions;
-          post.accountId = id;
-          post.videoTitle = "";
+        let post: any = {
+            message: "",
+            hashtags: [],
+            mentions: [],
+            accountId: "",
+            videoTitle: ""
         }
-        formData.append('posts[]', JSON.stringify(post));
-      });
 
-      if (this.listOfTagOptions.length > 0) {
-        this.listOfTagOptions.forEach((tag: any) => {
-          formData.append('tags[]', tag);
+        this.accountsValue.forEach((accountId: any) => {
+            let arr = accountId.split("|");
+            let id = arr[0];
+            if (accountId.includes('facebook')) {
+                post.message = this.facebookMessage;
+                post.hashtags = this.listOfTagOptionsFacebook;
+                post.mentions = this.mentions;
+                post.accountId = id;
+                post.videoTitle = "";
+            } else if (accountId.includes('instagram')) {
+                post.message = this.instagramMessage;
+                post.hashtags = this.listOfTagOptionsInsta;
+                post.mentions = this.mentions;
+                post.accountId = id;
+                post.videoTitle = "";
+            }
+            formData.append('posts[]', JSON.stringify(post));
         });
-      }
 
-      if (this.mentions.length > 0) {
-        formData.append('mentions', JSON.stringify(this.mentions));
-      }
+        if (this.listOfTagOptions.length > 0) {
+            this.listOfTagOptions.forEach((tag: any) => {
+                formData.append('tags[]', tag);
+            });
+        }
 
-      if (this.urlLinks.length > 0) {
-        this.urlLinks.forEach((media: any) => {
-          if(media.url!=""){
-            formData.append('images[]', media.url);
-          }
-        });
-      }
+        if (this.mentions.length > 0) {
+            formData.append('mentions', JSON.stringify(this.mentions));
+        }
 
-      formData.append('status', param);
-      formData.append('message', this.message);
-
-      if (formData) {
-          this.facebookSocialService.postToSocialMedia(formData).subscribe({
-              next: (event) => {
-                  if (param == 'PUBLISH') {
-                      iconPublish?.classList.add('hide');
-                      iconPublish?.parentElement?.classList.add('wide');
-                      spinningPublish.classList.add('show');
-                  } else {
-                      iconSave?.classList.add('hide');
-                      iconSave?.parentElement?.classList.add('wide');
-                      spinningDraft.classList.add('show');
-                  }
-                  loadingScreen.classList.add('m-loading-screen-active');
-                  btnSubmit?.classList.add('m-btn-submit');
-              },
-              error: (err) => {
-                  if (err.error.errors) {
-                      err.error.errors.forEach((error: any) => {
-                          this.shared.createMessage('error', error);
-                      });
-                  }
-                  else {
-                      this.shared.createMessage('error', err.error.message);
-                  }
-                  if (param == 'PUBLISH') {
-                      iconPublish?.classList.remove('hide');
-                      iconPublish?.parentElement?.classList.remove('wide');
-                  } else {
-                      iconSave?.classList.remove('hide');
-                      iconSave?.parentElement?.classList.remove('wide');
-                  }
-                  loadingScreen.classList.remove('m-loading-screen-active');
-                  spinningPublish.classList.remove('show');
-                  spinningDraft.classList.remove('show');
-                  btnSubmit?.classList.remove('m-btn-submit');
-            },
-            complete: () => {
-                this.message = '';
-                this.accountsValue = [];
-                loadingScreen.classList.remove('m-loading-screen-active');
-                spinningPublish.classList.remove('show');
-                spinningDraft.classList.remove('show');
-                btnSubmit?.classList.remove('m-btn-submit');
-
-                if (param == 'PUBLISH') {
-                    this.shared.createMessage('success', 'published!');
-                } else {
-                    this.shared.createMessage('success', 'saved to drafts!');
+        if (this.urlLinks.length > 0) {
+            this.urlLinks.forEach((media: any) => {
+                if (media.url != "") {
+                    formData.append('images[]', media.url);
                 }
+            });
+        }
 
-                if (param == 'PUBLISH') {
-                    iconPublish?.classList.remove('hide');
-                    iconPublish?.parentElement?.classList.remove('wide');
-                } else {
-                    iconSave?.classList.remove('hide');
-                    iconSave?.parentElement?.classList.remove('wide');
-                }
+        formData.append('status', param);
+        formData.append('message', this.message);
 
-            },
-        });
-      }
+        if (formData) {
+            this.facebookSocialService.postToSocialMedia(formData).subscribe({
+                next: (event) => {
+                    if (param == 'PUBLISH') {
+                        this.router.navigateByUrl('/application/published-posts')
+                    } else {
+                        this.router.navigateByUrl('/application/drafts')
+                    }
+                    this.isLoading = false;
+                },
+                error: (err) => {
+                    if (err.error.errors) {
+                        err.error.errors.forEach((error: any) => {
+                            this.shared.createMessage('error', error);
+                        });
+                    }
+                    else {
+                        this.shared.createMessage('error', err.error.message);
+                    }
+                    this.isLoading = false;
+                },
+                complete: () => {
+                    this.isLoading = false;
+                    this.message = '';
+                    this.accountsValue = [];
+                    if (param == 'PUBLISH') {
+                        this.shared.createMessage('success', 'published!');
+                    } else {
+                        this.shared.createMessage('success', 'saved to drafts!');
+                    }
+                },
+            });
+        }
     }
 
     //Images preview from upload file
@@ -292,66 +261,66 @@ export class CreatePostComponent implements OnInit {
 
     //upload image changes
     handleChange(event: any): void {
-      if (event.fileList.length>0) {
-        this.availableImages = true;
-      } else {
-        this.availableImages = false;
-      }
+        if (event.fileList.length > 0) {
+            this.availableImages = true;
+        } else {
+            this.availableImages = false;
+        }
 
-      if (event.type == 'success') {
-        this.mediaId = 0;
-        this.urlLinks = [];
-        event.fileList.forEach((elem: any) => {
-          let img = {
-            id: 0,
-            url: "",
-            type: ""
-          }
-          this.mediaId++;
-          img.id = this.mediaId;
-          img.url = elem.response.files.url;
-          img.type = elem.response.files.type;
-          this.urlLinks.push(img);
-        })
-        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-      }
-      else if (event.type == 'removed') {
-        this.refreshPages();
-        this.mediaId = 0;
-        this.urlLinks = [];
+        if (event.type == 'success') {
+            this.mediaId = 0;
+            this.urlLinks = [];
+            event.fileList.forEach((elem: any) => {
+                let img = {
+                    id: 0,
+                    url: "",
+                    type: ""
+                }
+                this.mediaId++;
+                img.id = this.mediaId;
+                img.url = elem.response.files.url;
+                img.type = elem.response.files.type;
+                this.urlLinks.push(img);
+            })
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+        }
+        else if (event.type == 'removed') {
+            this.refreshPages();
+            this.mediaId = 0;
+            this.urlLinks = [];
 
-        event.fileList.forEach((elem: any) => {
-          let img = {
-            id: 0,
-            url: "",
-            type: ""
-          }
-          this.mediaId++;
-          img.id = this.mediaId;
-          img.url = elem.response.files.url;
-          img.type = elem.response.files.type;
-          this.urlLinks.push(img);
-        })
-        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-      }
+            event.fileList.forEach((elem: any) => {
+                let img = {
+                    id: 0,
+                    url: "",
+                    type: ""
+                }
+                this.mediaId++;
+                img.id = this.mediaId;
+                img.url = elem.response.files.url;
+                img.type = elem.response.files.type;
+                this.urlLinks.push(img);
+            })
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+        }
     }
 
     tabChange(id: any, event: any) {
-      if(!event.target.closest('li').classList.contains('is-blocked')) {
-        let list = [].slice.call(event.target.closest('li').parentNode.children);
-        list.forEach((elem: any) => {
-            elem.classList.remove('is-active');
-        });
-        event.target.closest('li').classList.add('is-active');
-        this.tabId1 = id;
-        if(id == 'instagram-tab-title') {
-          this.instagramPreview = true;
-          this.facebookPreview = false;
-        } else if(id == 'facebook-tab-title') {
-          this.instagramPreview = false;
-          this.facebookPreview = true;
+        if (!event.target.closest('li').classList.contains('is-blocked')) {
+            let list = [].slice.call(event.target.closest('li').parentNode.children);
+            list.forEach((elem: any) => {
+                elem.classList.remove('is-active');
+            });
+            event.target.closest('li').classList.add('is-active');
+            this.tabId1 = id;
+            if (id == 'instagram-tab-title') {
+                this.instagramPreview = true;
+                this.facebookPreview = false;
+            } else if (id == 'facebook-tab-title') {
+                this.instagramPreview = false;
+                this.facebookPreview = true;
+            }
         }
-      }
     }
 
     resetSuccess() {
@@ -371,8 +340,8 @@ export class CreatePostComponent implements OnInit {
     }
 
     collapseImageUpload() {
-      this.showUploadVideo= false;
-      this.uploadImageActive = !this.uploadImageActive;
+        this.showUploadVideo = false;
+        this.uploadImageActive = !this.uploadImageActive;
     }
 
     updateMessage() {
@@ -394,164 +363,164 @@ export class CreatePostComponent implements OnInit {
         this.uploadImageActive = false;
     }
 
-    generatethumbnails(action : string , newVideo = false ){
-      this.leadThumbnail = true
-      if(action == "previous"){
-          this.currentTimePosition -= this.duration ;
-      }else if(action == "next"){
-          this.currentTimePosition += this.duration ;
-      }
-
-      generateVideoThumbnails(this.selectedVideo.file, 3 , this.selectedVideo.file.type , this.currentTimePosition , this.duration ).then((thumbArray) => {
-        this.listThumbnail = thumbArray;
-
-        if(newVideo){
-          this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string ;
-          this.selectedThumbnail.time = thumbArray[0].time as number ;
-          this.selectedThumbnailList.push({id : this.selectedVideo.id , imgB64 : this.selectedThumbnail.imgB64 , time : this.selectedThumbnail.time })
+    generatethumbnails(action: string, newVideo = false) {
+        this.leadThumbnail = true
+        if (action == "previous") {
+            this.currentTimePosition -= this.duration;
+        } else if (action == "next") {
+            this.currentTimePosition += this.duration;
         }
-        this.leadThumbnail = false ;
-      })
+
+        generateVideoThumbnails(this.selectedVideo.file, 3, this.selectedVideo.file.type, this.currentTimePosition, this.duration).then((thumbArray) => {
+            this.listThumbnail = thumbArray;
+
+            if (newVideo) {
+                this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string;
+                this.selectedThumbnail.time = thumbArray[0].time as number;
+                this.selectedThumbnailList.push({ id: this.selectedVideo.id, imgB64: this.selectedThumbnail.imgB64, time: this.selectedThumbnail.time })
+            }
+            this.leadThumbnail = false;
+        })
     }
 
-    selectThumbnail(item : {imgB64 : '' , time : 0 } ){
-          this.selectedThumbnail = item;
+    selectThumbnail(item: { imgB64: '', time: 0 }) {
+        this.selectedThumbnail = item;
 
 
-          this.selectedThumbnailList.forEach(selectedThumbnail => {
-              if(selectedThumbnail.id == this.selectedVideo.id){
-                  selectedThumbnail.imgB64 = item.imgB64;
-                  selectedThumbnail.time = item.time;
-              }
-          })
-          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
+        this.selectedThumbnailList.forEach(selectedThumbnail => {
+            if (selectedThumbnail.id == this.selectedVideo.id) {
+                selectedThumbnail.imgB64 = item.imgB64;
+                selectedThumbnail.time = item.time;
+            }
+        })
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     }
 
     //upload image changes
     uploadVideo(event: any): void {
-      if(event.type === "success"){
-        if(event.file){
-          this.availableVideos = true;
-          let loadedFile = {id : this.videoCounter ,file :event.file.originFileObj , videoUrl : event.file.response.files.url  };
-          this.videoList.push(loadedFile)
-          this.selectedVideo = loadedFile;
-          this.videoCounter++;
-        }else {
-          this.availableVideos = false;
-        }
-        this.refreshPages();
-        this.generatethumbnails('next' , true);
-        this.currentTimePosition = -10;
-        setTimeout(() => {
-          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-        }, 2500);
-      }
-    }
-
-    changeSelectedVideo(item : {id : number ,imgB64 : string , time : number}){
-      this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
-      this.generatethumbnails('next');
-      this.currentTimePosition = -10;
-    }
-
-    deleteVideo(item : {id : number ,imgB64 : string , time : number}){
-      this.modal.confirm({
-          nzTitle: 'Are you sure delete this video?',
-          nzContent: '<b style="color: red;">remove video </b>',
-          nzOkText: 'Yes',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          nzOnOk: () => {
-              this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id!=thumbnail.id  )
-              let removedVideo = this.videoList.filter((video) => item.id == video.id  )[0]
-              this.videoList = this.videoList.filter((video) => item.id != video.id  )
-              this.videosList = this.videosList.filter((video) => removedVideo.videoUrl != video.response.files.url  )
-              if(this.selectedVideo.id == item.id){
-                  this.listThumbnail = [];
-              }
-
-              if(this.videoList.length>0) {
+        if (event.type === "success") {
+            if (event.file) {
                 this.availableVideos = true;
-              }else {
+                let loadedFile = { id: this.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url };
+                this.videoList.push(loadedFile)
+                this.selectedVideo = loadedFile;
+                this.videoCounter++;
+            } else {
                 this.availableVideos = false;
-              }
-              this.refreshPages();
-              this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => {return { id:r.id, url: r.imgB64, type:"video" }})];
-          },
-          nzCancelText: 'No',
-          nzOnCancel: () => console.log('Cancel', item)
-      });
+            }
+            this.refreshPages();
+            this.generatethumbnails('next', true);
+            this.currentTimePosition = -10;
+            setTimeout(() => {
+                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            }, 2500);
+        }
+    }
+
+    changeSelectedVideo(item: { id: number, imgB64: string, time: number }) {
+        this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
+        this.generatethumbnails('next');
+        this.currentTimePosition = -10;
+    }
+
+    deleteVideo(item: { id: number, imgB64: string, time: number }) {
+        this.modal.confirm({
+            nzTitle: 'Are you sure delete this video?',
+            nzContent: '<b style="color: red;">remove video </b>',
+            nzOkText: 'Yes',
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => {
+                this.selectedThumbnailList = this.selectedThumbnailList.filter((thumbnail) => item.id != thumbnail.id)
+                let removedVideo = this.videoList.filter((video) => item.id == video.id)[0]
+                this.videoList = this.videoList.filter((video) => item.id != video.id)
+                this.videosList = this.videosList.filter((video) => removedVideo.videoUrl != video.response.files.url)
+                if (this.selectedVideo.id == item.id) {
+                    this.listThumbnail = [];
+                }
+
+                if (this.videoList.length > 0) {
+                    this.availableVideos = true;
+                } else {
+                    this.availableVideos = false;
+                }
+                this.refreshPages();
+                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            },
+            nzCancelText: 'No',
+            nzOnCancel: () => console.log('Cancel', item)
+        });
     }
 
     refreshPages() {
-      let instaTab = document.getElementById('instagram-tab-title');
-      let fbTab = document.getElementById('facebook-tab-title');
-      if (this.availableImages && this.availableVideos) {
-        if(!instaTab?.classList.contains('is-active')) instaTab?.classList.add('is-active');
-        fbTab?.classList.remove('is-active');
-        fbTab?.classList.add('is-blocked');
-        this.instagramPreview = true;
-        this.facebookPreview = false;
-        this.tabId1='instagram-tab-title';
-        this.getPages('instagram');
-        this.notification
-        .blank(
-          'Reminder',
-          "<strong>Facebook</strong> doesn't support images and videos on the same post."
-        )
-        .onClick.subscribe(() => {
-          console.log('notification clicked!');
-        });
-        this.wasMixedTypes = true;
-      } else {
-        fbTab?.classList.remove('is-blocked');
-        if(this.wasMixedTypes) {
-          this.getPages('mixed');
+        let instaTab = document.getElementById('instagram-tab-title');
+        let fbTab = document.getElementById('facebook-tab-title');
+        if (this.availableImages && this.availableVideos) {
+            if (!instaTab?.classList.contains('is-active')) instaTab?.classList.add('is-active');
+            fbTab?.classList.remove('is-active');
+            fbTab?.classList.add('is-blocked');
+            this.instagramPreview = true;
+            this.facebookPreview = false;
+            this.tabId1 = 'instagram-tab-title';
+            this.getPages('instagram');
+            this.notification
+                .blank(
+                    'Reminder',
+                    "<strong>Facebook</strong> doesn't support images and videos on the same post."
+                )
+                .onClick.subscribe(() => {
+                    console.log('notification clicked!');
+                });
+            this.wasMixedTypes = true;
+        } else {
+            fbTab?.classList.remove('is-blocked');
+            if (this.wasMixedTypes) {
+                this.getPages('mixed');
+            }
         }
-      }
     }
 
-    showAlbumModal(){
-      this.showAlbum = true;
+    showAlbumModal() {
+        this.showAlbum = true;
     }
 
     handleOk(): void {
-      this.showAlbum = false;
+        this.showAlbum = false;
     }
 
     handleCancel(): void {
-      this.showAlbum = false;
+        this.showAlbum = false;
     }
 
-  addMentions(event:any[]) {
-    this.mentions = event;
-  }
-
-  addToPost(event : any){
-    // TODO:: list of images selected from album list
-    console.log(event);
-  }
-
-  mergeHashtags(e:any) {
-    if(this.listBeforeChange.length > e.length) {
-      let diffValue = this.listBeforeChange.filter(res => (!e.includes(res)));
-      this.listOfTagOptionsFacebook = this.listOfTagOptionsFacebook.filter(res => (!diffValue.includes(res)))
-      this.listOfTagOptionsInsta = this.listOfTagOptionsInsta.filter(res => (!diffValue.includes(res)))
+    addMentions(event: any[]) {
+        this.mentions = event;
     }
-    else {
-      this.listOfTagOptionsFacebook = this.uniqByForEach([...e, ...this.listOfTagOptionsFacebook]);
-      this.listOfTagOptionsInsta = this.uniqByForEach([...e, ...this.listOfTagOptionsInsta]);
-    }
-    this.listBeforeChange = e;
-  }
 
-  uniqByForEach<T>(array: T[]) {
-    const result: T[] = [];
-    array.forEach((item) => {
-        if (!result.includes(item)) {
-            result.push(item);
+    addToPost(event: any) {
+        // TODO:: list of images selected from album list
+        console.log(event);
+    }
+
+    mergeHashtags(e: any) {
+        if (this.listBeforeChange.length > e.length) {
+            let diffValue = this.listBeforeChange.filter(res => (!e.includes(res)));
+            this.listOfTagOptionsFacebook = this.listOfTagOptionsFacebook.filter(res => (!diffValue.includes(res)))
+            this.listOfTagOptionsInsta = this.listOfTagOptionsInsta.filter(res => (!diffValue.includes(res)))
         }
-    })
-    return result;
-  }
+        else {
+            this.listOfTagOptionsFacebook = this.uniqByForEach([...e, ...this.listOfTagOptionsFacebook]);
+            this.listOfTagOptionsInsta = this.uniqByForEach([...e, ...this.listOfTagOptionsInsta]);
+        }
+        this.listBeforeChange = e;
+    }
+
+    uniqByForEach<T>(array: T[]) {
+        const result: T[] = [];
+        array.forEach((item) => {
+            if (!result.includes(item)) {
+                result.push(item);
+            }
+        })
+        return result;
+    }
 }
