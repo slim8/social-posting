@@ -21,13 +21,9 @@ class NotificationMail extends Mailable
      *
      * @return void
      */
-    public function __construct(string $content, string $mailto, string $mailsubject, string $template)
+    public function __construct(array $content, string $mailto, string $mailsubject, string $template)
     {
-        $this->mailData = [
-            'title' => 'Title exemple',
-            'body' => $content,
-        ];
-
+        $this->mailData = $content;
         $this->mailto = $mailto;
         $this->template = $template;
         $this->mailsubject = $mailsubject;
@@ -40,6 +36,6 @@ class NotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->view($this->template)->from(envValue('MAIL_FROM_ADDRESS'))->to($this->mailto)->subject($this->mailsubject);
+        return $this->view($this->template , $this->mailData)->from(envValue('MAIL_FROM_ADDRESS'))->to($this->mailto)->subject($this->mailsubject);
     }
 }

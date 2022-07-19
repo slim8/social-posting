@@ -1,0 +1,36 @@
+# Apache configurations
+P .htaccess
+P .htpasswd
+
+# Log files
+P *.log
+
+# Environment markers
+P /__DEV__
+P /__LIVE__
+
+# Google
+P /public/google*.html
+
+# Laravel specific
+P /bootstrap/cache/
+- /node_modules/
+- /resources/**.js
+- /resources/**.scss
+- /resources/**.vue
+- /resources/frontend/
+P /storage/
+- /tests/
+P /vendor/
+- /.*
+P /composer.json
+- package.json
+- package-lock.json
+- phpunit.xml
+- README.md
+- webpack.mix.js
+
+# Add project specific filters below
+P /public/assets
+P /public/storage
+P /tmp/

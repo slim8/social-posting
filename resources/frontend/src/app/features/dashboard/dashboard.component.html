@@ -11,7 +11,7 @@
         <div class="m-alert-container">
           <div class="m-alert">
             <div class="m-close-icon">
-              <img src="../../../assets/img/close.png" alt="close" />
+              <img src="/assets/img/close.png" alt="close" />
             </div>
             <div
               i18n="Message Title|Title for the message alert@@messageTitle"
@@ -95,7 +95,17 @@
                   <tr *ngFor="let post of posts">
                     <td class="m-media-preview">
                       <div class="m-media-small">
-                        <img src="{{ post.postMedia[0].url }}" alt="" />
+                        <img
+                          src="/assets/img/test-images/default.png"
+                          alt=""
+                          *ngIf="post.postMedia.length == 0"
+                        />
+
+                        <img
+                          src="{{ post.postMedia[0].url }}"
+                          alt=""
+                          *ngIf="post.postMedia.length > 0"
+                        />
                         <div class="m-provider-logo">
                           <img
                             class="instagram"
@@ -208,15 +218,16 @@
           <button
             (change)="disableButtons()"
             disabled="true"
-            routerLink="../create-post"
+            routerLink="/application/create-post"
             class="m-button"
             [ngClass]="{
               'is-primary': listOfPages != '',
               'is-disabled': listOfPages == ''
             }"
-            i18n="Create Post |Create Post @@createPost"
+            i18n="Create Post |Text for create post button @@createPostButton"
           >
-            <span><i nz-icon nzType="ng-zorro:edit"></i></span> Create post
+            <span><i nz-icon nzType="ng-zorro:edit"></i></span>
+            Create post
           </button>
         </div>
       </div>
@@ -231,19 +242,37 @@
               'is-primary': listOfPages != '',
               'is-disabled': listOfPages == ''
             }"
+            i18n="Create Post |Text for create post button @@createPostButton"
           >
-            <span><i nz-icon nzType="ng-zorro:edit"></i></span> Beitrag
-            erstellen
+            <span><i nz-icon nzType="ng-zorro:edit"></i></span>
+            Create Post
           </button>
-          <button class="m-button m-linked-accounts is-secondary">
-            <i nz-icon nzType="ng-zorro:profile"></i>Verknüpfte Konten
+          <button
+            class="m-button m-linked-accounts is-secondary"
+            i18n="
+              Linked Accounts |Text for linked accounts button
+              @@linkedAccountsButton"
+          >
+            <i nz-icon nzType="ng-zorro:profile"></i>Linked Accounts
           </button>
         </div>
         <div class="m-news">
           <div class="m-news-header">
-            <div class="m-title">Neuigkeiten des Social Media Publishers</div>
-            <div class="m-text">
-              Neue Features, Updates und Ankündigungen findest Du hier.
+            <div
+              class="m-title"
+              i18n="
+                News Title |Text for the news title section inside dashboard
+                @@dashboardNewsTitle"
+            >
+              News from the social media publisher
+            </div>
+            <div
+              class="m-text"
+              i18n="
+                News Subtitle Title |Text for the news sub title section inside
+                dashboard @@dashboardNewsSubTitle"
+            >
+              Find new features, updates and announcements here.
             </div>
           </div>
           <div class="m-notes">
@@ -278,16 +307,19 @@
               </li>
             </ul>
           </div>
-          <a class="m-see-more" href="/application/dashboard/blog-posts"
-            >Mehr lesen</a
-          >
+          <a
+            class="m-see-more"
+            href="/application/dashboard/blog-posts"
+            i18n="Read More |Text for read more button @@readMore"
+            >Read more
+          </a>
         </div>
       </div>
     </div>
 
     <div class="m-modal-pages">
       <div (click)="closeModal()" class="m-close-icon">
-        <img src="../../../assets/img/close.png" alt="close" />
+        <img src="/assets/img/close.png" alt="close" />
       </div>
       <div class="m-modal-header">
         <div class="m-title" i18n="Add pages|Title for adding pages@@addPages">
@@ -345,15 +377,15 @@
 
       <div class="m-success-modal">
         <div (click)="closeSuccessModal()" class="m-close-icon">
-          <img src="../../../assets/img/close.png" alt="close" />
+          <img src="/assets/img/close.png" alt="close" />
         </div>
         <div class="m-success">
-          <img src="../../../assets/img/Group.png" alt="refreshing" />
+          <img src="/assets/img/Group.png" alt="refreshing" />
           <div
             class="m-success-title"
             i18n="Logged In|Logged in successfully@@loggedIn"
           >
-            <img src="../../../assets/img/Check.png" alt="success" />
+            <img src="/assets/img/Check.png" alt="success" />
             Logged in successfully.
           </div>
           <p
@@ -361,8 +393,8 @@
               Redirect Message Success|Text for redirection after
               success@@redirectMessageSuccess"
           >
-            Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
-            mediafactory Social Media Publisher hinzuzufügen.
+            You will be immediately redirected to view your linked pages dem Add
+            mediafactory social media publisher.
           </p>
         </div>
       </div>

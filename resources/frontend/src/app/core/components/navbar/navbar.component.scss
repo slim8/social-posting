@@ -18,7 +18,7 @@
             height: 100%;
             display: flex;
             flex-direction: row;
-            align-items: baseline;
+            align-items: center;
             margin-left: 85px;
             gap: 20px;
 
@@ -57,11 +57,11 @@
                 width: 100%;
                 justify-content: flex-end;
                 gap: 24px;
-                padding-right: 5%;
-                @include mq(tablet) {
-                  padding-right: 20%;
-                  gap: 63px;
-              }
+
+                @include mq(l) {
+                    padding-right: 20%;
+                    gap: 63px;
+                }
 
                 > .m-logout {
                     cursor: pointer;

@@ -7,6 +7,7 @@ use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\Repositories\UserRepository;
 use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
+use App\Http\Traits\UserTrait;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -21,6 +22,7 @@ class ApiAuthController extends Controller
 {
     use MailTrait;
     use RequestsTrait;
+    use UserTrait;
 
     protected $userRepository;
 
@@ -101,7 +103,10 @@ class ApiAuthController extends Controller
 
         $user->attachRole('companyadmin');
 
-        // MailTrait::index('A new user has been Created <br> <strong>Email:</strong> ' . $request->email . '<br> <strong>Password:</strong>' . $password, $request->email, 'Company Account Created', 'emails.accountCreated');
+        // Start Email Configuration
+        $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
+        MailTrait::index($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+        // End Email Configuration
         Log::channel('info')->info('New company has been registred with email '.$request->email);
 
         return RequestsTrait::processResponse(true, [

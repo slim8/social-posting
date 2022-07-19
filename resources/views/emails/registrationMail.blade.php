@@ -120,10 +120,14 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:0 35px;">
-                                        <h3>Change your password</h3>
+                                        <h2>Welcome! </h2>
+                                        <h3>Your registration has been successful.</h3>
                                         <span id="separator"></span>
-                                        <p>You can create a new password by clicking on the button below.</p>
-                                        <a href="{{$mailData['resetPasswordUrl']}}{{$mailData['token']}}" >Change password</a>
+                                        <p>Here are your login credentials.</p>
+                                        <br>
+                                        <p><strong>Email: </strong> {{$mailData['mail']}}</p>
+                                        <p><strong>Password: </strong> {{$mailData['password']}}</p>
+                                        <a href="{{$mailData['loginUrl']}}" >Login to your account</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -146,6 +150,5 @@
             </td>
         </tr>
     </table>
-    <!--/100% body table-->
 </body>
 </html>

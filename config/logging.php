@@ -117,28 +117,38 @@ return [
         'info' => [
             'driver' => 'daily',
             'level' => 'info',
+            'tap' => [\App\Http\Helpers\AddUserInformation::class],
             'path' => storage_path('logs/custom/info/info.log'),
+            'days' => 7,
         ],
 
         'notice' => [
             'driver' => 'daily',
             'level' => 'notice',
+            'tap' => [\App\Http\Helpers\AddUserInformation::class],
             'path' => storage_path('logs/custom/notice/notice.log'),
+            'days' => 7,
         ],
         'facebook' => [
             'driver' => 'daily',
             'level' => 'notice',
+            'tap' => [\App\Http\Helpers\AddUserInformation::class],
             'path' => storage_path('logs/custom/facebook/facebook.log'),
+            'days' => 7,
         ],
         'instagram' => [
             'driver' => 'daily',
             'level' => 'notice',
+            'tap' => [\App\Http\Helpers\AddUserInformation::class],
             'path' => storage_path('logs/custom/instagram/instagram.log'),
+            'days' => 7,
         ],
         'exception' => [
             'driver' => 'daily',
             'level' => 'notice',
+            'tap' => [\App\Http\Helpers\AddUserInformation::class],
             'path' => storage_path('logs/custom/exception/exception.log'),
+            'days' => 7,
         ],
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
