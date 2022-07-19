@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UsersAccounts;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\TraitController;
 
 trait UserTrait
 {
@@ -39,7 +40,8 @@ trait UserTrait
      */
     public static function getCurrentProviderId()
     {
-        $account = ProviderToken::where('created_by', UserTrait::getCurrentId())->first();
+        $traitController = new TraitController();
+        $account = ProviderToken::where('created_by', $traitController->getCurrentId())->first();
 
         if (!$account) {
             return false;
@@ -53,7 +55,8 @@ trait UserTrait
      */
     public static function getUniqueProviderTokenByProvider($accountUserId, string $provider = 'facebook', int $userId = null)
     {
-        $account = ProviderToken::where('createdBy', $userId ? $userId : UserTrait::getCurrentId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
+        $traitController = new TraitController();
+        $account = ProviderToken::where('createdBy', $userId ? $userId : $traitController->getCurrentId())->where('provider', $provider)->where('accountUserId', $accountUserId)->first();
 
         if (!$account) {
             return false;
@@ -67,7 +70,8 @@ trait UserTrait
      */
     public static function getCurrentProviderObject()
     {
-        $account = ProviderToken::where('createdBy', UserTrait::getCurrentId())->first();
+        $traitController = new TraitController();
+        $account = ProviderToken::where('createdBy', $traitController->getCurrentId())->first();
 
         if (!$account) {
             return false;
@@ -81,7 +85,8 @@ trait UserTrait
      */
     public static function getProviderTByProviderUID($uid)
     {
-        $account = ProviderToken::where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $uid)->first();
+        $traitController = new TraitController();
+        $account = ProviderToken::where('createdBy', $traitController->getCurrentId())->where('accountUserId', $uid)->first();
 
         if (!$account) {
             return false;
@@ -95,7 +100,8 @@ trait UserTrait
      */
     public static function isUserLinkedToActualCompany($user)
     {
-        $account = User::where('companyId', UserTrait::getCompanyId())->where('id', $user)->first();
+        $traitController = new TraitController();
+        $account = User::where('companyId', $traitController->getCompanyId())->where('id', $user)->first();
 
         if (!$account) {
             return false;
@@ -120,7 +126,8 @@ trait UserTrait
      */
     public static function removePermissionaccountFromUser($userId, $accountId)
     {
-        Log::channel('info')->info('[removePermissionaccountFromUser] User '.UserTrait::getCurrentId().' has remove Account : '.$accountId.' From User '.$userId);
+        $traitController = new TraitController();
+        Log::channel('info')->info('[removePermissionaccountFromUser] User '.$traitController->getCurrentId().' has remove Account : '.$accountId.' From User '.$userId);
         UsersAccounts::where('accountId', $accountId)->where('userId', $userId)->delete();
     }
 

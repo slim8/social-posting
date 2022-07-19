@@ -11,9 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-    use UserTrait;
-    use RequestsTrait;
+    protected $traitController;
 
+    public function __construct()
+    {
+        $this->traitController = new TraitController();
+    }
     /**
      * Display the specified profile.
      *
@@ -23,7 +26,7 @@ class ProfileController extends Controller
      */
     public function show(int $id = null)
     {
-        return $id ? User::findOrFail($id) : UserTrait::getUserObject();
+        return $id ? User::findOrFail($id) : $this->traitController->getUserObject();
     }
 
     /**
@@ -46,9 +49,9 @@ class ProfileController extends Controller
             return Response()->json($validation->errors(), 422);
         }
 
-        User::where('id', UserTrait::getCurrentId())->update($request->all());
+        User::where('id', $this->traitController->getCurrentId())->update($request->all());
 
-        return RequestsTrait::processResponse(true);
+        return $this->traitController->processResponse(true);
     }
 
     /**
@@ -71,15 +74,15 @@ class ProfileController extends Controller
         }
 
         if ($request->password !== $request->passwordConfirmation) {
-            return RequestsTrait::processResponse(false, ['passwordConfirmation' => ['Password did not match']]);
+            return $this->traitController->processResponse(false, ['passwordConfirmation' => ['Password did not match']]);
         }
-        $user = User::where('id', UserTrait::getCurrentId())->first();
+        $user = User::where('id', $this->traitController->getCurrentId())->first();
 
         if (!Hash::check($request->currentPassword, $user->password)) {
-            return RequestsTrait::processResponse(false, ['currentPassword' => ['Invalid password']]);
+            return $this->traitController->processResponse(false, ['currentPassword' => ['Invalid password']]);
         }
         $user->update(['password' => Hash::make($request->password)]);
 
-        return RequestsTrait::processResponse(true);
+        return $this->traitController->processResponse(true);
     }
 }
