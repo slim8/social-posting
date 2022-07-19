@@ -11,10 +11,12 @@ trait MailTrait
     public static function index(array $content, string $mailto, string $mailsubject = 'Notification Mail', string $template = 'emails.notificationMail')
     {
         try{
-            return Mail::send(new NotificationMail($content, $mailto, $mailsubject, $template));
+            $sendMail = Mail::send(new NotificationMail($content, $mailto, $mailsubject, $template));
+            Log::channel('info')->info('A new Email {'.$mailsubject.'} has been send to '.$mailto);
+            return $sendMail;
         }
         catch(\Exception $e){
-            Log::channel('exception')->error($e->getMessage());
+            Log::channel('info')->error($e->getMessage());
         }
 
     }
