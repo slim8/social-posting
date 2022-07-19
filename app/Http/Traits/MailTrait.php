@@ -16,7 +16,7 @@ trait MailTrait
             return $sendMail;
         }
         catch(\Exception $e){
-            Log::channel('info')->error($e->getMessage());
+            Log::channel('exception')->error($e->getMessage());
         }
 
     }
