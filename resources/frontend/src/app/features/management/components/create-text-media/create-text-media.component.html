@@ -1,8 +1,8 @@
-<div class="mod-add-news">
+<div class="mod-add-text-media">
     <div class="m-wrapper">
         <div class="m-header">
-            <h1 *ngIf="editMode" i18n="Update News|Update News for the Update News@@updateNews">Update News</h1>
-            <h1 *ngIf="!editMode" i18n="Create News|Create News for the Create News@@CreateNews">Create News</h1>
+            <h1 *ngIf="editMode" i18n="text media|title for the text media@@textMedia">Update text media</h1>
+            <h1 *ngIf="!editMode" i18n="Create text media|Create text media for the Create text media@@CreateTextMedia">Create text media</h1>
         </div>
         <div class="m-form">
             <div class="m-form-group">
@@ -13,11 +13,11 @@
                 <small class="error" *ngIf="error && error.title" >{{error.title[0]}}</small>
             </div>
             <div class="m-form-group">
-                <label i18n="teaser|Title for the teaser@@teaser">Teaser</label>
+                <label i18n="subtitle|Title for the subtitle@@subtitle">Subtitle</label>
                 <div class="m-form-input">
-                    <input nz-input type="text" placeholder="teaser" [(ngModel)]="teaser" />
+                    <input nz-input type="text" placeholder="subtitle" [(ngModel)]="subtitle" />
                 </div>
-                <small class="error" *ngIf="error && error.teaser" >{{error.teaser[0]}}</small>
+                <small class="error" *ngIf="error && error.subtitle" >{{error.subtitle[0]}}</small>
             </div>
             <div class="m-form-group">
                 <label i18n="picture|Title for the picture@@picture">Picture</label>
@@ -27,21 +27,11 @@
                 <small class="error" *ngIf="error && error.image" >{{error.image[0]}}</small>
             </div>
             <div class="m-form-group">
-                <label i18n="date|Title for the date@@date">date</label>
+                <label i18n="description|Title for the description@@description">Description</label>
                 <div class="m-form-input">
-                    <input nz-input type="date" placeholder="date" [(ngModel)]="date" />
+                    <textarea rows="4" nz-input [(ngModel)]="description"></textarea> 
                 </div>
-                <small class="error" *ngIf="error && error.date" >{{error.date[0]}}</small>
-            </div>
-            <div class="m-form-group">
-                <label i18n="template|Title for the template@@template">Template</label>
-                <div class="m-form-input">
-                    <nz-select nzPlaceHolder="Choose" class="m-select" [(ngModel)]="template" >
-                        <nz-option nzValue="1" nzLabel="Vertical"></nz-option>
-                        <nz-option nzValue="2" nzLabel="Horizental"></nz-option>
-                    </nz-select>
-                </div>
-                <small class="error" *ngIf="error && error.template" >{{error.template[0]}}</small>
+                <small class="error" *ngIf="error && error.description" >{{error.description[0]}}</small>
             </div>
             <button nz-button nzType="primary" nzShape="round" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
                 <i nz-icon nzType="edit" nzTheme="outline"></i>
@@ -50,3 +40,4 @@
         </div>
     </div>
 </div>
+

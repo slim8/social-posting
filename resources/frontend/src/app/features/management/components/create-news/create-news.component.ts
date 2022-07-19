@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NewsService } from './../../../dashboard/services/news.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,18 +10,46 @@ import { Component, OnInit } from '@angular/core';
 export class CreateNewsComponent implements OnInit {
 
 
-    title: string ="";
-    teaser: string = "";
-    picture: string = "";
-    date: string =  "2022-04-05 00:00:00";
-    template: string = '';
-    image : File | null = null;
+  title: string ="";
+  teaser: string = "";
+  picture: string = "";
+  date: string =  "2022-04-05 00:00:00";
+  template: string = '';
+  image : File | null = null;
 
   error : any = null ;
 
-  constructor( private newsService : NewsService , private router : Router) { }
+  editMode = false ;
+  newsEditId :string | null =  null;
+
+  constructor( private newsService : NewsService , private router : Router , private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    console.log(this.route.snapshot.paramMap.get('id'))
+    this.newsEditId = this.route.snapshot.paramMap.get('id');
+    if(this.newsEditId) {
+      this.editMode = true ;
+      this.getNewsToEdit(this.newsEditId);
+    }
+
+  }
+
+  getNewsToEdit(news : any){
+    this.newsService.getNewsById(news).subscribe({
+      next: (event: any) => {
+          console.log(event);
+          this.title = event.new.title;
+          this.teaser  = event.new.teaser;
+          this.date =  event.new.date;
+          this.template = event.new.template;
+        },
+      error: err => {
+          console.log(err);
+          this.error = err.error.error;
+      },
+      complete: () => {
+      }
+    })
   }
 
   loadFile(event : Event){
@@ -50,12 +78,35 @@ export class CreateNewsComponent implements OnInit {
     formData.append('image',this.image);
     formData.append('date',this.date);
     formData.append('template',this.template);
+    if(this.editMode){
+      this.editNews(formData);
+    }else{
+      this.addNews(formData);
+    }
+    
+  }
 
+  addNews(formData : FormData){
     this.newsService.addNews(formData).subscribe({
       next: (event: any) => {
           this.router.navigate(['/application/management/news']);
           console.log(event);
           
+        },
+      error: err => {
+          console.log(err);
+          this.error = err.error.error;
+      },
+      complete: () => {
+      }
+    })
+  }
+
+  editNews(formData : FormData){
+    this.newsService.updateNews(this.newsEditId , formData).subscribe({
+      next: (event: any) => {
+          console.log(event);
+          this.router.navigate(['/application/management/news']);
         },
       error: err => {
           console.log(err);

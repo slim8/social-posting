@@ -1,9 +1,22 @@
 
-
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
 
 .mod-news{
 
     >.m-wrapper {
+
+        >.m-header{
+            padding: 18px;
+            font-size: 2.5rem;
+            line-height: 1.36175;
+            text-transform: capitalize;
+            font-weight: 400;
+            >h1{
+                color: $color-media-black-opacity-half;
+            }
+        }
 
         >.m-table-container{
 
@@ -12,13 +25,13 @@
                 height: 83px;
                 display: flex;
                 justify-content: end;
-                background-color: white;
+                background-color: $color-white;
                 padding: 25px;
 
                 >.m-primary-button{
                     gap: 3px;
-                    background-color: #ff8d69;
-                    border-color: #ff8d69;
+                    background-color: $color-media-primary-orange;
+                    border-color: $color-media-primary-orange;
                     font-size: 0.75rem;
                     line-height: 1.4166666667;
                 }
@@ -26,7 +39,7 @@
             }
 
             >.m-table{
-                    background-color: white;
+                background-color: $color-white;
 
                 .m-table-header{
                     font-size: 0.625rem;
@@ -38,21 +51,47 @@
                         font-weight: 700;
                         font-size: 0.625rem;
                         line-height: 1.4;
-                        color: #00000080;
+                        color: $color-media-black-opacity-half;
                     }
 
                 }
 
                 .m-table-body{
-                    
-                    >.m-table-row{
 
-                        >.m-table-title{
-                            font-size: 0.75rem;
-                            line-height: 1.4166666667;
-                            font-weight: bold;
+                    .m-table-title{
+                        font-size: 0.75rem;
+                        line-height: 1.4166666667;
+                        font-weight: bold;
+                    }
+
+                    .m-table-picture{
+
+                        >img{
+                            width:170px ;
+                            height : 70px;
+                            object-fit: cover;
+                            object-position: center;
                         }
                     }
+
+                    .m-table-action{
+
+                        >.m-primary-button{
+                            background-color: $color-media-primary-orange;
+                            border-color: $color-media-primary-orange;
+                        }
+
+                        >.m-secondary-button{
+                            background-color: $color-media-light-grey;;
+                            border-color: $color-media-light-grey;
+                        }
+
+                        >.m-danger-button{
+                            background-color: #ff3838;
+                            border-color: #ff3838;
+                        }
+                    }
+
                 }
             }
         }

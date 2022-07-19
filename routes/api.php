@@ -89,5 +89,5 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], f
     Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
     Route::post('/change-password', [ProfileController::class, 'changePassword']);
     Route::apiResource('/news', NewsController::class);
-    Route::apiResource('/text-media-news', TextMediaNewsController::class)->except(['show','index']);
+    Route::apiResource('/text-media-news', TextMediaNewsController::class)->except(['index']);
 });

@@ -1,3 +1,4 @@
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { Router } from '@angular/router';
 import { NewsService } from './../../../dashboard/services/news.service';
 import { Component, OnInit } from '@angular/core';
@@ -27,20 +28,26 @@ export class NewsComponent implements OnInit {
       picture: "",
       newsId: 0,
       createdAt: "",
-      updatedAt: ""
+      updatedAt: "" ,
+      img : ''
     }]
   }]
 
   expandSet = new Set<number>();
 
-  constructor( private router: Router , private newsService : NewsService ) { }
+  constructor( private router: Router , private newsService : NewsService , private modal: NzModalService ) { }
 
   ngOnInit(): void {
 
+    this.getNewsList();
+
+  }
+
+  getNewsList(){
     this.newsService.getNewsList().subscribe({
       next: (event: any) => {
           console.log(event);
-          this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url}));
+          this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url , text_media_news : item.text_media_news.map((media : any) => ({...media , img : JSON.parse(media.picture).url}))}));
         },
       error: err => {
         
@@ -48,15 +55,72 @@ export class NewsComponent implements OnInit {
       complete: () => {
       }
     })
-
   }
 
   addNews(){
     this.router.navigate(['/application/management/create-news']);
   }
 
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
+  addTextMedia(news : number){
+    this.router.navigate(['/application/management/news/'+news+'/create-text-media' ]);
+  }
+  
+
+  editNews(id : number ){
+    console.log(id)
+    this.router.navigate(['/application/management/edit-news' , id]);
+  }
+
+  editTextMedia(news : number ,id : number ){
+    this.router.navigate(['/application/management/news/'+news+'/edit-text-media' , id]);
+  }
+
+  deleteNews(id : number , title : string){
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to remove this news ?</i>',
+      nzContent: '<b>'+ title + '</b>',
+      nzOnOk: () => {
+        console.log('ok');
+        this.newsService.deleteNews(id).subscribe({
+          next: (event: any) => {
+              console.log(event);
+              this.getNewsList();
+            },
+          error: err => {
+            
+          },
+          complete: () => {
+          }
+        })
+      }
+    });
+    
+  }
+
+  deleteNewsTextMedia(id : number , title : string){
+    this.modal.confirm({
+      nzTitle: '<i>Do you Want to remove this text media ?</i>',
+      nzContent: '<b>'+ title + '</b>',
+      nzOnOk: () => {
+        console.log('ok');
+        this.newsService.deleteNewsTextMedia(id).subscribe({
+          next: (event: any) => {
+              console.log(event);
+              this.getNewsList();
+            },
+          error: err => {
+            
+          },
+          complete: () => {
+          }
+        })
+      }
+    });
+    
+  }
+
+  onExpandChange(id: number): void {
+    if(!this.expandSet.has(id)) {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);

@@ -8,6 +8,7 @@ import { UsersListComponent } from './components/users-list/users-list.component
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { NewsComponent } from './components/news/news.component';
 import { CreateNewsComponent } from './components/create-news/create-news.component';
+import { CreateTextMediaComponent } from './components/create-text-media/create-text-media.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { CreateNewsComponent } from './components/create-news/create-news.compon
     UsersListComponent,
     CreateUserComponent,
     NewsComponent,
-    CreateNewsComponent
+    CreateNewsComponent,
+    CreateTextMediaComponent
   ],
   imports: [
     CommonModule,
