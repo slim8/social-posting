@@ -120,8 +120,8 @@
                                 </tr>
                                 <tr>
                                     <td style="padding:0 35px;">
-                                        <h2>Welcome! </h1>
-                                        <h3>Your registration has been successful.</h2>
+                                        <h2>Welcome! </h2>
+                                        <h3>Your registration has been successful.</h3>
                                         <span id="separator"></span>
                                         <p>Here are your login credentials.</p>
                                         <br>
