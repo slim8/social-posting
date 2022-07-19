@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Password;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\MailTrait;
 use App\Http\Traits\RequestsTrait;
 use App\Mail\ForgetPassword;
 use App\Models\User;
@@ -17,6 +18,7 @@ use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
+    use MailTrait;
     use RequestsTrait;
 
     /**
@@ -36,7 +38,7 @@ class ForgotPasswordController extends Controller
             ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
         );
 
-        Mail::to($request->email)->send(new ForgetPassword(['title' => 'Forgot password', 'body' => $token]));
+        MailTrait::index(['title' => 'Forgot password', 'token' => $token, 'resetPasswordUrl' => envValue('APP_URL').'/auth/reset-password/'], $request->email, 'Request Forget Password', 'emails.forgetPassword');
 
         // return RequestsTrait::processResponse(true);
         return RequestsTrait::processResponse(true, ['token' => $token]);
