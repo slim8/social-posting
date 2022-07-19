@@ -15,8 +15,8 @@ interface success {
 export class LoginComponent implements OnInit {
     isLoading = false;
     credentials = {
-        email: 'oussema.kassis@softtodo.com',
-        password: 'Soft1to2do',
+        email: '',
+        password: '',
     };
     passwordVisible = false;
     password?: string;

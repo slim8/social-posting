@@ -1,20 +1,16 @@
 <div class="mod-drafts">
   <div class="m-wrapper">
     <div class="m-title">
-      <h1
-        i18n="
-          My Drafts Posts Title|Title for My Posts
-          Page@@myDraftsPosts"
-      >
-        Entwürfe
+      <h1 i18n="My Drafts Posts Title|Title for My Posts Page@@myDraftsPosts">
+        Drafts
       </h1>
-      <br/>
+      <br />
       <h3
         i18n="
           My Drafts Posts Sub Title|Title for My Posts
           Page@@myDraftsPostsSubTitle"
       >
-        Hier findest Du all deine bisherig veröffentlichten Beiträge
+        Here you will find all your previously published articles
       </h3>
     </div>
     <div class="m-container">
@@ -29,7 +25,12 @@
             <div class="m-button-icon">
               <i nz-icon nzType="ng-zorro:image"></i>
             </div>
-            <div class="m-button-text">Beitragsart</div>
+            <div
+              class="m-button-text"
+              i18n="postType|Title for the post type@@postType"
+            >
+              Post type
+            </div>
             <div class="m-button-arrow">
               <i
                 nz-icon
@@ -58,7 +59,12 @@
                 [nzTheme]="'outline'"
               ></i>
             </div>
-            <div class="m-button-text">Alle Postings</div>
+            <div
+              class="m-button-text"
+              i18n="AllPostings|Title for the All Postings@@allPostings"
+            >
+              All Postings
+            </div>
             <div class="m-button-arrow">
               <i nz-icon nzType="ng-zorro:customArrow"></i>
             </div>
@@ -78,17 +84,19 @@
               class="m-icon-remove"
             />
           </div>
-
         </div>
         <div class="m-right">
-          <button class="m-button is-primary">
+          <button
+            class="m-button is-primary"
+            i18n="CreateNew|Title for the Create new@@createNew"
+          >
             <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
-            Neu erstellen
+            Create new
           </button>
         </div>
       </div>
 
-      <hr/>
+      <hr />
       <div class="m-content">
         <div class="m-border"></div>
         <div class="m-array-header">
@@ -99,7 +107,7 @@
                 My Drafts Posts Contribution|Contribution Title for My Posts
                 Page@@myDraftsPostsContribution"
             >
-              Beitrag
+              Contribution
             </div>
             <div
               class="m-date"
@@ -107,20 +115,24 @@
                 My Drafts Posts Status|Status Title for My Posts
                 Page@@myDraftsPosts"
             >
-              Erstellt am/von
+              Created on/by
             </div>
             <div
               class="m-activity"
               i18n="
-                My Drafts Posts Date|Date Title for My Posts
-                Page@@myDraftsPosts"
+                My Drafts Posts Activities|My Drafts Posts
+                Activities@@myDraftsActivities"
             >
-              Tätigkeiten
+              activities
             </div>
           </div>
         </div>
         <div class="m-item" *ngFor="let post of posts">
-          <app-post-item [post]="post" [draftsList]="draftsList" (newItemEvent)="update($event)"></app-post-item>
+          <app-post-item
+            [post]="post"
+            [draftsList]="draftsList"
+            (newItemEvent)="update($event)"
+          ></app-post-item>
         </div>
       </div>
     </div>
