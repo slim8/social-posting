@@ -9,6 +9,7 @@ use App\Http\Controllers\Repositories\UserRepository;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\TraitController;
 
 class AdminsController extends Controller
 {

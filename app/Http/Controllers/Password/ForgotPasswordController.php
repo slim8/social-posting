@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Password;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\MailTrait;
-use App\Http\Traits\RequestsTrait;
-use App\Mail\ForgetPassword;
+use App\Http\Controllers\TraitController;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,8 +16,12 @@ use Illuminate\Support\Str;
 
 class ForgotPasswordController extends Controller
 {
-    use MailTrait;
-    use RequestsTrait;
+    protected $traitController;
+
+    public function __construct()
+    {
+        $this->traitController = new TraitController();
+    }
 
     /**
      * Forget Password Function [Send link via mail].
@@ -38,10 +40,10 @@ class ForgotPasswordController extends Controller
             ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
         );
 
-        MailTrait::index(['title' => 'Forgot password', 'token' => $token, 'resetPasswordUrl' => envValue('APP_URL').'/auth/reset-password/'], $request->email, 'Request Forget Password', 'emails.forgetPassword');
+        $this->traitController->index(['title' => 'Forgot password', 'token' => $token, 'resetPasswordUrl' => envValue('APP_URL').'/auth/reset-password/'], $request->email, 'Request Forget Password', 'emails.forgetPassword');
 
-        // return RequestsTrait::processResponse(true);
-        return RequestsTrait::processResponse(true, ['token' => $token]);
+        // return $this->traitController->processResponse(true);
+        return $this->traitController->processResponse(true, ['token' => $token]);
     }
 
     /**
@@ -49,7 +51,6 @@ class ForgotPasswordController extends Controller
      */
     public function resetPassword(Request $request)
     {
-
         $validation = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
             'password' => 'required|string|min:6',
@@ -63,7 +64,8 @@ class ForgotPasswordController extends Controller
 
         if ($request->password !== $request->passwordConfirmation) {
             Log::channel('notice')->notice('reset password request for email : '.$request->email.' with mismatch password');
-            return RequestsTrait::processResponse(false, ['passwordConfirmation' => ['Password did not match']]);
+
+            return $this->traitController->processResponse(false, ['passwordConfirmation' => ['Password did not match']]);
         }
 
         $updatePassword = DB::table('password_resets')
@@ -72,7 +74,8 @@ class ForgotPasswordController extends Controller
 
         if (!$updatePassword) {
             Log::channel('notice')->notice('reset password request for email : '.$request->email.' with invalid token');
-            return RequestsTrait::processResponse(false, ['message' => 'Inavlid Token']);
+
+            return $this->traitController->processResponse(false, ['message' => 'Inavlid Token']);
         }
 
         $user = User::where('email', $request->email)
@@ -80,6 +83,7 @@ class ForgotPasswordController extends Controller
 
         DB::table('password_resets')->where(['email' => $request->email])->delete();
         Log::channel('info')->info('success reset password request for email : '.$request->email);
-        return RequestsTrait::processResponse(true, ['message' => 'Your password has been changed , you can now logged in']);
+
+        return $this->traitController->processResponse(true, ['message' => 'Your password has been changed , you can now logged in']);
     }
 }
