@@ -155,12 +155,12 @@
                         },
                         "fr": {
                             "localize": ["fr"],
-                            "outputPath": "/angular/fr/",
+                            "outputPath": "public/fr/",
                             "i18nMissingTranslation": "error"
                         },
                         "de": {
                             "localize": ["de"],
-                            "outputPath": "/angular/de/",
+                            "outputPath": "public/de/",
                             "i18nMissingTranslation": "error"
                         }
                     },
