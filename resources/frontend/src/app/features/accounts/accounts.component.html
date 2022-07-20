@@ -125,8 +125,6 @@
           </div>
           <div class="m-page-info">
             <div class="m-page">{{ account.profileName }}</div>
-            <div class="m-date">hinzugefügt am 23.04.22</div>
-            <div class="m-followers">Follower: <strong> 4967</strong></div>
           </div>
           <div class="m-alert">
             <img src="/assets/img/exclamation.png" alt="" />
@@ -185,7 +183,7 @@
             class="m-page-info"
           >
             <div class="m-page">{{ page.pageName }}</div>
-            <div class="m-date">hinzugefügt am 23.04.22</div>
+            <div class="m-date"> <span i18n="Added on|Title for added on@@addedOn">added on &nbsp;</span> {{page.createdAt | date: "dd.MM.yyyy" }}</div>
             <div class="m-followers">
               Follower: <strong> {{ page.followers }}</strong>
             </div>
@@ -216,7 +214,8 @@
             <button
               class="m-button is-primary"
               i18n="Create Post|Text for create post@@createPost"
-              routerLink="/application/create-post"
+              routerLink="/application/create-post/{{page.id}}"
+
             >
               <span><i nz-icon nzType="ng-zorro:edit"></i></span> Create Post
             </button>

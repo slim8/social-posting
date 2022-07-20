@@ -155,9 +155,10 @@
                             @include textstyle-size-16-bold();
                         }
                         > .m-date {
-                            @include textstyle-size-12();
-                            color: $color-media-black-opacity-half;
-                            margin-bottom: 19px;
+                          display: inline-flex;
+                          @include textstyle-size-12();
+                          color: $color-media-black-opacity-half;
+                          margin-bottom: 19px;
                         }
                         > .m-followers {
                             @include textstyle-size-12();
