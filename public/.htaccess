@@ -19,3 +19,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+SetEnvIf Request_URI ^/(api/) noauth=1
+<RequireAny>
+  Require env noauth
+  Require valid-user
+</RequireAny>
