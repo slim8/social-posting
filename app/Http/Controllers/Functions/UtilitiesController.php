@@ -41,9 +41,9 @@ class UtilitiesController extends Controller
         $isFacebookPage = in_array('facebook', $providersName) && in_array('page', $providersType);
         $isInstagramAccountPage = in_array('instagram', $providersName);
 
-        if (!$videos && !$images && $isInstagramAccountPage) {
+        if (!$videos && !$images && ($isInstagramAccountPage || $isFacebookPage)) {
             $responseObject->status = false;
-            $responseObject->message = 'Can not post to Instagram Without Media';
+            $responseObject->message = 'Can not post Without Media';
         }
         if ($videos && count($videos) > 1 && $isFacebookPage) {
             $responseObject->status = false;
