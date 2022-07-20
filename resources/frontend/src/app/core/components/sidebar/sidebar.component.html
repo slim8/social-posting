@@ -94,7 +94,7 @@
         >
       </li>
 
-      <li class="m-item" >
+      <li class="m-item" *ngIf="checkRole('admin')" >
         <img
           i18n-alt
           src="/assets/img/svgs/icons/send.svg"
