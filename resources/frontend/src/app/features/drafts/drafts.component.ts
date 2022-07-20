@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { AccountsService } from '../social-accounts/services/accounts.service';
 import { HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 const calendarIcon = '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 7.5V5.25C15 4.42157 14.3284 3.75 13.5 3.75H4.5C3.67157 3.75 3 4.42157 3 5.25V7.5M15 7.5V14.25C15 15.0784 14.3284 15.75 13.5 15.75H4.5C3.67157 15.75 3 15.0784 3 14.25V7.5M15 7.5H3M6 2.25V5.25M12 2.25V5.25" stroke="black" stroke - width="1.5" stroke - linecap="round"/><rect x="4.5" y="9" width="2.25" height="2.25" rx="0.375" fill="black"/><rect x="7.875" y="9" width="2.25" height="2.25" rx="0.375" fill="black"/><rect x="11.25" y="9" width="2.25" height="2.25" rx="0.375" fill="black"/></svg>'
@@ -17,11 +19,12 @@ export class DraftsComponent implements OnInit {
     posts: any[] = [];
     draftsList: any = [];
 
-    constructor(private iconService: NzIconService,
-      private accountsService: AccountsService,
-      private message: NzMessageService) {
+    constructor(private iconService: NzIconService, private accountsService: AccountsService, private router: Router, private sharedModule : SharedModule,private message: NzMessageService) {
         this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
         this.iconService.addIconLiteral('ng-zorro:customArrow', arrowIcon);
+        if (this.router.url.includes('drafts')) {
+          this.sharedModule.initSideMenu('drafts');
+        }
     }
 
     ngOnInit(): void {

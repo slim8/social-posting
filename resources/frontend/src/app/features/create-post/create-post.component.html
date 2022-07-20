@@ -2,13 +2,13 @@
 <div class="mod-create-post">
   <div class="m-wrapper">
     <div class="m-header">
-      <h3>Neuer Beitrag</h3>
+      <h3 i18n="New Post|Title for New Post@@newPost">New post</h3>
     </div>
     <div class="m-cp-container">
       <div class="m-left-col">
         <div class="m-form-group">
           <div class="m-form-label">
-            <h4>Platzierung</h4>
+            <h4 i18n="Accounts|Title for accounts@@accounts">Account(s)</h4>
           </div>
           <div class="m-form-field">
             <nz-form-control [nzSpan]="24">
@@ -30,9 +30,7 @@
                     ><small class="m-page-item-provider">{{
                       option.provider
                     }}</small>
-                    - {{ option.pageName }}</label
-                  ></nz-option
-                >
+                    - {{ option.pageName }}</label></nz-option>
               </nz-select>
             </nz-form-control>
           </div>
@@ -40,7 +38,7 @@
 
         <div class="m-form-group">
           <div class="m-form-label">
-            <h4>Medien</h4>
+            <h4 i18n="Media|Title for Media@@media">Media</h4>
           </div>
           <div class="m-upload" [ngClass]="{ 'is-shown': uploadImageActive }">
             <div class="clearfix">
@@ -54,7 +52,7 @@
               >
                 <div>
                   <i nz-icon nzType="plus"></i>
-                  <div style="margin-top: 8px">Upload</div>
+                  <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
               <nz-modal
@@ -81,7 +79,7 @@
               >
                 <div>
                   <i nz-icon nzType="plus"></i>
-                  <div style="margin-top: 8px">Upload</div>
+                  <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
             </div>
@@ -116,30 +114,30 @@
               <button
                 class="m-button is-disabled m-image"
                 (click)="collapseImageUpload()"
+                i18n="add a Photo|Title for add a photo@@addPhoto"
               >
-                <span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Foto
-                hinzufügen
+                <span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Add a photo
               </button>
               <button
                 class="m-button is-disabled m-video"
                 (click)="collapseVideoUpload()"
+                i18n="Add a Video|Title for add a video@@addVideo"
               >
-                <span><i nz-icon nzType="ng-zorro:video"></i></span> Video
-                hinzufügen
+                <span><i nz-icon nzType="ng-zorro:video"></i></span> Add a video
               </button>
-              <button
-                class="m-button is-disabled m-gallery"
-                (click)="showAlbumModal()"
-              >
-                <span><i nz-icon nzType="ng-zorro:album"></i></span> Meine
-                individualisierten Vorlagen
-                <span class="m-info-icon">
+              <div class="m-button-notice-container">
+                <button
+                  class="m-button is-disabled m-gallery"
+                  (click)="showAlbumModal()"
+                  i18n="My gallery|Title for my gallery@@myGallery"
+                >
+                  <span><i nz-icon nzType="ng-zorro:album"></i></span> My gallery
+                </button>
+                <span class="m-info-icon" >
                   <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
-                  <div class="m-text-info">Wähle aus deinen zuvor
-                    individuell gestalteten
-                    Beiträgen aus. </div>
+                  <div class="m-text-info" i18n="My Gallery Info Text|Title for my gallery info text@@myGalleryInfoText">Choose from your previously customized posts. </div>
                 </span>
-              </button>
+              </div>
               <nz-modal
                 [(nzVisible)]="showAlbum"
                 nzTitle="The first Modal"
@@ -153,8 +151,9 @@
                     line-height: 33px;
                     color: rgba(0, 0, 0, 0.5);
                   "
+                  i18n="My gallery|Title for my gallery@@myGallery"
                 >
-                  Meine individualisierten Vorlagen
+                My gallery
                 </div>
                 <ng-container *nzModalContent>
                   <app-album-preview
@@ -185,7 +184,7 @@
 
         <div class="m-form-group">
           <div class="m-form-label">
-            <h4>Hashtags</h4>
+            <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
           </div>
           <div class="m-form-field">
             <nz-select
@@ -206,7 +205,7 @@
 
         <div class="m-form-group">
           <div class="m-form-label">
-            <h4>Standort <span>- optional</span></h4>
+            <h4 i18n="Location|Title for location@@location">Location <span>- optional</span></h4>
           </div>
           <div class="m-form-field">
             <input
@@ -252,14 +251,12 @@
             <div class="m-tab-content">
               <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
                 <div class="m-header">
-                  <h3>Instagram Beitrag anpassen</h3>
-                  <p>
-                    Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.
-                  </p>
+                  <h3 i18n="Customize Instagram Post|Title for Customize instagram post@@customizeInstagramPost">Customize Instagram post</h3>
+                  <p i18n="Text for Instagram Only|Title for This text will only appear on your Instagram post@@TextForInstagramOnly">This text will only appear on your Instagram post.</p>
                 </div>
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4>Instagram Text</h4>
+                    <h4 i18n="Instagram Text|Title for Instagram Text@@instagramText">Instagram Text</h4>
                   </div>
                   <div class="m-form-field">
                     <textarea
@@ -274,7 +271,7 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4>Hashtags</h4>
+                    <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
                   </div>
                   <div class="m-form-field">
                     <nz-select
@@ -294,7 +291,7 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4>Markierung <span>- optional</span></h4>
+                    <h4 i18n="Mention|Title for Mention@@mention">Mention <span>- optional</span></h4>
                   </div>
                   <div class="m-form-field">
                     <input
@@ -341,14 +338,14 @@
 
               <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
                 <div class="m-header">
-                  <h3>Facebook Beitrag anpassen</h3>
-                  <p>
-                    Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.
+                  <h3 i18n="Customize Facebook Post|Title for Customize facebook post@@customizeFacebookPost">Customize Facebook Post</h3>
+                  <p i18n="Text for Facebook Only|Title for This text will only appear on your Facebook post@@TextForFacebookOnly">
+                    This text will only appear on your Facebook post.
                   </p>
                 </div>
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4>Facebook Text</h4>
+                    <h4 i18n="Facebook Text|Title for Facebook Text@@facebookText">Facebook Text</h4>
                   </div>
                   <div class="m-form-field">
                     <textarea
@@ -363,7 +360,7 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4>Hashtags</h4>
+                    <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
                   </div>
                   <div class="m-form-field">
                     <nz-select
@@ -383,7 +380,7 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4>Markierung <span>- optional</span></h4>
+                    <h4 i18n="Mention|Title for Mention@@mention">Mention <span>- optional</span></h4>
                   </div>
                   <div class="m-form-field">
                     <input
@@ -434,10 +431,9 @@
       </div>
       <div class="m-right-col">
         <div *ngIf="mediaList.length <= 0" class="m-no-preview">
-          <h3>Vorschau nicht verfügbar</h3>
-          <p>
-            Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu, um
-            hier eine Vorschau zu sehen.
+          <h3 i18n="Preview Not Available|Title for preview not available@@previewNotAvailable">Preview not available</h3>
+          <p i18n="Preview Not Available Info Text|Title for preview not available Info@@previewNotAvailableInfoText">
+            Add one or more images or a video to the post to see a preview here.
           </p>
         </div>
 
@@ -462,22 +458,24 @@
         (click)="submitForm('DRAFT')"
         nz-button
         [nzLoading]="isLoading"
+        i18n="Save as Draft Button|Title for Save as draft button@@saveAsDraftButton"
       >
         <span class="m-button-icon-save"
           ><i nz-icon nzType="ng-zorro:folder"></i
         ></span>
-        Als Entwurf speichern
+        Save as draft
       </button>
       <button
         class="m-button is-primary no-transparent"
         nz-button
         (click)="uploadThumbnail('PUBLISH')"
         [nzLoading]="isLoading"
+        i18n="Publish Button|Title for Publish button@@publishButton"
       >
         <span class="m-button-icon-publish"
           ><i nz-icon nzType="ng-zorro:send"></i
         ></span>
-        Veröffentlichen
+        Publish
       </button>
     </div>
   </div>

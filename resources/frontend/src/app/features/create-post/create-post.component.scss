@@ -124,6 +124,63 @@
                                     }
                                 }
                             }
+
+                            > .m-button-notice-container {
+                              position: relative;
+                              width: 100%;
+                              > button {
+                                  background-color: $color-media-lighter-grey;
+                                  color: $color-base-100;
+                                  padding: 4px 10px;
+                                  gap: 0;
+                                  align-items: center;
+                                  @include textstyle-size-12();
+                                  &.m-image,
+                                  &.m-video {
+                                      width: 149px;
+                                  }
+                                  &.m-gallery {
+                                      width: 100%;
+                                      text-align: left;
+                                      > span {
+                                          margin-left: 3px;
+                                      }
+                                  }
+
+                                  > span {
+                                      margin-right: 9px;
+
+                                      i {
+                                          > svg {
+                                              font-size: 15px;
+                                          }
+                                      }
+                                  }
+                              }
+                              > .m-info-icon {
+                                position: absolute;
+                                right: 9px;
+                                top: 4px;
+                                > .m-text-info {
+                                  width: 103px;
+                                  position: absolute;
+                                  @include textstyle-size-10();
+                                  height: fit-content;
+                                  padding: 9px 4px 8px 9px;
+                                  background-color: $color-base-0;
+                                  box-shadow: 0px 4px 4px $color-media-secondary-button;
+                                  border-radius: 5px;
+                                  display: none;
+                                  z-index: 9;
+                                  right: -100px;
+                                }
+                                &:hover {
+                                  > .m-text-info {
+                                    display: block;
+                                  }
+                                }
+                              }
+                            }
                         }
 
                         > .m-textarea-message {
