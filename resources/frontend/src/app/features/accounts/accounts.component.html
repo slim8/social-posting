@@ -185,7 +185,7 @@
             class="m-page-info"
           >
             <div class="m-page">{{ page.pageName }}</div>
-            <div class="m-date">hinzugefügt am 23.04.22</div>
+            <div class="m-date"> <span i18n="Added on|Title for added on@@addedOn">added on &nbsp;</span> {{page.createdAt | date: "dd.MM.yyyy" }}</div>
             <div class="m-followers">
               Follower: <strong> {{ page.followers }}</strong>
             </div>
