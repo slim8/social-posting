@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
@@ -47,14 +47,14 @@ export class AccountsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.validateForm = this.formBuilder.group({
-            myChoices: new FormArray([]),
-        });
-        this.getConnectedAccounts();
-        this.getPages();
-        if (this.router.url.includes('accounts')) {
-            this.sharedModule.initSideMenu('accounts');
-        }
+      this.validateForm = this.formBuilder.group({
+          myChoices: new FormArray([]),
+      });
+      this.getConnectedAccounts();
+      this.getPages();
+      if (this.router.url.includes('accounts')) {
+          this.sharedModule.initSideMenu('accounts');
+      }
     }
 
     getPages() {
