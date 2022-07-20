@@ -21,7 +21,7 @@ trait RequestsTrait
             $pageFacebookPageLink = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
-            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageFacebookPageLink, 'category' => $category,  'pageName' => $name];
+            $AllPages[] = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageFacebookPageLink, 'category' => $category,  'pageName' => $name ,'createdAt' => $account->createdAt];
         }
 
         return $AllPages;
@@ -65,7 +65,7 @@ trait RequestsTrait
             }
             $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,
                 'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false,
-                'followers' => $followers, 'link' => $link, 'username' => $username, ];
+                'followers' => $followers, 'link' => $link, 'username' => $username, 'createdAt' => $account->createdAt];
 
             if ($traitController->getUserObject()->hasRole('companyadmin')) {
                 $pageContent['users'] = $traitController->getUsersLinkedToAccounts($id);

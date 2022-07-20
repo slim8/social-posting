@@ -83,7 +83,7 @@ class ProviderTokenController extends Controller
             $now = strtotime(date('Y-m-d'));
 
             $expiry = strtotime('-5 days', strtotime($account->expiryDate));
-            array_push($response, ['mustBeRefreshed' => (!$this->traitController->getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profileName, 'userName' => $account->userName, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === Account::$STATUS_DISCONNECTED) ? false : true]);
+            array_push($response, ['mustBeRefreshed' => (!$this->traitController->getUserObject()->autoRefresh && $expiry < $now), 'provider' => $account->provider, 'providerId' => $account->accountUserId, 'profileName' => $account->profileName, 'userName' => $account->userName, 'tokenExpireOn' => $this->utilitiesController->differenceBetweenDates($account->expiryDate), 'isConnected' => ($account->longLifeToken === Account::$STATUS_DISCONNECTED) ? false : true , 'createdAt' => $account->createdAt]);
         }
         Log::channel('info')->info('User : '.$userId.' Fetch his Provider token accounts');
         if ($response) {
