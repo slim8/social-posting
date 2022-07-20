@@ -65,7 +65,7 @@ class TextMediaNewsController extends Controller
      */
     public function show($id)
     {
-        return RequestsTrait::processResponse(true , ['textMedia' => TextMediaNews::where('id',$id)->first()]);
+        return $this->fileController->processResponse(true , ['textMedia' => TextMediaNews::where('id',$id)->first()]);
     }
 
     /**
