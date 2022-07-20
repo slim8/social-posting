@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\RequestsTrait;
+use App\Http\Controllers\TraitController;
 use App\Http\Traits\Services\FacebookService;
-use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\ProviderToken;
@@ -19,15 +18,15 @@ use Intervention\Image\ImageManager;
 
 class FacebookController extends Controller
 {
-    use UserTrait;
-    use RequestsTrait;
-    use FacebookService;
-
     protected $instagramController;
     protected $imageManager;
+    protected $facebookService;
+    protected $traitController;
 
     public function __construct()
     {
+        $this->facebookService = new FacebookService();
+        $this->traitController = new TraitController();
         $this->instagramController = new InstagramController();
         $this->imageManager = new ImageManager();
     }
@@ -46,7 +45,7 @@ class FacebookController extends Controller
      */
     public function updateOrReturnProviderIdUser($adminId, $longLifeToken, $accountUserId)
     {
-        $account = UserTrait::getUniqueProviderTokenByProvider($accountUserId, 'facebook', $adminId);
+        $account = $this->traitController->getUniqueProviderTokenByProvider($accountUserId, 'facebook', $adminId);
 
         $personalInformation = $this->getFacebookPersonalInformations($longLifeToken);
 
@@ -77,7 +76,7 @@ class FacebookController extends Controller
      */
     public function generateLongLifeToken($tokenKey, string $facebookUserId = '', int $userId = null)
     {
-        $userObj = $userId ? $userId : UserTrait::getCurrentId();
+        $userObj = $userId ? $userId : $this->traitController->getCurrentId();
         $facebookAppKey = envValue('FACEBOOK_APP_ID');
         $facebookSecretKey = envValue('FACEBOOK_SECRET_KEY');
         $response = Http::get(envValue('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
@@ -85,7 +84,8 @@ class FacebookController extends Controller
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
         $providerObject->token = $response->json('access_token');
-        Log::channel('facebook')->info('[generateLongLifeToken] User : '.UserTrait::getCurrentId().' has generate long life token for facebook account id : '.$facebookUserId);
+        Log::channel('facebook')->info('[generateLongLifeToken] User : '.$this->traitController->getCurrentId().' has generate long life token for facebook account id : '.$facebookUserId);
+
         return $providerObject;
     }
 
@@ -105,8 +105,7 @@ class FacebookController extends Controller
         $tokenKey = $request->accessToken;
         $longLife = $this->generateLongLifeToken($tokenKey)->token;
 
-        return response()->json(['success' => true,
-        'long_life_access_token' => $longLife, ], 201);
+        return $this->traitController->processResponse(true, ['long_life_access_token' => $longLife]);
     }
 
     /**
@@ -114,7 +113,7 @@ class FacebookController extends Controller
      */
     public function getProviderTokenByid($id)
     {
-        return RequestsTrait::findAccountByUid($id, 'id')->accessToken;
+        return $this->traitController->findAccountByUid($id, 'id')->accessToken;
     }
 
     /**
@@ -122,7 +121,7 @@ class FacebookController extends Controller
      */
     public function getUidAccountById($id)
     {
-        return RequestsTrait::findAccountByUid($id, 'id')->uid;
+        return $this->traitController->findAccountByUid($id, 'id')->uid;
     }
 
     /**
@@ -137,7 +136,7 @@ class FacebookController extends Controller
         foreach ($object as $key => $value) {
             array_push($multiPart, ['name' => $key, 'contents' => $key == 'thumb' ? fopen($value, 'rb') : $value]);
         }
-        Log::channel('facebook')->info('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication to facebook page Id : '.$pageId);
+        Log::channel('facebook')->info('[postVideoPublicationFormUrl] User id : '.$this->traitController->getCurrentId().' try to Post Video Publication to facebook page Id : '.$pageId);
 
         try {
             $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/videos', [
@@ -148,39 +147,38 @@ class FacebookController extends Controller
                 unlink($object['thumb']);
             }
             if ($response->getStatusCode() == 200) {
-                Log::channel('facebook')->info('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' has success  Post Video Publication to facebook page Id : '.$pageId);
+                Log::channel('facebook')->info('[postVideoPublicationFormUrl] User id : '.$this->traitController->getCurrentId().' has success  Post Video Publication to facebook page Id : '.$pageId);
                 $responseObject['status'] = true;
                 $responseObject['id'] = json_decode($response->getBody(), true)['id'];
                 $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
             } else {
-                Log::channel('facebook')->notice('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' cannot  Post Video Publication to facebook page Id : '.$pageId);
+                Log::channel('facebook')->notice('[postVideoPublicationFormUrl] User id : '.$this->traitController->getCurrentId().' cannot  Post Video Publication to facebook page Id : '.$pageId);
                 $responseObject['status'] = false;
                 $responseObject['message'] = 'to be defined';
             }
+
             return $responseObject;
-        }
-        catch(\Exception $e){
-            Log::channel('facebook')->error('[postVideoPublicationFormUrl] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication to facebook page Id : '.$pageId . ' Message ==> '.$e->getMessage());
+        } catch (\Exception $e) {
+            Log::channel('facebook')->error('[postVideoPublicationFormUrl] User id : '.$this->traitController->getCurrentId().' try to Post Video Publication to facebook page Id : '.$pageId.' Message ==> '.$e->getMessage());
             Log::channel('exception')->error($e->getMessage());
             $responseObject['status'] = false;
             $responseObject['message'] = $e->getMessage();
+
             return $responseObject;
         }
-
-
-
     }
 
     public function postMediaFromUrl($pageId, $token, $url)
     {
-        try{
+        try {
             $response = Http::post(envValue('FACEBOOK_ENDPOINT').$pageId.'/photos?access_token='.$token.'&url='.$url.'&published=false');
-            Log::channel('facebook')->info('[postMediaFromUrl] User id : '.UserTrait::getCurrentId() . ' has Post media Publication from Url '.$url. 'to facebook page Id : '.$pageId);
+            Log::channel('facebook')->info('[postMediaFromUrl] User id : '.$this->traitController->getCurrentId().' has Post media Publication from Url '.$url.'to facebook page Id : '.$pageId);
+
             return $response->json('id');
-        }
-        catch(\Exception $e){
-            Log::channel('facebook')->error('[postMediaFromUrl] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication from Url '.$url. 'to facebook page Id : '.$pageId.' Message ==> '.$e->getMessage());
+        } catch (\Exception $e) {
+            Log::channel('facebook')->error('[postMediaFromUrl] User id : '.$this->traitController->getCurrentId().' try to Post Video Publication from Url '.$url.'to facebook page Id : '.$pageId.' Message ==> '.$e->getMessage());
             Log::channel('exception')->error($e->getMessage());
+
             return $e->getMessage();
         }
     }
@@ -195,7 +193,7 @@ class FacebookController extends Controller
         $tagsString = ' ';
         if ($tags) {
             foreach ($tags as $tag) {
-                $tagsString = $tagsString.'#'.RequestsTrait::formatTags($tag).' ';
+                $tagsString = $tagsString.'#'.$this->traitController->formatTags($tag).' ';
             }
         }
         $object['message'] = $object['message'].$tagsString;
@@ -211,16 +209,17 @@ class FacebookController extends Controller
                 $temporarFile = Storage::disk('custom-ftp')->get('images/'.$fileUrl);
                 $temporarFile = Storage::disk('temporar-video')->put($fileUrl, $temporarFile);
                 $temporarFile = Storage::disk('temporar-video')->path($fileUrl);
-                $object['thumb'] =  $temporarFile;
+                $object['thumb'] = $temporarFile;
             } else {
-                $object['thumb'] =  $videos['thumbnail'];
+                $object['thumb'] = $videos['thumbnail'];
             }
 
             $object['description'] = $object['message'];
             if ($videoTitle) {
                 $object['title'] = $videoTitle;
             }
-            Log::channel('facebook')->info('[postToFacebookMethod] User id : '.UserTrait::getCurrentId() . ' try to Post Video Publication from Url '.$videos['url']. 'to facebook page Id : '.$pageId);
+            Log::channel('facebook')->info('[postToFacebookMethod] User id : '.$this->traitController->getCurrentId().' try to Post Video Publication from Url '.$videos['url'].'to facebook page Id : '.$pageId);
+
             return $this->postVideoPublicationFormUrl($pageId, $object);
         }
 
@@ -240,22 +239,23 @@ class FacebookController extends Controller
                 'form_params' => $object,
             ]);
             if ($response->getStatusCode() == 200) {
-                Log::channel('facebook')->info('User Id: '.UserTrait::getCurrentId().' Has Post a publication to Facebook Account '.$pageId);
+                Log::channel('facebook')->info('User Id: '.$this->traitController->getCurrentId().' Has Post a publication to Facebook Account '.$pageId);
                 $responseObject['status'] = true;
                 $responseObject['id'] = json_decode($response->getBody(), true)['id'];
                 $responseObject['url'] = envValue('FACEBOOK_ROOT_LINK').$responseObject['id'];
             } else {
-                Log::channel('facebook')->notice('User Id: '.UserTrait::getCurrentId().' cannot Post a publication to Facebook Account '.$pageId);
+                Log::channel('facebook')->notice('User Id: '.$this->traitController->getCurrentId().' cannot Post a publication to Facebook Account '.$pageId);
                 $responseObject['status'] = false;
                 $responseObject['message'] = 'to be defined';
             }
+
             return $responseObject;
-        }
-        catch (\Exception $e){
-            Log::channel('facebook')->error('User Id: '.UserTrait::getCurrentId().' Has Post a publication to Facebook Account '.$pageId . ' Message ==>'.$e->getMessage());
+        } catch (\Exception $e) {
+            Log::channel('facebook')->error('User Id: '.$this->traitController->getCurrentId().' Has Post a publication to Facebook Account '.$pageId.' Message ==>'.$e->getMessage());
             Log::channel('exception')->error($e->getMessage());
             $responseObject['status'] = false;
             $responseObject['message'] = $e->getMessage();
+
             return $responseObject;
         }
     }
@@ -265,20 +265,20 @@ class FacebookController extends Controller
      */
     public function getAllPagesByCompanyId()
     {
-        $actualCompanyId = UserTrait::getCompanyId();
+        $actualCompanyId = $this->traitController->getCompanyId();
 
         return $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId, 1);
     }
 
     public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
     {
-        $AllPages = RequestsTrait::getSavedAccountFromDB();
+        $AllPages = $this->traitController->getSavedAccountFromDB();
 
         if ($returnJson) {
             if ($AllPages) {
-                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
+                return $this->traitController->processResponse(true, ['pages' => $AllPages]);
             } else {
-                return RequestsTrait::processResponse(false, ['message' => 'No Facebook Page Found']);
+                return $this->traitController->processResponse(false, ['message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
@@ -290,7 +290,7 @@ class FacebookController extends Controller
      */
     public function savePage($facebookPage, $userUid)
     {
-        $actualCompanyId = UserTrait::getCompanyId();
+        $actualCompanyId = $this->traitController->getCompanyId();
 
         $id = $facebookPage['pageId'];
         $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
@@ -315,9 +315,9 @@ class FacebookController extends Controller
                         'category' => $category,
                         'providerType' => 'page',
                         'accessToken' => $pageToken,
-                        'providerTokenId' => UserTrait::getUniqueProviderTokenByProvider($userUid),
+                        'providerTokenId' => $this->traitController->getUniqueProviderTokenByProvider($userUid),
                     ]);
-            Log::channel('facebook')->info('User :'.UserTrait::getCurrentId().' add Page With UID : '.$id. 'to his company '.$actualCompanyId.' On local ID ==> '.$account->id);
+            Log::channel('facebook')->info('User :'.$this->traitController->getCurrentId().' add Page With UID : '.$id.'to his company '.$actualCompanyId.' On local ID ==> '.$account->id);
         }
     }
 
@@ -335,7 +335,7 @@ class FacebookController extends Controller
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {
                 $id = $facebookPage['id'];
-                $pageFacebookPageLink = FacebookService::getPagePicture($id);
+                $pageFacebookPageLink = $this->facebookService->getPagePicture($id);
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
@@ -343,7 +343,7 @@ class FacebookController extends Controller
                 $checkIfExist = Account::where('uid', $id);
 
                 if (!$checkWithCompany) {
-                    $checkIfExist = $checkIfExist->where('company_id', UserTrait::getCompanyId());
+                    $checkIfExist = $checkIfExist->where('company_id', $this->traitController->getCompanyId());
                 }
 
                 $checkIfExist = $checkIfExist->first();
@@ -362,7 +362,7 @@ class FacebookController extends Controller
                         $checkIfExist = Account::where('uid', $businessAccountId);
 
                         if (!$checkWithCompany) {
-                            $checkIfExist = $checkIfExist->where('company_id', UserTrait::getCompanyId());
+                            $checkIfExist = $checkIfExist->where('company_id', $this->traitController->getCompanyId());
                         }
 
                         $checkIfExist = $checkIfExist->first();
@@ -381,7 +381,7 @@ class FacebookController extends Controller
 
     public function getPagesAccountInterne()
     {
-        $providerObject = UserTrait::getCurrentProviderObject();
+        $providerObject = $this->traitController->getCurrentProviderObject();
 
         return $this->getAccountPagesAccount($providerObject->accountUserId, $providerObject->longLifeToken);
     }
@@ -405,9 +405,9 @@ class FacebookController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
+            return $this->traitController->processResponse(true, ['pages' => $AllPages]);
         } else {
-            return RequestsTrait::processResponse(false);
+            return $this->traitController->processResponse(false);
         }
     }
 
@@ -443,14 +443,16 @@ class FacebookController extends Controller
      */
     public function commentCount($postIdProvider, $accessToken)
     {
-        try{
+        try {
             $request = Http::get(envValue('FACEBOOK_ENDPOINT').$postIdProvider.'/comments?access_token='.$accessToken.'&summary=1');
             $response = $request->json('summary');
-            Log::channel('info')->info('User '.UserTrait::getCurrentId().' get comments counts from '.$postIdProvider);
+            Log::channel('info')->info('User '.$this->traitController->getCurrentId().' get comments counts from '.$postIdProvider);
+
             return $response['total_count'];
-        } catch(\Exception $e){
-            Log::channel('facebook')->error('User '.UserTrait::getCurrentId().' get comments counts from '.$postIdProvider.' Message ==> '.$e->getMessage());
+        } catch (\Exception $e) {
+            Log::channel('facebook')->error('User '.$this->traitController->getCurrentId().' get comments counts from '.$postIdProvider.' Message ==> '.$e->getMessage());
             Log::channel('exception')->error($e->getMessage());
+
             return 'NA';
         }
     }

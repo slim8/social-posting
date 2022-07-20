@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Functions\UtilitiesController;
-use App\Http\Traits\RequestsTrait;
+use App\Http\Controllers\TraitController;
 use App\Http\Traits\Services\FacebookService;
-use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Hashtag;
@@ -24,19 +23,19 @@ use Illuminate\Support\Facades\Validator;
 
 class GeneralSocialController extends Controller
 {
-    use UserTrait;
-    use RequestsTrait;
-    use FacebookService;
-
     protected $utilitiesController;
     protected $facebookController;
     protected $instagramController;
+    protected $traitController;
+    protected $facebookService;
 
     public function __construct()
     {
         $this->utilitiesController = new UtilitiesController();
         $this->facebookController = new FacebookController();
         $this->instagramController = new InstagramController();
+        $this->traitController = new TraitController();
+        $this->facebookService = new FacebookService();
     }
 
     public function sendToPost(Request $request)
@@ -49,7 +48,8 @@ class GeneralSocialController extends Controller
             'status' => 'string|max:255',
         ]);
         if ($validator->fails()) {
-            Log::channel('notice')->notice('[sendToPost] User : '.UserTrait::getCurrentId().' Try To create a new post with Invalid Request');
+            Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To create a new post with Invalid Request');
+
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
@@ -61,8 +61,9 @@ class GeneralSocialController extends Controller
         // Check if post status is DRAFT
         if ($requestPostId) {
             if (Post::where('id', $requestPostId)->where('status', POST::$STATUS_PUBLISH)->first()) {
-                Log::channel('notice')->notice('[sendToPost] User : '.UserTrait::getCurrentId().' Try To edit a Published post Id '.$requestPostId);
-                return RequestsTrait::processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
+                Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To edit a Published post Id '.$requestPostId);
+
+                return $this->traitController->processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
             }
         }
         if ($request->file('sources')) {
@@ -94,8 +95,9 @@ class GeneralSocialController extends Controller
         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
 
         if (!$validator->status) {
-            Log::channel('exception')->notice('[sendToPost] User Id : '.UserTrait::getCurrentId().' ==> '.$validator->message);
-            return RequestsTrait::processResponse(false, ['message' => $validator->message]);
+            Log::channel('exception')->notice('[sendToPost] User Id : '.$this->traitController->getCurrentId().' ==> '.$validator->message);
+
+            return $this->traitController->processResponse(false, ['message' => $validator->message]);
         }
 
         foreach ($request->posts as $postJson) {
@@ -109,9 +111,9 @@ class GeneralSocialController extends Controller
                 $mentions = json_decode($mentions, true);
             }
 
-            $account = RequestsTrait::findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
+            $account = $this->traitController->findAccountByUid($post['accountId'], 'id', 1);  // $singleAccountId
             // $accounPermission To check if User Has permission to post to Account
-            $accounPermission = UserTrait::getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission(UserTrait::getCurrentId(), $post['accountId']) ? true : false;
+            $accounPermission = $this->traitController->getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission($this->traitController->getCurrentId(), $post['accountId']) ? true : false;
 
             if ($account && $accounPermission) {
                 if ($requestPostId) {
@@ -130,7 +132,7 @@ class GeneralSocialController extends Controller
                         'message' => $request->message,
                         'status' => $request->status,
                         'publishedAt' => Carbon::now(),
-                        'createdBy' => UserTrait::getCurrentId(),
+                        'createdBy' => $this->traitController->getCurrentId(),
                         'isScheduled' => 0,
                     ];
                     if (!$requestPostId) {
@@ -163,7 +165,7 @@ class GeneralSocialController extends Controller
                                             'posX' => $mention['x'],
                                             'posY' => $mention['y'],
                                             'provider' => 'instagram',
-                                            'companyId' => \App\Http\Traits\UserTrait::getCompanyId(),
+                                            'companyId' => $this->traitController->getCompanyId(),
                                         ]);
                                     }
                                 }
@@ -200,7 +202,7 @@ class GeneralSocialController extends Controller
                         $obj['message'] = $message;
                     }
                     $obj['access_token'] = $account->accessToken;
-                    Log::channel('facebook')->info('[sendToPost] User Id : '.UserTrait::getCurrentId().' Try to post To facebook Uid :'.$account->uid . ' with account Id '.$account->id.' Post Id : '.$postId);
+                    Log::channel('facebook')->info('[sendToPost] User Id : '.$this->traitController->getCurrentId().' Try to post To facebook Uid :'.$account->uid.' with account Id '.$account->id.' Post Id : '.$postId);
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $post['hashtags'], $videos, $post['videoTitle']) : POST::$STATUS_DRAFT;
                 } elseif ($accountProvider == 'instagram') {
                     if ($message) {
@@ -208,7 +210,7 @@ class GeneralSocialController extends Controller
                     }
                     $BusinessIG = $account->uid;
                     $obj['access_token'] = $this->instagramController->getAccessToken($account->id);
-                    Log::channel('instagarm')->info('[sendToPost] User Id : '.UserTrait::getCurrentId().' Try to post To Instagaram Uid :'.$BusinessIG . ' with account Id '.$account->id.' Post Id : '.$postId);
+                    Log::channel('instagram')->info('[sendToPost] User Id : '.$this->traitController->getCurrentId().' Try to post To Instagaram Uid :'.$BusinessIG.' with account Id '.$account->id.' Post Id : '.$postId);
                     $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos, $localisation, $mentions) : POST::$STATUS_DRAFT;
                 }
 
@@ -231,13 +233,13 @@ class GeneralSocialController extends Controller
 
                     if ($post['hashtags']) {
                         foreach ($post['hashtags'] as $hashtag) {
-                            $hashtag = RequestsTrait::formatTags($hashtag);
+                            $hashtag = $this->traitController->formatTags($hashtag);
                             $hashtagId = Hashtag::where('name', $hashtag)->first();
 
                             if (!$hashtagId) {
                                 $hashtagId = Hashtag::create([
                                     'name' => $hashtag,
-                                    'companyId' => \App\Http\Traits\UserTrait::getCompanyId(),
+                                    'companyId' => $this->traitController->getCompanyId(),
                                 ]);
                             }
 
@@ -248,21 +250,22 @@ class GeneralSocialController extends Controller
                         }
                     }
                 } else {
-                    Log::channel('facebook')->error('[sendToPost] User : '.UserTrait::getCurrentId().' ==> Message : '.$postResponse['message']);
+                    Log::channel('facebook')->error('[sendToPost] User : '.$this->traitController->getCurrentId().' ==> Message : '.$postResponse['message']);
                     $errorLog[] = $postResponse['message'];
                 }
             } else {
-                $messageError = 'Cannot find a connected account Or permissions denied for ID  ' . $post['accountId'];
-                $errorLog[] =$messageError;
-                Log::channel('notice')->notice('[sendToPost] User : '.UserTrait::getCurrentId().' ==> Message : '.$messageError);
+                $messageError = 'Cannot find a connected account Or permissions denied for ID  '.$post['accountId'];
+                $errorLog[] = $messageError;
+                Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' ==> Message : '.$messageError);
             }
         }
 
         if ($errorLog) {
-            return RequestsTrait::processResponse(false, ['message' => $errorLog]);
+            return $this->traitController->processResponse(false, ['message' => $errorLog]);
         }
-        Log::channel('info')->info('[sendToPost] User : '.UserTrait::getCurrentId().' create or edit post : '.$postId->id.' successfuly');
-        return RequestsTrait::processResponse(true);
+        Log::channel('info')->info('[sendToPost] User : '.$this->traitController->getCurrentId().' create or edit post : '.$postId->id.' successfuly');
+
+        return $this->traitController->processResponse(true);
     }
 
     /**
@@ -270,20 +273,20 @@ class GeneralSocialController extends Controller
      */
     public function getAllPagesByCompanyId()
     {
-        $actualCompanyId = UserTrait::getCompanyId();
+        $actualCompanyId = $this->traitController->getCompanyId();
 
         return $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId, 1);
     }
 
     public function getSavedPagefromDataBaseByCompanyId($companyId, int $returnJson = 0)
     {
-        $AllPages = RequestsTrait::getAllAccountsFromDB();
+        $AllPages = $this->traitController->getAllAccountsFromDB();
 
         if ($returnJson) {
             if ($AllPages) {
-                return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
+                return $this->traitController->processResponse(true, ['pages' => $AllPages]);
             } else {
-                return RequestsTrait::processResponse(false, ['message' => 'No Facebook Page Found']);
+                return $this->traitController->processResponse(false, ['message' => 'No Facebook Page Found']);
             }
         } else {
             return $AllPages;
@@ -295,7 +298,7 @@ class GeneralSocialController extends Controller
      */
     public function getAccountPagesAccount($facebookUserId, $tokenKey)
     {
-        $facebookUri = envValue('FACEBOOK_ENDPOINT') . $facebookUserId . '/accounts?access_token=' . $tokenKey;
+        $facebookUri = envValue('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
 
         $response = Http::get($facebookUri);
 
@@ -306,7 +309,7 @@ class GeneralSocialController extends Controller
         if ($jsonPageList) {
             foreach ($jsonPageList as $facebookPage) {
                 $id = $facebookPage['id'];
-                $pageFacebookPageLink = FacebookService::getPagePicture($id);
+                $pageFacebookPageLink = $this->facebookService->getPagePicture($id);
                 $pageToken = $facebookPage['access_token'];
                 $category = $facebookPage['category'];
                 $name = $facebookPage['name'];
@@ -319,7 +322,7 @@ class GeneralSocialController extends Controller
 
     public function getPagesAccountInterne()
     {
-        $providerObject = UserTrait::getCurrentProviderObject();
+        $providerObject = $this->traitController->getCurrentProviderObject();
 
         return $this->getAccountPagesAccount($providerObject->accountUserId, $providerObject->longLifeToken);
     }
@@ -343,9 +346,9 @@ class GeneralSocialController extends Controller
         $AllPages = $this->getAccountPagesAccount($facebookUserId, $tokenKey);
 
         if ($AllPages) {
-            return RequestsTrait::processResponse(true, ['pages' => $AllPages]);
+            return $this->traitController->processResponse(true, ['pages' => $AllPages]);
         } else {
-            return RequestsTrait::processResponse(false);
+            return $this->traitController->processResponse(false);
         }
     }
 
@@ -359,13 +362,13 @@ class GeneralSocialController extends Controller
      */
     public function getSavedAccountsFromDataBaseByCompanyId(int $returnJson = 0, int $accountId = null)
     {
-        $AllPages = RequestsTrait::getAllAccountsFromDB($accountId);
-        Log::channel('info')->info('User :'.UserTrait::getCurrentId().' has request all accounts from database');
+        $AllPages = $this->traitController->getAllAccountsFromDB($accountId);
+        Log::channel('info')->info('User :'.$this->traitController->getCurrentId().' has request all accounts from database');
         if ($returnJson) {
             if ($AllPages) {
-                return RequestsTrait::processResponse(true, [$accountId ? 'page' : 'pages' => $AllPages]);
+                return $this->traitController->processResponse(true, [$accountId ? 'page' : 'pages' => $AllPages]);
             } else {
-                return RequestsTrait::processResponse(false, ['message' => 'No Accounts Found']);
+                return $this->traitController->processResponse(false, ['message' => 'No Accounts Found']);
             }
         } else {
             return $AllPages;
@@ -387,25 +390,27 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
-        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', UserTrait::getCurrentId())->where('accountUserId', $facebookUserId)->first();
+        $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', $this->traitController->getCurrentId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
 
         /* Start Reconnect Block */
         if ($providerToken) {
-            FacebookService::ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerToken->id);
-            Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' Try to reconnect Facebook user : '.$facebookUserId);
-            return RequestsTrait::processResponse(true, ['message' => 'Your account and his sub pages has been Re-connected']);
+            $this->facebookService->ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerToken->id);
+            Log::channel('facebook')->info('User : '.$this->traitController->getCurrentId().' Try to reconnect Facebook user : '.$facebookUserId);
+
+            return $this->traitController->processResponse(true, ['message' => 'Your account and his sub pages has been Re-connected']);
         } else {
-            Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' Try to add Facebook user : '.$facebookUserId);
+            Log::channel('facebook')->info('User : '.$this->traitController->getCurrentId().' Try to add Facebook user : '.$facebookUserId);
         }
 
         /* End  Reconnect Block */
         if ($facebookResponse['AllPages']) {
-            Log::channel('facebook')->info('User : '.UserTrait::getCurrentId().' fetch his pages from Facebook user : '.$facebookUserId);
-            return RequestsTrait::processResponse(true, ['pages' => $facebookResponse['AllPages']]);
+            Log::channel('facebook')->info('User : '.$this->traitController->getCurrentId().' fetch his pages from Facebook user : '.$facebookUserId);
+
+            return $this->traitController->processResponse(true, ['pages' => $facebookResponse['AllPages']]);
         } else {
-            return RequestsTrait::processResponse(true, ['message' => 'No unauthorized accounts found']);
+            return $this->traitController->processResponse(true, ['message' => 'No unauthorized accounts found']);
         }
     }
 
@@ -417,15 +422,16 @@ class GeneralSocialController extends Controller
         $jsonPageList = $request->json('pages');
         $userUid = $request->json('user');
 
-        if (!UserTrait::getUniqueProviderTokenByProvider($userUid)) {
-            Log::channel('facebook')->notice('User : '.UserTrait::getCurrentId(). 'after try to save new facebok pages :  No User Id Found in this Account');
-            return RequestsTrait::processResponse(false, ['message' => 'No User Id Found in this Account']);
+        if (!$this->traitController->getUniqueProviderTokenByProvider($userUid)) {
+            Log::channel('facebook')->notice('User : '.$this->traitController->getCurrentId().'after try to save new facebok pages :  No User Id Found in this Account');
+
+            return $this->traitController->processResponse(false, ['message' => 'No User Id Found in this Account']);
         }
 
         // Check and return false if userUid not autorized for this action ;
         $AllPages = [];
 
-        $actualCompanyId = UserTrait::getCompanyId();
+        $actualCompanyId = $this->traitController->getCompanyId();
 
         if ($jsonPageList) {
             foreach ($jsonPageList as $providerAccount) {
@@ -439,9 +445,9 @@ class GeneralSocialController extends Controller
 
             $Pages = $this->getSavedPagefromDataBaseByCompanyId($actualCompanyId);
 
-            return RequestsTrait::processResponse(true, ['pages' => $Pages]);
+            return $this->traitController->processResponse(true, ['pages' => $Pages]);
         } else {
-            return RequestsTrait::processResponse(false, ['message' => 'No page autorized']);
+            return $this->traitController->processResponse(false, ['message' => 'No page autorized']);
         }
     }
 
@@ -452,16 +458,16 @@ class GeneralSocialController extends Controller
     {
         $searchQuery = $request->q;
         if (!$searchQuery) {
-            return RequestsTrait::processResponse(false);
+            return $this->traitController->processResponse(false);
         }
 
-        $mentions = Mentions::where('companyId', UserTrait::getCompanyId())->where('username', 'like', '%' . $searchQuery . '%')->distinct('username')->get('username');
+        $mentions = Mentions::where('companyId', $this->traitController->getCompanyId())->where('username', 'like', '%'.$searchQuery.'%')->distinct('username')->get('username');
 
         if (!$mentions) {
-            return RequestsTrait::processResponse(false);
+            return $this->traitController->processResponse(false);
         }
 
-        return RequestsTrait::processResponse(true, ['mentions' => $mentions]);
+        return $this->traitController->processResponse(true, ['mentions' => $mentions]);
     }
 
     /**
@@ -471,10 +477,10 @@ class GeneralSocialController extends Controller
     {
         $searchQuery = $request->q;
         if (!$searchQuery) {
-            return RequestsTrait::processResponse(false);
+            return $this->traitController->processResponse(false);
         }
-        $hashtags = Hashtag::where('companyId', UserTrait::getCompanyId())->where('name', 'like', '%' . str_replace(' ', '_', $searchQuery) . '%')->distinct('name')->get('name');
+        $hashtags = Hashtag::where('companyId', $this->traitController->getCompanyId())->where('name', 'like', '%'.str_replace(' ', '_', $searchQuery).'%')->distinct('name')->get('name');
 
-        return RequestsTrait::processResponse(count($hashtags) > 0 ? true : false, ['hashtags' => $hashtags]);
+        return $this->traitController->processResponse(count($hashtags) > 0 ? true : false, ['hashtags' => $hashtags]);
     }
 }
