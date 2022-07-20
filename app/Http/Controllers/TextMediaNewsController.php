@@ -6,6 +6,7 @@ use App\Models\TextMediaNews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class TextMediaNewsController extends Controller
 {
@@ -67,7 +68,7 @@ class TextMediaNewsController extends Controller
      */
     public function show($id)
     {
-        return $this->fileController->processResponse(true , ['textMedia' => TextMediaNews::where('id',$id)->first()]);
+        return $this->traitController->processResponse(true , ['textMedia' => TextMediaNews::where('id',$id)->first()]);
     }
 
     /**
