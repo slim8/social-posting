@@ -105,21 +105,22 @@
 
             > .m-two-column {
                 @include mq(ml) {
-                    width: 38%;
+                    width: 57%;
                     margin: auto;
                     display: flex;
 
                     > .m-form-field-1 {
                         display: flex;
-                        justify-content: start;
+                        justify-content: end;
+                        width: 40%;
 
                         > .m-form-label {
-                            max-width: 25%;
+                            max-width: 100%;
                             margin: 0px 20px 0px -10px;
                         }
 
                         > .m-form-control {
-                            max-width: 65%;
+                            max-width: 100%;
                         }
                     }
                     > .m-form-field-2 {
@@ -127,11 +128,11 @@
                         justify-content: start;
 
                         > .m-form-label {
-                            max-width: 15%;
+                            max-width: 100%;
                         }
 
                         > .m-form-control {
-                            max-width: 60%;
+                            max-width: 100%;
                         }
                     }
                 }
