@@ -103,16 +103,16 @@ export class CreatePostComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-      this.getPages('mixed');
-      const mentioned = document.querySelector('.mentioned');
-      if (this.router.url.includes('create-post')) {
-          this.sharedModule.initSideMenu('create-post');
-      }
-      this.activatedRoute.params.subscribe(params => {
-        if(params['id']) {
-          this.pageId=params['id'];
+        this.getPages('mixed');
+        const mentioned = document.querySelector('.mentioned');
+        if (this.router.url.includes('create-post')) {
+            this.sharedModule.initSideMenu('create-post');
         }
-      });
+        this.activatedRoute.params.subscribe(params => {
+            if (params['id']) {
+                this.pageId = params['id'];
+            }
+        });
     }
 
     getPages(param: string) {
@@ -122,22 +122,22 @@ export class CreatePostComponent implements OnInit {
             next: (event: any) => {
                 this.listOfPages = new Array();
                 event.pages.forEach((page: any) => {
-                  if (param == 'mixed') {
-                      if (page.isConnected == true) {
-                          this.listOfPages.push(page);
-                      }
-                      if(this.pageId != "") {
-                        if(page.id==this.pageId) {
-                          let selectedPage = page.id+"|"+page.provider;
-                          this.accountsValue.push(selectedPage);
+                    if (param == 'mixed') {
+                        if (page.isConnected == true) {
+                            this.listOfPages.push(page);
                         }
-                      }
-                  }
-                  else if (param == 'instagram') {
-                      if (page.isConnected == true && page.provider == 'instagram') {
-                          this.listOfPages.push(page);
-                      }
-                  }
+                        if (this.pageId != "") {
+                            if (page.id == this.pageId) {
+                                let selectedPage = page.id + "|" + page.provider;
+                                this.accountsValue.push(selectedPage);
+                            }
+                        }
+                    }
+                    else if (param == 'instagram') {
+                        if (page.isConnected == true && page.provider == 'instagram') {
+                            this.listOfPages.push(page);
+                        }
+                    }
                 })
             },
             error: err => {
@@ -233,11 +233,6 @@ export class CreatePostComponent implements OnInit {
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: (event) => {
-                    if (param == 'PUBLISH') {
-                        this.router.navigateByUrl('/application/published-posts')
-                    } else {
-                        this.router.navigateByUrl('/application/drafts')
-                    }
                     this.isLoading = false;
                 },
                 error: (err) => {
@@ -257,8 +252,12 @@ export class CreatePostComponent implements OnInit {
                     this.accountsValue = [];
                     if (param == 'PUBLISH') {
                         this.shared.createMessage('success', 'published!');
+                        this.router.navigateByUrl('/application/published-posts')
+
                     } else {
                         this.shared.createMessage('success', 'saved to drafts!');
+                        this.router.navigateByUrl('/application/drafts')
+
                     }
                 },
             });
