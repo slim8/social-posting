@@ -82,13 +82,19 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
     Route::apiResource('/dictionary', DictionaryController::class)->except(['show']);
-    Route::apiResource('/text-media-news', TextMediaNewsController::class)->except(['index']);
-    Route::apiResource('/news', NewsController::class);
+    Route::post('/text-media-news', [TextMediaNewsController::class , 'store']);
+    Route::get('/text-media-news/{id}', [TextMediaNewsController::class , 'show']);
+    Route::put('/text-media-news/{id}', [TextMediaNewsController::class , 'update']);
+    Route::delete('/text-media-news/{id}', [TextMediaNewsController::class , 'destroy']);
+    Route::post('/news', [ NewsController::class ,'store' ]);
+    Route::put('/news/{id}', [ NewsController::class ,'update' ]);
+    Route::delete('/news/{id}', [ NewsController::class ,'destroy' ]);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('get-profile.api');
     Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
     Route::post('/change-password', [ProfileController::class, 'changePassword']);
-    Route::apiResource('/news', NewsController::class)->only(['index', 'show']);
+    Route::get('/news',[ NewsController::class ,'index' ]);
+    Route::get('/news/{id}',[ NewsController::class ,'show' ]);
 });
