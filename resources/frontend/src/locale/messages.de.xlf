@@ -138,6 +138,10 @@
           <context context-type="linenumber">101</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">117</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/components/post-item/post-item.component.html</context>
           <context context-type="linenumber">77</context>
         </context-group>
@@ -150,12 +154,22 @@
           <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="managmentNews" datatype="html">
+        <source>Managment news</source>
+        <target>Nachrichten aus der Verwaltung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Managment news</note>
+        <note priority="1" from="meaning">Managment news</note>
+      </trans-unit>
       <trans-unit id="dictionaries" datatype="html">
         <source>Dictionaries</source>
         <target>Wörterbücher</target>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <note priority="1" from="description">Title for the Dictionaries</note>
         <note priority="1" from="meaning">Dictionaries</note>
@@ -398,7 +412,7 @@ dem mediafactory Social Media Publisher hinzuzufügen.</target></trans-unit>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">89</context>
         </context-group>
         <note priority="1" from="description">Title for the Cancel</note>
         <note priority="1" from="meaning">Cancel</note>
@@ -410,12 +424,20 @@ dem mediafactory Social Media Publisher hinzuzufügen.</target></trans-unit>
           <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">37,39</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">55,57</context>
+          <context context-type="linenumber">75,77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <note priority="1" from="description">Title for the save</note>
         <note priority="1" from="meaning">save</note>
@@ -446,6 +468,46 @@ dem mediafactory Social Media Publisher hinzuzufügen.</target></trans-unit>
         <note priority="1" from="description">Application title</note>
         <note priority="1" from="meaning">App Title</note>
       <target>Social Media Publisher </target></trans-unit>
+      <trans-unit id="forgotPassword" datatype="html">
+        <source>Forgot Password?</source>
+        <target>Passwort vergessen?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Forgot Password</note>
+        <note priority="1" from="meaning">Forgot Password</note>
+      </trans-unit>
+      <trans-unit id="clickHere" datatype="html">
+        <source>Click here.</source>
+        <target>Klick hier.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Click here</note>
+        <note priority="1" from="meaning">Click here</note>
+      </trans-unit>
+      <trans-unit id="noAccountYet" datatype="html">
+        <source>No account yet?</source>
+        <target>Noch keinen Account?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <note priority="1" from="description">Title for the No account yet</note>
+        <note priority="1" from="meaning">No account yet</note>
+      </trans-unit>
+      <trans-unit id="signUpHere" datatype="html">
+        <source>Sign up here.</source>
+        <target>Hier anmelden.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Sign up here</note>
+        <note priority="1" from="meaning">Sign up here</note>
+      </trans-unit>
       <trans-unit id="loginPhrase" datatype="html">
         <source> Easily manage all your social media and get results with our application </source>
         <context-group purpose="location">
@@ -532,7 +594,7 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         <source> Login </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
-          <context context-type="linenumber">62,64</context>
+          <context context-type="linenumber">65,67</context>
         </context-group>
       <target>Login </target></trans-unit>
       <trans-unit id="registration" datatype="html">
@@ -561,11 +623,11 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <note priority="1" from="description">Title for the FirstName </note>
         <note priority="1" from="meaning">FirstName</note>
@@ -578,11 +640,11 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <note priority="1" from="description">Title for the lastName </note>
         <note priority="1" from="meaning">lastName</note>
@@ -604,11 +666,11 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">9</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <note priority="1" from="description">Title for the E-mail </note>
         <note priority="1" from="meaning">E-mail</note>
@@ -621,7 +683,7 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">30</context>
         </context-group>
         <note priority="1" from="description">Title for the Adress </note>
         <note priority="1" from="meaning">Adress</note>
@@ -632,6 +694,10 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
         <note priority="1" from="description">Title for the Postcode </note>
         <note priority="1" from="meaning">Postcode</note>
       <target>PLZ</target></trans-unit>
@@ -640,6 +706,10 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
           <context context-type="linenumber">134</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <note priority="1" from="description">Title for the City </note>
         <note priority="1" from="meaning">City</note>
@@ -661,7 +731,7 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <note priority="1" from="description">Title for the Website </note>
         <note priority="1" from="meaning">Website</note>
@@ -700,11 +770,16 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/blog-posts/blog-posts.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
         <note priority="1" from="description">Title for the news</note>
         <note priority="1" from="meaning">news</note>
       <target>Neuigkeiten des Social Media Publishers</target></trans-unit>
       <trans-unit id="newFeatures" datatype="html">
-        <source>Neue Features, Updates und Ankündigungen findest Du hier.</source>
+        <source>Find new features, updates and announcements here.</source>
+        <target>Neue Features, Updates und Ankündigungen findest Du hier.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/blog-posts/blog-posts.component.html</context>
           <context context-type="linenumber">5</context>
@@ -713,7 +788,7 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         <note priority="1" from="meaning">new Features</note>
       <target>Neue Features, Updates und Ankündigungen findest Du hier.</target></trans-unit>
       <trans-unit id="back" datatype="html">
-        <source> Zurück zur Übersicht </source>
+        <source> Back to overview </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/post-detail/post-detail.component.html</context>
           <context context-type="linenumber">4</context>
@@ -721,6 +796,16 @@ eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptu
         <note priority="1" from="description">Title for the back</note>
         <note priority="1" from="meaning">back</note>
       <target>Zurück zur Übersicht </target></trans-unit>
+      <trans-unit id="supportTeam" datatype="html">
+        <source>If you have any questions, our support team is at your side: </source>
+        <target>ZBei Fragen steht Ihnen unser Support-Team zur Seite:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/post-detail/post-detail.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <note priority="1" from="description">Title for the support team</note>
+        <note priority="1" from="meaning">support team</note>
+      </trans-unit>
       <trans-unit id="dashboardTitle" datatype="html">
         <source> Social Media Publisher </source>
         <context-group purpose="location">
@@ -1059,11 +1144,171 @@ Media Publishers</target></trans-unit>
                     </note>
         <note priority="1" from="meaning">Published Post Title</note>
       <target>Meine Beiträge</target></trans-unit>
+      <trans-unit id="updateNews" datatype="html">
+        <source>Update News</source>
+        <target>Neuigkeiten aktualisieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Update News for the Update News</note>
+        <note priority="1" from="meaning">Update News</note>
+      </trans-unit>
+      <trans-unit id="CreateNews" datatype="html">
+        <source>Create News</source>
+        <target>Nachrichten erstellen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Create News for the Create News</note>
+        <note priority="1" from="meaning">Create News</note>
+      </trans-unit>
+      <trans-unit id="title" datatype="html">
+        <source>Title</source>
+        <target>Titel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <note priority="1" from="description">Title for the title</note>
+        <note priority="1" from="meaning">title</note>
+      </trans-unit>
+      <trans-unit id="teaser" datatype="html">
+        <source>Teaser</source>
+        <target>Teaser</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <note priority="1" from="description">Title for the teaser</note>
+        <note priority="1" from="meaning">teaser</note>
+      </trans-unit>
+      <trans-unit id="picture" datatype="html">
+        <source>Picture</source>
+        <target>Bild</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <note priority="1" from="description">Title for the picture</note>
+        <note priority="1" from="meaning">picture</note>
+      </trans-unit>
+      <trans-unit id="date" datatype="html">
+        <source>date</source>
+        <target>Datum</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <note priority="1" from="description">Title for the date</note>
+        <note priority="1" from="meaning">date</note>
+      </trans-unit>
+      <trans-unit id="template" datatype="html">
+        <source>Template</source>
+        <target>Schablone</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <note priority="1" from="description">Title for the template</note>
+        <note priority="1" from="meaning">template</note>
+      </trans-unit>
+      <trans-unit id="textMedia" datatype="html">
+        <source>Update text media</source>
+        <target>Textmedien aktualisieren</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">title for the text media</note>
+        <note priority="1" from="meaning">text media</note>
+      </trans-unit>
+      <trans-unit id="CreateTextMedia" datatype="html">
+        <source>Create text media</source>
+        <target>Textmedien erstellen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <note priority="1" from="description">Create text media for the Create text media</note>
+        <note priority="1" from="meaning">Create text media</note>
+      </trans-unit>
+      <trans-unit id="subtitle" datatype="html">
+        <source>Subtitle</source>
+        <target>Untertitel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <note priority="1" from="description">Title for the subtitle</note>
+        <note priority="1" from="meaning">subtitle</note>
+      </trans-unit>
+      <trans-unit id="description" datatype="html">
+        <source>Description</source>
+        <target>Beschreibung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <note priority="1" from="description">Title for the description</note>
+        <note priority="1" from="meaning">description</note>
+      </trans-unit>
+      <trans-unit id="createUsers" datatype="html">
+        <source>Create Users</source>
+        <target>Benutzer erstellen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">title for the create Users</note>
+        <note priority="1" from="meaning">create Users</note>
+      </trans-unit>
       <trans-unit id="newPassword" datatype="html">
         <source>new password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <note priority="1" from="description">Title for the new password</note>
         <note priority="1" from="meaning">new password</note>
@@ -1073,16 +1318,56 @@ Media Publishers</target></trans-unit>
         <source>Subscribe newsletter</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">69</context>
         </context-group>
         <note priority="1" from="description">Title for the Subscribe newsletter</note>
         <note priority="1" from="meaning">Subscribe newsletter</note>
       <target>Newsletter abonnieren</target></trans-unit>
+      <trans-unit id="addNews" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add News </source>
+        <target><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Nachrichten hinzufügen </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">9,11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Add News</note>
+        <note priority="1" from="meaning">Add News</note>
+      </trans-unit>
+      <trans-unit id="usersList" datatype="html">
+        <source>Users list</source>
+        <target>Benutzerliste</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">title for the Users list</note>
+        <note priority="1" from="meaning">Users list</note>
+      </trans-unit>
       <trans-unit id="setPermissions" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Set Permissions </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">4,6</context>
+          <context context-type="linenumber">8,10</context>
         </context-group>
         <note priority="1" from="description">Title for the Set Permissions</note>
         <note priority="1" from="meaning">Set Permissions</note>
@@ -1091,7 +1376,7 @@ Media Publishers</target></trans-unit>
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add User </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">9,11</context>
+          <context context-type="linenumber">13,15</context>
         </context-group>
         <note priority="1" from="description">Title for the Add User</note>
         <note priority="1" from="meaning">Add User</note>
@@ -1101,7 +1386,7 @@ Media Publishers</target></trans-unit>
         <source>Add Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <note priority="1" from="description">Title for the Add Permissions</note>
         <note priority="1" from="meaning">Add Permissions</note>

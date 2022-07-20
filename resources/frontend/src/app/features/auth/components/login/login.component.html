@@ -45,10 +45,13 @@
       </ng-template>
 
       <div class="m-sign-up">
-        <p>Passwort vergessen? <a routerLink="../forget-password">Klicke hier.</a></p>
+        <p> 
+          <span i18n="Forgot Password|Title for the Forgot Password@@forgotPassword">Forgot Password?</span>  
+          <a routerLink="../forget-password" i18n="Click here|Title for the Click here@@clickHere">Click here.</a>
+        </p>
         <p>
-          Noch kein Konto?
-          <a routerLink="../register">Registriere dich hier.</a>
+          <span i18n="No account yet|Title for the No account yet@@noAccountYet">No account yet?</span> 
+          <a routerLink="../register" i18n="Sign up here|Title for the Sign up here@@signUpHere">Sign up here.</a>
         </p>
       </div>
       <div class="m-button-login">

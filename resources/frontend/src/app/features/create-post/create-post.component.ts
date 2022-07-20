@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
 import { generateVideoThumbnails } from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -25,6 +25,9 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 })
 export class CreatePostComponent implements OnInit {
     isLoading = false;
+
+    // pre-selected page
+    pageId: string = "";
 
     //upload file apiURL
     uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
@@ -95,15 +98,21 @@ export class CreatePostComponent implements OnInit {
         private modal: NzModalService,
         private notification: NzNotificationService,
         private router: Router,
-        private sharedModule: SharedModule
+        private sharedModule: SharedModule,
+        private activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
-        this.getPages('mixed');
-        const mentioned = document.querySelector('.mentioned');
-        if (this.router.url.includes('create-post')) {
-            this.sharedModule.initSideMenu('create-post');
+      this.getPages('mixed');
+      const mentioned = document.querySelector('.mentioned');
+      if (this.router.url.includes('create-post')) {
+          this.sharedModule.initSideMenu('create-post');
+      }
+      this.activatedRoute.params.subscribe(params => {
+        if(params['id']) {
+          this.pageId=params['id'];
         }
+      });
     }
 
     getPages(param: string) {
@@ -113,16 +122,22 @@ export class CreatePostComponent implements OnInit {
             next: (event: any) => {
                 this.listOfPages = new Array();
                 event.pages.forEach((page: any) => {
-                    if (param == 'mixed') {
-                        if (page.isConnected == true) {
-                            this.listOfPages.push(page);
+                  if (param == 'mixed') {
+                      if (page.isConnected == true) {
+                          this.listOfPages.push(page);
+                      }
+                      if(this.pageId != "") {
+                        if(page.id==this.pageId) {
+                          let selectedPage = page.id+"|"+page.provider;
+                          this.accountsValue.push(selectedPage);
                         }
-                    }
-                    else if (param == 'instagram') {
-                        if (page.isConnected == true && page.provider == 'instagram') {
-                            this.listOfPages.push(page);
-                        }
-                    }
+                      }
+                  }
+                  else if (param == 'instagram') {
+                      if (page.isConnected == true && page.provider == 'instagram') {
+                          this.listOfPages.push(page);
+                      }
+                  }
                 })
             },
             error: err => {

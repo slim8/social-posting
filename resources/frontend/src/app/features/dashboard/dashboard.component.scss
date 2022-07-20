@@ -66,6 +66,7 @@
                         > .m-note {
                             @include textstyle-size-10();
                             color: $color-media-secondary-button;
+                            cursor: pointer;
                         }
                     }
 
