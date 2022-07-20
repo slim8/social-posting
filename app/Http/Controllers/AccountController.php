@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\RequestsTrait;
-use App\Http\Traits\UserTrait;
 use App\Models\Account;
 use App\Models\AccountPost;
 use App\Models\Mentions;
@@ -15,8 +13,15 @@ use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
-    use UserTrait;
-    use RequestsTrait;
+    protected $traitController;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->traitController = new TraitController();
+    }
 
     /**
      * Disconnect Or Connect Account
@@ -26,38 +31,41 @@ class AccountController extends Controller
     public function disconnectAccount(Request $request, int $action = null, int $accountId = null)
     {
         if ($action !== 0 && $action !== 1) {
-            Log::channel('notice')->notice('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect/Connect Account without Specify Action');
-            return RequestsTrait::processResponse(false, ['message' => 'Please specify action 0 for disconnect and 1 for Connect']);
+            Log::channel('notice')->notice('[disconnectAccount] User : '.$this->traitController->getCurrentId().' Try To Disconnect/Connect Account without Specify Action');
+
+            return $this->traitController->processResponse(false, ['message' => 'Please specify action 0 for disconnect and 1 for Connect']);
         }
 
         if (!$accountId) {
-            Log::channel('notice')->notice('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect/Connect Account without Account ID');
-            return RequestsTrait::processResponse(false, ['message' => 'Please choose a valid account ID']);
+            Log::channel('notice')->notice('[disconnectAccount] User : '.$this->traitController->getCurrentId().' Try To Disconnect/Connect Account without Account ID');
+
+            return $this->traitController->processResponse(false, ['message' => 'Please choose a valid account ID']);
         }
 
-        $userId = UserTrait::getCurrentId();
+        $userId = $this->traitController->getCurrentId();
 
         $account = Account::where('id', $accountId)->whereHas('providerToken', function ($query) use ($userId) {
             $query->where('provider_tokens.created_by', $userId);
         })->first();
 
         if (!$account) {
-            Log::channel('notice')->notice('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect/Connect Account Id : '.$accountId.' But could not find Account');
-            return RequestsTrait::processResponse(false, ['messsage' => 'Cannot find account']);
+            Log::channel('notice')->notice('[disconnectAccount] User : '.$this->traitController->getCurrentId().' Try To Disconnect/Connect Account Id : '.$accountId.' But could not find Account');
+
+            return $this->traitController->processResponse(false, ['messsage' => 'Cannot find account']);
         }
 
         $account->update(['status' => $action]);
 
         if ($action) {
-            Log::channel('info')->info('[disconnectAccount] User : '.UserTrait::getCurrentId().' has Connect Account Id : '.$accountId);
+            Log::channel('info')->info('[disconnectAccount] User : '.$this->traitController->getCurrentId().' has Connect Account Id : '.$accountId);
 
             $object['message'] = 'Your account has been connected';
         } else {
-            Log::channel('info')->info('[disconnectAccount] User : '.UserTrait::getCurrentId().' Try To Disconnect Account Id : '.$accountId);
+            Log::channel('info')->info('[disconnectAccount] User : '.$this->traitController->getCurrentId().' Try To Disconnect Account Id : '.$accountId);
             $object['message'] = 'Your account has been disconnected';
         }
 
-        return RequestsTrait::processResponse(true, $object);
+        return $this->traitController->processResponse(true, $object);
     }
 
     /**
@@ -83,7 +91,7 @@ class AccountController extends Controller
 
             AccountPost::where('id', $accountPostId)->delete();
         }
-        Log::channel('info')->info('[deleteAccountAction] User : '.UserTrait::getCurrentId().' Delete Account Id : '.$accountId.' With hsi Mentions , PostMedia And Posts');
+        Log::channel('info')->info('[deleteAccountAction] User : '.$this->traitController->getCurrentId().' Delete Account Id : '.$accountId.' With hsi Mentions , PostMedia And Posts');
         Account::where('id', $accountId)->delete();
 
         return true;
@@ -94,15 +102,16 @@ class AccountController extends Controller
      */
     public function deleteAccount(int $accountId = null)
     {
-        $account = RequestsTrait::findAccountByUid($accountId, 'id', 1);
+        $account = $this->traitController->findAccountByUid($accountId, 'id', 1);
 
         if (!$account) {
-            Log::channel('notice')->notice('[deleteAccount] User : '.UserTrait::getCurrentId(). ' Try To delete Account :'.$accountId." But he don't have rights to delete this account");
-            return RequestsTrait::processResponse(false, ['message' => "You don't have rights to delete this account"]);
+            Log::channel('notice')->notice('[deleteAccount] User : '.$this->traitController->getCurrentId().' Try To delete Account :'.$accountId." But he don't have rights to delete this account");
+
+            return $this->traitController->processResponse(false, ['message' => "You don't have rights to delete this account"]);
         }
 
         $this->deleteAccountAction($accountId);
 
-        return RequestsTrait::processResponse(true);
+        return $this->traitController->processResponse(true);
     }
 }

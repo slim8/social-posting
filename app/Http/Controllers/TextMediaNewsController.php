@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\RequestsTrait;
 use App\Models\TextMediaNews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,22 +9,23 @@ use Illuminate\Support\Facades\Validator;
 
 class TextMediaNewsController extends Controller
 {
-    use RequestsTrait;
     protected $fileController;
+    protected $traitController;
 
     /**
-     * Construct
+     * Construct.
      */
-
-     public function __construct()
-     {
+    public function __construct()
+    {
         $this->fileController = new FileController();
-     }
+        $this->traitController = new TraitController();
+    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -35,25 +35,27 @@ class TextMediaNewsController extends Controller
             'subtitle' => 'required',
             'description' => 'required',
             'newsId' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg'
+            'image' => 'required|mimes:png,jpg,jpeg',
         ]);
 
-        if($validation->fails()){
-            return RequestsTrait::processResponse(false , [ "error" => $validation->errors()]);
+        if ($validation->fails()) {
+            return $this->traitController->processResponse(false, ['error' => $validation->errors()]);
         }
 
-        try{
-            $picture = $this->fileController->uploadLocalAndReturnObject( $request->file('image'), 'image' );
-            TextMediaNews::create([
+        try {
+            $picture = $this->fileController->uploadLocalAndReturnObject($request->file('image'), 'image');
+            $newTextMedia = TextMediaNews::create([
                 'title' => $request->title,
                 'subtitle' => $request->subtitle,
                 'description' => $request->description,
                 'picture' => json_encode($picture),
                 'newsId' => $request->newsId,
             ]);
-            return RequestsTrait::processResponse(true);
-        }catch(\Exception $e){
-            return RequestsTrait::processResponse(false , [ "error" => $e->getMessage() ]);
+            Log::channel('info')->info('User : '.$this->traitController->getCurrentId() . ' add new TextMediaNews : '.$newTextMedia->id);
+            return $this->traitController->processResponse(true);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error($e->getMessage());
+            return $this->traitController->processResponse(false, ['error' => $e->getMessage()]);
         }
     }
 
@@ -71,13 +73,13 @@ class TextMediaNewsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
         $validation = Validator::make($request->all(), [
             'title' => 'required',
             'subtitle' => 'required',
@@ -85,45 +87,49 @@ class TextMediaNewsController extends Controller
             'newsId' => 'required',
         ]);
 
-        if($validation->fails()){
-            return RequestsTrait::processResponse(false , [ "error" => $validation->errors()]);
+        if ($validation->fails()) {
+            return $this->traitController->processResponse(false, ['error' => $validation->errors()]);
         }
 
-        try{
-            $textMedia = TextMediaNews::where('id' , $id)->first();
-            if($request->file('image')){
+        try {
+            $textMedia = TextMediaNews::where('id', $id)->first();
+            if ($request->file('image')) {
                 Storage::delete(json_decode($textMedia->picture)->name);
-                $picture = $this->fileController->uploadLocalAndReturnObject( $request->file('image'), 'image' );
+                $picture = $this->fileController->uploadLocalAndReturnObject($request->file('image'), 'image');
                 $textMedia->picture = json_encode($picture);
             }
+            Log::channel('info')->info('User : '.$this->traitController->getCurrentId() . ' Has Update TextMediaNews : '.$id);
             $textMedia->title = $request->title;
             $textMedia->subtitle = $request->subtitle;
             $textMedia->description = $request->description;
             $textMedia->newsId = $request->newsId;
             $textMedia->save();
 
-            return RequestsTrait::processResponse(true);
-        }catch(\Exception $e){
-            return RequestsTrait::processResponse(false , [ "error" => $e->getMessage() ]);
+            return $this->traitController->processResponse(true);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error($e->getMessage());
+            return $this->traitController->processResponse(false, ['error' => $e->getMessage()]);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        try{
-            $textMedia = TextMediaNews::where('id' , $id)->first();
+        try {
+            $textMedia = TextMediaNews::where('id', $id)->first();
             Storage::delete(json_decode($textMedia->picture)->name);
             $textMedia->delete();
-            
-            return RequestsTrait::processResponse(true);
-        }catch(\Exception $e){
-            return RequestsTrait::processResponse(false , [ "error" => $e->getMessage() ]);
+            Log::channel('info')->info('User : '.$this->traitController->getCurrentId() . ' Has delete TextMediaNews : '.$id);
+            return $this->traitController->processResponse(true);
+        } catch (\Exception $e) {
+            Log::channel('exception')->error($e->getMessage());
+            return $this->traitController->processResponse(false, ['error' => $e->getMessage()]);
         }
     }
 }
