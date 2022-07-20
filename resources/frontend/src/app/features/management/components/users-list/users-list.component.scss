@@ -2,30 +2,43 @@
 @import '../../../../../assets/sass/_global/_mixins.scss';
 @import '../../../../../assets/sass/_project/base.scss';
 
+.mod-user-list{
+    >.m-wrapper {
 
-div {
-    div.button-container {
-        text-align: end;
-        margin : 0 0 20px 0;
-        >button{
-            margin : 0 0 0 20px;
-            &.m-primary-button{
-                background: $color-media-black-opacity-30;
-                color: $color-base-0;
-                border-color: $color-media-black-opacity-30;
-                &:hover{
-                    background: $color-media-secondary-button;
-                    border-color: $color-media-black-opacity-half;
-                }
-                &[Disabled]{
-                    background: rgba(0, 0, 0, 0.1);
+        >.m-header{
+            padding: 18px;
+            font-size: 2.5rem;
+            line-height: 1.36175;
+            text-transform: capitalize;
+            font-weight: 400;
+            >h1{
+                color: $color-media-black-opacity-half;
+            }
+        }
+        
+        >.m-button-container {
+            text-align: end;
+            margin : 0 0 20px 0;
+            >button{
+                margin : 0 0 0 20px;
+                &.m-primary-button{
+                    background: $color-media-black-opacity-30;
                     color: $color-base-0;
-                    border-color: rgba(0, 0, 0, 0.15);
+                    border-color: $color-media-black-opacity-30;
+                    &:hover{
+                        background: $color-media-secondary-button;
+                        border-color: $color-media-black-opacity-half;
+                    }
+                    &[Disabled]{
+                        background: rgba(0, 0, 0, 0.1);
+                        color: $color-base-0;
+                        border-color: rgba(0, 0, 0, 0.15);
+                    }
                 }
             }
         }
-    }
-} 
+    } 
+}
 
 .m-permission-block{
     >.m-permission-tag{

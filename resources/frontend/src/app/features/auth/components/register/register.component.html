@@ -1,17 +1,30 @@
 <div class="mod-register">
   <div class="m-wrapper">
     <div class="m-subtitle">
-      <h2 i18n="registration|Title for the registration @@registration">REGISTRATION</h2>
+      <h2 i18n="registration|Title for the registration @@registration">
+        REGISTRATION
+      </h2>
     </div>
 
     <div class="m-title">
-      <h1 i18n="Social Media Publisher|subTitle for the registration @@socialmediapublisher">Social Media Publisher</h1>
+      <h1
+        i18n="
+          Social Media Publisher|subTitle for the registration
+          @@socialmediapublisher"
+      >
+        Social Media Publisher
+      </h1>
     </div>
 
     <div class="m-para">
       Easily manage all your social media and get results with our application
     </div>
-    <form class="m-form" nz-form [formGroup]="validateForm" (ngSubmit)="onSaveCompany()">
+    <form
+      class="m-form"
+      nz-form
+      [formGroup]="validateForm"
+      (ngSubmit)="onSaveCompany()"
+    >
       <nz-form-item class="m-form-field">
         <nz-form-label
           class="m-form-label"
@@ -93,14 +106,14 @@
           nzFor="adress"
           nzRequired
           i18n="Adress|Title for the Adress @@adress"
-          >Adress</nz-form-label
+          >Address</nz-form-label
         >
         <nz-form-control
           [nzSm]="14"
           [nzXs]="24"
-          nzErrorTip="Please input adress!"
+          nzErrorTip="Please input address!"
         >
-          <input nz-input id="adress" formControlName="adress" />
+          <input nz-input id="adress" formControlName="address" />
         </nz-form-control>
       </nz-form-item>
       <div class="m-two-column">
@@ -112,7 +125,7 @@
             nzFor="Postcode"
             nzRequired
             i18n="Postcode|Title for the Postcode @@postCode"
-            >Postcode</nz-form-label
+            >Post Code</nz-form-label
           >
           <nz-form-control
             [nzSm]="14"
@@ -120,7 +133,7 @@
             class="m-form-control"
             nzErrorTip="Please input Postcode!"
           >
-            <input nz-input id="Postcode" formControlName="postcode" />
+            <input nz-input id="Postcode" formControlName="postCode" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item class="m-form-field-2">
@@ -180,16 +193,15 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item class="m-form-field" nz-row class="register-area">
-
-          <button
-            class="m-button is-primary no-transparent"
-            type="submit"
-            nz-button
-            [nzLoading]="isLoading"
-            i18n="Registrieren|Title for the Registrieren @@registrieren"
-          >
-            Registrieren
-          </button>
+        <button
+          class="m-button is-primary no-transparent"
+          type="submit"
+          nz-button
+          [nzLoading]="isLoading"
+          i18n="Registrieren|Title for the Registrieren @@registrieren"
+        >
+          Registrieren
+        </button>
       </nz-form-item>
     </form>
   </div>

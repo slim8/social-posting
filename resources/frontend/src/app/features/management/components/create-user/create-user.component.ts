@@ -15,7 +15,9 @@ export class CreateUserComponent implements OnInit {
   firstName = null ;
   lastName = null ;
   isSubscriber = false ;
-  adress = null ;
+  address = null ;
+  city = null ;
+  postCode = null;
   website = null ;
   error : any = null ;
   newPassword = Math.random().toString(36).slice(-8); ;
@@ -38,7 +40,9 @@ export class CreateUserComponent implements OnInit {
       firstName : this.firstName, 
       lastName : this.lastName , 
       isSubscriber : this.isSubscriber ,
-      adress : this.adress ,
+      address : this.address ,
+      city : this.city ,
+      postCode : this.postCode ,
       website : this.website ,
       password : this.newPassword ,
     };

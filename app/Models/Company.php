@@ -19,7 +19,7 @@ class Company extends ExtendedModel
 
     protected $fillable = [
         'name',
-        'adress',
+        'address',
         'phoneNumber',
         'email',
         'website',

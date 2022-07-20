@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('subtitle');
-            $table->string('description');
+            $table->text('description');
             $table->string('picture')->nullable();
             $table->foreignId('news_id')->constrained()->onDelete('cascade');
             $table->timestamps();

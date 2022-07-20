@@ -49,24 +49,30 @@ class ApiAuthController extends Controller
 
     public function register(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'companyName' => 'required|string|max:255',
-        //     'firstName' => 'required|string|max:255',
-        //     'lastName' => 'required|string|max:255',
-        //     'adress' => 'string|max:255',
-        //     'website' => 'string|max:255',
-        //      'address' => 'required|string|max:255',
-        //     'postCode' => 'required|string|max:255',
-        //     'city' => 'required|string|max:255',
-        //     'email' => 'required|string|email|max:255|unique:users|unique:companies',
-        //     'phone_number' => 'required|string|max:255|unique:companies',
-        //     'isSubscriber' => '',
-        // ], [
-        //     'companyName.required' => 'This is a required message for company name',
-        // ]);
-        // if ($validator->fails()) {
-        //     return response(['errors' => $validator->errors()->all()], 422);
-        // }
+        // Add Array merge for field phone_number to be validated with Database
+        // Request Field name must be like column name on database
+        if($request->phoneNumber){
+            $request->merge([
+                'phone_number' => $request->phoneNumber,
+            ]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'companyName' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'website' => 'string|max:255',
+            'address' => 'required|string|max:255',
+            'postCode' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users|unique:companies',
+            'phone_number' => 'required|string|max:255|unique:companies',
+            'isSubscriber' => '',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
 
         if (Company::where('phoneNumber', $request->phoneNumber)->first()) {
             return $this->traitController->processResponse(false, ['message' => 'This Phone Number is Already exist']);
@@ -79,7 +85,7 @@ class ApiAuthController extends Controller
             'name' => $request->companyName,
             'email' => $request->email,
             'phoneNumber' => $request->phoneNumber,
-            'adress' => $request->adress,
+            'address' => $request->address,
             'website' => $request->website,
             'planId' => '1',
             'isAdmin' => false,
@@ -95,7 +101,7 @@ class ApiAuthController extends Controller
             'companyId' => $company->id,
             'password' => hash::make($password),
             'autoRefresh' => 1,
-            'address' => $request->address,
+            'address' => $request->adress,
             'postCode' => $request->postCode,
             'city' => $request->city,
         ]);
