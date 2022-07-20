@@ -6,6 +6,7 @@ use App\Models\TextMediaNews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class TextMediaNewsController extends Controller
 {
@@ -57,6 +58,17 @@ class TextMediaNewsController extends Controller
             Log::channel('exception')->error($e->getMessage());
             return $this->traitController->processResponse(false, ['error' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return $this->traitController->processResponse(true , ['textMedia' => TextMediaNews::where('id',$id)->first()]);
     }
 
     /**

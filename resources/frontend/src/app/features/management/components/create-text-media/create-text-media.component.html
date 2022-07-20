@@ -1,0 +1,43 @@
+<div class="mod-add-text-media">
+    <div class="m-wrapper">
+        <div class="m-header">
+            <h1 *ngIf="editMode" i18n="text media|title for the text media@@textMedia">Update text media</h1>
+            <h1 *ngIf="!editMode" i18n="Create text media|Create text media for the Create text media@@CreateTextMedia">Create text media</h1>
+        </div>
+        <div class="m-form">
+            <div class="m-form-group">
+                <label i18n="title|Title for the title@@title">Title</label>
+                <div class="m-form-input">
+                    <input nz-input type="text" placeholder="title" [(ngModel)]="title" />
+                </div>
+                <small class="error" *ngIf="error && error.title" >{{error.title[0]}}</small>
+            </div>
+            <div class="m-form-group">
+                <label i18n="subtitle|Title for the subtitle@@subtitle">Subtitle</label>
+                <div class="m-form-input">
+                    <input nz-input type="text" placeholder="subtitle" [(ngModel)]="subtitle" />
+                </div>
+                <small class="error" *ngIf="error && error.subtitle" >{{error.subtitle[0]}}</small>
+            </div>
+            <div class="m-form-group">
+                <label i18n="picture|Title for the picture@@picture">Picture</label>
+                <div class="m-form-input">
+                    <input nz-input type="file" (change)="loadFile($event)" placeholder="picture" [(ngModel)]="picture" />
+                </div>
+                <small class="error" *ngIf="error && error.image" >{{error.image[0]}}</small>
+            </div>
+            <div class="m-form-group">
+                <label i18n="description|Title for the description@@description">Description</label>
+                <div class="m-form-input">
+                    <textarea rows="4" nz-input [(ngModel)]="description"></textarea> 
+                </div>
+                <small class="error" *ngIf="error && error.description" >{{error.description[0]}}</small>
+            </div>
+            <button nz-button nzType="primary" nzShape="round" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
+                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                save
+            </button>
+        </div>
+    </div>
+</div>
+

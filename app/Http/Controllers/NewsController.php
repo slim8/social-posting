@@ -139,7 +139,7 @@ class NewsController extends Controller
             $post = News::where('id', $id)->first();
             Storage::delete(json_decode($post->picture)->name);
             $post->delete();
-            Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' delete a News Id : '.$d);
+            Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' delete a News Id : '.$id);
 
             return $this->traitController->processResponse(true);
         } catch (\Exception $e) {

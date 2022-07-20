@@ -97,7 +97,7 @@
     > div {
         > div {
             > div {
-                margin-top: 0 !important;
+                margin-top: -6px !important;
             }
         }
     }
@@ -123,6 +123,12 @@
             fill: transparent;
         }
     }
+}
+
+svg {
+  .m-info-icon & {
+    fill: $color-media-black-opacity-half!important;
+  }
 }
 
 .ant-modal {

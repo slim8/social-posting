@@ -2,7 +2,7 @@
     <div class="m-wrapper">
         <div class="m-header">
             <h3 class="m-title" i18n="news|Title for the news@@news">news</h3>
-            <p class="m-description" i18n="new Features|subTitle for the new Features@@newFeatures">Neue Features, Updates und Ankündigungen findest Du hier.</p>
+            <p class="m-description" i18n="new Features|subTitle for the new Features@@newFeatures">Find new features, updates and announcements here.</p>
         </div>
         <div class="m-container">
             <div class="m-posts-container" *ngFor="let post of posts ; let index = index">
@@ -15,7 +15,7 @@
                         <div class="m-post-title" >
                             <h3>{{post.title}}</h3>
                             <div class="m-redirect-icon">
-                                <a [routerLink]="['/application/dashboard/post', 1]" class="">
+                                <a [routerLink]="['/application/dashboard/post', post.id]" class="">
                                     <i nz-icon nzType="ng-zorro:show-view" style="font-size: 16px;"></i>
                                 </a>
                             </div>

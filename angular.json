@@ -44,6 +44,7 @@
                         "inlineStyleLanguage": "scss",
                         "assets": [
                             "resources/frontend/src/favicon.ico",
+                            "resources/frontend/src/.htaccess",
                             "resources/frontend/src/assets",
                             {
                                 "glob": "**/*",
@@ -155,12 +156,12 @@
                         },
                         "fr": {
                             "localize": ["fr"],
-                            "outputPath": "/angular/fr/",
+                            "outputPath": "public/fr/",
                             "i18nMissingTranslation": "error"
                         },
                         "de": {
                             "localize": ["de"],
-                            "outputPath": "/angular/de/",
+                            "outputPath": "public/de/",
                             "i18nMissingTranslation": "error"
                         }
                     },
