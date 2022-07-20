@@ -206,15 +206,9 @@
                   </a>
                 </div>
                 <div class="m-right">
-                  <button class="m-button is-primary">
-                    <img
-                      i18n-alt
-                      src="/assets/img/svgs/icons/send.svg"
-                      alt="send icon"
-                    />
-                    <span i18n="Publish|Publish Button Text@@publish"
-                      >Publish</span
-                    >
+                  <button class="m-button is-primary" (click)="publishDraft(item.postId)">
+                    <img i18n-alt src="/assets/img/svgs/icons/send.svg" alt="send icon"/>
+                    <span i18n="Publish|Publish Button Text@@publish">Publish</span>
                   </button>
                 </div>
               </td>
