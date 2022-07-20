@@ -293,24 +293,24 @@
         <note priority="1" from="meaning">Add Pages Text</note>
       </trans-unit>
       <trans-unit id="pagesLinkedToAccount" datatype="html">
-        <source> Pages Linked To <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>accountname.test<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>: </source>
+        <source>Pages Linked To </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
-          <context context-type="linenumber">267,269</context>
+          <context context-type="linenumber">265</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">343,345</context>
         </context-group>
         <note priority="1" from="description">Text for pages linked to
-            accountname</note>
+          accountname</note>
         <note priority="1" from="meaning">Pages Linked To Accountname</note>
       </trans-unit>
       <trans-unit id="link" datatype="html">
         <source> Link </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
-          <context context-type="linenumber">299,301</context>
+          <context context-type="linenumber">296,298</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
@@ -323,7 +323,7 @@
         <source><x id="TAG_IMG" ctype="image" equiv-text="&lt;img src=&quot;/assets/img/Check.png&quot; alt=&quot;success&quot; /&gt;"/> Logged in successfully. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
-          <context context-type="linenumber">315,317</context>
+          <context context-type="linenumber">312,314</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
@@ -336,7 +336,7 @@
         <source> You will be immediately redirected to view your linked pages dem Add mediafactory social media publisher. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
-          <context context-type="linenumber">322,325</context>
+          <context context-type="linenumber">319,322</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>

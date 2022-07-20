@@ -315,10 +315,10 @@ um Beiträge zu gestalten und direkt zu veröffenltichen.
         <note priority="1" from="meaning">Add Pages Text</note>
       <target>Wählen Sie Ihre verbundenen Business-Konten und Facebook-Seiten aus, die Sie mit der Mediafactory verbinden möchten.</target></trans-unit>
       <trans-unit id="pagesLinkedToAccount" datatype="html">
-        <source> Pages Linked To <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>accountname.test<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>: </source>
+        <source>Pages Linked To </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
-          <context context-type="linenumber">267,269</context>
+          <context context-type="linenumber">265</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
@@ -332,7 +332,7 @@ um Beiträge zu gestalten und direkt zu veröffenltichen.
         <source> Link </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
-          <context context-type="linenumber">299,301</context>
+          <context context-type="linenumber">296,298</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
