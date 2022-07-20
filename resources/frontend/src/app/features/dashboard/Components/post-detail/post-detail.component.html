@@ -1,34 +1,34 @@
 <div class="mod-post-detail">
     <div class="m-wrapper">
         <div class="m-header">
-           <a href="" i18n="back|Title for the back@@back"> Zurück zur Übersicht </a>
+           <a href="/application/dashboard/blog-posts" i18n="back|Title for the back@@back"> Back to overview </a>
         </div>
         <div class="m-container">
-            <div class="m-post-detail-date">23.06.2022</div>
-            <div class="m-post-detail-title">Das Planen von Postings im Kalender</div>
-            <div class="m-post-detail-img-1">
-                <img src="https://assets.keap.com/image/upload/b_rgb:FFFFFF,c_limit,dpr_1,f_auto,h_395,q_95,w_569/v1/learn/images/Zz1lOTI0YzgzNzI0NDI1NDljMzRiZWVjOTI1ODk4OTZmNg==.jpg" alt="">
+            <div class="m-post-detail-date">{{news.date}}</div>
+            <div class="m-post-detail-title">{{news.title}}</div>
+            <div class="m-post-detail-img">
+                <img nz-image [nzSrc]="news.img" alt="">
             </div>
             <div class="m-post-detail-description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet
+                {{news.teaser}}
             </div>
-            <div class="m-post-detail-subtitle">
-                Einfacher, schneller, übersichtlicher.
-            </div>
-            <div class="m-post-detail-description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-            </div>
-            <div class="m-post-detail-img-2">
-                <img src="https://assets.keap.com/image/upload/b_rgb:FFFFFF,c_limit,dpr_1,f_auto,h_395,q_95,w_569/v1/learn/images/Zz1lOTI0YzgzNzI0NDI1NDljMzRiZWVjOTI1ODk4OTZmNg==.jpg" alt="">
-            </div>
-            <div class="m-post-detail-description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+            <div class="m-text-media-container" *ngFor="let item of news.text_media_news">
+                <div class="m-post-detail-subtitle">
+                    {{item.title}}
+                </div>
+                <div class="m-post-detail-description">
+                    {{item.subtitle}}
+                </div>
+                <div class="m-post-detail-img">
+                    <img nz-image [nzSrc]="item.img" alt="">
+                </div>
+                <div class="m-post-detail-description">
+                    {{item.description}}
+                </div>    
             </div>
         </div>
         <div class="m-support-footer">
-            <div class="m-info">Bei Fragen steht dir unser Support Team zur Seite: </div>
+            <div class="m-info" i18n="support team|Title for the support team@@supportTeam" >If you have any questions, our support team is at your side: </div>
             <div class="m-tel">Tel.: +49 (0) 1234 56778</div>
             <div class="m-mail">Mail: support@smpt.com</div>
         </div>

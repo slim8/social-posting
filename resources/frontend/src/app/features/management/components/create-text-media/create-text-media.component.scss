@@ -1,0 +1,53 @@
+@import '../../../../../assets/sass/_project/_config.scss';
+@import '../../../../../assets/sass/_global/_mixins.scss';
+@import '../../../../../assets/sass/_project/base.scss';
+
+.mod-add-text-media{
+
+    >.m-wrapper {
+        >.m-header{
+            padding: 18px;
+            font-size: 2.5rem;
+            line-height: 1.36175;
+            text-transform: capitalize;
+            font-weight: 400;
+            >h1{
+                color: $color-media-black-opacity-half;
+            }
+        }
+
+        >.m-form{
+
+            >.m-form-group{
+                padding: 18px;
+
+                >label {
+                    font-size: 0.75rem;
+                    line-height: 1.4166666667rem;
+                    text-transform: capitalize;
+                    font-weight: 700;
+                }
+
+                >.m-form-input {
+
+                    >.m-select{
+                        width: 100%;
+                    }
+                    
+                }
+
+                >.error{
+                    color: red;
+                }
+            }
+
+            >.m-primary-button{
+                margin : 18px ;
+                background-color: $color-media-primary-orange;
+                border-color: $color-media-primary-orange;
+            }
+        }
+
+        
+    }
+}
