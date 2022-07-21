@@ -50,6 +50,8 @@ trait RequestsTrait
             $pageProfilePicture = $account->profilePicture;
             $category = $account->category;
             $name = $account->name;
+            $canDelete = $traitController->getUserObject()->hasRole('companyadmin') ? true : false;
+            $canDisconnect = $traitController->getUserObject()->hasRole('companyadmin') ? true : false;
 
             if ($provider == 'facebook') {
                 $pageInfo = $facebookService->getFacebookPageInfo($uid, $account->accessToken);
@@ -65,7 +67,8 @@ trait RequestsTrait
             }
             $pageContent = ['id' => $id, 'pageId' => $uid, 'pagePictureUrl' => $pageProfilePicture, 'category' => $category,
                 'pageName' => $name, 'provider' => $provider, 'isConnected' => $account->status ? true : false,
-                'followers' => $followers, 'link' => $link, 'username' => $username, 'createdAt' => $account->createdAt];
+                'followers' => $followers, 'link' => $link, 'username' => $username, 'createdAt' => $account->createdAt,
+                'canDelete' => $canDelete, 'canDisconnect' => $canDisconnect];
 
             if ($traitController->getUserObject()->hasRole('companyadmin')) {
                 $pageContent['users'] = $traitController->getUsersLinkedToAccounts($id);
