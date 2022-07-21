@@ -225,7 +225,20 @@ export class AccountsComponent implements OnInit {
           nzCancelText: 'No',
           nzOnCancel: () => console.log('Cancel')
       });
-  }
+    }
+
+    showDeleteAccountConfirm(id: any): void {
+      this.modal.confirm({
+          nzTitle: 'Do you really want to delete this personnel account?',
+          nzContent: '<b style="color: red;">this account will be deleted permenantly</b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.deleteAccount(id),
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel')
+      });
+    }
 
     reconnectPage(event: any, id: any) {
         this.accountsService.reconnectPageById(id).subscribe({
@@ -244,7 +257,7 @@ export class AccountsComponent implements OnInit {
     deletePage (id:string) {
       this.isLoading = true;
       this.listOfPages = [];
-      this.accountsService.deleteAccount(id).subscribe({
+      this.accountsService.deletePage(id).subscribe({
         next: (event: any) => {
 
         },
@@ -255,6 +268,25 @@ export class AccountsComponent implements OnInit {
           this.isLoading = false;
           this.getPages();
         }
-    })
+      })
+    }
+
+    deleteAccount (id:string) {
+      this.isLoading = true;
+      this.listOfPages = [];
+      this.connectedAccounts = [];
+      this.accountsService.deleteAccount(id).subscribe({
+        next: (event: any) => {
+
+        },
+        error: err => {
+
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.getConnectedAccounts();
+          this.getPages();
+        }
+      })
     }
 }

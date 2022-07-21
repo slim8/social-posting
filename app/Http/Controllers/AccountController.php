@@ -78,7 +78,6 @@ class AccountController extends Controller
         foreach ($accountsPosts as $accountPost) {
             $accountPostId = $accountPost->id;
             $postId = $accountPost->postId;
-            array_push($postsIds, $postId);
             PostHashtag::where('accountPostId', $accountPostId)->delete();
 
             $count = AccountPost::where('postId', $postId)->count();
