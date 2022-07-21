@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Account extends ExtendedModel
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $hidden = ['pivot'];
 
