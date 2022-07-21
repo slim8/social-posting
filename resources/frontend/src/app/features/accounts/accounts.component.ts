@@ -61,7 +61,6 @@ export class AccountsComponent implements OnInit {
         this.service.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
                 this.listOfPages = success.pages;
-                console.log(this.listOfPages);
             },
             (error) => {
                 this.listOfPages = [];
@@ -211,7 +210,7 @@ export class AccountsComponent implements OnInit {
             nzOkDanger: true,
             nzOnOk: () => this.disconnectPage(id),
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel')
+            nzOnCancel: () => {}
         });
     }
 

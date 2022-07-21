@@ -144,11 +144,9 @@ export class AccountsManagementComponent implements OnInit {
     disconnect(id: string) {
         this.accountsService.disconnectAccountById(id).subscribe({
             next: (response: any) => {
-                console.log(response)
                 this.connectedAccounts = response.accounts
             },
             error: err => {
-                console.log(err)
                 this.connectedAccounts = []
             },
             complete: () => {
@@ -190,7 +188,7 @@ export class AccountsManagementComponent implements OnInit {
             nzOkDanger: true,
             nzOnOk: () => this.disconnect(id),
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel')
+            nzOnCancel: () => {}
         });
     }
 }

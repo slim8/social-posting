@@ -32,7 +32,6 @@ export class SidebarComponent implements OnInit {
     constructor(
         private iconService: NzIconService,
         private jwtService: JwtHelperService) {
-        // fetch('http://localhost:4200/assets/img/svgs/icons/dashboard.svg').then(response => response.text()).then(text => { console.log(text); this.dashboardIcon = text; });
         this.iconService.addIconLiteral('ng-zorro:dashboard', dashboardIcon);
         this.iconService.addIconLiteral('ng-zorro:profile', profileIcon);
         this.iconService.addIconLiteral('ng-zorro:folder', folderIcon);

@@ -33,7 +33,6 @@ export class DictionairiesComponent implements OnInit {
   getData(){
     this.dictionariesService.getDictionariesList().subscribe({
       next: (event: any) => {
-          console.log(event);
           this.dictionaries = event.dictionary;
         },
       error: err => {
@@ -134,7 +133,6 @@ export class DictionairiesComponent implements OnInit {
 
   removeFromDictionaries( data : any , e : Event ){
     e.preventDefault();
-    console.log('closed');
 
     this.modal.confirm({
       nzTitle: '<i>Do you Want to remove this Key ?</i>',
