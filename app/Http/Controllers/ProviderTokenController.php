@@ -146,8 +146,7 @@ class ProviderTokenController extends Controller
             return $this->traitController->processResponse(false, ['message' => "You don't have access right to delete this Account Provider"]);
         }
 
-        $accounts = Account::where('providerTokenId', $tokenId)->get();
-
+        $accounts = Account::where('providerTokenId', $tokenId)->orderBy('related_account_id' , 'DESC')->get();
         if ($accounts) {
             foreach ($accounts as $account) {
                 $this->accountController->deleteAccountAction($account->id);
