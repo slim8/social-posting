@@ -53,6 +53,7 @@ class FileController extends Controller
      */
     public function convertToJpeg($folderName, $image, int $isOnDisk = 0, string $filePathName = null)
     {
+
         if (!$isOnDisk) {
             $object = $image->store('temporar'.'s/'.date('Y').'/'.date('m').'/'.date('d'));
         }
@@ -104,7 +105,7 @@ class FileController extends Controller
             if (envValue('APP_ENV') == 'local') {
                 $fileObject->url = $this->uploadToDistant($newImagePath, 'image', 1, $newImagePath);
             } else {
-                $fileObject->url = $this->uploadLocal($newImagePath, 'image');
+                $fileObject->url = $this->uploadLocal($newImagePath, 'image' , 1);
             }
 
             return $this->traitController->processResponse(true, ['files' => $fileObject]);
@@ -152,10 +153,14 @@ class FileController extends Controller
     /**
      * Start Local Upload.
      */
-    public function uploadLocal($file, $type)
+    public function uploadLocal($file, $type , int $isBase64 = 0)
     {
         if ($type == 'image') {
-            $imageLink = $this->convertToJpeg('postedImages', $file);
+            if($isBase64){
+                $imageLink = $this->convertToJpeg('postedImages', $file , $isBase64 , $file);
+            } else {
+                $imageLink = $this->convertToJpeg('postedImages', $file);
+            }
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
 
             return Storage::url('postedImages/'.$imageName);
