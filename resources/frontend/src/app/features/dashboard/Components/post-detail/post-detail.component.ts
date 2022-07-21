@@ -41,7 +41,6 @@ export class PostDetailComponent implements OnInit {
   getNews(news : any){
     this.newsService.getNewsById(news).subscribe({
       next: (event: any) => {
-        console.log(event);
         if(event.new){
           this.news = {...event.new , img : JSON.parse(event.new.picture).url , text_media_news : event.new.text_media_news.map((media : any) => ({...media , img : JSON.parse(media.picture).url}))};
 
