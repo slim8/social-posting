@@ -36,4 +36,8 @@ export class AccountsService {
   publishDraft(id: string, params : any = []) {
     return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/publish/' + id , params);
   }
+
+  deleteAccount(id: string, params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/'+id+'/delete' , params);
+  }
 }

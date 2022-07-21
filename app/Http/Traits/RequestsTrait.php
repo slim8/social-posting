@@ -43,7 +43,7 @@ trait RequestsTrait
             $userId = $traitController->getCurrentId();
         }
 
-        foreach ($accountObject->orderBy('id')->lazy() as $account) {
+        foreach ($accountObject->orderBy('id')->get() as $account) {
             $id = $account->id;
             $uid = $account->uid;
             $provider = $account->provider;
