@@ -66,7 +66,7 @@ class FacebookController extends Controller
                     'createdBy' => $adminId,
                     'accountUserId' => $accountUserId,
                     'provider' => 'facebook',
-                    'profilePicture' => $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$accountUserId.uniqid().'.jpg',$personalInformation['picture']),
+                    'profilePicture' => $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$accountUserId.uniqid(),$personalInformation['picture']),
                     'profileName' => $personalInformation['name'] ? $personalInformation['name'] : '',
                     'userName' => '',
                 ]);

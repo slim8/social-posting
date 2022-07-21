@@ -110,7 +110,11 @@
           class="m-account-container"
         >
           <div class="m-media-small">
-            <img
+            <img *ngIf="account.pictureUrl"
+              src="{{account.pictureUrl}}"
+              alt=""
+            />
+            <img *ngIf="!account.pictureUrl"
               src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"
               alt=""
             />
