@@ -83,7 +83,7 @@ export class CreatePostComponent implements OnInit {
     listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
 
     videoCounter = 0;
-    videoList: { id: number, file: File, videoUrl: string }[] = [];
+    videoList: { id: number, file: File, videoUrl: string , duration : number }[] = [];
     selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     showAlbum: boolean = false;
@@ -365,9 +365,12 @@ export class CreatePostComponent implements OnInit {
 
     generatethumbnails(action: string, newVideo = false) {
         this.leadThumbnail = true
-        if (action == "previous") {
+        
+        if (action == "previous" && this.currentTimePosition > 10) {
             this.currentTimePosition -= this.duration;
-        } else if (action == "next") {
+            console.log("previous");
+        } else if (action == "next" && this.currentTimePosition < this.selectedVideo.duration - 10 ) {
+            console.log("next");
             this.currentTimePosition += this.duration;
         }
 
@@ -401,19 +404,31 @@ export class CreatePostComponent implements OnInit {
         if (event.type === "success") {
             if (event.file) {
                 this.availableVideos = true;
-                let loadedFile = { id: this.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url };
-                this.videoList.push(loadedFile)
-                this.selectedVideo = loadedFile;
-                this.videoCounter++;
+                // TODO::video duration
+                console.log(event.file.originFileObj);
+
+                let tempVideoEl = document.createElement('video');
+                let that = this;
+                tempVideoEl.addEventListener('loadedmetadata', function() {
+                    console.log(tempVideoEl.duration);
+                    let loadedFile = { id: that.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url , duration : tempVideoEl.duration };
+                    that.videoList.push(loadedFile)
+                    that.selectedVideo = loadedFile;
+                    that.videoCounter++;
+                    that.generatethumbnails('next', true);
+                    that.currentTimePosition = -10;
+                    that.refreshPages();
+                    setTimeout(() => {
+                        that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+                    }, 2500);
+                });
+                tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
+
+                // TODO:: end video duration
             } else {
                 this.availableVideos = false;
             }
-            this.refreshPages();
-            this.generatethumbnails('next', true);
-            this.currentTimePosition = -10;
-            setTimeout(() => {
-                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
-            }, 2500);
+            
         }
     }
 

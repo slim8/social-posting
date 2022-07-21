@@ -314,6 +314,7 @@
                     <div
                       class="m-previous-icon"
                       (click)="generatethumbnails('previous')"
+                      *ngIf="currentTimePosition  > 10"
                     >
                       <i nz-icon nzType="left" nzTheme="outline"></i>
                     </div>
@@ -329,6 +330,7 @@
                     <div
                       class="m-next-icon"
                       (click)="generatethumbnails('next')"
+                      *ngIf="selectedVideo && (currentTimePosition  < selectedVideo.duration - 10)"
                     >
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
@@ -404,6 +406,7 @@
                     <div
                       class="m-previous-icon"
                       (click)="generatethumbnails('previous')"
+                      *ngIf="currentTimePosition  > 10"
                     >
                       <i nz-icon nzType="left" nzTheme="outline"></i>
                     </div>
@@ -419,6 +422,7 @@
                     <div
                       class="m-next-icon"
                       (click)="generatethumbnails('next')"
+                      *ngIf="selectedVideo && (currentTimePosition  < selectedVideo.duration - 10)"
                     >
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
