@@ -296,7 +296,7 @@ class FacebookController extends Controller
         $actualCompanyId = $this->traitController->getCompanyId();
 
         $id = $facebookPage['pageId'];
-        $pageFacebookPageLink = $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid().'jpg',$facebookPage['pagePictureUrl']);
+        $pageFacebookPageLink = $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid(),$facebookPage['pagePictureUrl']);
         $pageToken = $facebookPage['pageToken'];
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];

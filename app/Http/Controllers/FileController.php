@@ -36,7 +36,7 @@ class FileController extends Controller
         $curlCh = curl_init();
         curl_setopt($curlCh, CURLOPT_URL, $link);
         curl_setopt($curlCh, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlCh, CURLOPT_SSLVERSION, 3);
+        curl_setopt($curlCh, CURLOPT_SSLVERSION, 0);
         $curlData = curl_exec($curlCh);
         curl_close($curlCh);
         if (!empty($curlData)) {
