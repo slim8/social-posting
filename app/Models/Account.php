@@ -10,7 +10,7 @@ class Account extends ExtendedModel
 {
     use HasFactory;
 
-    protected $hidden = ['pivot'];
+    protected $hidden = ['pivot', "deleted_at"];
 
     public static $STATUS_DISCONNECTED = 'DISCONNECTED';
 
