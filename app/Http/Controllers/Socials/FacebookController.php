@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\TraitController;
 use App\Http\Traits\Services\FacebookService;
 use App\Models\Account;
@@ -22,11 +23,13 @@ class FacebookController extends Controller
     protected $imageManager;
     protected $facebookService;
     protected $traitController;
+    protected $fileController;
 
     public function __construct()
     {
         $this->facebookService = new FacebookService();
         $this->traitController = new TraitController();
+        $this->fileController = new FileController();
         $this->instagramController = new InstagramController();
         $this->imageManager = new ImageManager();
     }
@@ -293,7 +296,7 @@ class FacebookController extends Controller
         $actualCompanyId = $this->traitController->getCompanyId();
 
         $id = $facebookPage['pageId'];
-        $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
+        $pageFacebookPageLink = $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid().'jpg',$facebookPage['pagePictureUrl']);
         $pageToken = $facebookPage['pageToken'];
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];

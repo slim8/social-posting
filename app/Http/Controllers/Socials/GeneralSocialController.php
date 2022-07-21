@@ -44,12 +44,10 @@ class GeneralSocialController extends Controller
         $inc = 0;
         $validator = Validator::make($request->all(), [
             'posts' => 'required',
-            'message' => 'string|max:255',
             'status' => 'string|max:255',
         ]);
         if ($validator->fails()) {
             Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To create a new post with Invalid Request');
-
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
