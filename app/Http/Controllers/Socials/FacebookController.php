@@ -200,7 +200,8 @@ class FacebookController extends Controller
                 $tagsString = $tagsString.'#'.$this->traitController->formatTags($tag).' ';
             }
         }
-        $object['message'] = $object['message'].$tagsString;
+
+        $object['message'] = isset($object['message']) ? $object['message'] : ''.$tagsString;
 
         if ($videos) {
             $videos = json_decode($videos[0], true);
