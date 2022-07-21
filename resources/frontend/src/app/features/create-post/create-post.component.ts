@@ -233,7 +233,7 @@ export class CreatePostComponent implements OnInit {
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: (event) => {
-                    this.isLoading = false;
+                  
                 },
                 error: (err) => {
                     if (err.error.errors) {
@@ -379,7 +379,7 @@ export class CreatePostComponent implements OnInit {
 
     generatethumbnails(action: string, newVideo = false) {
         this.leadThumbnail = true
-        
+
         if (action == "previous" && this.currentTimePosition > 10) {
             this.currentTimePosition -= this.duration;
         } else if (action == "next" && this.currentTimePosition < this.selectedVideo.duration - 10 ) {
@@ -436,7 +436,7 @@ export class CreatePostComponent implements OnInit {
             } else {
                 this.availableVideos = false;
             }
-            
+
         }
     }
 
