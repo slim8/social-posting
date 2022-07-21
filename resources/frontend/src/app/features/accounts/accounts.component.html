@@ -140,7 +140,7 @@
           </div>
           <div class="m-action"></div>
           <div class="m-action-manager">
-            <button (click)="deletePage(account.id)" class="m-icon-button">
+            <button (click)="showDeleteConfirm(account.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
@@ -221,18 +221,18 @@
             </button>
           </div>
           <div class="m-action-manager">
-            <button (click)="deletePage(page.id)" class="m-icon-button">
+            <button *ngIf="page.canDelete" (click)="showDeleteConfirm(page.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="!page.isConnected"
+              *ngIf="!page.isConnected && page.canDisconnect"
               (click)="reconnectPage($event, page.id)"
               class="m-icon-button"
             >
               <i nz-icon nzType="login" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="page.isConnected"
+              *ngIf="page.isConnected  && page.canDisconnect"
               (click)="showDisconnectConfirm(page.id)"
               class="m-icon-button"
             >
@@ -301,15 +301,15 @@
 
     <div class="m-success-modal">
       <div (click)="closeSuccessModal()" class="m-close-icon">
-        <img src="../../../assets/img/close.png" alt="close" />
+        <img src="/assets/img/close.png" alt="close" />
       </div>
       <div class="m-success">
-        <img src="../../../assets/img/Group.png" alt="refreshing" />
+        <img src="/assets/img/Group.png" alt="refreshing" />
         <div
           class="m-success-title"
           i18n="Logged In|Logged in successfully@@loggedIn"
         >
-          <img src="../../../assets/img/check.png" alt="success" />
+          <img src="/assets/img/check.png" alt="success" />
           Logged in successfully.
         </div>
         <p

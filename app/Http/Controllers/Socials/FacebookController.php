@@ -37,8 +37,9 @@ class FacebookController extends Controller
     public function getFacebookPersonalInformations($accessToken)
     {
         $responseObject = [];
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name,picture&access_token='.$accessToken);
         $responseObject['name'] = $response->json('name');
+        $responseObject['picture'] = isset($response->json('picture')['data']) ? $response->json('picture')['data']['url'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
 
         return $responseObject;
     }
@@ -65,7 +66,7 @@ class FacebookController extends Controller
                     'createdBy' => $adminId,
                     'accountUserId' => $accountUserId,
                     'provider' => 'facebook',
-                    'profilePicture' => 'picture file',
+                    'profilePicture' => $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$accountUserId.uniqid().'.jpg',$personalInformation['picture']),
                     'profileName' => $personalInformation['name'] ? $personalInformation['name'] : '',
                     'userName' => '',
                 ]);
