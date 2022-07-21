@@ -32,27 +32,45 @@
                 min-height: 83px;
                 border-bottom: 1px solid $color-media-black-opacity-30;
                 display: flex;
-                flex-direction: column-reverse;
+                flex-direction: column;
                 row-gap: 25px;
                 justify-content: space-between;
                 padding: 25px;
+                align-items: end;
 
-                @include mq(tablet) {
+                @include mq(desktop) {
                     flex-direction: row;
                 }
 
                 > .m-left {
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
+                    row-gap: 10px;
+                    width: 100%;
+
+                    @include mq(mobilebig) {
+                        flex-direction: row;
+                        width: auto;
+                    }
 
                     > .m-button {
                         margin-right: 10px;
                         height: 36px;
-                        padding: 5px;
                         background: $color-media-background-light-grey;
                         align-items: center;
                         display: flex;
-                        justify-content: center;
+                        justify-content: space-between;
+                        width: auto;
+                        padding: 0 40px;
+
+                        @include mq(mobilebig) {
+                            width: 146px;
+                            padding: 5px;
+                        }
+
+                        @include mq(desktop) {
+                            width: auto;
+                        }
 
                         > .m-button-icon {
                             font-size: 19px;
@@ -79,7 +97,15 @@
 
                 > .m-right {
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
+                    row-gap: 10px;
+                    width: 100%;
+
+                    @include mq(mobilebig) {
+                        flex-direction: row;
+                        width: auto;
+                    }
+
                     > .m-button {
                         margin-right: 10px;
                         height: 36px;
@@ -106,7 +132,7 @@
 
                     > .m-search-form {
                         border: 1px solid $color-media-background-light-grey;
-                        margin-right: 25px;
+                        margin-right: 10px;
                         height: 36px;
                         padding: 5px;
                     }
@@ -115,12 +141,24 @@
 
             > .m-album-items-container {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
                 padding: 35px;
                 grid-gap: 22px;
                 max-height: 600px;
                 overflow: auto;
+                justify-items: center;
+
+                @include mq(mobilebig) {
+                    margin-right: 10px;
+                    grid-template-columns: 1fr 1fr;
+                }
+
                 @include mq(tablet) {
+                    margin-right: 34px;
+                    grid-template-columns: 1fr 1fr 1fr;
+                }
+
+                @include mq(desktop) {
                     margin-right: 34px;
                     grid-template-columns: 1fr 1fr 1fr 1fr;
                 }
