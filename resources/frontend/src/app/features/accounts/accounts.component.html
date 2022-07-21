@@ -221,18 +221,18 @@
             </button>
           </div>
           <div class="m-action-manager">
-            <button (click)="deletePage(page.id)" class="m-icon-button">
+            <button *ngIf="page.canDelete" (click)="deletePage(page.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="!page.isConnected"
+              *ngIf="!page.isConnected && page.canDisconnect"
               (click)="reconnectPage($event, page.id)"
               class="m-icon-button"
             >
               <i nz-icon nzType="login" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="page.isConnected"
+              *ngIf="page.isConnected  && page.canDisconnect"
               (click)="showDisconnectConfirm(page.id)"
               class="m-icon-button"
             >
