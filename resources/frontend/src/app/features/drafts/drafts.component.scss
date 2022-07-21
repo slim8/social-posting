@@ -80,6 +80,7 @@
                         align-items: center;
                         margin-left: 27px;
                         padding-top: 5px;
+                        cursor: pointer;
 
                         > .m-icon-remove {
                             width: 14px;
@@ -196,6 +197,7 @@
                             > .m-image {
                                 padding-top: 16px;
                                 padding-left: 9px;
+                                width: 170px;
 
                                 > img {
                                     max-width: 170px;
