@@ -48,6 +48,7 @@
                 flex-direction: column;
                 padding: 10px;
                 margin-bottom: 0px;
+                align-items: baseline;
 
                 @include mq(mobilebig) {
                     width: 85%;
@@ -57,6 +58,12 @@
                 }
 
                 @include mq(desktop) {
+                    width: 85%;
+                    margin: auto;
+                    margin-bottom: 10px;
+                }
+
+                @include mq(ml) {
                     width: 57%;
                     margin: auto;
                     margin-bottom: 10px;
@@ -66,6 +73,7 @@
             nz-form-control {
                 max-width: 100%;
                 margin-left: 0;
+                text-align: start;
 
                 @include mq(mobilebig) {
                     max-width: 50%;
@@ -104,15 +112,17 @@
             }
 
             > .m-two-column {
-                @include mq(ml) {
-                    width: 57%;
+                @include mq(tablet) {
+                    width: 85%;
                     margin: auto;
                     display: flex;
 
                     > .m-form-field-1 {
                         display: flex;
                         justify-content: end;
-                        width: 40%;
+                        width: 45%;
+                        margin: 0;
+                        align-items: baseline;
 
                         > .m-form-label {
                             max-width: 100%;
@@ -120,21 +130,28 @@
                         }
 
                         > .m-form-control {
-                            max-width: 100%;
+                            max-width: 40%;
                         }
                     }
                     > .m-form-field-2 {
                         display: flex;
                         justify-content: start;
+                        width: 50%;
+                        margin: 0;
 
                         > .m-form-label {
-                            max-width: 100%;
+                            max-width: fit-content;;
+                            justify-content: flex-start;
                         }
 
                         > .m-form-control {
-                            max-width: 100%;
+                            max-width: 48%;
                         }
                     }
+                }
+
+                @include mq(ml) {
+                    width: 57%;
                 }
             }
         }
