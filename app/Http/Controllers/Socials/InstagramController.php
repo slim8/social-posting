@@ -384,7 +384,7 @@ class InstagramController extends Controller
         $id = $instagramAccount['pageId'];
         $relatedAccountId = $this->traitController->findAccountByUid($instagramAccount['relatedAccountId']) ? $this->traitController->findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
         $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ?
-        $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid().'.jpg',$instagramAccount['accountPictureUrl']): 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
+        $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid(),$instagramAccount['accountPictureUrl']): 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
         $name = $instagramAccount['pageName'];
         $token = $relatedAccountId ? 'NA' : $instagramAccount['accessToken'];
 
