@@ -37,7 +37,7 @@ class AdminSeeder extends Seeder
             'name' => 'MGO',
             'email' => 'ali.softtodo@gmail.com',
             'phoneNumber' => '000000000',
-            'adress' => 'Adresse',
+            'address' => 'Adresse',
             'website' => 'Website',
             'planId' => $plan->id,
             'isAdmin' => true,
