@@ -215,6 +215,19 @@ export class AccountsComponent implements OnInit {
         });
     }
 
+    showDeleteConfirm(id: any): void {
+      this.modal.confirm({
+          nzTitle: 'Do you really want to delete this account?',
+          nzContent: '<b style="color: red;">this account will be deleted permenantly</b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.deletePage(id),
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel')
+      });
+  }
+
     reconnectPage(event: any, id: any) {
         this.accountsService.reconnectPageById(id).subscribe({
             next: (event: any) => {
@@ -230,6 +243,19 @@ export class AccountsComponent implements OnInit {
     }
 
     deletePage (id:string) {
+      this.isLoading = true;
+      this.listOfPages = [];
+      this.accountsService.deleteAccount(id).subscribe({
+        next: (event: any) => {
 
+        },
+        error: err => {
+
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.getPages();
+        }
+    })
     }
 }

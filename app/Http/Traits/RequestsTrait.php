@@ -33,7 +33,7 @@ trait RequestsTrait
         $traitController = new TraitController();
         $facebookService = new FacebookService();
         $AllPages = [];
-        $accountObject = Account::where('companyId', $traitController->getCompanyId());
+        $accountObject = Account::where('companyId', $traitController->getCompanyId())->withoutTrashed();
 
         if ($accountId) {
             $accountObject = $accountObject->where('id', $accountId);
@@ -43,7 +43,7 @@ trait RequestsTrait
             $userId = $traitController->getCurrentId();
         }
 
-        foreach ($accountObject->orderBy('id')->lazy() as $account) {
+        foreach ($accountObject->orderBy('id')->get() as $account) {
             $id = $account->id;
             $uid = $account->uid;
             $provider = $account->provider;
