@@ -382,9 +382,7 @@ export class CreatePostComponent implements OnInit {
         
         if (action == "previous" && this.currentTimePosition > 10) {
             this.currentTimePosition -= this.duration;
-            console.log("previous");
         } else if (action == "next" && this.currentTimePosition < this.selectedVideo.duration - 10 ) {
-            console.log("next");
             this.currentTimePosition += this.duration;
         }
 
@@ -418,13 +416,9 @@ export class CreatePostComponent implements OnInit {
         if (event.type === "success") {
             if (event.file) {
                 this.availableVideos = true;
-                // TODO::video duration
-                console.log(event.file.originFileObj);
-
                 let tempVideoEl = document.createElement('video');
                 let that = this;
                 tempVideoEl.addEventListener('loadedmetadata', function() {
-                    console.log(tempVideoEl.duration);
                     let loadedFile = { id: that.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url , duration : tempVideoEl.duration };
                     that.videoList.push(loadedFile)
                     that.selectedVideo = loadedFile;
@@ -477,7 +471,7 @@ export class CreatePostComponent implements OnInit {
                 this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
             },
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel', item)
+            nzOnCancel: () => {}
         });
     }
 
@@ -498,7 +492,6 @@ export class CreatePostComponent implements OnInit {
                     "<strong>Facebook</strong> doesn't support images and videos on the same post."
                 )
                 .onClick.subscribe(() => {
-                    console.log('notification clicked!');
                 });
             this.wasMixedTypes = true;
         } else {
@@ -526,8 +519,6 @@ export class CreatePostComponent implements OnInit {
     }
 
     addToPost(event: any) {
-        // TODO:: list of images selected from album list
-        console.log(event);
     }
 
     mergeHashtags(e: any) {

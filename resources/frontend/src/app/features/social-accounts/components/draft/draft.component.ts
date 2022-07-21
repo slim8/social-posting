@@ -20,7 +20,6 @@ export class DraftComponent implements OnInit {
         this.postService.posts().subscribe({
             next: (res: any) => {
                 this.posts = res.posts;
-                console.log(this.posts);
             },
             error: err => {
 
