@@ -223,7 +223,7 @@ export class AccountsComponent implements OnInit {
           nzOkDanger: true,
           nzOnOk: () => this.deletePage(id),
           nzCancelText: 'No',
-          nzOnCancel: () => console.log('Cancel')
+          nzOnCancel: () => {}
       });
   }
 
