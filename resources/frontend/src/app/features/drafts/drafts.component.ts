@@ -16,113 +16,131 @@ const arrowIcon = '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xml
     styleUrls: ['./drafts.component.scss']
 })
 export class DraftsComponent implements OnInit {
-    isLoading = false;
-    posts: any[] = [];
-    draftsList: any = [];
+  isLoading = false;
+  posts: any[] = [];
+  draftsList: any = [];
 
-    constructor(private iconService: NzIconService, private modal: NzModalService, private postService: PostService, private router: Router, private sharedModule : SharedModule,private message: NzMessageService) {
-        this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
-        this.iconService.addIconLiteral('ng-zorro:customArrow', arrowIcon);
-        if (this.router.url.includes('drafts')) {
-          this.sharedModule.initSideMenu('drafts');
+  constructor(
+    private iconService: NzIconService,
+    private modal: NzModalService,
+    private postService: PostService,
+    private router: Router,
+    private sharedModule: SharedModule,
+    private message: NzMessageService
+  ) {
+    this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
+    this.iconService.addIconLiteral('ng-zorro:customArrow', arrowIcon);
+
+    if (this.router.url.includes('drafts')) {
+      this.sharedModule.initSideMenu('drafts');
+    }
+  }
+
+  ngOnInit(): void {
+    this.getDrafts();
+  }
+
+  update(event: any) {
+    this.draftsList = event;
+  }
+
+  getDrafts() {
+    this.isLoading = true;
+    const params = new HttpParams()
+      .set("filterBy", "AccountsPosts")
+      .set("limit", "10")
+      .set("status", "DRAFT")
+      .set("getStat", false);
+
+    this.postService.getPosts(params).subscribe({
+      next: (event: any) => {
+        this.posts = event.posts;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.posts = [];
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
+    })
+  }
+
+  check(event:any, value:string) {
+    if(event.target.checked) {
+      if(!this.draftsList.includes(value)) {
+        this.draftsList.push(value);
+      }
+    } else {
+      if(this.draftsList.includes(value)) {
+        let index = this.draftsList.indexOf(value);
+        this.draftsList.splice(index, 1);
+      }
+    }
+  }
+
+  removeDraft() {
+    if (this.draftsList.length > 0) {
+      const formData: FormData = new FormData();
+      this.draftsList.forEach((draft: any) => {
+        formData.append('postsIds[]', draft);
+      })
+      this.postService.removeDrafts(formData).subscribe({
+        next: (event: any) => {
+        },
+        error: (err) => {
+        },
+        complete: () => {
+          this.getDrafts();
         }
-    }
-
-    ngOnInit(): void {
-        this.getDrafts();
-    }
-
-    update(event: any) {
-        this.draftsList = event;
-    }
-
-    getDrafts() {
-        this.isLoading = true;
-        const params = new HttpParams()
-            .set("filterBy", "AccountsPosts")
-            .set("limit", "10")
-            .set("status", "DRAFT")
-            .set("getStat", false);
-
-        this.postService.getPosts(params).subscribe({
-            next: (event: any) => {
-                this.posts = event.posts;
-                this.isLoading = false;
-            },
-            error: (err) => {
-                this.posts = [];
-                this.isLoading = false;
-            },
-            complete: () => {
-                this.isLoading = false;
-            }
-        })
-    }
-
-    check(event:any, value:string) {
-      if(event.target.checked) {
-            if(!this.draftsList.includes(value)) {
-                this.draftsList.push(value);
-            }
-        } else {
-            if(this.draftsList.includes(value)) {
-                let index = this.draftsList.indexOf(value);
-                this.draftsList.splice(index, 1);
-            }
-        }
-     }
-
-    removeDraft() {
-        if (this.draftsList.length > 0) {
-            const formData: FormData = new FormData();
-            this.draftsList.forEach((draft: any) => {
-                formData.append('postsIds[]', draft);
-            })
-            this.postService.removeDrafts(formData).subscribe({
-                next: (event: any) => {
-                },
-                error: (err) => {
-                },
-                complete: () => {
-                    this.getDrafts();
-                }
-            })
-        }
-    }
-
-    showRemoveDraftModal() {
-      this.modal.confirm({
-        nzTitle: '<p>Are you sure you want to delete this Draft?</p>',
-        nzContent: '<b style="color: red;">All other drafts related will be also deleted</b>',
-        nzOkText: 'Yes',
-        nzOkType: 'primary',
-        nzOkDanger: true,
-        nzOnOk: () => this.removeDraft(),
-        nzCancelText: 'No',
-        nzOnCancel: () => console.log('Cancel')
-    });
-    }
-
-
-  publishDraft(id: string) {
-    if(confirm('Do you want to publish this post?')) {
-      this.isLoading = true;
-      this.draftsList = [];
-      this.postService.publishDraft(id).subscribe({
-          next: () => {
-            this.createMessage('success', "draft have been published");
-          },
-          error: (err) => {
-            this.createMessage('error', err.error);
-            this.isLoading = false;
-            this.getDrafts();
-          },
-          complete: () => {
-            this.isLoading = false;
-            this.getDrafts();
-          }
       })
     }
+  }
+
+  showRemoveDraftModal() {
+    this.modal.confirm({
+      nzTitle: '<p>Are you sure you want to delete this Draft?</p>',
+      nzContent: '<b style="color: red;">All other related drafts will be also deleted</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.removeDraft(),
+      nzCancelText: 'No',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+
+  showPublishDraftModal(id: string) {
+    this.modal.confirm({
+      nzTitle: '<p>Do you want to publish this draft?</p>',
+      nzContent: '<b style="color: red;">All other related drafts will be also published</b>',
+      nzOkText: 'Yes',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () => this.publishDraft(id),
+      nzCancelText: 'No',
+      nzOnCancel: () => console.log('Cancel')
+    });
+  }
+
+  publishDraft(id: string) {
+    this.isLoading = true;
+    this.draftsList = [];
+    this.postService.publishDraft(id).subscribe({
+        next: () => {
+          this.createMessage('success', "draft have been published");
+        },
+        error: (err) => {
+          this.createMessage('error', err.error);
+          this.isLoading = false;
+          this.getDrafts();
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.getDrafts();
+        }
+    })
   }
 
   createMessage(type: string, message: any): void {
