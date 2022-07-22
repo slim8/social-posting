@@ -7,10 +7,22 @@ import { sharedConstants } from 'src/app/shared/sharedConstants';
 })
 export class PostService {
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    posts() {
-        return this.http.get(sharedConstants.API_ENDPOINT + 'posts');
-    }
+  posts() {
+      return this.http.get(sharedConstants.API_ENDPOINT + 'posts');
+  }
+
+  getPosts(params : any = []) {
+    return this.http.get(sharedConstants.API_ENDPOINT+ 'posts', {params})
+  }
+
+  removeDrafts(params : any = []) {
+      return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/delete' , params);
+  }
+
+  publishDraft(id: string, params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/publish/' + id , params);
+  }
 
 }

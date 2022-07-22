@@ -7,7 +7,7 @@
     >.m-wrapper{
         width : 360px;
         min-height: 556px;
-        background : white ;
+        background : $color-base-0 ;
         margin: 35px auto;
 
         >.m-post-header {
@@ -28,6 +28,7 @@
                 >.m-user-info{
                     margin: auto 10px 5px 8px;
                     >.m-username{
+                      filter: blur(3px);
                       @include textstyle-size-12-bold();
                     }
 
@@ -38,7 +39,7 @@
             }
 
             >.m-header-dots{
-                color : #D9D9D9;
+                color : $color-base-15;
             }
         }
 
@@ -46,12 +47,12 @@
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
-            font-size: 8.44147px;
+            font-size: 12px;
             line-height: 11px;
 
             /* black */
-            color: #000000;
-            padding : 15px;
+            color: $color-base-100;
+            padding : 0 15px 15px;
 
             > span {
               font-weight: 700;

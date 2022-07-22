@@ -4,7 +4,6 @@
       <h1 i18n="My Drafts Posts Title|Title for My Posts Page@@myDraftsPosts">
         Drafts
       </h1>
-      <br />
       <h3
         i18n="
           My Drafts Posts Sub Title|Title for My Posts
@@ -76,7 +75,7 @@
               <li nz-menu-item>menu4 3rd menu item</li>
             </ul>
           </nz-dropdown-menu>
-          <div class="m-remove" (click)="removeDraft()">
+          <div class="m-remove" (click)="showRemoveDraftModal()">
             <img
               i18n-alt
               src="/assets/img/svgs/icons/remove.svg"
@@ -104,7 +103,7 @@
             <tr class="m-titles">
               <td></td>
               <td
-                colspan="4"
+                colspan="2"
                 i18n="
                   My Published Posts Contribution|Contribution Title for My
                   Posts Page@@myPublishedPostsContribution"
@@ -138,7 +137,7 @@
           <tbody *ngFor="let item of posts" class="m-post">
             <tr class="m-headline">
               <td class="m-checkbox">
-                <input type="checkbox" class="m-checkbox-input" #itemValue />
+                <input type="checkbox" class="m-checkbox-input" [value]="item.postId" #itemValue (click)="check($event, itemValue.value)" />
               </td>
               <td class="m-icon">
                 <img src="/assets/img/test-images/image.svg" alt="" />
@@ -184,7 +183,7 @@
               </td>
               <td class="m-date">
                 <p class="m-create-date">
-                  {{ item.createdAt | date: "dd-MM-yyyy HH:mm" }}
+                  {{ item.createdAt | date: "dd.MM.yyyy HH:mm" }}
                 </p>
                 <span class="m-text"> {{ item.createdBy }} </span>
               </td>
@@ -206,7 +205,7 @@
                   </a>
                 </div>
                 <div class="m-right">
-                  <button class="m-button is-primary" (click)="publishDraft(item.postId)">
+                  <button class="m-button is-primary" (click)="showPublishDraftModal(item.postId)">
                     <img i18n-alt src="/assets/img/svgs/icons/send.svg" alt="send icon"/>
                     <span i18n="Publish|Publish Button Text@@publish">Publish</span>
                   </button>

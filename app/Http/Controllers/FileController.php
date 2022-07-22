@@ -7,9 +7,9 @@ use App\Http\Traits\RequestsTrait;
 use File;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
@@ -28,34 +28,32 @@ class FileController extends Controller
         $this->traitController = new TraitController();
     }
 
-    public function sendmail()
-    {
-        $this->traitController->index('This is an mail exemple', 'zied.maaloul@softtodo.com', 'Subject Exemple');
-    }
-
     /**
-     * Store a File Link to Disk
+     * Store a File Link to Disk.
      */
-    public function storeFromLinkToDisk($fileName , $link , $folderName = 'pageAssets')
+    public function storeFromLinkToDisk($fileName, $link, $folderName = 'pageAssets')
     {
         $curlCh = curl_init();
         curl_setopt($curlCh, CURLOPT_URL, $link);
         curl_setopt($curlCh, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlCh, CURLOPT_SSLVERSION,3);
-        $curlData = curl_exec ($curlCh);
-        curl_close ($curlCh);
-        if(!empty($curlData)){
+        curl_setopt($curlCh, CURLOPT_SSLVERSION, 0);
+        $curlData = curl_exec($curlCh);
+        curl_close($curlCh);
+        if (!empty($curlData)) {
             Storage::disk('public')->put($folderName.'/'.$fileName.'.jpg', $curlData);
             $url = Storage::url($folderName.'/'.$fileName.'.jpg');
         }
         Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' Fetch link to '.$link);
+
         return $url;
     }
+
     /**
      * Convert Image To Jpeg.
      */
     public function convertToJpeg($folderName, $image, int $isOnDisk = 0, string $filePathName = null)
     {
+
         if (!$isOnDisk) {
             $object = $image->store('temporar'.'s/'.date('Y').'/'.date('m').'/'.date('d'));
         }
@@ -107,7 +105,7 @@ class FileController extends Controller
             if (envValue('APP_ENV') == 'local') {
                 $fileObject->url = $this->uploadToDistant($newImagePath, 'image', 1, $newImagePath);
             } else {
-                $fileObject->url = $this->uploadLocal($newImagePath, 'image');
+                $fileObject->url = $this->uploadLocal($newImagePath, 'image' , 1);
             }
 
             return $this->traitController->processResponse(true, ['files' => $fileObject]);
@@ -155,10 +153,14 @@ class FileController extends Controller
     /**
      * Start Local Upload.
      */
-    public function uploadLocal($file, $type)
+    public function uploadLocal($file, $type , int $isBase64 = 0)
     {
         if ($type == 'image') {
-            $imageLink = $this->convertToJpeg('postedImages', $file);
+            if($isBase64){
+                $imageLink = $this->convertToJpeg('postedImages', $file , $isBase64 , $file);
+            } else {
+                $imageLink = $this->convertToJpeg('postedImages', $file);
+            }
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
 
             return Storage::url('postedImages/'.$imageName);

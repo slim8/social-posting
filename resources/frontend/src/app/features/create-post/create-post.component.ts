@@ -86,7 +86,7 @@ export class CreatePostComponent implements OnInit {
     listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
 
     videoCounter = 0;
-    videoList: { id: number, file: File, videoUrl: string }[] = [];
+    videoList: { id: number, file: File, videoUrl: string , duration : number }[] = [];
     selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     showAlbum: boolean = false;
@@ -150,34 +150,34 @@ export class CreatePostComponent implements OnInit {
     }
 
     async uploadThumbnail(param: string) {
-        this.isLoading = true;
-        let list = this.videoList.map(video => {
-            let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-            return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
-        })
+      this.listOfVideos = [];
+      this.isLoading = true;
+      let list = this.videoList.map(video => {
+          let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
+          return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
+      })
 
-        await list.forEach(async (videoObject) => {
-            await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                next: (response) => {
-                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                },
-                error: (err) => {
-                    this.shared.createMessage('error', err);
-                },
-                complete: () => {
+      await list.forEach(async (videoObject) => {
+          await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+              next: (response) => {
+                  this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+              },
+              error: (err) => {
+                  this.shared.createMessage('error', err);
+              },
+              complete: () => {
 
-                }
-            });
-        })
-        setTimeout(() => {
-            this.submitForm(param);
-        }, 2000);
+              }
+          });
+      })
+      setTimeout(() => {
+          this.submitForm(param);
+      }, 2000);
     }
 
     submitForm(param: string) {
         this.isLoading = true;
         const formData: FormData = new FormData();
-
         this.listOfVideos.forEach((videoObject) => {
             formData.append('videos[]', JSON.stringify(videoObject));
         })
@@ -233,7 +233,7 @@ export class CreatePostComponent implements OnInit {
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: (event) => {
-                    this.isLoading = false;
+
                 },
                 error: (err) => {
                     if (err.error.errors) {
@@ -379,9 +379,10 @@ export class CreatePostComponent implements OnInit {
 
     generatethumbnails(action: string, newVideo = false) {
         this.leadThumbnail = true
-        if (action == "previous") {
+
+        if (action == "previous" && this.currentTimePosition > 10) {
             this.currentTimePosition -= this.duration;
-        } else if (action == "next") {
+        } else if (action == "next" && this.currentTimePosition < this.selectedVideo.duration - 10 ) {
             this.currentTimePosition += this.duration;
         }
 
@@ -415,19 +416,27 @@ export class CreatePostComponent implements OnInit {
         if (event.type === "success") {
             if (event.file) {
                 this.availableVideos = true;
-                let loadedFile = { id: this.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url };
-                this.videoList.push(loadedFile)
-                this.selectedVideo = loadedFile;
-                this.videoCounter++;
+                let tempVideoEl = document.createElement('video');
+                let that = this;
+                tempVideoEl.addEventListener('loadedmetadata', function() {
+                    let loadedFile = { id: that.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url , duration : tempVideoEl.duration };
+                    that.videoList.push(loadedFile)
+                    that.selectedVideo = loadedFile;
+                    that.videoCounter++;
+                    that.generatethumbnails('next', true);
+                    that.currentTimePosition = -10;
+                    that.refreshPages();
+                    setTimeout(() => {
+                        that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+                    }, 2500);
+                });
+                tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
+
+                // TODO:: end video duration
             } else {
                 this.availableVideos = false;
             }
-            this.refreshPages();
-            this.generatethumbnails('next', true);
-            this.currentTimePosition = -10;
-            setTimeout(() => {
-                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
-            }, 2500);
+
         }
     }
 
@@ -462,7 +471,7 @@ export class CreatePostComponent implements OnInit {
                 this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
             },
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel', item)
+            nzOnCancel: () => {}
         });
     }
 
@@ -483,7 +492,6 @@ export class CreatePostComponent implements OnInit {
                     "<strong>Facebook</strong> doesn't support images and videos on the same post."
                 )
                 .onClick.subscribe(() => {
-                    console.log('notification clicked!');
                 });
             this.wasMixedTypes = true;
         } else {
@@ -511,8 +519,6 @@ export class CreatePostComponent implements OnInit {
     }
 
     addToPost(event: any) {
-        // TODO:: list of images selected from album list
-        console.log(event);
     }
 
     mergeHashtags(e: any) {

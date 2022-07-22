@@ -25,15 +25,11 @@ export class AccountsService {
       return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/status/1/' + id, {});
   }
 
-  getPosts(params : any = []) {
-      return this.http.get(sharedConstants.API_ENDPOINT+ 'posts', {params})
+  deletePage(id: string, params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/'+id+'/delete' , params);
   }
 
-  removeDrafts(params : any = []) {
-      return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/delete' , params);
-  }
-
-  publishDraft(id: string, params : any = []) {
-    return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/publish/' + id , params);
+  deleteAccount(id: string, params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'token/'+id+'/delete' , params);
   }
 }

@@ -80,6 +80,7 @@
                         align-items: center;
                         margin-left: 27px;
                         padding-top: 5px;
+                        cursor: pointer;
 
                         > .m-icon-remove {
                             width: 14px;
@@ -160,13 +161,22 @@
 
                     > thead {
                         > tr {
+                          position: relative;
+                          &:before {
+                            content: '';
+                            border-bottom: 1px solid $color-media-black-opacity-30;
+                            position: absolute;
+                            width: 100%;
+                            padding-top: 19px;
+                        }
+
                             > td {
                                 @include textstyle-size-10-bold();
                                 color: $color-media-black-opacity-half;
-
                                 &:nth-child(2) {
-                                    padding-left: 90px;
+                                    padding-left: 9px;
                                 }
+
                             }
                         }
                     }
@@ -174,22 +184,20 @@
                         > .m-headline {
                             position: relative;
 
-                            &:before {
-                                content: '';
-                                border-bottom: 1px solid $color-media-black-opacity-30;
-                                position: absolute;
-                                width: 100%;
-                            }
+
 
                             > .m-icon {
                                 padding: 16px;
 
                                 @include mq(desktop) {
                                     padding: 0;
+                                    padding-left: 17px;
                                 }
                             }
                             > .m-image {
                                 padding-top: 16px;
+                                padding-left: 9px;
+                                width: 170px;
 
                                 > img {
                                     max-width: 170px;
@@ -205,7 +213,7 @@
                                     outline: none;
                                     position: relative;
                                     margin-right: 28px;
-                                    margin-bottom: 15px;
+                                    margin-bottom: 12px;
 
                                     &::after {
                                         content: '';
@@ -229,16 +237,18 @@
                                 }
                             }
                             > .m-content {
-                                display: flex;
-                                flex-wrap: wrap;
                                 row-gap: 10px;
                                 padding-left: 10px;
                                 padding-top: 16px;
-
+                                @include mq(tablet) {
+                                  padding-left: 30px;
+                              }
                                 > h6 {
                                     font-weight: bold;
                                     width: 100%;
                                     margin: 0;
+                                    padding-bottom: 5px;
+
                                 }
 
                                 > .m-account {
@@ -247,6 +257,7 @@
                                     align-items: center;
                                     > .m-image {
                                         position: relative;
+
                                         &.is-disconnected {
                                             filter: opacity(0.2);
                                         }
@@ -255,8 +266,8 @@
                                             border-radius: 50%;
                                             display: block;
                                             object-fit: cover;
-                                            width: 40px;
-                                            height: 40px;
+                                            width: 19px;
+                                            height: 19px;
                                         }
 
                                         > .m-provider-logo {
@@ -299,6 +310,7 @@
                                 > .m-create-date {
                                     @include textstyle-size-10-bold();
                                     width: 100%;
+                                    margin-bottom: 0px;
                                 }
                             }
 
@@ -312,8 +324,16 @@
                                 > .m-left,
                                 > .m-right {
                                     > .m-button {
+                                        padding: 11px 18px 11px 11px;
                                         height: 36px;
                                     }
+                                }
+                                > .m-left{
+                                  >a{
+                                    > i{
+                                    margin-right: 0;
+                                  }
+                                  }
                                 }
                             }
                         }
