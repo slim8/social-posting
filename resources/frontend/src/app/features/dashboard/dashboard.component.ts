@@ -1,3 +1,4 @@
+import { NewsService } from './services/news.service';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -33,13 +34,27 @@ export class DashboardComponent implements OnInit {
     currentUser: any;
     listpages: any;
 
+    news = [{
+        id: 1,
+        title: "",
+        teaser: "",
+        picture: "",
+        date: "",
+        template: '',
+        createdAt: "",
+        updatedAt: "",
+        img : ''
+        }
+      ]
+
     constructor(
         private iconService: NzIconService,
         private service: FacebookSocialService,
         private accountsService: AccountsService,
         private sharedModule: SharedModule,
         private formBuilder: FormBuilder,
-        private router: Router
+        private router: Router ,
+        private newsService : NewsService
     ) {
         this.iconService.addIconLiteral('ng-zorro:add', addIcon);
         this.iconService.addIconLiteral('ng-zorro:open', openIcon);
@@ -61,7 +76,23 @@ export class DashboardComponent implements OnInit {
             this.disableButtons();
         }, 50)
 
+        this.getNews();
     }
+
+    getNews() {
+
+        this.newsService.getNewsList().subscribe({
+          next: (event: any) => {
+              this.news = event.news.filter((item : any , index : number) => (index < 4) );
+              console.log(this.news);
+            },
+          error: err => {
+            
+          },
+          complete: () => {
+          }
+        })
+      }
 
     closeAlert(event: any) {
         let message = event.target.parentElement?.parentElement?.parentElement;
