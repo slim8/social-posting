@@ -127,7 +127,7 @@
                     </td>
                     <td class="m-page-info">
                       <div class="m-page">{{ post.message }}</div>
-                      <div class="m-date">{{ post.createdAt }}</div>
+                      <div class="m-date">{{ post.createdAt | date: "dd.MM.yyyy, HH:mm" }}</div>
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-like-count">{{ post.stats.likes }}</div>
