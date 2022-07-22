@@ -178,8 +178,6 @@ export class CreatePostComponent implements OnInit {
     submitForm(param: string) {
         this.isLoading = true;
         const formData: FormData = new FormData();
-        console.log(this.listOfVideos);
-
         this.listOfVideos.forEach((videoObject) => {
             formData.append('videos[]', JSON.stringify(videoObject));
         })
