@@ -29,7 +29,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return $this->traitController->processResponse(true, ['news' => News::with('textMediaNews')->orderBy('created_at', 'desc')->get()]);
+        return $this->traitController->processResponse(true, ['news' => News::with('textMediaNews')->orderBy('id', 'desc')->get()]);
     }
 
     /**
