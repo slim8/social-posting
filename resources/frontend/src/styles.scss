@@ -138,3 +138,17 @@ svg {
 .is-shown {
   display: block!important;
 }
+.ant-modal-content {
+  .ant-modal-close{
+    i{
+      color: $color-base-100;
+    }
+  }
+  .ant-modal-confirm-body{
+  margin-top: 25px;
+  .m-delete-msg{
+    margin-bottom: 0;
+  }
+}
+}
+
