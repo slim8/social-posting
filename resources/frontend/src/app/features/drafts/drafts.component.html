@@ -75,7 +75,7 @@
               <li nz-menu-item>menu4 3rd menu item</li>
             </ul>
           </nz-dropdown-menu>
-          <div class="m-remove" (click)="removeDraft()">
+          <div class="m-remove" (click)="showRemoveDraftModal()">
             <img
               i18n-alt
               src="/assets/img/svgs/icons/remove.svg"
@@ -137,7 +137,7 @@
           <tbody *ngFor="let item of posts" class="m-post">
             <tr class="m-headline">
               <td class="m-checkbox">
-                <input type="checkbox" class="m-checkbox-input" #itemValue />
+                <input type="checkbox" class="m-checkbox-input" [value]="item.postId" #itemValue (click)="check($event, itemValue.value)" />
               </td>
               <td class="m-icon">
                 <img src="/assets/img/test-images/image.svg" alt="" />
