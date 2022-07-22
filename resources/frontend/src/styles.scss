@@ -150,6 +150,14 @@ svg {
   .m-delete-msg{
     margin-bottom: 0;
   }
-}
+  }
+  .ant-modal-confirm-btns {
+     button{
+      background-color: $color-media-primary-orange;
+      .ng-star-inserted{
+        color: $color-base-0;
+      }
+    }
+  }
 }
 
