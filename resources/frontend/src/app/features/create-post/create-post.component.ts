@@ -150,34 +150,34 @@ export class CreatePostComponent implements OnInit {
     }
 
     async uploadThumbnail(param: string) {
-        this.isLoading = true;
-        let list = this.videoList.map(video => {
-            let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-            return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
-        })
+      this.listOfVideos = [];
+      this.isLoading = true;
+      let list = this.videoList.map(video => {
+          let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
+          return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
+      })
 
-        await list.forEach(async (videoObject) => {
-            await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                next: (response) => {
-                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                },
-                error: (err) => {
-                    this.shared.createMessage('error', err);
-                },
-                complete: () => {
+      await list.forEach(async (videoObject) => {
+          await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+              next: (response) => {
+                  this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+              },
+              error: (err) => {
+                  this.shared.createMessage('error', err);
+              },
+              complete: () => {
 
-                }
-            });
-        })
-        setTimeout(() => {
-            this.submitForm(param);
-        }, 2000);
+              }
+          });
+      })
+      setTimeout(() => {
+          this.submitForm(param);
+      }, 2000);
     }
 
     submitForm(param: string) {
         this.isLoading = true;
         const formData: FormData = new FormData();
-
         this.listOfVideos.forEach((videoObject) => {
             formData.append('videos[]', JSON.stringify(videoObject));
         })
@@ -233,7 +233,7 @@ export class CreatePostComponent implements OnInit {
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: (event) => {
-                  
+
                 },
                 error: (err) => {
                     if (err.error.errors) {

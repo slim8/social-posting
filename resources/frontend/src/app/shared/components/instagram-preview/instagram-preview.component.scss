@@ -52,6 +52,9 @@
                       flex-grow: 1;
                       padding: 0 0.5em;
 
+                      > .m-name {
+                        filter: blur(3px);
+                      }
                       > span,
                       strong {
                           display: block;

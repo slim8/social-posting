@@ -127,7 +127,7 @@
                     </td>
                     <td class="m-page-info">
                       <div class="m-page">{{ post.message }}</div>
-                      <div class="m-date">{{ post.createdAt }}</div>
+                      <div class="m-date">{{ post.createdAt | date: "dd.MM.yyyy, HH:mm" }}</div>
                     </td>
                     <td *ngIf="post.provider == 'facebook'" class="m-stats">
                       <div class="m-like-count">{{ post.stats.likes }}</div>
@@ -382,28 +382,28 @@
         </button>
       </div>
 
-      <div class="m-success-modal">
-        <div (click)="closeSuccessModal()" class="m-close-icon">
-          <img src="/assets/img/close.png" alt="close" />
+    </div>
+    <div class="m-success-modal">
+      <div (click)="closeSuccessModal()" class="m-close-icon">
+        <img src="/assets/img/close.png" alt="close" />
+      </div>
+      <div class="m-success">
+        <img src="/assets/img/Group.png" alt="refreshing" />
+        <div
+          class="m-success-title"
+          i18n="Logged In|Logged in successfully@@loggedIn"
+        >
+          <img src="/assets/img/check.png" alt="success" />
+          Logged in successfully.
         </div>
-        <div class="m-success">
-          <img src="/assets/img/Group.png" alt="refreshing" />
-          <div
-            class="m-success-title"
-            i18n="Logged In|Logged in successfully@@loggedIn"
-          >
-            <img src="/assets/img/Check.png" alt="success" />
-            Logged in successfully.
-          </div>
-          <p
-            i18n="
-              Redirect Message Success|Text for redirection after
-              success@@redirectMessageSuccess"
-          >
-            You will be immediately redirected to view your linked pages dem Add
-            mediafactory social media publisher.
-          </p>
-        </div>
+        <p
+          i18n="
+            Redirect Message Success|Text for redirection after
+            success@@redirectMessageSuccess"
+        >
+          You will be immediately redirected to view your linked pages dem Add
+          mediafactory social media publisher.
+        </p>
       </div>
     </div>
   </div>
