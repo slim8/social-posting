@@ -284,32 +284,9 @@
           </div>
           <div class="m-notes">
             <ul>
-              <li>
+              <li *ngFor="let item of news">
                 <p>
-                  Beiträge auf
-                  <strong>mehreren Plattformen gleichzeitig</strong>
-                  veröffentlichen. <a href="#">Jetzt ansehen.</a>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Du kannst jetzt Beiträge für die
-                  <strong> Zukunft planen</strong> und in den Kalender
-                  einplanen. Zur Kalenderansicht.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Beiträge auf
-                  <strong>mehreren Plattformen gleichzeitig</strong>
-                  veröffentlichen. <a href="#">Jetzt ansehen.</a>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Du kannst jetzt Beiträge für die
-                  <strong> Zukunft planen </strong> und in den Kalender
-                  einplanen.
+                  {{item.teaser}}. <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
                 </p>
               </li>
             </ul>
