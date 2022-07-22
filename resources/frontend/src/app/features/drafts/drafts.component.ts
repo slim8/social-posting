@@ -46,7 +46,6 @@ export class DraftsComponent implements OnInit {
 
         this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
-              console.log(event);
                 this.posts = event.posts;
                 this.isLoading = false;
             },

@@ -7,6 +7,7 @@ fs.copyFile('public/angular/index.html', 'resources/views/angular.blade.php', (e
 
 
 var dir = './public/storage/temporarStored';
+var pageAssets = './public/storage/pageAssets';
 var postedVideos = './public/storage/postedVideos';
 var postedImages = './public/storage/postedImages';
 var images = './public/storage/images';
@@ -21,4 +22,7 @@ if (!fs.existsSync(postedImages)){
 }
 if (!fs.existsSync(images)){
     fs.mkdirSync(images);
+}
+if (!fs.existsSync(pageAssets)){
+    fs.mkdirSync(pageAssets);
 }

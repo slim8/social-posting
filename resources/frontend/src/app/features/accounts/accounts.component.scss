@@ -168,6 +168,9 @@
 
                     > .m-alert {
                         width: 24px;
+                        &.m-full-width {
+                          width: 178px;
+                        }
                         position: relative;
 
                         &:hover {

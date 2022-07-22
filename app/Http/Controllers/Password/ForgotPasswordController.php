@@ -40,7 +40,11 @@ class ForgotPasswordController extends Controller
             ['email' => $request->email, 'token' => $token, 'created_at' => Carbon::now()]
         );
 
-        $this->traitController->index(['title' => 'Forgot password', 'token' => $token, 'resetPasswordUrl' => envValue('APP_URL').'/auth/reset-password/'], $request->email, 'Request Forget Password', 'emails.forgetPassword');
+        try{
+            $this->traitController->sendMail(['title' => 'Forgot password', 'token' => $token, 'resetPasswordUrl' => envValue('APP_URL').'/auth/reset-password/'], $request->email, 'Request Forget Password', 'emails.forgetPassword');
+        } catch(\Exception $e){
+            Log::channel('exception')->info($e->getMessage());
+        }
 
         // return $this->traitController->processResponse(true);
         return $this->traitController->processResponse(true, ['token' => $token]);

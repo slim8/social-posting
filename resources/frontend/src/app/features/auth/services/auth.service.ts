@@ -20,7 +20,6 @@ export class AuthService {
 
     // return true is there is a loggen in user
     public loggedIn(): boolean {
-        console.log(this.jwtService.decodeToken());
         return this.jwtService.tokenGetter() !== null && !this.jwtService.isTokenExpired();
     }
 

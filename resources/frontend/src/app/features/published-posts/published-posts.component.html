@@ -131,7 +131,8 @@
           <tbody *ngFor="let item of posts" class="m-post">
             <tr class="m-headline">
               <td class="m-icon">
-                <img src="/assets/img/test-images/image.svg" alt="" />
+                <img src="/assets/img/test-images/image.svg" alt="" *ngIf="item.postMedia.length > 0 && item.postMedia[0].type != 'video' " />
+                <i nz-icon nzType="play-square" style ="color:#b2b2b2" *ngIf="item.postMedia.length > 0 && item.postMedia[0].type == 'video'"></i>
               </td>
               <td class="m-image">
                 <nz-skeleton-element
@@ -142,8 +143,15 @@
                 <img
                   src="{{ item.postMedia[0].url }}"
                   alt=""
-                  *ngIf="item.postMedia.length > 0"
+                  *ngIf="item.postMedia.length > 0 && item.postMedia[0].type != 'video' "
                 />
+
+                <img
+                  src="{{ item.thumbnailLink }}"
+                  alt=""
+                  *ngIf="item.postMedia.length > 0 && item.postMedia[0].type === 'video' "
+                />
+
               </td>
 
               <td class="m-content">
@@ -226,7 +234,7 @@
                 </div>
               </td>
               <td class="m-item">
-                <a class="m-button is-grey" href="{{ item.url }}">
+                <a class="m-button is-grey" href="{{ item.url }}" target="_blank">
                   <span><i nz-icon nzType="ng-zorro:external-link"></i></span>
                   <span
                     i18n="

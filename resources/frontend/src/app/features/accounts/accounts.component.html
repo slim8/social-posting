@@ -110,7 +110,11 @@
           class="m-account-container"
         >
           <div class="m-media-small">
-            <img
+            <img *ngIf="account.pictureUrl"
+              src="{{account.pictureUrl}}"
+              alt=""
+            />
+            <img *ngIf="!account.pictureUrl"
               src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Gull_portrait_ca_usa.jpg"
               alt=""
             />
@@ -126,21 +130,16 @@
           <div class="m-page-info">
             <div class="m-page">{{ account.profileName }}</div>
           </div>
-          <div class="m-alert">
+          <div class="m-alert m-full-width">
             <img src="/assets/img/exclamation.png" alt="" />
-            <div
-              class="m-title-hover"
-              i18n="
-                Alert error connection|Text alert for error
-                connection@@alertErrorConnection"
-            >
+            <div class="m-title-hover" i18n="Alert error connection|Text alert for error connection@@alertErrorConnection">
               We are currently unable to access your account. Please check your
               account and your access data on Facebook directly.
             </div>
           </div>
           <div class="m-action"></div>
           <div class="m-action-manager">
-            <button (click)="deletePage(account.id)" class="m-icon-button">
+            <button (click)="showDeleteAccountConfirm(account.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
@@ -221,18 +220,18 @@
             </button>
           </div>
           <div class="m-action-manager">
-            <button (click)="deletePage(page.id)" class="m-icon-button">
+            <button *ngIf="page.canDelete" (click)="showDeleteConfirm(page.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="!page.isConnected"
+              *ngIf="!page.isConnected && page.canDisconnect"
               (click)="reconnectPage($event, page.id)"
               class="m-icon-button"
             >
               <i nz-icon nzType="login" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="page.isConnected"
+              *ngIf="page.isConnected  && page.canDisconnect"
               (click)="showDisconnectConfirm(page.id)"
               class="m-icon-button"
             >
@@ -260,12 +259,9 @@
         </div>
         <div
           *ngIf="this.currentUser != ''"
-          class="m-list-title"
-          i18n="
-            Pages Linked To Accountname|Text for pages linked to
-            accountname@@pagesLinkedToAccount"
-        >
-          Pages Linked To <strong>accountname.test</strong>:
+          class="m-list-title">
+          <span i18n="Pages Linked To Accountname|Text for pages linked to
+          accountname@@pagesLinkedToAccount" >Pages Linked To </span> <strong>accountname.test</strong>:
         </div>
       </div>
 
@@ -312,7 +308,7 @@
           class="m-success-title"
           i18n="Logged In|Logged in successfully@@loggedIn"
         >
-          <img src="/assets/img/Check.png" alt="success" />
+          <img src="/assets/img/check.png" alt="success" />
           Logged in successfully.
         </div>
         <p
@@ -320,8 +316,8 @@
             Redirect Message Success|Text for redirection after
             success@@redirectMessageSuccess"
         >
-          Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
-          mediafactory Social Media Publisher hinzuzufügen.
+        You will be immediately redirected to view your linked pages dem
+        Add mediafactory social media publisher.
         </p>
       </div>
     </div>

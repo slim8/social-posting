@@ -36,4 +36,12 @@ export class AccountsService {
   publishDraft(id: string, params : any = []) {
     return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/publish/' + id , params);
   }
+
+  deletePage(id: string, params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'accounts/'+id+'/delete' , params);
+  }
+
+  deleteAccount(id: string, params : any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT + 'token/'+id+'/delete' , params);
+  }
 }

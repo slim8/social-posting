@@ -13,16 +13,18 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
+use App\Http\Controllers\FileController;
 class InstagramController extends Controller
 {
     protected $utilitiesController;
     protected $traitController;
+    protected $fileController;
 
     public function __construct()
     {
         $this->utilitiesController = new UtilitiesController();
         $this->traitController = new TraitController();
+        $this->fileController = new FileController();
     }
 
     /**
@@ -274,7 +276,7 @@ class InstagramController extends Controller
             }
         }
 
-        $object['caption'] = $object['caption'] . $tagsString;
+        $object['caption'] = isset($object['caption']) ? $object['caption'] : '' . $tagsString;
 
         if ($counts == 1) {
             if (!$location) {
@@ -381,7 +383,8 @@ class InstagramController extends Controller
     {
         $id = $instagramAccount['pageId'];
         $relatedAccountId = $this->traitController->findAccountByUid($instagramAccount['relatedAccountId']) ? $this->traitController->findAccountByUid($instagramAccount['relatedAccountId'])->id : null;
-        $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ? $instagramAccount['accountPictureUrl'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
+        $pageinstagramAccountLink = $instagramAccount['accountPictureUrl'] ?
+        $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid(),$instagramAccount['accountPictureUrl']): 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
         $name = $instagramAccount['pageName'];
         $token = $relatedAccountId ? 'NA' : $instagramAccount['accessToken'];
 

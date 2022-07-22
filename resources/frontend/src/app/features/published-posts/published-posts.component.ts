@@ -38,7 +38,6 @@ export class PublishedPostsComponent implements OnInit {
             .set("getStat", true);
         this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
-                console.log(event)
                 this.posts = event.posts;
                 this.isLoading = false;
             },

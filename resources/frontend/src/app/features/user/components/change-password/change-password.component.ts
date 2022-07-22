@@ -35,14 +35,11 @@ export class ChangePasswordComponent implements OnInit {
   };
 
   showPasswordConfirmationAction(){
-    console.log('in');
-    
     this.showPasswordConfirmation = !this.showPasswordConfirmation ;
   };
 
   saveNewPassword(){
     this.error = null ;
-    console.log(this.currentPassword , this.newPassword , this.passwordConfirmation );
     let data = {
       password : this.newPassword,
       passwordConfirmation : this.passwordConfirmation, 
