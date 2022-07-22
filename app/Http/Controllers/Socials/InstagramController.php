@@ -283,8 +283,6 @@ class InstagramController extends Controller
                 $object['location_id'] = $location;
             }
 
-            $object['location_id'] = '7640348500';
-
             $singlePostResponse = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos, $mentions);
 
             if (!$singlePostResponse['status']) {
