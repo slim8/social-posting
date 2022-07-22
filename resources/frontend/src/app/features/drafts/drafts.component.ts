@@ -100,16 +100,17 @@ export class DraftsComponent implements OnInit {
 
   showRemoveDraftModal() {
     this.modal.confirm({
-      nzTitle: '<p>Are you sure you want to delete this Draft?</p>',
-      nzContent: '<b style="color: red;">All other related drafts will be also deleted</b>',
-      nzOkText: 'Yes',
+      nzTitle: '<p class="m-delete-msg">Are you sure you want to delete this Draft?</p>',
+      nzContent: '<b style="color: red;">All other drafts related will be also deleted</b>',
+      nzOkText: 'Delete',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => this.removeDraft(),
-      nzCancelText: 'No',
+      nzCancelText: 'Cancel',
       nzOnCancel: () => console.log('Cancel')
-    });
+  });
   }
+
 
   showPublishDraftModal(id: string) {
     this.modal.confirm({

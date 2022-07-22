@@ -138,3 +138,26 @@ svg {
 .is-shown {
   display: block!important;
 }
+.ant-modal-content {
+  .ant-modal-close{
+    i{
+      color: $color-base-100;
+      opacity: 0.85;
+    }
+  }
+  .ant-modal-confirm-body{
+  margin-top: 25px;
+  .m-delete-msg{
+    margin-bottom: 0;
+  }
+  }
+  .ant-modal-confirm-btns {
+     button{
+      background-color: $color-media-primary-orange;
+      .ng-star-inserted{
+        color: $color-base-0;
+      }
+    }
+  }
+}
+
