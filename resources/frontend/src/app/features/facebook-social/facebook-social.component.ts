@@ -65,25 +65,18 @@ export class FacebookSocialComponent implements OnInit {
     }
 
     handleOk(): void {
-        console.log('Button ok clicked!');
         this.isVisible = false;
     }
 
     handleCancel(): void {
-        console.log('Button cancel clicked!');
         this.isVisible = false;
     }
 
     onSubmit() {
         if (this.validateForm.valid) {
-            console.log(this.validateForm.value);
-
-            console.log('this.listpages', this.listpages);
-
             let selectedobject = this.listpages.filter((item: any) =>
                 this.validateForm.value.myChoices.includes(item.pageId)
             );
-            console.log(selectedobject);
             this.service
                 .manageFacebookPages(
                     sharedConstants.API_ENDPOINT + 'save-meta-pages-groups',
@@ -93,9 +86,6 @@ export class FacebookSocialComponent implements OnInit {
                     }
                 )
                 .subscribe((response: any) => {
-
-                    console.log('saveFacebookPages');
-                    console.log(response);
                 });
 
             this.validateForm = this.fb.group({

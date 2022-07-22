@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
@@ -47,21 +47,20 @@ export class AccountsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.validateForm = this.formBuilder.group({
-            myChoices: new FormArray([]),
-        });
-        this.getConnectedAccounts();
-        this.getPages();
-        if (this.router.url.includes('accounts')) {
-            this.sharedModule.initSideMenu('accounts');
-        }
+      this.validateForm = this.formBuilder.group({
+          myChoices: new FormArray([]),
+      });
+      this.getConnectedAccounts();
+      this.getPages();
+      if (this.router.url.includes('accounts')) {
+          this.sharedModule.initSideMenu('accounts');
+      }
     }
 
     getPages() {
         this.service.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
                 this.listOfPages = success.pages;
-                console.log(this.listOfPages);
             },
             (error) => {
                 this.listOfPages = [];
@@ -211,9 +210,22 @@ export class AccountsComponent implements OnInit {
             nzOkDanger: true,
             nzOnOk: () => this.disconnectPage(id),
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel')
+            nzOnCancel: () => {}
         });
     }
+
+    showDeleteConfirm(id: any): void {
+      this.modal.confirm({
+          nzTitle: 'Do you really want to delete this account?',
+          nzContent: '<b style="color: red;">this account will be deleted permenantly</b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.deletePage(id),
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel')
+      });
+  }
 
     reconnectPage(event: any, id: any) {
         this.accountsService.reconnectPageById(id).subscribe({
@@ -230,6 +242,19 @@ export class AccountsComponent implements OnInit {
     }
 
     deletePage (id:string) {
+      this.isLoading = true;
+      this.listOfPages = [];
+      this.accountsService.deleteAccount(id).subscribe({
+        next: (event: any) => {
 
+        },
+        error: err => {
+
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.getPages();
+        }
+    })
     }
 }

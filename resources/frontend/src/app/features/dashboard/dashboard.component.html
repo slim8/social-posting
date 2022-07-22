@@ -43,6 +43,7 @@
                 Dashboard container side note|Side note for dashboard
                 container@@dashboardContainerNote"
               class="m-note"
+              routerLink="/application/published-posts"
             >
               View all posts
             </div>
@@ -104,7 +105,12 @@
                         <img
                           src="{{ post.postMedia[0].url }}"
                           alt=""
-                          *ngIf="post.postMedia.length > 0"
+                          *ngIf="post.postMedia.length > 0 && post.postMedia[0].type != 'video' "
+                        />
+                        <img
+                          src="{{ post.thumbnailLink }}"
+                          alt=""
+                          *ngIf="post.postMedia.length > 0 && post.postMedia[0].type == 'video' "
                         />
                         <div class="m-provider-logo">
                           <img
@@ -252,6 +258,7 @@
             i18n="
               Linked Accounts |Text for linked accounts button
               @@linkedAccountsButton"
+              routerLink="/application/accounts"
           >
             <i nz-icon nzType="ng-zorro:profile"></i>Linked Accounts
           </button>

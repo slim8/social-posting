@@ -110,7 +110,12 @@ class ApiAuthController extends Controller
 
         // Start Email Configuration
         $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
-        $this->traitController->index($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+
+        try{
+            $this->traitController->sendMail($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+        } catch(\Exception $e){
+            Log::channel('exception')->info($e->getMessage());
+        }
         // End Email Configuration
         Log::channel('info')->info('New company has been registred with email '.$request->email);
 
@@ -156,6 +161,13 @@ class ApiAuthController extends Controller
         ]);
 
         $user->attachRole('user');
+
+        $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
+        try{
+            $this->traitController->sendMail($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+        } catch(\Exception $e){
+            Log::channel('exception')->info($e->getMessage());
+        }
 
         Log::channel('info')->info('company admin Id :'.$this->traitController->getCurrentId().' has add teh user '.$request->email.' to his company : '.$actualCompanyId);
         return $this->traitController->processResponse(true, [

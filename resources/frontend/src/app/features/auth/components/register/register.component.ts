@@ -61,6 +61,7 @@ export class RegisterComponent implements OnInit {
                 if (control.invalid) {
                     control.markAsDirty();
                     control.updateValueAndValidity({ onlySelf: true });
+                    this.isLoading = false;
                 }
             });
         }

@@ -39,7 +39,6 @@ export class UsersListComponent implements OnInit {
   getData(){
     this.userService.getUsersList().subscribe({
       next: (event: any) => {
-          console.log(event);
           this.listOfUsers = event.users;
         },
       error: err => {
@@ -51,8 +50,6 @@ export class UsersListComponent implements OnInit {
 
     this.userService.getPagesList().subscribe({
       next: (event: any) => {
-          console.log("this are all the pages");
-          console.log(event);
           this.listOfPages = event.pages;
         },
       error: err => {
@@ -93,14 +90,11 @@ export class UsersListComponent implements OnInit {
   onItemChecked(id: number, checked: boolean): void {
     this.updateCheckedSet(id, checked);
     this.refreshCheckedStatus();
-    console.log(this.setOfCheckedId.values());
-    
   }
 
   sendRequest(): void {
     this.loading = true;
     const requestData = this.listOfUsers.filter((data : any) => this.setOfCheckedId.has(data.id));
-    console.log(requestData);
     setTimeout(() => {
       this.setOfCheckedId.clear();
       this.refreshCheckedStatus();
@@ -123,7 +117,6 @@ export class UsersListComponent implements OnInit {
 
   onItemCheckedPage(id: number, checked: boolean): void {
     this.updateCheckedPageSet(id, checked);
-    console.log(this.setOfCheckedPageId);
     
   }
 
@@ -150,7 +143,6 @@ export class UsersListComponent implements OnInit {
 
     this.userService.addPermission(formData).subscribe({
       next: (event: any) => {
-          console.log(event);
           this.isVisible = false;
           this.getData();
         },
@@ -166,7 +158,6 @@ export class UsersListComponent implements OnInit {
 
   removePermission(userId : any ,accountId : any , e : Event){
     e.preventDefault();
-    console.log('closed' , accountId , userId);
     const formData: FormData = new FormData();
 
       formData.append('accounts[]', accountId);
@@ -177,7 +168,6 @@ export class UsersListComponent implements OnInit {
         nzTitle: '<i>Do you Want to remove this permission ?</i>',
         nzContent: '<b>remove permissions '+ this.getPermissionName(accountId) + '</b>',
         nzOnOk: () => {
-          console.log('ok');
           this.userService.removePermission(formData).subscribe({
             next: (event: any) => {
                 this.getData();

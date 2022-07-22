@@ -125,8 +125,6 @@
           </div>
           <div class="m-page-info">
             <div class="m-page">{{ account.profileName }}</div>
-            <div class="m-date">hinzugefügt am 23.04.22</div>
-            <div class="m-followers">Follower: <strong> 4967</strong></div>
           </div>
           <div class="m-alert">
             <img src="/assets/img/exclamation.png" alt="" />
@@ -142,7 +140,7 @@
           </div>
           <div class="m-action"></div>
           <div class="m-action-manager">
-            <button (click)="deletePage(account.id)" class="m-icon-button">
+            <button (click)="showDeleteConfirm(account.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
@@ -185,7 +183,7 @@
             class="m-page-info"
           >
             <div class="m-page">{{ page.pageName }}</div>
-            <div class="m-date">hinzugefügt am 23.04.22</div>
+            <div class="m-date"> <span i18n="Added on|Title for added on@@addedOn">added on &nbsp;</span> {{page.createdAt | date: "dd.MM.yyyy" }}</div>
             <div class="m-followers">
               Follower: <strong> {{ page.followers }}</strong>
             </div>
@@ -216,24 +214,25 @@
             <button
               class="m-button is-primary"
               i18n="Create Post|Text for create post@@createPost"
-              routerLink="/application/create-post"
+              routerLink="/application/create-post/{{page.id}}"
+
             >
               <span><i nz-icon nzType="ng-zorro:edit"></i></span> Create Post
             </button>
           </div>
           <div class="m-action-manager">
-            <button (click)="deletePage(page.id)" class="m-icon-button">
+            <button *ngIf="page.canDelete" (click)="showDeleteConfirm(page.id)" class="m-icon-button">
               <i nz-icon nzType="ng-zorro:trash" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="!page.isConnected"
+              *ngIf="!page.isConnected && page.canDisconnect"
               (click)="reconnectPage($event, page.id)"
               class="m-icon-button"
             >
               <i nz-icon nzType="login" nzTheme="outline"></i>
             </button>
             <button
-              *ngIf="page.isConnected"
+              *ngIf="page.isConnected  && page.canDisconnect"
               (click)="showDisconnectConfirm(page.id)"
               class="m-icon-button"
             >
@@ -261,12 +260,9 @@
         </div>
         <div
           *ngIf="this.currentUser != ''"
-          class="m-list-title"
-          i18n="
-            Pages Linked To Accountname|Text for pages linked to
-            accountname@@pagesLinkedToAccount"
-        >
-          Pages Linked To <strong>accountname.test</strong>:
+          class="m-list-title">
+          <span i18n="Pages Linked To Accountname|Text for pages linked to
+          accountname@@pagesLinkedToAccount" >Pages Linked To </span> <strong>accountname.test</strong>:
         </div>
       </div>
 
@@ -313,7 +309,7 @@
           class="m-success-title"
           i18n="Logged In|Logged in successfully@@loggedIn"
         >
-          <img src="/assets/img/Check.png" alt="success" />
+          <img src="/assets/img/check.png" alt="success" />
           Logged in successfully.
         </div>
         <p
@@ -321,8 +317,8 @@
             Redirect Message Success|Text for redirection after
             success@@redirectMessageSuccess"
         >
-          Du wirst gleich weitergeleitet, um deine verknüpften Seiten dem
-          mediafactory Social Media Publisher hinzuzufügen.
+        You will be immediately redirected to view your linked pages dem
+        Add mediafactory social media publisher.
         </p>
       </div>
     </div>

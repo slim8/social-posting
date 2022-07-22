@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
 import { generateVideoThumbnails } from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
@@ -25,6 +25,9 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
 })
 export class CreatePostComponent implements OnInit {
     isLoading = false;
+
+    // pre-selected page
+    pageId: string = "";
 
     //upload file apiURL
     uploadFileAPIURL = sharedConstants.API_ENDPOINT + "uploadfile";
@@ -83,7 +86,7 @@ export class CreatePostComponent implements OnInit {
     listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
 
     videoCounter = 0;
-    videoList: { id: number, file: File, videoUrl: string }[] = [];
+    videoList: { id: number, file: File, videoUrl: string , duration : number }[] = [];
     selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     showAlbum: boolean = false;
@@ -95,7 +98,8 @@ export class CreatePostComponent implements OnInit {
         private modal: NzModalService,
         private notification: NzNotificationService,
         private router: Router,
-        private sharedModule: SharedModule
+        private sharedModule: SharedModule,
+        private activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
@@ -104,6 +108,11 @@ export class CreatePostComponent implements OnInit {
         if (this.router.url.includes('create-post')) {
             this.sharedModule.initSideMenu('create-post');
         }
+        this.activatedRoute.params.subscribe(params => {
+            if (params['id']) {
+                this.pageId = params['id'];
+            }
+        });
     }
 
     getPages(param: string) {
@@ -116,6 +125,12 @@ export class CreatePostComponent implements OnInit {
                     if (param == 'mixed') {
                         if (page.isConnected == true) {
                             this.listOfPages.push(page);
+                        }
+                        if (this.pageId != "") {
+                            if (page.id == this.pageId) {
+                                let selectedPage = page.id + "|" + page.provider;
+                                this.accountsValue.push(selectedPage);
+                            }
                         }
                     }
                     else if (param == 'instagram') {
@@ -218,12 +233,7 @@ export class CreatePostComponent implements OnInit {
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
                 next: (event) => {
-                    if (param == 'PUBLISH') {
-                        this.router.navigateByUrl('/application/published-posts')
-                    } else {
-                        this.router.navigateByUrl('/application/drafts')
-                    }
-                    this.isLoading = false;
+                  
                 },
                 error: (err) => {
                     if (err.error.errors) {
@@ -242,8 +252,12 @@ export class CreatePostComponent implements OnInit {
                     this.accountsValue = [];
                     if (param == 'PUBLISH') {
                         this.shared.createMessage('success', 'published!');
+                        this.router.navigateByUrl('/application/published-posts')
+
                     } else {
                         this.shared.createMessage('success', 'saved to drafts!');
+                        this.router.navigateByUrl('/application/drafts')
+
                     }
                 },
             });
@@ -365,9 +379,10 @@ export class CreatePostComponent implements OnInit {
 
     generatethumbnails(action: string, newVideo = false) {
         this.leadThumbnail = true
-        if (action == "previous") {
+
+        if (action == "previous" && this.currentTimePosition > 10) {
             this.currentTimePosition -= this.duration;
-        } else if (action == "next") {
+        } else if (action == "next" && this.currentTimePosition < this.selectedVideo.duration - 10 ) {
             this.currentTimePosition += this.duration;
         }
 
@@ -401,19 +416,27 @@ export class CreatePostComponent implements OnInit {
         if (event.type === "success") {
             if (event.file) {
                 this.availableVideos = true;
-                let loadedFile = { id: this.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url };
-                this.videoList.push(loadedFile)
-                this.selectedVideo = loadedFile;
-                this.videoCounter++;
+                let tempVideoEl = document.createElement('video');
+                let that = this;
+                tempVideoEl.addEventListener('loadedmetadata', function() {
+                    let loadedFile = { id: that.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url , duration : tempVideoEl.duration };
+                    that.videoList.push(loadedFile)
+                    that.selectedVideo = loadedFile;
+                    that.videoCounter++;
+                    that.generatethumbnails('next', true);
+                    that.currentTimePosition = -10;
+                    that.refreshPages();
+                    setTimeout(() => {
+                        that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+                    }, 2500);
+                });
+                tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
+
+                // TODO:: end video duration
             } else {
                 this.availableVideos = false;
             }
-            this.refreshPages();
-            this.generatethumbnails('next', true);
-            this.currentTimePosition = -10;
-            setTimeout(() => {
-                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
-            }, 2500);
+
         }
     }
 
@@ -448,7 +471,7 @@ export class CreatePostComponent implements OnInit {
                 this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
             },
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel', item)
+            nzOnCancel: () => {}
         });
     }
 
@@ -469,7 +492,6 @@ export class CreatePostComponent implements OnInit {
                     "<strong>Facebook</strong> doesn't support images and videos on the same post."
                 )
                 .onClick.subscribe(() => {
-                    console.log('notification clicked!');
                 });
             this.wasMixedTypes = true;
         } else {
@@ -497,8 +519,6 @@ export class CreatePostComponent implements OnInit {
     }
 
     addToPost(event: any) {
-        // TODO:: list of images selected from album list
-        console.log(event);
     }
 
     mergeHashtags(e: any) {
