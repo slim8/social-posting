@@ -92,10 +92,9 @@ export class DraftsComponent implements OnInit {
     }
 
     showRemoveDraftModal() {
-      alert();
       this.modal.confirm({
-        nzTitle: 'Do you really want to disconnect this account?',
-        nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
+        nzTitle: '<p>Are you sure you want to delete this Draft?</p>',
+        nzContent: '<b style="color: red;">All other drafts related will be also deleted</b>',
         nzOkText: 'Yes',
         nzOkType: 'primary',
         nzOkDanger: true,
