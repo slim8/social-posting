@@ -276,14 +276,12 @@ class InstagramController extends Controller
             }
         }
 
-        $object['caption'] = $object['caption'] . $tagsString;
+        $object['caption'] = (isset($object['caption']) ? $object['caption'] : '') . $tagsString;
 
         if ($counts == 1) {
             if (!$location) {
                 $object['location_id'] = $location;
             }
-
-            $object['location_id'] = '7640348500';
 
             $singlePostResponse = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos, $mentions);
 

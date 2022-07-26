@@ -24,23 +24,35 @@
         >.m-container{
 
             >.m-posts-container{
-                margin-left: 120px;
+                margin-left: 0px;
+
+                @include mq(desktop){
+                    margin-left: 120px;
+                }
                 
 
                 >.m-first-post{
-                    width : 608px ;
+                    width : 100% ;
                     display: flex;
                     flex-direction: column;
                     margin : 49px 0 ;
 
+                    @include mq(tablet){
+                        width : 608px ;
+                    }
+
                     >.m-post-img{
 
                         >img{
-                            width : 608px ;
-                            height: 226px;
+                            width : 100% ;
+                            height: 151px;
                             object-fit: cover;
                             object-position: center;
 
+                            @include mq(tablet){
+                                width : 608px ;
+                                height: 226px;
+                            }
                         }
                     }
 
@@ -78,24 +90,44 @@
                 }
 
                 >.m-post-item{
-                    width : 608px ;
+                    width : 100% ;
                     display: flex;
+                    flex-direction: column;
                     align-items: center;
                     margin : 49px 0 ;
 
+                    @include mq(tablet){
+                        width : 608px ;
+                        flex-direction: row;
+                    }
+
                     >.m-post-img{
                         margin-right: 22px ;
+                        width : 100% ;
+
+                        @include mq(tablet){
+                            width : 204px ;
+                        }
 
                         >img{
-                            width : 204px ;
+                            width : 100% ;
                             height: 151px;
                             object-fit: cover;
                             object-position: center;
+
+                            @include mq(tablet){
+                                width : 204px ;
+                            }
                         }
                     }
 
                     >.m-post-description{
                         width: 100%; 
+                        margin-top: 22px;
+
+                        @include mq(tablet){
+                            margin-top: 0px;
+                        }
 
                         >.m-post-date{
                             font-weight: 400;
@@ -130,8 +162,12 @@
 
                 >.m-post-line{
                     border: 1px solid $color-media-black;
-                    width: 608px;
+                    width: 100%;
                     margin-left: 0px;
+
+                    @include mq(tablet){
+                        width : 608px ;
+                    }
                 }
 
                 &:last-child {

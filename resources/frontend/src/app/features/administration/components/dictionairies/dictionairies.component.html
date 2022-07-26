@@ -37,6 +37,7 @@
     [nzTitle]="modalTitle"
     [nzContent]="modalContent"
     [nzFooter]="modalFooter"
+    [nzBodyStyle]="{minWidth : '350px'}"
     >
     <ng-template #modalTitle>{{ updateMode ? 'Update '+dictionaryToUpdate.key : 'Add Key'}}</ng-template>
 

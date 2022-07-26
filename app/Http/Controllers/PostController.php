@@ -180,7 +180,7 @@ class PostController extends Controller
                 $posts[] = $postContent;
             }
         }
-        
+
         if ($posts) {
             return $this->traitController->processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
         } else {
@@ -204,9 +204,15 @@ class PostController extends Controller
 
         $isCompanyAdmin = $this->traitController->getUserObject()->hasRole('companyadmin') ? true : false;
         $userCompanyId = $this->traitController->getUserObject()->companyId;
-
-        foreach ($request->postsIds as $postId) {
+        foreach (array_unique($request->postsIds) as $postId) {
             $currentPost = Post::where('id', $postId)->first();
+
+            if(!$currentPost){
+                $errMesage = 'Post '.$postId.' Not Found';
+                $errorLog = $errMesage;
+                Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
+                continue;
+            }
 
             $isDraft = $currentPost->status === 'DRAFT';
             $createdBy = $currentPost->createdBy;

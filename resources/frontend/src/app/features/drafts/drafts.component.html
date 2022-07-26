@@ -75,7 +75,7 @@
               <li nz-menu-item>menu4 3rd menu item</li>
             </ul>
           </nz-dropdown-menu>
-          <div class="m-remove" (click)="removeDraft()">
+          <div class="m-remove" (click)="showRemoveDraftModal()">
             <img
               i18n-alt
               src="/assets/img/svgs/icons/remove.svg"
@@ -87,7 +87,7 @@
         <div class="m-right">
           <button
             class="m-button is-primary"
-            i18n="CreateNew|Title for the Create new@@createNew"
+            i18n="CreateNew|Title for the Create new@@createNew" routerLink="/application/create-post"
           >
             <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
             Create new
@@ -137,7 +137,7 @@
           <tbody *ngFor="let item of posts" class="m-post">
             <tr class="m-headline">
               <td class="m-checkbox">
-                <input type="checkbox" class="m-checkbox-input" #itemValue />
+                <input type="checkbox" class="m-checkbox-input" [value]="item.postId" #itemValue (click)="check($event, itemValue.value)" />
               </td>
               <td class="m-icon">
                 <img src="/assets/img/test-images/image.svg" alt="" />
@@ -205,7 +205,7 @@
                   </a>
                 </div>
                 <div class="m-right">
-                  <button class="m-button is-primary" (click)="publishDraft(item.postId)">
+                  <button class="m-button is-primary" (click)="showPublishDraftModal(item.postId)">
                     <img i18n-alt src="/assets/img/svgs/icons/send.svg" alt="send icon"/>
                     <span i18n="Publish|Publish Button Text@@publish">Publish</span>
                   </button>
