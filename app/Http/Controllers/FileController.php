@@ -7,6 +7,7 @@ use App\Http\Traits\RequestsTrait;
 use File;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -237,5 +238,18 @@ class FileController extends Controller
 
             return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
         }
+    }
+
+
+    /**
+     * Get company media .
+     */
+    public function getCompanyMedia($companyId)
+    {
+        $media  = DB::select('select * from `post_media` 
+        where exists (select * from `posts` 
+        where `post_media`.`post_id` = `posts`.`id` and 
+        exists (select * from `users` where `posts`.`created_by` = `users`.`id` and `company_id` = :id) and `posts`.`deleted_at` is null)', ['id' => $companyId]); 
+        return $this->traitController->processResponse(false, ['files' => $media]);
     }
 }
