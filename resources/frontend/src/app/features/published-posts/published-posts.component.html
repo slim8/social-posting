@@ -190,7 +190,7 @@
               </td>
               <td class="m-date">
                 <p class="m-create-date">
-                  {{ item.createdAt | date: "dd-MM-yyyy HH:mm" }}
+                  {{ item.createdAt | date: "dd.MM.yyyy  HH:mm" }}
                 </p>
                 <span class="m-text"> {{ item.createdBy }} </span>
               </td>
@@ -199,37 +199,39 @@
             <tr class="m-details">
               <td class="m-item" colspan="3">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.shares }}</span>
+                  <span class="m-number">{{ item.stats.shares ?  item.stats.shares : item.stats.saves  }}</span>
                   <span
                     class="m-text"
                     i18n="
                       Published Post Reached People|Published Post Reached
                       People @@publishedPostShares"
-                    >Shares</span
+                    >{{ item.stats.shares ?  "Shares" : "Saves"  }}</span
                   >
                 </div>
               </td>
               <td class="m-item">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.likes }}</span>
+                  <span class="m-number">{{ item.stats.likes ?  item.stats.likes : item.stats.engagement  }}</span>
                   <span
                     class="m-text"
                     i18n="
                       Published Post Likes|Published Post Likes
                       @@publishedPostLikes"
-                    >Likes</span
+                    >{{ item.stats.comments ?  "Likes" : "Engagements"  }}</span
                   >
                 </div>
               </td>
               <td class="m-item">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.comments }}</span>
+                  <span class="m-number">{{ item.stats.comments ?  item.stats.comments : item.stats.impressions  }}</span>
                   <span
                     class="m-text"
                     i18n="
                       Published Post Comments|Published Post Comments
                       @@publishedPostComments"
-                    >Comments</span
+                    > {{ item.stats.comments ?  "Comments" : "Impressions"  }}
+
+                    </span
                   >
                 </div>
               </td>
