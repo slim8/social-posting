@@ -250,6 +250,6 @@ class FileController extends Controller
         where exists (select * from `posts` 
         where `post_media`.`post_id` = `posts`.`id` and 
         exists (select * from `users` where `posts`.`created_by` = `users`.`id` and `company_id` = :id) and `posts`.`deleted_at` is null)', ['id' => $companyId]); 
-        return $this->traitController->processResponse(false, ['files' => $media]);
+        return $this->traitController->processResponse(true, ['files' => $media]);
     }
 }
