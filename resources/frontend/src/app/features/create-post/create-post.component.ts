@@ -1,6 +1,5 @@
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { NzSelectSizeType } from 'ng-zorro-antd/select';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -25,7 +24,6 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     styleUrls: ['./create-post.component.scss'],
 })
 export class CreatePostComponent implements OnInit {
-  validateForm!: FormGroup;
     isLoading = false;
 
     // pre-selected page
@@ -92,7 +90,7 @@ export class CreatePostComponent implements OnInit {
     selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     showAlbum: boolean = false;
-     errors = [];
+
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
@@ -101,17 +99,10 @@ export class CreatePostComponent implements OnInit {
         private notification: NzNotificationService,
         private router: Router,
         private sharedModule: SharedModule,
-        private activatedRoute: ActivatedRoute,
-        private fb: FormBuilder,
+        private activatedRoute: ActivatedRoute
     ) { }
 
     ngOnInit(): void {
-      this.validateForm = this.fb.group({
-        Message: new FormControl(null, [Validators.required]),
-        Hashtags: new FormControl(null, [Validators.required]),
-        Mentions: new FormControl(null, []),
-    });
-
         this.getPages('mixed');
         const mentioned = document.querySelector('.mentioned');
         if (this.router.url.includes('create-post')) {
@@ -185,116 +176,92 @@ export class CreatePostComponent implements OnInit {
     }
 
     submitForm(param: string) {
+        this.isLoading = true;
+        const formData: FormData = new FormData();
+        this.listOfVideos.forEach((videoObject) => {
+            formData.append('videos[]', JSON.stringify(videoObject));
+        })
 
-      if (this.validateForm.valid) {
-        let data = this.validateForm.value;
+        let post: any = {
+            message: "",
+            hashtags: [],
+            mentions: [],
+            accountId: "",
+            videoTitle: ""
+        }
 
-       //  data.message or data['message'];
+        this.accountsValue.forEach((accountId: any) => {
+            let arr = accountId.split("|");
+            let id = arr[0];
+            if (accountId.includes('facebook')) {
+                post.message = this.facebookMessage;
+                post.hashtags = this.listOfTagOptionsFacebook;
+                post.mentions = this.mentions;
+                post.accountId = id;
+                post.videoTitle = "";
+            } else if (accountId.includes('instagram')) {
+                post.message = this.instagramMessage;
+                post.hashtags = this.listOfTagOptionsInsta;
+                post.mentions = this.mentions;
+                post.accountId = id;
+                post.videoTitle = "";
+            }
+            formData.append('posts[]', JSON.stringify(post));
+        });
 
-       this.isLoading = true;
-       const formData: FormData = new FormData();
-       this.listOfVideos.forEach((videoObject) => {
-           formData.append('videos[]', JSON.stringify(videoObject));
-       })
+        if (this.listOfTagOptions.length > 0) {
+            this.listOfTagOptions.forEach((tag: any) => {
+                formData.append('tags[]', tag);
+            });
+        }
 
-       let post: any = {
-           message: "",
-           hashtags: [],
-           mentions: [],
-           accountId: "",
-           videoTitle: ""
-       }
+        if (this.mentions.length > 0) {
+            formData.append('mentions', JSON.stringify(this.mentions));
+        }
 
-       this.accountsValue.forEach((accountId: any) => {
-           let arr = accountId.split("|");
-           let id = arr[0];
-           if (accountId.includes('facebook')) {
-               post.message = data.facebookMessage;
-               post.hashtags = data.listOfTagOptionsFacebook;
-               post.mentions = data.mentions;
-               post.accountId = id;
-               post.videoTitle = "";
-           } else if (accountId.includes('instagram')) {
-               post.message = data.instagramMessage;
-               post.hashtags = data.listOfTagOptionsInsta;
-               post.mentions = data.mentions;
-               post.accountId = id;
-               post.videoTitle = "";
-           }
-           formData.append('posts[]', JSON.stringify(post));
-       });
+        if (this.urlLinks.length > 0) {
+            this.urlLinks.forEach((media: any) => {
+                if (media.url != "") {
+                    formData.append('images[]', media.url);
+                }
+            });
+        }
 
-       if (this.listOfTagOptions.length > 0) {
-           this.listOfTagOptions.forEach((tag: any) => {
-               formData.append('tags[]', tag);
-           });
-       }
+        formData.append('status', param);
+        formData.append('message', this.message);
 
-       if (this.mentions.length > 0) {
-           formData.append('mentions', JSON.stringify(this.mentions));
-       }
+        if (formData) {
+            this.facebookSocialService.postToSocialMedia(formData).subscribe({
+                next: (event) => {
 
-       if (this.urlLinks.length > 0) {
-           this.urlLinks.forEach((media: any) => {
-               if (media.url != "") {
-                   formData.append('images[]', media.url);
-               }
-           });
-       }
-
-       formData.append('status', param);
-       formData.append('message', data.message);
-
-       if (formData) {
-           this.facebookSocialService.postToSocialMedia(formData).subscribe({
-               next: (event) => {
-
-               },
-               error: (err) => {
-
-                  Object.keys(err).forEach(key => {
-                    if( err[key].status == 'INVALID') {
-                      this.errors[key] = err[key];
+                },
+                error: (err) => {
+                    if (err.error.errors) {
+                        err.error.errors.forEach((error: any) => {
+                            this.shared.createMessage('error', error);
+                        });
                     }
-                  });
+                    else {
+                        this.shared.createMessage('error', err.error.message);
+                    }
+                    this.isLoading = false;
+                },
+                complete: () => {
+                    this.isLoading = false;
+                    this.message = '';
+                    this.accountsValue = [];
+                    if (param == 'PUBLISH') {
+                        this.shared.createMessage('success', 'published!');
+                        this.router.navigateByUrl('/application/published-posts')
 
-                  this.errors["medias"] = "we need media here";
-                    if (err.others) {
-                      this.shared.createMessage('error', err.other);
-                   }
+                    } else {
+                        this.shared.createMessage('success', 'saved to drafts!');
+                        this.router.navigateByUrl('/application/drafts')
 
-                   this.isLoading = false;
-               },
-               complete: () => {
-                   this.isLoading = false;
-                   this.message = '';
-                   this.accountsValue = [];
-                   if (param == 'PUBLISH') {
-                       this.shared.createMessage('success', 'published!');
-                       this.router.navigateByUrl('/application/published-posts')
-
-                   } else {
-                       this.shared.createMessage('success', 'saved to drafts!');
-                       this.router.navigateByUrl('/application/drafts')
-
-                   }
-               },
-           });
-       }
-      } else {
-
-        Object.values(this.validateForm.controls).forEach(control => {
-          if (control.invalid) {
-              control.markAsDirty();
-              control.updateValueAndValidity({ onlySelf: true });
-              this.isLoading = false;
-          }
-      });
-      }
-      /*
-
-
-        */
+                    }
+                },
+            });
+        }
     }
 
     //Images preview from upload file

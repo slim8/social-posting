@@ -1,5 +1,5 @@
 <div class="m-loading-screen"></div>
-<div class="mod-create-post" nz-form [formGroup]="validateForm">
+<div class="mod-create-post">
   <div class="m-wrapper">
     <div class="m-header">
       <h3 i18n="New Post|Title for New Post@@newPost">New post</h3>
@@ -11,8 +11,9 @@
             <h4 i18n="Accounts|Title for accounts@@accounts">Account(s)</h4>
           </div>
           <div class="m-form-field">
+            <nz-form-control [nzSpan]="24">
               <nz-select
-
+                [(ngModel)]="accountsValue"
                 [nzSize]="size"
                 nzMode="tags"
                 nzPlaceHolder="Please select"
@@ -31,7 +32,8 @@
                     }}</small>
                     - {{ option.pageName }}</label></nz-option>
               </nz-select>
-            </div>
+            </nz-form-control>
+          </div>
         </div>
 
         <div class="m-form-group">
@@ -53,11 +55,6 @@
                   <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
-
-              <span class="m-error">
-
-                {{ errors['medias']}}
-              </span>
               <nz-modal
                 [nzVisible]="previewVisible"
                 [nzContent]="modalContent"
@@ -173,39 +170,29 @@
           <div class="m-form-label">
             <h4>Text</h4>
           </div>
-            <nz-form-item class="m-form-field">
-              <nz-form-control
-              nzErrorTip="Please input Message!"
-            >
-                  <!--  [(ngModel)]="message" (keyup)="updateMessage()"-->
-                  <textarea
-                  id="mainMessage"
-                  class="m-textarea-message"
-                  nz-input
-                  placeholder="Statut"
-                  formControlName="Message"
-                ></textarea>
-              </nz-form-control>
-            </nz-form-item>
-
+          <div class="m-form-field">
+            <textarea
+              id="mainMessage"
+              [(ngModel)]="message"
+              (keyup)="updateMessage()"
+              class="m-textarea-message"
+              nz-input
+              placeholder="Statut"
+            ></textarea>
+          </div>
         </div>
 
         <div class="m-form-group">
           <div class="m-form-label">
             <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
           </div>
-          <!--
-            [(ngModel)]="listOfTagOptions"-->
-          <nz-form-item class="m-form-field">
-            <nz-form-control
-              nzErrorTip="Please input Hashtags!"
-            >
+          <div class="m-form-field">
             <nz-select
               class="general"
               (ngModelChange)="mergeHashtags($event)"
               nzMode="tags"
               nzPlaceHolder="#hashtags"
-              formControlName="Hashtags"
+              [(ngModel)]="listOfTagOptions"
             >
               <nz-option
                 *ngFor="let option of listOfOption"
@@ -213,8 +200,7 @@
                 [nzValue]="option.value"
               ></nz-option>
             </nz-select>
-            </nz-form-control>
-          </nz-form-item>
+          </div>
         </div>
 
         <div class="m-form-group">
@@ -273,9 +259,8 @@
                     <h4 i18n="Instagram Text|Title for Instagram Text@@instagramText">Instagram Text</h4>
                   </div>
                   <div class="m-form-field">
-                    <!-- [(ngModel)]="instagramMessage" -->
                     <textarea
-
+                      [(ngModel)]="instagramMessage"
                       (change)="checkMessage()"
                       class="m-textarea-message"
                       nz-input
@@ -289,13 +274,11 @@
                     <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
                   </div>
                   <div class="m-form-field">
-
-                    <!--                       [(ngModel)]="listOfTagOptionsInsta"
- -->
                     <nz-select
                       nzMode="tags"
                       class="instagram"
                       nzPlaceHolder="#hashtags"
+                      [(ngModel)]="listOfTagOptionsInsta"
                     >
                       <nz-option
                         *ngFor="let option of listOfOptionInsta"
@@ -367,12 +350,8 @@
                     <h4 i18n="Facebook Text|Title for Facebook Text@@facebookText">Facebook Text</h4>
                   </div>
                   <div class="m-form-field">
-
-                    <!--
-                       [(ngModel)]="facebookMessage"
-                    -->
                     <textarea
-
+                      [(ngModel)]="facebookMessage"
                       (change)="checkMessage()"
                       class="m-textarea-message"
                       nz-input
@@ -386,13 +365,11 @@
                     <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
                   </div>
                   <div class="m-form-field">
-                    <!--
-                                            [(ngModel)]="listOfTagOptionsFacebook"
-                     -->
                     <nz-select
                       nzMode="tags"
                       class="facebook"
                       nzPlaceHolder="#hashtags"
+                      [(ngModel)]="listOfTagOptionsFacebook"
                     >
                       <nz-option
                         *ngFor="let option of listOfOptionFacebook"
