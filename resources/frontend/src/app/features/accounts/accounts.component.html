@@ -261,7 +261,7 @@
           *ngIf="this.currentUser != ''"
           class="m-list-title">
           <span i18n="Pages Linked To Accountname|Text for pages linked to
-          accountname@@pagesLinkedToAccount" >Pages Linked To </span> <strong>accountname.test</strong>:
+          accountname@@pagesLinkedToAccount" >Pages Linked To </span> <strong>{{ accountName }}</strong>:
         </div>
       </div>
 
@@ -269,19 +269,9 @@
         <tr *ngFor="let page of listpages">
           <td>
             <label>
-              <input
-                class="m-checkbox"
-                type="checkbox"
-                [value]="page.pageId"
-                (change)="onCheckChange($event)"
-              />
-
-              <nz-avatar
-                nzIcon="user"
-                [nzSrc]="page.pagePictureUrl"
-                style="margin: 8px 26px; width: 36px; height: 36px"
-              ></nz-avatar>
-
+              <input class="m-checkbox" type="checkbox" [value]="page.pageId" (change)="onCheckChange($event)" />
+              <nz-avatar nzIcon="user" [nzSrc]="page.pagePictureUrl" style="margin: 8px 26px; width: 36px; height: 36px"></nz-avatar>
+              <img class="m-provider-logo" src="{{ '/assets/img/test-images/' + page.provider + '.svg' }}" alt=""/>
               {{ page.pageName }}
             </label>
           </td>
