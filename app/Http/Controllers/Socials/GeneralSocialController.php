@@ -394,6 +394,7 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
+        $facebookUserObject = $this->facebookController->getFacebookPersonalInformations($request->accessToken);
         $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', $this->traitController->getCurrentId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
@@ -412,7 +413,7 @@ class GeneralSocialController extends Controller
         if ($facebookResponse['AllPages']) {
             Log::channel('facebook')->info('User : '.$this->traitController->getCurrentId().' fetch his pages from Facebook user : '.$facebookUserId);
 
-            return $this->traitController->processResponse(true, ['pages' => $facebookResponse['AllPages']]);
+            return $this->traitController->processResponse(true, ['pages' => $facebookResponse['AllPages'] , 'accountName' => $facebookUserObject["name"]]);
         } else {
             return $this->traitController->processResponse(true, ['message' => 'No unauthorized accounts found']);
         }
