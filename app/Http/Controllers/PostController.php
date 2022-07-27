@@ -291,13 +291,14 @@ class PostController extends Controller
         $postObject = Post::where('id', $postId)->first();
         $postImage = PostMedia::where('type', 'image')->where('postId', $postId)->get();
         $postVideo = PostMedia::where('type', 'video')->where('postId', $postId)->get();
+        $accountPost = AccountPost::where('postId', $postId)->first();
 
         if ($postVideo) {
             foreach ($postVideo as $video) {
                 $videoObject = [];
                 $videoObject['url'] = $video->url;
-                $videoObject['seconde'] = null;
-                $videoObject['thumbnail'] = null;
+                $videoObject['seconde'] = $accountPost->thumbnailSeconde;
+                $videoObject['thumbnail'] = $accountPost->thumbnailLink;
                 $videos[] = $videoObject;
             }
         }
