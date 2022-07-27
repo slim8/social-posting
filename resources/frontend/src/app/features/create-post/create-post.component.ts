@@ -1,3 +1,4 @@
+import { PostService as SocialAccountsPostService } from './../social-accounts/services/post.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
 import { Component, OnInit } from '@angular/core';
@@ -91,10 +92,14 @@ export class CreatePostComponent implements OnInit {
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     showAlbum: boolean = false;
 
+    editDraftMode : boolean = false;
+    editDraftPost ={id : ''};
+
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
         private postService: PostService,
+        private SocialAccountsPostService: SocialAccountsPostService,
         private modal: NzModalService,
         private notification: NzNotificationService,
         private router: Router,
@@ -113,6 +118,10 @@ export class CreatePostComponent implements OnInit {
                 this.pageId = params['id'];
             }
         });
+        if (this.router.url.includes('drafts')) {
+            console.log('params' , this.activatedRoute.params);
+            this.getDraftToEdit(this.activatedRoute.snapshot.paramMap.get('draft'));
+        }
     }
 
     getPages(param: string) {
@@ -229,6 +238,15 @@ export class CreatePostComponent implements OnInit {
 
         formData.append('status', param);
         formData.append('message', this.message);
+
+        if(this.editDraftMode){
+            formData.append('originalId', this.editDraftPost.id);
+            this.videosList.forEach((videoObject) => {
+                if(videoObject['seconde']){
+                    formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+                }
+            })
+        }
 
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
@@ -542,5 +560,99 @@ export class CreatePostComponent implements OnInit {
             }
         })
         return result;
+    }
+
+    getDraftToEdit(draft : string | null){
+        this.editDraftMode = true ;
+        console.log(draft);
+        this.SocialAccountsPostService.getDraft(draft).subscribe({
+            next: (event: any) => {
+                console.log(event);
+
+                this.editDraftPost = event.post;
+
+                let imageList  : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "image").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
+                    console.log(this.mentions);
+                        // TODO :: to show mention on edit draft
+                        // this.mentions.push(...item.mentions.map((montion : {username : string , posX : string , posY : string , id : number}) => ({
+                        //     username : montion.username ,  
+                        //     posX : montion.posX,
+                        //     posY : montion.posY,
+                        //     image : key , 
+                        //     id : montion.id
+                        // })));
+                        let img = {
+                            id: 0,
+                            url: "",
+                            type: ""
+                        }
+                        this.mediaId++;
+                        img.id = this.mediaId;
+                        img.url = item.url;
+                        img.type = item.type;
+                        this.urlLinks.push(img);
+
+                    return {
+                            uid: -(key+1) ,
+                            name: item.url ,
+                            status: 'done',
+                            url: item.url,
+                            thumbUrl: item.url
+                          }
+                } )
+                this.fileList = [...imageList];
+                this.message = event.post.message ;
+                this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
+
+                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
+                    let relatedPost = event.post.subPosts.filter((subPost: {postId : 0}) => item.postId == subPost.postId)[0]
+                    this.mediaList.push( { id: -(key+1), url: relatedPost.thumbnailLink, type: "video" })
+                    return {
+                            uid: -(key+1) ,
+                            name: item.url ,
+                            status: 'done',
+                            url: item.url,
+                            seconde: relatedPost.thumbnailSeconde,
+                            thumbUrl: relatedPost.thumbnailLink
+                          }
+                } )
+
+                this.videosList = [...DraftVideoList];
+
+                setTimeout(() => {
+                    console.log(this.editDraftPost , DraftVideoList , imageList,this.fileList , this.listOfPages);
+                    let selectedAccountId = event.post.subPosts.map((item : {accountId : any , provider : string , message : string , hashtags : [{name : string}]}) => {
+
+                        
+
+                        if(item.provider == "facebook"){
+                            this.facebookMessage = item.message;
+                            if(item.hashtags.length){
+                                // console.log(item.hashtags);
+                                this.listOfTagOptionsFacebook = [...item.hashtags.map(tag => tag.name)]
+                            }
+                        }else if(item.provider == "instagram"){
+                            this.instagramMessage = item.message;
+                            if(item.hashtags.length){
+                                // console.log(item.hashtags);
+                                this.listOfTagOptionsInsta = [...item.hashtags.map(tag => tag.name)]
+                            }
+                        }
+
+                        return item.accountId;
+                    } )
+                    let selectedAccount = this.listOfPages.filter((item : {id : any}) => selectedAccountId.includes(item.id)).map(item => item.id+'|'+item.provider )
+                    this.accountsValue = [...selectedAccount];
+                    console.log(selectedAccount , selectedAccountId , this.accountsValue);
+                }, 3000);
+                
+            },
+            error: err => {
+                
+            },
+            complete: () => {
+
+            }
+        });
     }
 }
