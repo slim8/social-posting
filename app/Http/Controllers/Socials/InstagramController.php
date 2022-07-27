@@ -193,7 +193,7 @@ class InstagramController extends Controller
     {
         $responseObject = [];
         $client = new Client();
-        $object[$videos ? 'video_url' : 'image_url'] = $videos ? $videos[0] : $imagesUrls[0];
+        $object[$videos ? 'video_url' : 'image_url'] = $videos ? (isset($videos[0]["url"]) ? $videos[0]["url"] : $videos[0]) : $imagesUrls[0];
 
         if ($videos) {
             $object['media_type'] = 'VIDEO';
