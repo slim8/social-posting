@@ -149,119 +149,158 @@ export class CreatePostComponent implements OnInit {
         });
     }
 
+    validateForm(): boolean {
+      let validator = false;
+      let accountsFormController = document.getElementById('accountsFormController');
+      let mediasFormController = document.getElementById('mediasFormController');
+      accountsFormController?.classList.remove('m-shown');
+      accountsFormController?.classList.add('m-hidden');
+
+      if(this.accountsValue.length > 0) {
+        accountsFormController?.classList.remove('m-shown');
+        accountsFormController?.classList.add('m-hidden');
+        validator = true;
+      } else {
+        accountsFormController?.classList.add('m-shown');
+      }
+
+
+      if(this.mediaList.length > 0) {
+        mediasFormController?.classList.remove('m-shown');
+        mediasFormController?.classList.add('m-hidden');
+        validator = true;
+      } else {
+        mediasFormController?.classList.add('m-shown');
+      }
+
+
+
+      return validator;
+    }
+
+    accountChange(){
+      this.validateForm();
+    }
+
+    mediaChange(){
+      this.validateForm();
+    }
     async uploadThumbnail(param: string) {
-      this.listOfVideos = [];
-      this.isLoading = true;
-      let list = this.videoList.map(video => {
-          let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-          return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
-      })
+      let validator = this.validateForm();
+      if(validator) {
+        this.listOfVideos = [];
+        this.isLoading = true;
+        let list = this.videoList.map(video => {
+            let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
+            return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
+        })
 
-      await list.forEach(async (videoObject) => {
-          await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-              next: (response) => {
-                  this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-              },
-              error: (err) => {
-                  this.shared.createMessage('error', err);
-              },
-              complete: () => {
+        await list.forEach(async (videoObject) => {
+            await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+                next: (response) => {
+                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+                },
+                error: (err) => {
+                    this.shared.createMessage('error', err);
+                },
+                complete: () => {
 
-              }
-          });
-      })
-      setTimeout(() => {
-          this.submitForm(param);
-      }, 2000);
+                }
+            });
+        })
+        setTimeout(() => {
+            this.submitForm(param);
+        }, 2000);
+      }
     }
 
     submitForm(param: string) {
-        this.isLoading = true;
-        const formData: FormData = new FormData();
-        this.listOfVideos.forEach((videoObject) => {
-            formData.append('videos[]', JSON.stringify(videoObject));
-        })
+      this.isLoading = true;
+      const formData: FormData = new FormData();
+      this.listOfVideos.forEach((videoObject) => {
+          formData.append('videos[]', JSON.stringify(videoObject));
+      })
 
-        let post: any = {
-            message: "",
-            hashtags: [],
-            mentions: [],
-            accountId: "",
-            videoTitle: ""
-        }
+      let post: any = {
+          message: "",
+          hashtags: [],
+          mentions: [],
+          accountId: "",
+          videoTitle: ""
+      }
 
-        this.accountsValue.forEach((accountId: any) => {
-            let arr = accountId.split("|");
-            let id = arr[0];
-            if (accountId.includes('facebook')) {
-                post.message = this.facebookMessage;
-                post.hashtags = this.listOfTagOptionsFacebook;
-                post.mentions = this.mentions;
-                post.accountId = id;
-                post.videoTitle = "";
-            } else if (accountId.includes('instagram')) {
-                post.message = this.instagramMessage;
-                post.hashtags = this.listOfTagOptionsInsta;
-                post.mentions = this.mentions;
-                post.accountId = id;
-                post.videoTitle = "";
-            }
-            formData.append('posts[]', JSON.stringify(post));
-        });
+      this.accountsValue.forEach((accountId: any) => {
+          let arr = accountId.split("|");
+          let id = arr[0];
+          if (accountId.includes('facebook')) {
+              post.message = this.facebookMessage;
+              post.hashtags = this.listOfTagOptionsFacebook;
+              post.mentions = this.mentions;
+              post.accountId = id;
+              post.videoTitle = "";
+          } else if (accountId.includes('instagram')) {
+              post.message = this.instagramMessage;
+              post.hashtags = this.listOfTagOptionsInsta;
+              post.mentions = this.mentions;
+              post.accountId = id;
+              post.videoTitle = "";
+          }
+          formData.append('posts[]', JSON.stringify(post));
+      });
 
-        if (this.listOfTagOptions.length > 0) {
-            this.listOfTagOptions.forEach((tag: any) => {
-                formData.append('tags[]', tag);
-            });
-        }
+      if (this.listOfTagOptions.length > 0) {
+          this.listOfTagOptions.forEach((tag: any) => {
+              formData.append('tags[]', tag);
+          });
+      }
 
-        if (this.mentions.length > 0) {
-            formData.append('mentions', JSON.stringify(this.mentions));
-        }
+      if (this.mentions.length > 0) {
+          formData.append('mentions', JSON.stringify(this.mentions));
+      }
 
-        if (this.urlLinks.length > 0) {
-            this.urlLinks.forEach((media: any) => {
-                if (media.url != "") {
-                    formData.append('images[]', media.url);
-                }
-            });
-        }
+      if (this.urlLinks.length > 0) {
+          this.urlLinks.forEach((media: any) => {
+              if (media.url != "") {
+                  formData.append('images[]', media.url);
+              }
+          });
+      }
 
-        formData.append('status', param);
-        formData.append('message', this.message);
+      formData.append('status', param);
+      formData.append('message', this.message);
 
-        if (formData) {
-            this.facebookSocialService.postToSocialMedia(formData).subscribe({
-                next: (event) => {
+      if (formData) {
+          this.facebookSocialService.postToSocialMedia(formData).subscribe({
+              next: (event) => {
 
-                },
-                error: (err) => {
-                    if (err.error.errors) {
-                        err.error.errors.forEach((error: any) => {
-                            this.shared.createMessage('error', error);
-                        });
-                    }
-                    else {
-                        this.shared.createMessage('error', err.error.message);
-                    }
-                    this.isLoading = false;
-                },
-                complete: () => {
-                    this.isLoading = false;
-                    this.message = '';
-                    this.accountsValue = [];
-                    if (param == 'PUBLISH') {
-                        this.shared.createMessage('success', 'published!');
-                        this.router.navigateByUrl('/application/published-posts')
+              },
+              error: (err) => {
+                  if (err.error.errors) {
+                      err.error.errors.forEach((error: any) => {
+                          this.shared.createMessage('error', error);
+                      });
+                  }
+                  else {
+                      this.shared.createMessage('error', err.error.message);
+                  }
+                  this.isLoading = false;
+              },
+              complete: () => {
+                  this.isLoading = false;
+                  this.message = '';
+                  this.accountsValue = [];
+                  if (param == 'PUBLISH') {
+                      this.shared.createMessage('success', 'published!');
+                      this.router.navigateByUrl('/application/published-posts')
 
-                    } else {
-                        this.shared.createMessage('success', 'saved to drafts!');
-                        this.router.navigateByUrl('/application/drafts')
+                  } else {
+                      this.shared.createMessage('success', 'saved to drafts!');
+                      this.router.navigateByUrl('/application/drafts')
 
-                    }
-                },
-            });
-        }
+                  }
+              },
+          });
+      }
     }
 
     //Images preview from upload file
@@ -297,6 +336,7 @@ export class CreatePostComponent implements OnInit {
                 this.urlLinks.push(img);
             })
             this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            this.validateForm();
         }
         else if (event.type == 'removed') {
             this.refreshPages();
@@ -316,6 +356,7 @@ export class CreatePostComponent implements OnInit {
                 this.urlLinks.push(img);
             })
             this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            this.validateForm();
         }
     }
 
@@ -428,6 +469,7 @@ export class CreatePostComponent implements OnInit {
                     that.refreshPages();
                     setTimeout(() => {
                         that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+                        that.validateForm();
                     }, 2500);
                 });
                 tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);

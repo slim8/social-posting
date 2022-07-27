@@ -246,6 +246,15 @@
                             margin-top: 25px;
                         }
                     }
+
+                    > .m-hidden {
+                    display: none;
+                    }
+
+                    > .m-shown {
+                      display: block;
+                      color: $color-media-primary-orange;
+                    }
                 }
             }
 
