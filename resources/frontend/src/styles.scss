@@ -140,10 +140,21 @@ svg {
 }
 .ant-modal-content {
   .ant-modal-close{
-    i{
-      color: $color-base-100;
-      opacity: 0.85;
-    }
+      &:after {
+        content: '';
+        background-image: url('/../assets/img/svgs/close.svg');
+        position: absolute;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 9px;
+        right: 25px;
+        top: 22px;
+        height: 9px;
+        }
+        i{
+          color: $color-base-100;
+          opacity: 0;
+        }
   }
   .ant-modal-confirm-body{
   margin-top: 25px;
@@ -152,12 +163,18 @@ svg {
   }
   }
   .ant-modal-confirm-btns {
-     button,button:hover{
+    button{
+      &.ant-btn-primary,&.ant-btn-primary:hover{
       background-color: $color-media-primary-orange;
       border: 0;
-
-      .ng-star-inserted{
-        color: $color-base-0;
+      }
+      &:first-child {
+        background-color: $color-media-background-light-grey;
+        &:hover{
+          background-color: $color-media-background-light-grey;
+          border:0;
+          color: $color-media-dark-grey;
+        }
       }
     }
   }

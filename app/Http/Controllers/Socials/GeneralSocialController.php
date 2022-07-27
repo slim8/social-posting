@@ -47,8 +47,15 @@ class GeneralSocialController extends Controller
             'status' => 'string|max:255',
         ]);
         if ($validator->fails()) {
+            if(!$request->posts){
+                $errorLog['accounts'][] = "The Account field is required.";
+            }
+            if(!$request->status){
+                $errorLog['status'][] = "The Status field is required.";
+            }
             Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To create a new post with Invalid Request');
-            return response(['errors' => $validator->errors()->all()], 422);
+            //return response(['errors' => $validator->errors()->all()], 422);
+            return $this->traitController->processResponse(false , ["errors" => $errorLog]);
         }
 
         $images = $request->images;
@@ -60,8 +67,8 @@ class GeneralSocialController extends Controller
         if ($requestPostId) {
             if (Post::where('id', $requestPostId)->where('status', POST::$STATUS_PUBLISH)->first()) {
                 Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To edit a Published post Id '.$requestPostId);
-
-                return $this->traitController->processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
+                $error["errors"][] = 'This Post Is Published and cannot be Updated Or Published';
+                return $this->traitController->processResponse(false, ['errors' => $error]);
             }
         }
         if ($request->file('sources')) {
@@ -93,9 +100,8 @@ class GeneralSocialController extends Controller
         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
 
         if (!$validator->status) {
-            Log::channel('exception')->notice('[sendToPost] User Id : '.$this->traitController->getCurrentId().' ==> '.$validator->message);
-
-            return $this->traitController->processResponse(false, ['message' => $validator->message]);
+            Log::channel('exception')->notice('[sendToPost] User Id : '.$this->traitController->getCurrentId().' ==> '.$validator->messageString);
+            return $this->traitController->processResponse(false, ['errors' => $validator->message]);
         }
 
         foreach ($request->posts as $postJson) {
@@ -249,17 +255,17 @@ class GeneralSocialController extends Controller
                     }
                 } else {
                     Log::channel('facebook')->error('[sendToPost] User : '.$this->traitController->getCurrentId().' ==> Message : '.$postResponse['message']);
-                    $errorLog[] = $postResponse['message'];
+                    $errorLog["others"][]  = $postResponse['message'];
                 }
             } else {
                 $messageError = 'Cannot find a connected account Or permissions denied for ID  '.$post['accountId'];
-                $errorLog[] = $messageError;
+                $errorLog["accounts"][] = $messageError;
                 Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' ==> Message : '.$messageError);
             }
         }
 
         if ($errorLog) {
-            return $this->traitController->processResponse(false, ['message' => $errorLog]);
+            return $this->traitController->processResponse(false, ['errors' => $errorLog]);
         }
         Log::channel('info')->info('[sendToPost] User : '.$this->traitController->getCurrentId().' create or edit post : '.$postId->id.' successfuly');
 
