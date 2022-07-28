@@ -91,7 +91,8 @@
 
       <div class="m-album-items-container" *ngIf="!isLoading">
         <div class="m-album-item-container" *ngFor="let item of images">
-          <img nz-image [nzSrc]="item" alt="" class="m-album-item-image" />
+          <i nz-icon class="m-video-icon" *ngIf="item.type == 'video'" nzType="caret-right" nzTheme="outline"></i>
+          <img nz-image [nzSrc]="item.type == 'image' ? item.url : item.thumbnailLink" alt="" class="m-album-item-image" />
         </div>
         <br />
         <br />

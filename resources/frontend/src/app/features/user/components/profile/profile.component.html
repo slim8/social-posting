@@ -1,31 +1,33 @@
-<div class="main-container" *ngIf="profile">
-    <div class="left-sidebar">
-        <div class="inner">
-            <div class="user-profile">
-                <div class="user-image">
+<div class="mod-profile-container" *ngIf="profile">
+    <div class="m-wrapper">
+        <div class="m-header-container">
+            <div class="m-header-image">
+                <button nz-button nzType="primary" class="m-primary-button m-corner" (click)="toEditProfilePage()" i18n="Edit Profile|Title for the Edit Profile @@editProfile">
+                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    Edit Profile
+                </button>
+                <button nz-button nzType="primary" class="m-primary-button" (click)="toEditPasswordPage()" i18n="Edit Password|Title for the Edit Password page link@@editPassword">
+                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    Edit Password
+                </button>
+            </div>
+            <div class="m-user-profile">
+                <div class="m-user-image">
                     <nz-avatar [nzSize]="80" nzIcon="user"></nz-avatar>
                 </div>
-                <div class="user-info">
-                    <p class="user-name">{{ profile.firstName }} {{ profile.lastName }} </p>
-                    <p class="user-title">{{ profile.name }}</p>
-                    <p class="user-location">
-                         <!-- Malta -->
-                    </p>
+                <div class="m-user-info">
+                    <p class="m-user-name">{{ profile.firstName }} {{ profile.lastName }} </p>
+                    <p class="m-user-title">{{ profile.name }}</p>
                 </div>
             </div>
-            
         </div>
-    </div>
-    <div class="main-content">
-        <ul>
-            <li> <span class="label">email :</span>  {{ profile.email }} <i nz-icon nzType="check" nzTheme="outline" *ngIf="profile.emailVerifiedAt" ></i> </li>
-            <li> <span class="label">company :</span> {{ profile.company }} </li>
-            <li> <span class="label">last modified :</span> {{ profile.updatedAt }} </li>
-            <li> <span class="label">created :</span> {{ profile.createdAt }} </li>
-        </ul>
-        <button nz-button nzType="primary" nzShape="round" class="m-primary-button" (click)="toEditPage()">
-            <i nz-icon nzType="edit" nzTheme="outline"></i>
-            Edit
-        </button>
+        <div class="m-main-container">
+            <ul class="m-profile-detail">
+                <li class="m-profile-detail-item"> <span class="m-label">email :</span>  {{ profile.email }} <i nz-icon nzType="check" nzTheme="outline" *ngIf="profile.emailVerifiedAt" ></i> </li>
+                <li class="m-profile-detail-item"> <span class="m-label">company :</span> {{ profile.company }} </li>
+                <li class="m-profile-detail-item"> <span class="m-label">last modified :</span> {{ profile.updatedAt }} </li>
+                <li class="m-profile-detail-item"> <span class="m-label">created :</span> {{ profile.createdAt }} </li>
+            </ul>
+        </div>
     </div>
 </div>

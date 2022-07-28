@@ -97,4 +97,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], f
     Route::post('/change-password', [ProfileController::class, 'changePassword']);
     Route::get('/news',[ NewsController::class ,'index' ]);
     Route::get('/news/{id}',[ NewsController::class ,'show' ]);
+    Route::get('/files/{companyName}',[ FileController::class ,'getCompanyMedia' ]);
 });
+
+
