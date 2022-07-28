@@ -297,8 +297,8 @@ class PostController extends Controller
             foreach ($postVideo as $video) {
                 $videoObject = [];
                 $videoObject['url'] = $video->url;
-                $videoObject['seconde'] = $accountPost->thumbnailSeconde;
-                $videoObject['thumbnail'] = $accountPost->thumbnailLink;
+                $videoObject['seconde'] = $video->thumbnailSeconde;
+                $videoObject['thumbnail'] = $video->thumbnailLink;
                 $videos[] = $videoObject;
             }
         }

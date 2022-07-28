@@ -148,7 +148,7 @@
                 />
 
                 <img
-                  src="{{ item.thumbnailLink }}"
+                  src="{{ item.postMedia[0].thumbnailLink }}"
                   alt=""
                   *ngIf="item.postMedia.length > 0 && item.postMedia[0].type === 'video' "
                 />

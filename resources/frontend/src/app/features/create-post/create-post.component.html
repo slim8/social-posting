@@ -102,7 +102,7 @@
                   ></i>
                   <img
                     *ngIf="item"
-                    [src]="item.imgB64"
+                    [src]="item.imgB64 ? item.imgB64 : item.url "
                     (click)="changeSelectedVideo(item)"
                   />
                 </div>
