@@ -125,7 +125,7 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|string|email|max:255|unique:users',
             'address' => 'required|string|max:255',
             'postCode' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -134,6 +134,7 @@ class ApiAuthController extends Controller
         ], [
             'companyName.required' => 'This is a required message for company name',
         ]);
+
         if ($validator->fails()) {
             return response($validator->errors(), 422);
         }
@@ -155,7 +156,7 @@ class ApiAuthController extends Controller
 
         $user->attachRole('user');
 
-        $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
+        $mailBody = ["mail" => $request->email, "password" => $request->password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
         try{
             $this->traitController->sendMail($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
         } catch(\Exception $e){
