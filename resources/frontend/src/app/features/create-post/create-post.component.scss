@@ -63,6 +63,7 @@
 
                         nz-select {
                           width: 100%;
+                          max-width: 306px;
                         }
 
                         > .m-choose-media {
@@ -244,6 +245,15 @@
                             display: none;
                             margin-top: 25px;
                         }
+                    }
+
+                    > .m-hidden {
+                    display: none;
+                    }
+
+                    > .m-shown {
+                      display: block;
+                      color: $color-media-primary-orange;
                     }
                 }
             }

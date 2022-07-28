@@ -17,7 +17,7 @@ class PostMedia extends ExtendedModel
 
     public function post()
     {
-        $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class);
     }
 
     public function mentions()
