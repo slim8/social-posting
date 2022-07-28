@@ -90,6 +90,8 @@ export class CreatePostComponent implements OnInit {
     selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
     showAlbum: boolean = false;
+    avatarUrl:string = "";
+    pageName:string = "";
 
     constructor(
         private shared: SharedModule,
@@ -177,6 +179,14 @@ export class CreatePostComponent implements OnInit {
 
     accountChange(){
       this.validateForm();
+      if(this.accountsValue.length == 1) {
+        this.listOfPages.forEach((elem:any)=> {
+          if(elem.id == this.accountsValue[0].split("|", 1)) {
+            this.avatarUrl = elem.pagePictureUrl;
+            this.pageName = elem.pageName;
+          }
+        })
+      }
     }
 
     mediaChange(){
