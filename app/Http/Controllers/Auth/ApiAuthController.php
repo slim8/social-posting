@@ -125,7 +125,7 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|string|email|max:255|unique:users',
             'address' => 'required|string|max:255',
             'postCode' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -134,6 +134,7 @@ class ApiAuthController extends Controller
         ], [
             'companyName.required' => 'This is a required message for company name',
         ]);
+
         if ($validator->fails()) {
             return response($validator->errors(), 422);
         }
