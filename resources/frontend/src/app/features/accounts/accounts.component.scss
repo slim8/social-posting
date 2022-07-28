@@ -355,6 +355,7 @@
                     > td {
                         > label {
                             display: flex;
+                            position: relative;
                             align-items: center;
 
                             > input {
@@ -380,6 +381,13 @@
                                     height: 20px;
                                 }
                             }
+
+                            > .m-provider-logo {
+                              position: absolute;
+                              left: 63px;
+                              top: 23px;
+                              width: 26px;
+                            }
                         }
                     }
                 }
@@ -387,6 +395,9 @@
 
             > .m-submit-button {
                 float: right;
+                > button {
+                  @include textstyle-size-14-bold();
+                }
             }
         }
 

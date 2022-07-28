@@ -191,6 +191,19 @@
                     width: 136px;
                     height: 136px;
                     background: $color-media-background-light-grey;
+                    position: relative;
+
+                    >.m-video-icon{
+                        position: absolute;
+                        font-size: 70px;
+                        color: white;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        height: inherit;
+                        width: inherit;
+                        justify-content: center;
+                    }
 
                     > .m-album-item-image {
                         width: 136px;

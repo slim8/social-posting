@@ -1,39 +1,46 @@
-<div class="m-form">
-    <div class="m-form-group">
-        <label>E-mail</label>
-        <div class="m-form-input">
-            <input nz-input type="text" placeholder="email" [(ngModel)]="email" disabled />
+<div class="mod-edit-profile">
+    <div class="m-wrapper">
+
+
+        <div class="m-form">
+            <div class="m-form-group">
+                <label>E-mail</label>
+                <div class="m-form-input">
+                    <input nz-input type="text" placeholder="email" [(ngModel)]="email" disabled />
+                </div>
+                <small class="error" *ngIf="error && error.email" >{{error.email[0]}}</small>
+            </div>
+            <div class="m-form-group">
+                <label>First name</label>
+                <div class="m-form-input">
+                    <input nz-input type="text" placeholder="First Name" [(ngModel)]="firstName" />
+                </div>
+                <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
+            </div>
+            <div class="m-form-group">
+                <label>Last Name</label>
+                <div class="m-form-input">
+                    <input nz-input type="text" placeholder="Last Name" [(ngModel)]="lastName" />
+                </div>
+                <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
+            </div>
+            <div class="m-form-group">
+                <label>Subscribe newsletter</label>
+                <div class="m-form-switch">
+                    <nz-switch [(ngModel)]="isSubscriber"></nz-switch>
+                </div>
+            </div>
+            <div class="m-form-group" *ngIf="roles.includes('admin')" >
+                <label>auto refrech </label>
+                <div class="m-form-switch">
+                    <nz-switch [(ngModel)]="autoRefresh"></nz-switch>
+                </div>
+            </div>
+            <button nz-button nzType="primary" (click)="saveProfile()" class="m-primary-button">
+                <i nz-icon nzType="edit" nzTheme="outline"></i>
+                save
+            </button>
         </div>
-        <small class="error" *ngIf="error && error.email" >{{error.email[0]}}</small>
+
     </div>
-    <div class="m-form-group">
-        <label>First name</label>
-        <div class="m-form-input">
-            <input nz-input type="text" placeholder="First Name" [(ngModel)]="firstName" />
-        </div>
-        <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
-    </div>
-    <div class="m-form-group">
-        <label>Last Name</label>
-        <div class="m-form-input">
-            <input nz-input type="text" placeholder="Last Name" [(ngModel)]="lastName" />
-        </div>
-        <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
-    </div>
-    <div class="m-form-group">
-        <label>Subscribe newsletter</label>
-        <div>
-            <nz-switch [(ngModel)]="isSubscriber"></nz-switch>
-        </div>
-    </div>
-    <div class="m-form-group" *ngIf="roles.includes('admin')" >
-        <label>auto refrech </label>
-        <div>
-            <nz-switch [(ngModel)]="autoRefresh"></nz-switch>
-        </div>
-    </div>
-    <button nz-button nzType="primary" nzShape="round" (click)="saveProfile()" class="m-primary-button">
-        <i nz-icon nzType="edit" nzTheme="outline"></i>
-        save
-    </button>
 </div>

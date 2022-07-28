@@ -74,13 +74,6 @@ class ApiAuthController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
-        if (Company::where('phoneNumber', $request->phoneNumber)->first()) {
-            return $this->traitController->processResponse(false, ['message' => 'This Phone Number is Already exist']);
-        }
-
-        if (Company::where('email', $request->email)->first()) {
-            return $this->traitController->processResponse(false, ['message' => 'This Email is Already exist']);
-        }
         $company = Company::create([
             'name' => $request->companyName,
             'email' => $request->email,

@@ -28,8 +28,12 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  toEditPage(){
+  toEditProfilePage(){
     this.router.navigate(['/application/user/edit-profile']);
+  }
+
+  toEditPasswordPage(){
+    this.router.navigate(['/application/user/change-password']);
   }
 
 }

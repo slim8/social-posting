@@ -23,6 +23,7 @@ const trashIcon = '<svg width="14" height="15" viewBox="0 0 14 15" fill="none" x
 })
 export class AccountsComponent implements OnInit {
 
+    accountName: string = "";
     listOfPages: any = [];
     currentUser: any = [];
     listpages: any = [];
@@ -80,7 +81,8 @@ export class AccountsComponent implements OnInit {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
-                this.listpages = response.pages;
+              this.accountName = response.accountName;
+              this.listpages = response.pages;
                 if (param != 'add') {
                     this.getConnectedAccounts();
                 }

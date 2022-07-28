@@ -126,7 +126,7 @@
                                         position: absolute;
                                         border-right: 1px solid $color-media-black-opacity-30;
                                         height: 120%;
-                                        right: 8px;
+                                        right: 4px;
                                         top: -40%;
                                     }
                                 }
@@ -208,12 +208,14 @@
                             }
 
                             > .m-checkbox {
+                              width: 44px;
                                 > .m-checkbox-input {
                                     -webkit-appearance: none;
                                     outline: none;
                                     position: relative;
                                     margin-right: 28px;
                                     margin-bottom: 12px;
+
 
                                     &::after {
                                         content: '';
@@ -368,4 +370,8 @@
             }
         }
     }
+}
+.m-delete-msg{
+  margin-bottom: 0;
+  margin-top: 25px;
 }

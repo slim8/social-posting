@@ -284,32 +284,9 @@
           </div>
           <div class="m-notes">
             <ul>
-              <li>
+              <li *ngFor="let item of news">
                 <p>
-                  Beiträge auf
-                  <strong>mehreren Plattformen gleichzeitig</strong>
-                  veröffentlichen. <a href="#">Jetzt ansehen.</a>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Du kannst jetzt Beiträge für die
-                  <strong> Zukunft planen</strong> und in den Kalender
-                  einplanen. Zur Kalenderansicht.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Beiträge auf
-                  <strong>mehreren Plattformen gleichzeitig</strong>
-                  veröffentlichen. <a href="#">Jetzt ansehen.</a>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Du kannst jetzt Beiträge für die
-                  <strong> Zukunft planen </strong> und in den Kalender
-                  einplanen.
+                  {{item.teaser}}. <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
                 </p>
               </li>
             </ul>
@@ -346,7 +323,7 @@
             Pages Linked To Accountname|Text for pages linked to
             accountname@@pagesLinkedToAccount"
         >
-          Pages Linked To <strong>accountname.test</strong>:
+          Pages Linked To <strong>{{ accountName }}</strong>:
         </div>
       </div>
 
@@ -354,19 +331,9 @@
         <tr *ngFor="let page of listpages">
           <td>
             <label>
-              <input
-                class="m-checkbox"
-                type="checkbox"
-                [value]="page.pageId"
-                (change)="onCheckChange($event)"
-              />
-
-              <nz-avatar
-                nzIcon="user"
-                [nzSrc]="page.pagePictureUrl"
-                style="margin: 8px 26px; width: 36px; height: 36px"
-              ></nz-avatar>
-
+              <input class="m-checkbox" type="checkbox" [value]="page.pageId" (change)="onCheckChange($event)" />
+              <nz-avatar nzIcon="user" [nzSrc]="page.pagePictureUrl" style="margin: 8px 26px; width: 36px; height: 36px"></nz-avatar>
+              <img class="m-provider-logo" src="{{ '/assets/img/test-images/' + page.provider + '.svg' }}" alt=""/>
               {{ page.pageName }}
             </label>
           </td>

@@ -138,3 +138,45 @@ svg {
 .is-shown {
   display: block!important;
 }
+.ant-modal-content {
+  .ant-modal-close{
+      &:after {
+        content: '';
+        background-image: url('/../assets/img/svgs/close.svg');
+        position: absolute;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 9px;
+        right: 25px;
+        top: 22px;
+        height: 9px;
+        }
+        i{
+          color: $color-base-100;
+          opacity: 0;
+        }
+  }
+  .ant-modal-confirm-body{
+  margin-top: 25px;
+  .m-delete-msg{
+    margin-bottom: 0;
+  }
+  }
+  .ant-modal-confirm-btns {
+    button{
+      &.ant-btn-primary,&.ant-btn-primary:hover{
+      background-color: $color-media-primary-orange;
+      border: 0;
+      }
+      &:first-child {
+        background-color: $color-media-background-light-grey;
+        &:hover{
+          background-color: $color-media-background-light-grey;
+          border:0;
+          color: $color-media-dark-grey;
+        }
+      }
+    }
+  }
+}
+
