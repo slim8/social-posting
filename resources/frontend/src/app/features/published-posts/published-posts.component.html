@@ -198,7 +198,7 @@
                 </p>
                 <span class="m-text"> {{ item.createdBy }} </span>
               </td>
-              <td class="m-collapse" (click)="collapse($event)">collapse</td>
+              <td *ngIf="item.status" class="m-collapse" (click)="collapse($event)">collapse</td>
             </tr>
             <tr class="m-details">
               <td class="m-item" colspan="3">
