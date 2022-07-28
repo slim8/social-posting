@@ -149,7 +149,7 @@
                 ></nz-skeleton-element>
 
                 <img
-                  src="{{ item.postMedia[0].url }}"
+                  src="{{ item.thumbnailLink? item.thumbnailLink : item.postMedia[0].url }}"
                   alt=""
                   *ngIf="item.postMedia.length > 0"
                 />
