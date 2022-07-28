@@ -160,20 +160,17 @@ export class CreatePostComponent implements OnInit {
         accountsFormController?.classList.remove('m-shown');
         accountsFormController?.classList.add('m-hidden');
         validator = true;
-      } else {
+      } else if (this.accountsValue.length == 0){
         accountsFormController?.classList.add('m-shown');
       }
 
-
-      if(this.mediaList.length > 0) {
+      else if(this.mediaList.length > 0) {
         mediasFormController?.classList.remove('m-shown');
         mediasFormController?.classList.add('m-hidden');
         validator = true;
-      } else {
+      } else if(this.mediaList.length == 0) {
         mediasFormController?.classList.add('m-shown');
       }
-
-
 
       return validator;
     }
