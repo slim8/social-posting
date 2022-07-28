@@ -197,9 +197,8 @@
               </td>
               <td class="m-actions">
                 <div class="m-left">
-                  <a
-                    href="{{ item.url }}"
-                    target="_blank"
+                  <span
+                    [routerLink]="['/application/drafts/edit' , item.postId]"
                     class="m-button is-disabled"
                   >
                     <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
@@ -210,7 +209,7 @@
                         Text@@continueEditing"
                       >Continue editing
                     </span>
-                  </a>
+                  </span>
                 </div>
                 <div class="m-right">
                   <button class="m-button is-primary" (click)="showPublishDraftModal(item.postId)">

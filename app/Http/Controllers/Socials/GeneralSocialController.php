@@ -104,6 +104,10 @@ class GeneralSocialController extends Controller
             return $this->traitController->processResponse(false, ['errors' => $validator->message]);
         }
 
+        if ($requestPostId) {
+            // Delete All Saved Account Posts
+            AccountPost::where('postId', $requestPostId)->delete();
+        }
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
 
@@ -121,9 +125,8 @@ class GeneralSocialController extends Controller
 
             if ($account && $accounPermission) {
                 if ($requestPostId) {
-                    // Delete All Saved Account Posts and hashtags
+                    // Delete All Saved hashtags
                     PostHashtag::where('accountPostId', $account->id)->delete();
-                    AccountPost::where('postId', $requestPostId)->delete();
                 }
 
                 $InstagramController = new InstagramController();
