@@ -101,7 +101,9 @@
         <table *ngIf="!isLoading">
           <thead class="m-array-header">
             <tr class="m-titles">
-              <td></td>
+              <td class="m-checkbox">
+                <input type="checkbox" class="m-checkbox-input-all" (click)="checkAll($event)" />
+              </td>
               <td
                 colspan="2"
                 i18n="
@@ -149,7 +151,7 @@
                 ></nz-skeleton-element>
 
                 <img
-                  src="{{ item.postMedia[0].url }}"
+                  src="{{ item.thumbnailLink? item.thumbnailLink : item.postMedia[0].url }}"
                   alt=""
                   *ngIf="item.postMedia.length > 0"
                 />
