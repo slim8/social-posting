@@ -30,9 +30,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$redirect = new RedirectIfAuthenticated();
-$request = new Request();
-
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
