@@ -6,7 +6,7 @@
       </h1>
 
       <button
-        *ngIf="!isLoading && connectedAccounts != ''"
+        *ngIf="!isLoading && connectedAccounts != '' && isCompanyAdmin"
         (click)="loginWithFacebook('add')"
         i18n="add Account or page |add account or page@@addAccountPage"
         class="m-button is-primary"
@@ -15,7 +15,7 @@
       </button>
     </div>
     <div class="m-accounts-container">
-      <div *ngIf="!isLoading && connectedAccounts == ''" class="m-login">
+      <div *ngIf="!isLoading && connectedAccounts == '' && isCompanyAdmin" class="m-login">
         <span class="m-login-icon">
           <i nz-icon nzType="ng-zorro:add"></i>
         </span>
@@ -24,7 +24,7 @@
             i18n="
               No account|No connected account title@@NoConnectedAccountTitle"
           >
-            No posts yet.
+            No accounts found.
           </h4>
           <p
             i18n="
@@ -43,6 +43,28 @@
           >
             <span><i nz-icon nzType="ng-zorro:add"></i></span>Link account
           </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && connectedAccounts == '' && !isCompanyAdmin" class="m-login">
+        <span class="m-login-icon">
+          <i nz-icon nzType="ng-zorro:add"></i>
+        </span>
+        <div class="m-message-info">
+          <h4
+            i18n="
+              No account|No connected account title@@NoConnectedAccountTitle"
+          >
+            No accounts found.
+          </h4>
+          <p
+            i18n="
+              No account message|No connected account
+              message@@NoConnectedAccountMessage"
+          >
+            Please wait for the company administrator to Link the social media channels with the mediafactory to Design and
+            publish posts directly.
+          </p>
         </div>
       </div>
 
@@ -98,7 +120,7 @@
         <!-- End Skeleton -->
       </div>
       <div
-        *ngIf="!isLoading && connectedAccounts != ''"
+        *ngIf="!isLoading && connectedAccounts != '' && isCompanyAdmin"
         class="m-connected-accounts"
       >
         <h2 i18n="Personnel Account|Personnel account title@@personnelAccount">
