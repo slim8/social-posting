@@ -21,16 +21,19 @@ function envValue($key, $default = null)
     }
 }
 
-// function d(...$vars): void
-// {
-//     if (!in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && !headers_sent()) {
-//         header('HTTP/1.1 500 Internal Server Error');
-//     }
+/**
+ * Add Debug FUnction Symfony
+ */
+function d(...$vars): void
+{
+    if (!in_array(\PHP_SAPI, ['cli', 'phpdbg'], true) && !headers_sent()) {
+        header('HTTP/1.1 500 Internal Server Error');
+    }
 
-//     foreach ($vars as $v) {
-//         VarDumper::dump($v);
-//     }
-// }
+    foreach ($vars as $v) {
+        VarDumper::dump($v);
+    }
+}
 /**
  * Debug Only Function.
  */
