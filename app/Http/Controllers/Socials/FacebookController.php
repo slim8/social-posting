@@ -204,7 +204,7 @@ class FacebookController extends Controller
         $object['message'] = (isset($object['message']) ? $object['message'] : '').$tagsString;
 
         if ($videos) {
-            $videos = json_decode($videos[0], true);
+            $videos = gettype($videos[0]) == 'array' ? $videos[0] : json_decode($videos[0], true);
             $object['file_url'] = $videos['url'];
             $object['publihshed'] = true;
 
