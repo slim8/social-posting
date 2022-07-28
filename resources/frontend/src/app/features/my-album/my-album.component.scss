@@ -36,7 +36,6 @@
                 row-gap: 25px;
                 justify-content: space-between;
                 padding: 25px;
-                align-items: end;
 
                 @include mq(desktop) {
                     flex-direction: row;
