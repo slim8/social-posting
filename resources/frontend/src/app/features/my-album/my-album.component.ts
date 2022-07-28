@@ -12,11 +12,15 @@ const arrowIcon = '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xml
     styleUrls: ['./my-album.component.scss']
 })
 export class MyAlbumComponent implements OnInit {
-
-    isLoading: boolean = true;
+    displayLoginModal: boolean = false;
+    loggedIn: boolean = false;
+    isLoading: boolean = false;
+    isLoadingButton: boolean = false;
     images = [{url: '' ,id: 0 ,type: '' , thumbnailLink : ''}];
-
-
+    credentials = {
+      email: '',
+      password: '',
+    };
 
     constructor(
         private iconService: NzIconService , private fileService: FileService ,private jwtService: JwtHelperService
@@ -40,8 +44,20 @@ export class MyAlbumComponent implements OnInit {
         })
     }
 
+    showLoginModal() {
+      this.displayLoginModal = true;
+    }
 
+    closeModal() {
+      this.displayLoginModal = false;
+    }
 
+    logOut() {
 
+    }
+
+    login() {
+      this.isLoadingButton = true;
+    }
 
 }
