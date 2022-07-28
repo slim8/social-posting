@@ -185,8 +185,11 @@
                 <nz-badge nzStatus="warning" *ngIf="item.isScheduled">
                   <span class="m-text">Planned</span>
                 </nz-badge>
-                <nz-badge nzStatus="success" *ngIf="!item.isScheduled">
-                  <span class="m-text">Success</span>
+                <nz-badge nzStatus="success" *ngIf="!item.isScheduled && item.status">
+                  <span class="m-text">{{item.statusObject}}</span>
+                </nz-badge>
+                <nz-badge nzStatus="error" *ngIf="!item.isScheduled && !item.status">
+                  <span class="m-text">{{item.statusObject}}</span>
                 </nz-badge>
               </td>
               <td class="m-date">
