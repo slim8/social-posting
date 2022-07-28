@@ -148,4 +148,20 @@ export class DraftsComponent implements OnInit {
     this.message.create(type, ` ${message}`);
   }
 
+  checkAll(e:any) {
+    let checkboxes = document.querySelectorAll('.m-checkbox-input');
+    if(e.target.checked) {
+      checkboxes.forEach((elem:any) => {
+        if(!elem.checked){
+          elem.click();
+        }
+      })
+    } else {
+      checkboxes.forEach((elem:any) => {
+        if(elem.checked){
+          elem.click();
+        }
+      })
+    }
+  }
 }
