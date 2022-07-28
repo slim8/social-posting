@@ -87,9 +87,9 @@ export class CreatePostComponent implements OnInit {
     listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
 
     videoCounter = 0;
-    videoList: { id: number, file: File, videoUrl: string , duration : number }[] = [];
-    selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
-    mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+    videoList: { id: number, file: File|null, videoUrl: string , duration : number |null }[] = [];
+    selectedThumbnailList: { id: number, imgB64: string |null , time: number , url :  string |null}[] = [];
+    mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     showAlbum: boolean = false;
 
     editDraftMode : boolean = false;
@@ -195,27 +195,40 @@ export class CreatePostComponent implements OnInit {
       this.validateForm();
     }
     async uploadThumbnail(param: string) {
+    console.log("listOfVideos" , this.listOfVideos)
+    console.log("accountsValue" , this.accountsValue)
+    console.log("listOfTagOptions" , this.listOfTagOptions)
+    console.log("videosList" , this.videosList)
+    console.log("urlLinks" , this.urlLinks)
+    console.log("videoList" , this.videoList)
+    console.log("facebookMessage" , this.facebookMessage)
+    console.log("instagramMessage" , this.instagramMessage)
+    console.log("listOfTagOptionsFacebook" , this.listOfTagOptionsFacebook)
+    console.log("listOfTagOptionsInsta" , this.listOfTagOptionsInsta)
+    console.log("editDraftPost" , this.editDraftPost)
       let validator = this.validateForm();
       if(validator) {
         this.listOfVideos = [];
         this.isLoading = true;
         let list = this.videoList.map(video => {
             let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-            return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
+            return { url: video.videoUrl , id: thumbnail.id,imgB64: thumbnail.imgB64 , time: thumbnail.time , thumbnail: thumbnail.url ? thumbnail.url: '' };
         })
 
         await list.forEach(async (videoObject) => {
-            await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                next: (response) => {
-                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                },
-                error: (err) => {
-                    this.shared.createMessage('error', err);
-                },
-                complete: () => {
+            if(videoObject.imgB64){
+                await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+                    next: (response) => {
+                        this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+                    },
+                    error: (err) => {
+                        this.shared.createMessage('error', err);
+                    },
+                    complete: () => {
 
-                }
-            });
+                    }
+                });
+            }
         })
         setTimeout(() => {
             this.submitForm(param);
@@ -341,6 +354,7 @@ export class CreatePostComponent implements OnInit {
         if (event.type == 'success') {
             this.mediaId = 0;
             this.urlLinks = [];
+            console.log(event.fileList)
             event.fileList.forEach((elem: any) => {
                 let img = {
                     id: 0,
@@ -349,11 +363,17 @@ export class CreatePostComponent implements OnInit {
                 }
                 this.mediaId++;
                 img.id = this.mediaId;
-                img.url = elem.response.files.url;
-                img.type = elem.response.files.type;
+                if(elem.response){
+                    img.url = elem.response.files.url;
+                    img.type = elem.response.files.type;
+                }else{
+                    img.url = elem.url;
+                    img.type = 'image';
+                }
+                
                 this.urlLinks.push(img);
             })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
             this.validateForm();
         }
         else if (event.type == 'removed') {
@@ -369,11 +389,16 @@ export class CreatePostComponent implements OnInit {
                 }
                 this.mediaId++;
                 img.id = this.mediaId;
-                img.url = elem.response.files.url;
-                img.type = elem.response.files.type;
+                if(elem.response){
+                    img.url = elem.response.files.url;
+                    img.type = elem.response.files.type;
+                }else{
+                    img.url = elem.url;
+                    img.type = 'image';
+                }
                 this.urlLinks.push(img);
             })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" ,  } })];
             this.validateForm();
         }
     }
@@ -451,7 +476,7 @@ export class CreatePostComponent implements OnInit {
             if (newVideo) {
                 this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string;
                 this.selectedThumbnail.time = thumbArray[0].time as number;
-                this.selectedThumbnailList.push({ id: this.selectedVideo.id, imgB64: this.selectedThumbnail.imgB64, time: this.selectedThumbnail.time })
+                this.selectedThumbnailList.push({ id: this.selectedVideo.id, imgB64: this.selectedThumbnail.imgB64, time: this.selectedThumbnail.time , url : null})
             }
             this.leadThumbnail = false;
         })
@@ -467,7 +492,7 @@ export class CreatePostComponent implements OnInit {
                 selectedThumbnail.time = item.time;
             }
         })
-        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     }
 
     //upload image changes
@@ -500,13 +525,13 @@ export class CreatePostComponent implements OnInit {
         }
     }
 
-    changeSelectedVideo(item: { id: number, imgB64: string, time: number }) {
+    changeSelectedVideo(item: { id: number, imgB64:  string|null, time: number , url : string|null }) {
         this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
         this.generatethumbnails('next');
         this.currentTimePosition = -10;
     }
 
-    deleteVideo(item: { id: number, imgB64: string, time: number }) {
+    deleteVideo(item: { id: number, imgB64: string|null, time: number , url : string|null }) {
         this.modal.confirm({
             nzTitle: 'Are you sure delete this video?',
             nzContent: '<b style="color: red;">remove video </b>',
@@ -528,7 +553,7 @@ export class CreatePostComponent implements OnInit {
                     this.availableVideos = false;
                 }
                 this.refreshPages();
-                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
             },
             nzCancelText: 'No',
             nzOnCancel: () => {}
@@ -646,16 +671,19 @@ export class CreatePostComponent implements OnInit {
                 this.message = event.post.message ;
                 this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
 
-                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
-                    let relatedPost = event.post.subPosts.filter((subPost: {postId : 0}) => item.postId == subPost.postId)[0]
-                    this.mediaList.push( { id: -(key+1), url: relatedPost.thumbnailLink, type: "video" })
+                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
+
+                    this.mediaList.push( { id: -(key+1), url: item.thumbnailLink, type: "video" })
+                    this.videoList.push({ id: this.videoCounter, file: null , videoUrl: item.url , duration : null });
+                    this.selectedThumbnailList.push( { id: this.videoCounter, imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
+                    this.videoCounter ++;
                     return {
                             uid: -(key+1) ,
                             name: item.url ,
                             status: 'done',
                             url: item.url,
-                            seconde: relatedPost.thumbnailSeconde,
-                            thumbUrl: relatedPost.thumbnailLink
+                            seconde: item.thumbnailSeconde,
+                            thumbUrl: item.thumbnailLink
                           }
                 } )
 
