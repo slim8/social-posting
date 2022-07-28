@@ -98,7 +98,7 @@
         <!-- End Skeleton -->
       </div>
       <div
-        *ngIf="!isLoading && connectedAccounts != ''"
+        *ngIf="!isLoading && connectedAccounts != '' && isCompanyAdmin"
         class="m-connected-accounts"
       >
         <h2 i18n="Personnel Account|Personnel account title@@personnelAccount">

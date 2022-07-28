@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
@@ -31,6 +32,8 @@ export class AccountsComponent implements OnInit {
     user: any = [];
     validateForm!: FormGroup;
     isLoading: boolean = true;
+    userRoles:Array<string> = [];
+    isCompanyAdmin: boolean = false;
 
     constructor(
         private iconService: NzIconService,
@@ -56,6 +59,8 @@ export class AccountsComponent implements OnInit {
       if (this.router.url.includes('accounts')) {
           this.sharedModule.initSideMenu('accounts');
       }
+      this.userRoles = this.sharedModule.getuserRoles();
+      this.userRoles.includes('companyadmin')? this.isCompanyAdmin = true: this.isCompanyAdmin = false;
     }
 
     getPages() {
