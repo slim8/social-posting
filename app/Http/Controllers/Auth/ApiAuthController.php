@@ -155,7 +155,7 @@ class ApiAuthController extends Controller
 
         $user->attachRole('user');
 
-        $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
+        $mailBody = ["mail" => $request->email, "password" => $request->password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
         try{
             $this->traitController->sendMail($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
         } catch(\Exception $e){
