@@ -59,7 +59,9 @@
         }
     }
 }
-
+label, small{
+  cursor: pointer !important;
+  }
 /* Importing Bootstrap SCSS file. */
 
 /* width */
