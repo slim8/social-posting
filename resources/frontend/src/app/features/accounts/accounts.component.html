@@ -15,7 +15,7 @@
       </button>
     </div>
     <div class="m-accounts-container">
-      <div *ngIf="!isLoading && connectedAccounts == ''" class="m-login">
+      <div *ngIf="!isLoading && connectedAccounts == '' && isCompanyAdmin" class="m-login">
         <span class="m-login-icon">
           <i nz-icon nzType="ng-zorro:add"></i>
         </span>
@@ -24,7 +24,7 @@
             i18n="
               No account|No connected account title@@NoConnectedAccountTitle"
           >
-            No posts yet.
+            No accounts found.
           </h4>
           <p
             i18n="
@@ -43,6 +43,28 @@
           >
             <span><i nz-icon nzType="ng-zorro:add"></i></span>Link account
           </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && connectedAccounts == '' && !isCompanyAdmin" class="m-login">
+        <span class="m-login-icon">
+          <i nz-icon nzType="ng-zorro:add"></i>
+        </span>
+        <div class="m-message-info">
+          <h4
+            i18n="
+              No account|No connected account title@@NoConnectedAccountTitle"
+          >
+            No accounts found.
+          </h4>
+          <p
+            i18n="
+              No account message|No connected account
+              message@@NoConnectedAccountMessage"
+          >
+            Please wait for the company administrator to Link the social media channels with the mediafactory to Design and
+            publish posts directly.
+          </p>
         </div>
       </div>
 
