@@ -17,6 +17,7 @@
                 [nzSize]="size"
                 nzMode="tags"
                 nzPlaceHolder="Please select"
+                (ngModelChange)="accountChange()"
               >
                 <nz-option
                   *ngFor="let option of listOfPages"
@@ -34,6 +35,7 @@
               </nz-select>
             </nz-form-control>
           </div>
+          <span class="m-hidden" id="accountsFormController" i18n="AccountFormControl|Title for accounts Error@@accountsFormControl">Please fill the accounts field</span>
         </div>
 
         <div class="m-form-group">
@@ -162,6 +164,8 @@
               </nz-modal>
             </div>
           </div>
+          <span class="m-hidden" id="mediasFormController" i18n="MediaFormControl|Title for medias Error@@mediasFormControl">Please fill the medis field</span>
+
         </div>
 
         <div class="m-form-group">
