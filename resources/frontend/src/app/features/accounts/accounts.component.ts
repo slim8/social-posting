@@ -210,13 +210,13 @@ export class AccountsComponent implements OnInit {
 
     showDisconnectConfirm(id: any): void {
         this.modal.confirm({
-            nzTitle: 'Do you really want to disconnect this account?',
-            nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
-            nzOkText: 'Yes',
+            nzTitle: '<b>Do you really want to disconnect from this page?</b>',
+            nzContent: '<span style="color: red;">You will have to connect this acocunt via facebook to reconnect</span>',
+            nzOkText: 'Disconnect',
             nzOkType: 'primary',
             nzOkDanger: true,
             nzOnOk: () => this.disconnectPage(id),
-            nzCancelText: 'No',
+            nzCancelText: 'Cancel',
             nzOnCancel: () => {}
         });
     }
@@ -224,12 +224,11 @@ export class AccountsComponent implements OnInit {
     showDeleteConfirm(id: any): void {
       this.modal.confirm({
           nzTitle: 'Do you really want to delete this account?',
-          nzContent: '<b style="color: red;">this account will be deleted permenantly</b>',
-          nzOkText: 'Yes',
+          nzOkText: 'Delete',
           nzOkType: 'primary',
           nzOkDanger: true,
           nzOnOk: () => this.deletePage(id),
-          nzCancelText: 'No',
+          nzCancelText: 'Cancel',
           nzOnCancel: () => console.log('Cancel')
       });
     }
