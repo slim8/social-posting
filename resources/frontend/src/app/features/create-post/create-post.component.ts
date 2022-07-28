@@ -118,10 +118,7 @@ export class CreatePostComponent implements OnInit {
                 this.pageId = params['id'];
             }
         });
-        if (this.router.url.includes('drafts')) {
-            console.log('params' , this.activatedRoute.params);
-            this.getDraftToEdit(this.activatedRoute.snapshot.paramMap.get('draft'));
-        }
+        
     }
 
     getPages(param: string) {
@@ -153,7 +150,9 @@ export class CreatePostComponent implements OnInit {
                 this.shared.createMessage('error', err.error.message);
             },
             complete: () => {
-
+                if (this.router.url.includes('drafts')) {
+                    this.getDraftToEdit(this.activatedRoute.snapshot.paramMap.get('draft'));
+                }
             }
         });
     }
@@ -195,17 +194,6 @@ export class CreatePostComponent implements OnInit {
       this.validateForm();
     }
     async uploadThumbnail(param: string) {
-    console.log("listOfVideos" , this.listOfVideos)
-    console.log("accountsValue" , this.accountsValue)
-    console.log("listOfTagOptions" , this.listOfTagOptions)
-    console.log("videosList" , this.videosList)
-    console.log("urlLinks" , this.urlLinks)
-    console.log("videoList" , this.videoList)
-    console.log("facebookMessage" , this.facebookMessage)
-    console.log("instagramMessage" , this.instagramMessage)
-    console.log("listOfTagOptionsFacebook" , this.listOfTagOptionsFacebook)
-    console.log("listOfTagOptionsInsta" , this.listOfTagOptionsInsta)
-    console.log("editDraftPost" , this.editDraftPost)
       let validator = this.validateForm();
       if(validator) {
         this.listOfVideos = [];
@@ -354,7 +342,6 @@ export class CreatePostComponent implements OnInit {
         if (event.type == 'success') {
             this.mediaId = 0;
             this.urlLinks = [];
-            console.log(event.fileList)
             event.fileList.forEach((elem: any) => {
                 let img = {
                     id: 0,
@@ -631,15 +618,12 @@ export class CreatePostComponent implements OnInit {
 
     getDraftToEdit(draft : string | null){
         this.editDraftMode = true ;
-        console.log(draft);
         this.SocialAccountsPostService.getDraft(draft).subscribe({
             next: (event: any) => {
-                console.log(event);
 
                 this.editDraftPost = event.post;
 
                 let imageList  : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "image").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
-                    console.log(this.mentions);
                         // TODO :: to show mention on edit draft
                         // this.mentions.push(...item.mentions.map((montion : {username : string , posX : string , posY : string , id : number}) => ({
                         //     username : montion.username ,
@@ -689,8 +673,6 @@ export class CreatePostComponent implements OnInit {
 
                 this.videosList = [...DraftVideoList];
 
-                setTimeout(() => {
-                    console.log(this.editDraftPost , DraftVideoList , imageList,this.fileList , this.listOfPages);
                     let selectedAccountId = event.post.subPosts.map((item : {accountId : any , provider : string , message : string , hashtags : [{name : string}]}) => {
 
 
@@ -698,13 +680,11 @@ export class CreatePostComponent implements OnInit {
                         if(item.provider == "facebook"){
                             this.facebookMessage = item.message;
                             if(item.hashtags.length){
-                                // console.log(item.hashtags);
                                 this.listOfTagOptionsFacebook = [...item.hashtags.map(tag => tag.name)]
                             }
                         }else if(item.provider == "instagram"){
                             this.instagramMessage = item.message;
                             if(item.hashtags.length){
-                                // console.log(item.hashtags);
                                 this.listOfTagOptionsInsta = [...item.hashtags.map(tag => tag.name)]
                             }
                         }
@@ -713,8 +693,6 @@ export class CreatePostComponent implements OnInit {
                     } )
                     let selectedAccount = this.listOfPages.filter((item : {id : any}) => selectedAccountId.includes(item.id)).map(item => item.id+'|'+item.provider )
                     this.accountsValue = [...selectedAccount];
-                    console.log(selectedAccount , selectedAccountId , this.accountsValue);
-                }, 3000);
 
             },
             error: err => {
