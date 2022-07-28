@@ -128,7 +128,7 @@
         <div class="m-login-form">
           <input type="text" class="m-input" placeholder="E-Mail Adresse" [(ngModel)]="credentials.email">
           <input type="text" class="m-input" placeholder="Password" [(ngModel)]="credentials.password">
-          <button nz-button [nzLoading]="isLoadingButton" class="m-button is-primary" (click)="login()" i18n="Login|Title for Login@@login">Login</button>
+          <button nz-button [nzLoading]="isLoadingButton" class="m-button is-primary no-transparent" (click)="login()" i18n="Login|Title for Login@@login">Login</button>
         </div>
       </div>
     </div>
