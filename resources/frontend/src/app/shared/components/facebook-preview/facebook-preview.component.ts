@@ -13,6 +13,8 @@ export class FacebookPreviewComponent implements OnInit {
   @Input() imgList: any[] = [];
   @Input() postDescription! : string;
   @Input() accountName! : string;
+  @Input() pageName: string = "";
+  @Input() avatarUrl: string = "";
 
   constructor( private iconService: NzIconService, ) {
     this.iconService.addIconLiteral('ng-zorro:threeDot', threeDot);
