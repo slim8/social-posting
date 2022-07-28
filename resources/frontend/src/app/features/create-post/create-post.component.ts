@@ -273,9 +273,9 @@ export class CreatePostComponent implements OnInit {
               },
               error: (err) => {
                   if (err.error.errors) {
-                      err.error.errors.forEach((error: any) => {
-                          this.shared.createMessage('error', error);
-                      });
+                    Object.keys(err.error.errors).forEach(key => {
+                      this.shared.createMessage('error', err.error.errors[key][0]);
+                    });
                   }
                   else {
                       this.shared.createMessage('error', err.error.message);
