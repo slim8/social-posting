@@ -16,9 +16,6 @@ class AccountPost extends ExtendedModel
         'accountId',
         'message',
         'videoTitle',
-        'thumbnailSeconde',
-        'thumbnailLink',
-        'thumbnailRessource',
         'localisationText',
         'localisationRessource',
     ];
