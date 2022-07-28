@@ -160,20 +160,27 @@ svg {
   margin-top: 25px;
   .m-delete-msg{
     margin-bottom: 0;
+    font-weight: 700;
   }
+  }
+  .ant-modal-confirm-content p{
+    padding-left: 15px;
   }
   .ant-modal-confirm-btns {
     button{
+      font-weight: 700;
       &.ant-btn-primary,&.ant-btn-primary:hover{
       background-color: $color-media-primary-orange;
       border: 0;
       }
       &:first-child {
         background-color: $color-media-background-light-grey;
+        border:0;
         &:hover{
           background-color: $color-media-background-light-grey;
           border:0;
-          color: $color-media-dark-grey;
+          color: $color-base-100;
+          opacity: 0.85;
         }
       }
     }

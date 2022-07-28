@@ -101,7 +101,7 @@ export class DraftsComponent implements OnInit {
   showRemoveDraftModal() {
     this.modal.confirm({
       nzTitle: '<p class="m-delete-msg">Are you sure you want to delete this Draft?</p>',
-      nzContent: '<b style="color: red;">All other drafts related will be also deleted</b>',
+      nzContent: '<p style="color: red;">All other drafts related will be also deleted</b>',
       nzOkText: 'Delete',
       nzOkType: 'primary',
       nzOkDanger: true,
