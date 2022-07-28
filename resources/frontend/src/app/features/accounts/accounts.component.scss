@@ -451,10 +451,12 @@
 
                 > .m-success-title {
                     @include textstyle-size-14-bold();
+                    position: relative;
 
                     > img {
-                        margin-right: 18px;
-                        width: 17px;
+                      position: absolute;
+                      left: -42px;
+                      top: -7px;
                     }
                 }
 

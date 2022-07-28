@@ -116,9 +116,46 @@
                 overflow-x: auto;
 
                 > table {
+                    > thead {
+                      > tr {
+                        > .m-checkbox {
+                          transform: translate3d(-44px, -7px, 0);
+                          width: 44px;
+                            > .m-checkbox-input-all {
+                                -webkit-appearance: none;
+                                outline: none;
+                                position: relative;
+                                margin-right: 28px;
+                                margin-bottom: 12px;
+
+
+                                &::after {
+                                    content: '';
+                                    position: absolute;
+                                    border: 1px solid rgba(0, 0, 0, 0.5);
+                                    border-radius: 5px;
+                                    width: 18px;
+                                    height: 18px;
+                                }
+
+                                &:checked::after {
+                                    content: url('/assets/img/check-icon.png');
+                                    position: absolute;
+                                    background: rgba(231, 231, 231, 0.5);
+                                    width: 18px;
+                                    height: 18px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                            }
+                        }
+                      }
+                    }
                     > .m-post {
                         > tr {
                             > td {
+
                                 &:first-child {
                                     position: relative;
                                     &:after {

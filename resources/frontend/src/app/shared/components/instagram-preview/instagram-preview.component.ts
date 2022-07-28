@@ -10,6 +10,8 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
     //preview images variable
     @Input() mediaList: any[] = [];
     @Input() message: string = "";
+    @Input() pageName: string = "";
+    @Input() avatarUrl: string = "";
     @Output() newItemEvent = new EventEmitter<any[]>();
     mentions: any = [];
     isliked: boolean = false;

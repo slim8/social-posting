@@ -28,7 +28,6 @@
                 >.m-user-info{
                     margin: auto 10px 5px 8px;
                     >.m-username{
-                      filter: blur(3px);
                       @include textstyle-size-12-bold();
                     }
 

@@ -91,6 +91,8 @@ export class CreatePostComponent implements OnInit {
     selectedThumbnailList: { id: number, imgB64: string |null , time: number , url :  string |null}[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     showAlbum: boolean = false;
+    avatarUrl:string = "";
+    pageName:string = "";
 
     editDraftMode : boolean = false;
     editDraftPost ={id : ''};
@@ -168,26 +170,31 @@ export class CreatePostComponent implements OnInit {
         accountsFormController?.classList.remove('m-shown');
         accountsFormController?.classList.add('m-hidden');
         validator = true;
-      } else {
+      } else if (this.accountsValue.length == 0){
         accountsFormController?.classList.add('m-shown');
       }
 
-
-      if(this.mediaList.length > 0) {
+      else if(this.mediaList.length > 0) {
         mediasFormController?.classList.remove('m-shown');
         mediasFormController?.classList.add('m-hidden');
         validator = true;
-      } else {
+      } else if(this.mediaList.length == 0) {
         mediasFormController?.classList.add('m-shown');
       }
-
-
 
       return validator;
     }
 
     accountChange(){
       this.validateForm();
+      if(this.accountsValue.length == 1) {
+        this.listOfPages.forEach((elem:any)=> {
+          if(elem.id == this.accountsValue[0].split("|", 1)) {
+            this.avatarUrl = elem.pagePictureUrl;
+            this.pageName = elem.pageName;
+          }
+        })
+      }
     }
 
     mediaChange(){
@@ -295,9 +302,9 @@ export class CreatePostComponent implements OnInit {
               },
               error: (err) => {
                   if (err.error.errors) {
-                      err.error.errors.forEach((error: any) => {
-                          this.shared.createMessage('error', error);
-                      });
+                    Object.keys(err.error.errors).forEach(key => {
+                      this.shared.createMessage('error', err.error.errors[key][0]);
+                    });
                   }
                   else {
                       this.shared.createMessage('error', err.error.message);
