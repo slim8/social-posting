@@ -91,8 +91,10 @@ export class CreatePostComponent implements OnInit {
     selectedThumbnailList: { id: number, imgB64: string |null , time: number , url :  string |null}[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     showAlbum: boolean = false;
-    avatarUrl:string = "";
-    pageName:string = "";
+    avatarUrlInsta:string = "";
+    pageNameInsta:string = "";
+    avatarUrlFacebook:string = "";
+    pageNameFacebook:string = "";
 
     editDraftMode : boolean = false;
     editDraftPost ={id : ''};
@@ -217,12 +219,19 @@ export class CreatePostComponent implements OnInit {
 
     accountChange(){
       this.validateAccount();
-      if(this.accountsValue.length == 1) {
+      if(this.accountsValue.length >= 1) {
         this.listOfPages.forEach((elem:any)=> {
-          if(elem.id == this.accountsValue[0].split("|", 1)) {
-            this.avatarUrl = elem.pagePictureUrl;
-            this.pageName = elem.pageName;
-          }
+          this.accountsValue.forEach((account:any)=> {
+            if(elem.id == account.split("|", 1)) {
+              if(account.split("|", 2)[1] == "facebook") {
+                this.avatarUrlFacebook = elem.pagePictureUrl;
+                this.pageNameFacebook = elem.pageName;
+              } else {
+                this.avatarUrlInsta = elem.pagePictureUrl;
+                this.pageNameInsta = elem.pageName;
+              }
+            }
+          })
         })
       }
     }
