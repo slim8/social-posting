@@ -85,11 +85,10 @@
         <div class="m-right">
           <button
             class="m-button is-primary"
-            i18n="CreateNew|Title for the Create new@@createNew"
             routerLink="/application/create-post"
           >
             <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
-            Create new
+            <span i18n="CreateNew|Title for the Create new@@createNew">Create new</span>
           </button>
         </div>
       </div>
@@ -203,7 +202,7 @@
             <tr class="m-details">
               <td class="m-item" colspan="3">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.shares ?  item.stats.shares : (item.stats.saves ? item.stats.saves : 0)  }}</span>
+                  <span class="m-number">{{ item.stats.shares ?  item.stats.shares : item.stats.saves  }}</span>
                   <span
                     class="m-text"
                     i18n="
@@ -215,7 +214,7 @@
               </td>
               <td class="m-item">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.likes ?  item.stats.likes : (item.stats.engagement ? item.stats.engagement : 0)  }}</span>
+                  <span class="m-number">{{ item.stats.likes ?  item.stats.likes : item.stats.engagement  }}</span>
                   <span
                     class="m-text"
                     i18n="
@@ -227,7 +226,7 @@
               </td>
               <td class="m-item">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.comments ? item.stats.comments : (item.stats.impressions ? item.stats.impressions : 0)  }}</span>
+                  <span class="m-number">{{ item.stats.comments ?  item.stats.comments : item.stats.impressions  }}</span>
                   <span
                     class="m-text"
                     i18n="
