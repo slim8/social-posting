@@ -787,6 +787,7 @@ export class CreatePostComponent implements OnInit {
                     } )
                     let selectedAccount = this.listOfPages.filter((item : {id : any}) => selectedAccountId.includes(item.id)).map(item => item.id+'|'+item.provider )
                     this.accountsValue = [...selectedAccount];
+                    this.accountChange();
 
             },
             error: err => {
