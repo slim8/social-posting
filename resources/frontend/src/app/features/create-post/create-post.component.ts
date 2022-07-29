@@ -120,7 +120,7 @@ export class CreatePostComponent implements OnInit {
                 this.pageId = params['id'];
             }
         });
-        
+
     }
 
     getPages(param: string) {
@@ -170,23 +170,57 @@ export class CreatePostComponent implements OnInit {
         accountsFormController?.classList.remove('m-shown');
         accountsFormController?.classList.add('m-hidden');
         validator = true;
-      } else if (this.accountsValue.length == 0){
+      } else if (this.accountsValue.length == 0  ){
         accountsFormController?.classList.add('m-shown');
       }
 
-      else if(this.mediaList.length > 0) {
+      else if(this.mediaList.length > 0 ) {
         mediasFormController?.classList.remove('m-shown');
         mediasFormController?.classList.add('m-hidden');
+        accountsFormController?.classList.remove('m-shown');
+        accountsFormController?.classList.add('m-hidden');
         validator = true;
       } else if(this.mediaList.length == 0) {
         mediasFormController?.classList.add('m-shown');
+        accountsFormController?.classList.remove('m-shown');
+        accountsFormController?.classList.add('m-hidden');
       }
 
       return validator;
     }
 
+
+    validateAccount() {
+      let accountsFormController = document.getElementById('accountsFormController');
+      accountsFormController?.classList.remove('m-shown');
+      accountsFormController?.classList.add('m-hidden');
+
+      if(this.accountsValue.length > 0) {
+        accountsFormController?.classList.remove('m-shown');
+        accountsFormController?.classList.add('m-hidden');
+      } else if (this.accountsValue.length == 0  ){
+        accountsFormController?.classList.add('m-shown');
+      }
+    }
+
+    validateMedia() {
+      let mediasFormController = document.getElementById('mediasFormController');
+      mediasFormController?.classList.remove('m-shown');
+      mediasFormController?.classList.add('m-hidden');
+
+      if(this.mediaList.length > 0 ) {
+        mediasFormController?.classList.remove('m-shown');
+        mediasFormController?.classList.add('m-hidden');
+      } else if(this.mediaList.length == 0) {
+        mediasFormController?.classList.add('m-shown');
+      }
+    }
+
+
+
+
     accountChange(){
-      this.validateForm();
+      this.validateAccount();
       if(this.accountsValue.length == 1) {
         this.listOfPages.forEach((elem:any)=> {
           if(elem.id == this.accountsValue[0].split("|", 1)) {
@@ -198,7 +232,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     mediaChange(){
-      this.validateForm();
+      this.validateMedia();
     }
     async uploadThumbnail(param: string) {
       let validator = this.validateForm();
@@ -364,21 +398,12 @@ export class CreatePostComponent implements OnInit {
                     img.url = elem.url;
                     img.type = 'image';
                 }
-                
+
                 this.urlLinks.push(img);
             })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
-            this.validateForm();
+            this.mediaChange();
         }
-        else if (event.type == 'removed') {
-            this.refreshPages();
-            this.mediaId = 0;
-            this.urlLinks = [];
 
-            event.fileList.forEach((elem: any) => {
-                let img = {
-                    id: 0,
-                    url: "",
                     type: ""
                 }
                 this.mediaId++;
@@ -392,8 +417,8 @@ export class CreatePostComponent implements OnInit {
                 }
                 this.urlLinks.push(img);
             })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" ,  } })];
-            this.validateForm();
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            this.mediaChange();
         }
     }
 
@@ -506,7 +531,7 @@ export class CreatePostComponent implements OnInit {
                     that.refreshPages();
                     setTimeout(() => {
                         that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
-                        that.validateForm();
+                        that.mediaChange();
                     }, 2500);
                 });
                 tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
