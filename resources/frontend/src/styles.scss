@@ -131,6 +131,9 @@ svg {
   .m-info-icon & {
     fill: $color-media-black-opacity-half!important;
   }
+  .no-transparent & {
+    fill: $color-base-50!important;
+  }
 }
 
 .ant-modal {
