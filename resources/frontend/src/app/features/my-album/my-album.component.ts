@@ -33,7 +33,7 @@ export class MyAlbumComponent implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this.fileService.getImagesList(this.jwtService.decodeToken().data.id).subscribe({
+        this.fileService.getImagesList().subscribe({
             next : (event) => {
                 this.images = event.files;
                 this.isLoading = false;

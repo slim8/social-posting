@@ -110,7 +110,7 @@ export class CreatePostComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.getPages('mixed');
+        this.getPages('mixed', true);
         const mentioned = document.querySelector('.mentioned');
         if (this.router.url.includes('create-post')) {
             this.sharedModule.initSideMenu('create-post');
@@ -120,10 +120,10 @@ export class CreatePostComponent implements OnInit {
                 this.pageId = params['id'];
             }
         });
-        
+
     }
 
-    getPages(param: string) {
+    getPages(param: string , fromInit = false) {
         this.listOfPages = [];
         this.accountsValue = [];
         this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
@@ -152,7 +152,7 @@ export class CreatePostComponent implements OnInit {
                 this.shared.createMessage('error', err.error.message);
             },
             complete: () => {
-                if (this.router.url.includes('drafts')) {
+                if (this.router.url.includes('drafts') && fromInit ) {
                     this.getDraftToEdit(this.activatedRoute.snapshot.paramMap.get('draft'));
                 }
             }
@@ -161,6 +161,9 @@ export class CreatePostComponent implements OnInit {
 
     validateForm(): boolean {
       let validator = false;
+      let validatorAccounts = false;
+      let validatorMedia = false;
+
       let accountsFormController = document.getElementById('accountsFormController');
       let mediasFormController = document.getElementById('mediasFormController');
       accountsFormController?.classList.remove('m-shown');
@@ -169,24 +172,51 @@ export class CreatePostComponent implements OnInit {
       if(this.accountsValue.length > 0) {
         accountsFormController?.classList.remove('m-shown');
         accountsFormController?.classList.add('m-hidden');
-        validator = true;
-      } else if (this.accountsValue.length == 0){
+        validatorAccounts = true;
+      } else if (this.accountsValue.length == 0  ){
         accountsFormController?.classList.add('m-shown');
       }
 
-      else if(this.mediaList.length > 0) {
+      if(this.mediaList.length > 0 ) {
         mediasFormController?.classList.remove('m-shown');
         mediasFormController?.classList.add('m-hidden');
-        validator = true;
+        validatorMedia = true;
       } else if(this.mediaList.length == 0) {
         mediasFormController?.classList.add('m-shown');
       }
+      if(validatorMedia && validatorAccounts) validator=true;
 
       return validator;
     }
 
+    validateAccount() {
+      let accountsFormController = document.getElementById('accountsFormController');
+      accountsFormController?.classList.remove('m-shown');
+      accountsFormController?.classList.add('m-hidden');
+
+      if(this.accountsValue.length > 0) {
+        accountsFormController?.classList.remove('m-shown');
+        accountsFormController?.classList.add('m-hidden');
+      } else if (this.accountsValue.length == 0  ){
+        accountsFormController?.classList.add('m-shown');
+      }
+    }
+
+    validateMedia() {
+      let mediasFormController = document.getElementById('mediasFormController');
+      mediasFormController?.classList.remove('m-shown');
+      mediasFormController?.classList.add('m-hidden');
+
+      if(this.mediaList.length > 0 ) {
+        mediasFormController?.classList.remove('m-shown');
+        mediasFormController?.classList.add('m-hidden');
+      } else if(this.mediaList.length == 0) {
+        mediasFormController?.classList.add('m-shown');
+      }
+    }
+
     accountChange(){
-      this.validateForm();
+      this.validateAccount();
       if(this.accountsValue.length == 1) {
         this.listOfPages.forEach((elem:any)=> {
           if(elem.id == this.accountsValue[0].split("|", 1)) {
@@ -198,8 +228,9 @@ export class CreatePostComponent implements OnInit {
     }
 
     mediaChange(){
-      this.validateForm();
+      this.validateMedia();
     }
+
     async uploadThumbnail(param: string) {
       let validator = this.validateForm();
       if(validator) {
@@ -210,24 +241,36 @@ export class CreatePostComponent implements OnInit {
             return { url: video.videoUrl , id: thumbnail.id,imgB64: thumbnail.imgB64 , time: thumbnail.time , thumbnail: thumbnail.url ? thumbnail.url: '' };
         })
 
-        await list.forEach(async (videoObject) => {
-            if(videoObject.imgB64){
-                await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                    next: (response) => {
-                        this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                    },
-                    error: (err) => {
-                        this.shared.createMessage('error', err);
-                    },
-                    complete: () => {
-
-                    }
-                });
-            }
-        })
-        setTimeout(() => {
-            this.submitForm(param);
-        }, 2000);
+        let compteur = list.length;
+        if(compteur>0) {
+          await list.forEach(async (videoObject) => {
+              if(videoObject.imgB64){
+                  await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+                      next: (response) => {
+                          this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+                          compteur--;
+                      },
+                      error: (err) => {
+                          this.shared.createMessage('error', err);
+                      },
+                      complete: () => {
+                          if(compteur <= 0){
+                            console.log('im in3');
+                            this.submitForm(param);
+                          }
+                      }
+                  });
+              }else{
+                  compteur--;
+                  if(compteur <= 0){
+                    console.log('im in2');
+                    this.submitForm(param);
+                  }
+              }
+          })
+        }else {
+          this.submitForm(param);
+        }
       }
     }
 
@@ -364,37 +407,38 @@ export class CreatePostComponent implements OnInit {
                     img.url = elem.url;
                     img.type = 'image';
                 }
-                
+
                 this.urlLinks.push(img);
             })
             this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
-            this.validateForm();
+            // this.validateForm();
+            this.mediaChange();
         }
         else if (event.type == 'removed') {
-            this.refreshPages();
-            this.mediaId = 0;
-            this.urlLinks = [];
+          this.refreshPages();
+          this.mediaId = 0;
+          this.urlLinks = [];
 
-            event.fileList.forEach((elem: any) => {
-                let img = {
-                    id: 0,
-                    url: "",
-                    type: ""
-                }
-                this.mediaId++;
-                img.id = this.mediaId;
-                if(elem.response){
-                    img.url = elem.response.files.url;
-                    img.type = elem.response.files.type;
-                }else{
-                    img.url = elem.url;
-                    img.type = 'image';
-                }
-                this.urlLinks.push(img);
-            })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" ,  } })];
-            this.validateForm();
-        }
+          event.fileList.forEach((elem: any) => {
+              let img = {
+                  id: 0,
+                  url: "",
+                  type: ""
+              }
+              this.mediaId++;
+              img.id = this.mediaId;
+              if(elem.response){
+                  img.url = elem.response.files.url;
+                  img.type = elem.response.files.type;
+              }else{
+                  img.url = elem.url;
+                  img.type = 'image';
+              }
+              this.urlLinks.push(img);
+          })
+          this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
+          this.validateForm();
+      }
     }
 
     tabChange(id: any, event: any) {
@@ -464,7 +508,7 @@ export class CreatePostComponent implements OnInit {
             this.currentTimePosition += this.duration;
         }
 
-        generateVideoThumbnails(this.selectedVideo.file, 3, this.selectedVideo.file.type, this.currentTimePosition, this.duration).then((thumbArray) => {
+        generateVideoThumbnails(this.selectedVideo.videoUrl, 3, 'url', this.currentTimePosition, this.duration).then((thumbArray) => {
             this.listThumbnail = thumbArray;
 
             if (newVideo) {
@@ -472,7 +516,27 @@ export class CreatePostComponent implements OnInit {
                 this.selectedThumbnail.time = thumbArray[0].time as number;
                 this.selectedThumbnailList.push({ id: this.selectedVideo.id, imgB64: this.selectedThumbnail.imgB64, time: this.selectedThumbnail.time , url : null})
             }
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
             this.leadThumbnail = false;
+            this.validateMedia();
+        })
+
+    }
+
+    generateVideoDurationFromUrl = (url: string): Promise<number> => {
+        return new Promise((resolve, reject) => {
+            let video = document.createElement("video");
+            video.addEventListener("loadeddata", function () {
+                resolve(video.duration);
+                window.URL.revokeObjectURL(url);
+            });
+            video.preload = "metadata";
+            video.src = url;
+            // Load video in Safari / IE11
+            video.muted = true;
+            video.crossOrigin = "Anonymous";
+            video.playsInline = true;
+            video.play();
         })
     }
 
@@ -482,6 +546,9 @@ export class CreatePostComponent implements OnInit {
 
         this.selectedThumbnailList.forEach(selectedThumbnail => {
             if (selectedThumbnail.id == this.selectedVideo.id) {
+                if(!selectedThumbnail.imgB64){
+                    this.videosList = this.videosList.filter(video => video.uid != selectedThumbnail.id.toString())
+                }
                 selectedThumbnail.imgB64 = item.imgB64;
                 selectedThumbnail.time = item.time;
             }
@@ -505,8 +572,8 @@ export class CreatePostComponent implements OnInit {
                     that.currentTimePosition = -10;
                     that.refreshPages();
                     setTimeout(() => {
-                        that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
-                        that.validateForm();
+                      that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
+                      that.validateMedia();
                     }, 2500);
                 });
                 tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
@@ -521,8 +588,19 @@ export class CreatePostComponent implements OnInit {
 
     changeSelectedVideo(item: { id: number, imgB64:  string|null, time: number , url : string|null }) {
         this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
-        this.generatethumbnails('next');
-        this.currentTimePosition = -10;
+        this.generateVideoDurationFromUrl(this.selectedVideo.videoUrl).then(res => {
+            if(!this.selectedVideo.duration){
+                this.videoList = this.videoList.map(video => {
+                    if(this.selectedVideo.id == video.id){
+                        video.duration = res
+                    }
+                    return video ;
+                } );
+            }
+            this.currentTimePosition = -10;
+            this.generatethumbnails('next');
+        })
+
     }
 
     deleteVideo(item: { id: number, imgB64: string|null, time: number , url : string|null }) {
@@ -665,9 +743,9 @@ export class CreatePostComponent implements OnInit {
                 let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
 
                     this.mediaList.push( { id: -(key+1), url: item.thumbnailLink, type: "video" })
-                    this.videoList.push({ id: this.videoCounter, file: null , videoUrl: item.url , duration : null });
-                    this.selectedThumbnailList.push( { id: this.videoCounter, imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
-                    this.videoCounter ++;
+                    this.videoList.push({ id: -(key+1), file: null , videoUrl: item.url , duration : null });
+                    this.selectedThumbnailList.push( { id: -(key+1) , imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
+
                     return {
                             uid: -(key+1) ,
                             name: item.url ,

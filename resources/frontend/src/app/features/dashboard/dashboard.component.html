@@ -129,7 +129,7 @@
                       <div class="m-page">{{ post.message }}</div>
                       <div class="m-date">{{ post.createdAt | date: "dd.MM.yyyy, HH:mm" }}</div>
                     </td>
-                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
+                    <td *ngIf="post.provider == 'facebook' && post.status" class="m-stats">
                       <div class="m-like-count">{{ post.stats.likes }}</div>
                       <div
                         class="m-text"
@@ -138,13 +138,13 @@
                         reached people
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
+                    <td *ngIf="post.provider == 'facebook' && post.status" class="m-stats">
                       <div class="m-share-count">{{ post.stats.shares }}</div>
                       <div class="m-text" i18n="Likes |Likes @@likes">
                         likes
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
+                    <td *ngIf="post.provider == 'facebook' && post.status" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.comments }}
                       </div>
@@ -157,7 +157,7 @@
                       </div>
                     </td>
 
-                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                    <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-like-count">
                         {{ post.stats.engagement }}
                       </div>
@@ -168,13 +168,13 @@
                         engagement
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                    <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-share-count">{{ post.stats.saves }}</div>
                       <div class="m-text" i18n="Saves |Saves @@saves">
                         saves
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                    <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.impressions }}
                       </div>
@@ -186,16 +186,29 @@
                         impressions
                       </div>
                     </td>
+                    <td *ngIf="!post.status">
+                      <nz-badge nzStatus="error">
+                        <span class="m-text">{{post.statusObject}}</span>
+                      </nz-badge>
+                    </td>
                     <td class="m-action">
                       <a
+                        *ngIf="post.status"
                         href="{{ post.url }}"
                         target="_blank"
                         class="m-button is-disabled"
                         i18n="
                           To the Post |To the Post or create post @@toThePost"
                         ><span><i nz-icon nzType="ng-zorro:open"></i></span> To
-                        the post</a
-                      >
+                        the post</a>
+
+                        <a
+                        *ngIf="!post.status"
+                        class="m-button is-disabled is-blocked"
+                        i18n="
+                          To the Post |To the Post or create post @@toThePost"
+                        ><span><i class="no-transparent-only" nz-icon nzType="stop" nzTheme="outline"></i></span> To
+                        the post</a>
                     </td>
                   </tr>
                 </tbody>
