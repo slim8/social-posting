@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Traits\RequestsTrait;
+use App\Models\Post;
+use App\Models\PostMedia;
+use App\Models\User;
 use File;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -54,7 +57,6 @@ class FileController extends Controller
      */
     public function convertToJpeg($folderName, $image, int $isOnDisk = 0, string $filePathName = null)
     {
-
         if (!$isOnDisk) {
             $object = $image->store('temporar'.'s/'.date('Y').'/'.date('m').'/'.date('d'));
         }
@@ -106,7 +108,7 @@ class FileController extends Controller
             if (envValue('APP_ENV') == 'local') {
                 $fileObject->url = $this->uploadToDistant($newImagePath, 'image', 1, $newImagePath);
             } else {
-                $fileObject->url = $this->uploadLocal($newImagePath, 'image' , 1);
+                $fileObject->url = $this->uploadLocal($newImagePath, 'image', 1);
             }
 
             return $this->traitController->processResponse(true, ['files' => $fileObject]);
@@ -154,11 +156,11 @@ class FileController extends Controller
     /**
      * Start Local Upload.
      */
-    public function uploadLocal($file, $type , int $isBase64 = 0)
+    public function uploadLocal($file, $type, int $isBase64 = 0)
     {
         if ($type == 'image') {
-            if($isBase64){
-                $imageLink = $this->convertToJpeg('postedImages', $file , $isBase64 , $file);
+            if ($isBase64) {
+                $imageLink = $this->convertToJpeg('postedImages', $file, $isBase64, $file);
             } else {
                 $imageLink = $this->convertToJpeg('postedImages', $file);
             }
@@ -240,18 +242,37 @@ class FileController extends Controller
         }
     }
 
-
     /**
      * Get company media .
      */
-    public function getCompanyMedia($companyId)
+    public function getCompanyMedia()
     {
-        $media  = DB::select('select post_media.type , post_media.url , post_media.id , account_posts.thumbnail_link as thumbnailLink  from `post_media`
-        JOIN posts on post_media.post_id = posts.id 
-        JOIN account_posts on account_posts.post_id = posts.id 
-        where exists (select * from `posts` where `post_media`.`post_id` = `posts`.`id` 
-        and exists (select * from `users` where `posts`.`created_by` = `users`.`id` and `company_id` = :id) 
-        and `posts`.`deleted_at` is null)', ['id' => $companyId]); 
-        return $this->traitController->processResponse(true, ['files' => $media]);
+        $files = [];
+        $companyId = $this->traitController->getCompanyId();
+
+        $postsMedias = User::where('companyId' , $companyId)->with(['post' => function ($query) {
+            $query->with('postMedia');
+        }])->get();
+
+        if($postsMedias){
+            foreach($postsMedias as $postMedia){
+                if($postMedia->post){
+                    foreach($postMedia->post as $post){
+                        if($post->postMedia){
+                            foreach($post->postMedia as $medias){
+                                unset($medias->postId);
+                                unset($medias->createdAt);
+                                unset($medias->updatedAt);
+                                $files[] = $medias;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+        return $this->traitController->processResponse(count($files) > 0 , ['files' => $files]);
     }
 }

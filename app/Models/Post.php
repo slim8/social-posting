@@ -40,6 +40,11 @@ class Post extends ExtendedModel
 
     public function creator()
     {
-        return $this->belongsTo(Users::class, 'createdBy');
+        return $this->hasMany(User::class, 'id' , 'created_by');
+    }
+
+    public function user()
+    {
+        return $this->hasMany(User::class , 'created_by');
     }
 }
