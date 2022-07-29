@@ -159,7 +159,7 @@
 
                     <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-like-count">
-                        {{ post.stats.engagement }}
+                        {{ post.stats.engagement === "0" ? 0 :  post.stats.engagement}}
                       </div>
                       <div
                         class="m-text"
