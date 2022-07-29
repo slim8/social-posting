@@ -34,7 +34,6 @@ export class AccountPagesComponent implements OnInit {
         this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
             next: (event: any) => {
                 this.container = event.pages;
-                console.log(event);
             },
             error: err => {
                 this.shared.createMessage('error', err.error.errors);

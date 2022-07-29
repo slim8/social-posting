@@ -9,9 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Account extends ExtendedModel
 {
     use HasFactory;
-    use SoftDeletes;
 
-    protected $hidden = ['pivot'];
+    protected $hidden = ['pivot', "deleted_at"];
 
     public static $STATUS_DISCONNECTED = 'DISCONNECTED';
 

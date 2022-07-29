@@ -48,7 +48,11 @@ export class RegisterComponent implements OnInit {
                             this.router.navigate(['/auth/login']);
                         },
                         error: (error) => {
-                            this.createMessage('error', error.error.message);
+                            
+                            error.error.errors.forEach((item : any) => {
+                                this.createMessage('error', item);
+                            });
+                            
                             this.isLoading = false;
                         },
                         complete: () => {
@@ -61,6 +65,7 @@ export class RegisterComponent implements OnInit {
                 if (control.invalid) {
                     control.markAsDirty();
                     control.updateValueAndValidity({ onlySelf: true });
+                    this.isLoading = false;
                 }
             });
         }

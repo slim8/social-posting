@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
@@ -23,6 +24,7 @@ const trashIcon = '<svg width="14" height="15" viewBox="0 0 14 15" fill="none" x
 })
 export class AccountsComponent implements OnInit {
 
+    accountName: string = "";
     listOfPages: any = [];
     currentUser: any = [];
     listpages: any = [];
@@ -30,6 +32,8 @@ export class AccountsComponent implements OnInit {
     user: any = [];
     validateForm!: FormGroup;
     isLoading: boolean = true;
+    userRoles:Array<string> = [];
+    isCompanyAdmin: boolean = false;
 
     constructor(
         private iconService: NzIconService,
@@ -47,21 +51,22 @@ export class AccountsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.validateForm = this.formBuilder.group({
-            myChoices: new FormArray([]),
-        });
-        this.getConnectedAccounts();
-        this.getPages();
-        if (this.router.url.includes('accounts')) {
-            this.sharedModule.initSideMenu('accounts');
-        }
+      this.validateForm = this.formBuilder.group({
+          myChoices: new FormArray([]),
+      });
+      this.getConnectedAccounts();
+      this.getPages();
+      if (this.router.url.includes('accounts')) {
+          this.sharedModule.initSideMenu('accounts');
+      }
+      this.userRoles = this.sharedModule.getuserRoles();
+      this.userRoles.includes('companyadmin')? this.isCompanyAdmin = true: this.isCompanyAdmin = false;
     }
 
     getPages() {
         this.service.getCurrentApprovedFBPages().subscribe(
             (success: any) => {
                 this.listOfPages = success.pages;
-                console.log(this.listOfPages);
             },
             (error) => {
                 this.listOfPages = [];
@@ -81,7 +86,8 @@ export class AccountsComponent implements OnInit {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
-                this.listpages = response.pages;
+              this.accountName = response.accountName;
+              this.listpages = response.pages;
                 if (param != 'add') {
                     this.getConnectedAccounts();
                 }
@@ -204,15 +210,40 @@ export class AccountsComponent implements OnInit {
 
     showDisconnectConfirm(id: any): void {
         this.modal.confirm({
-            nzTitle: 'Do you really want to disconnect this account?',
-            nzContent: '<b style="color: red;">You will have to connect this acocunt via facebook to reconnect</b>',
-            nzOkText: 'Yes',
+            nzTitle: '<b>Do you really want to disconnect from this page?</b>',
+            nzContent: '<span style="color: red;">You will have to connect this acocunt via facebook to reconnect</span>',
+            nzOkText: 'Disconnect',
             nzOkType: 'primary',
             nzOkDanger: true,
             nzOnOk: () => this.disconnectPage(id),
-            nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel')
+            nzCancelText: 'Cancel',
+            nzOnCancel: () => {}
         });
+    }
+
+    showDeleteConfirm(id: any): void {
+      this.modal.confirm({
+          nzTitle: 'Do you really want to delete this account?',
+          nzOkText: 'Delete',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.deletePage(id),
+          nzCancelText: 'Cancel',
+          nzOnCancel: () => console.log('Cancel')
+      });
+    }
+
+    showDeleteAccountConfirm(id: any): void {
+      this.modal.confirm({
+          nzTitle: 'Do you really want to delete this personnel account?',
+          nzContent: '<b style="color: red;">this account will be deleted permenantly</b>',
+          nzOkText: 'Yes',
+          nzOkType: 'primary',
+          nzOkDanger: true,
+          nzOnOk: () => this.deleteAccount(id),
+          nzCancelText: 'No',
+          nzOnCancel: () => console.log('Cancel')
+      });
     }
 
     reconnectPage(event: any, id: any) {
@@ -230,6 +261,38 @@ export class AccountsComponent implements OnInit {
     }
 
     deletePage (id:string) {
+      this.isLoading = true;
+      this.listOfPages = [];
+      this.accountsService.deletePage(id).subscribe({
+        next: (event: any) => {
 
+        },
+        error: err => {
+
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.getPages();
+        }
+      })
+    }
+
+    deleteAccount (id:string) {
+      this.isLoading = true;
+      this.listOfPages = [];
+      this.connectedAccounts = [];
+      this.accountsService.deleteAccount(id).subscribe({
+        next: (event: any) => {
+
+        },
+        error: err => {
+
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.getConnectedAccounts();
+          this.getPages();
+        }
+      })
     }
 }

@@ -17,6 +17,7 @@
                 [nzSize]="size"
                 nzMode="tags"
                 nzPlaceHolder="Please select"
+                (ngModelChange)="accountChange()"
               >
                 <nz-option
                   *ngFor="let option of listOfPages"
@@ -27,13 +28,14 @@
                     class="m-page-img"
                     [src]="option.pagePictureUrl"
                   /><label
-                    ><small class="m-page-item-provider">{{
+                    ><small class="m-page-item-provider m-small">{{
                       option.provider
                     }}</small>
                     - {{ option.pageName }}</label></nz-option>
               </nz-select>
             </nz-form-control>
           </div>
+          <span class="m-hidden" id="accountsFormController" i18n="AccountFormControl|Title for accounts Error@@accountsFormControl">Please fill the accounts field</span>
         </div>
 
         <div class="m-form-group">
@@ -52,7 +54,6 @@
               >
                 <div>
                   <i nz-icon nzType="plus"></i>
-                  <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
               <nz-modal
@@ -79,7 +80,6 @@
               >
                 <div>
                   <i nz-icon nzType="plus"></i>
-                  <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
             </div>
@@ -102,7 +102,7 @@
                   ></i>
                   <img
                     *ngIf="item"
-                    [src]="item.imgB64"
+                    [src]="item.imgB64 ? item.imgB64 : item.url "
                     (click)="changeSelectedVideo(item)"
                   />
                 </div>
@@ -164,6 +164,8 @@
               </nz-modal>
             </div>
           </div>
+          <span class="m-hidden" id="mediasFormController" i18n="MediaFormControl|Title for medias Error@@mediasFormControl">Please fill the media field</span>
+
         </div>
 
         <div class="m-form-group">
@@ -314,6 +316,7 @@
                     <div
                       class="m-previous-icon"
                       (click)="generatethumbnails('previous')"
+                      *ngIf="currentTimePosition  > 10"
                     >
                       <i nz-icon nzType="left" nzTheme="outline"></i>
                     </div>
@@ -329,6 +332,7 @@
                     <div
                       class="m-next-icon"
                       (click)="generatethumbnails('next')"
+                      *ngIf="selectedVideo && (currentTimePosition  < selectedVideo.duration - 10)"
                     >
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
@@ -404,6 +408,7 @@
                     <div
                       class="m-previous-icon"
                       (click)="generatethumbnails('previous')"
+                      *ngIf="currentTimePosition  > 10"
                     >
                       <i nz-icon nzType="left" nzTheme="outline"></i>
                     </div>
@@ -419,6 +424,7 @@
                     <div
                       class="m-next-icon"
                       (click)="generatethumbnails('next')"
+                      *ngIf="selectedVideo && (currentTimePosition  < selectedVideo.duration - 10)"
                     >
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
@@ -441,6 +447,8 @@
           *ngIf="!refresh && mediaList.length > 0 && instagramPreview"
           [mediaList]="mediaList"
           [message]="instagramMessage"
+          [avatarUrl]="avatarUrl"
+          [pageName]="pageName"
           (newItemEvent)="addMentions($event)"
         ></app-instagram-preview>
 
@@ -449,13 +457,15 @@
           [postDescription]="facebookMessage"
           accountName="accountname.test"
           [imgList]="mediaList"
+          [avatarUrl]="avatarUrl"
+          [pageName]="pageName"
         ></app-facebook-preview>
       </div>
     </div>
     <div class="m-action-buttons">
       <button
         class="m-button is-secondary no-transparent"
-        (click)="submitForm('DRAFT')"
+        (click)="uploadThumbnail('DRAFT')"
         nz-button
         [nzLoading]="isLoading"
         i18n="Save as Draft Button|Title for Save as draft button@@saveAsDraftButton"

@@ -74,13 +74,6 @@ class ApiAuthController extends Controller
             return response(['errors' => $validator->errors()->all()], 422);
         }
 
-        if (Company::where('phoneNumber', $request->phoneNumber)->first()) {
-            return $this->traitController->processResponse(false, ['message' => 'This Phone Number is Already exist']);
-        }
-
-        if (Company::where('email', $request->email)->first()) {
-            return $this->traitController->processResponse(false, ['message' => 'This Email is Already exist']);
-        }
         $company = Company::create([
             'name' => $request->companyName,
             'email' => $request->email,
@@ -110,7 +103,12 @@ class ApiAuthController extends Controller
 
         // Start Email Configuration
         $mailBody = ["mail" => $request->email, "password" => $password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
-        $this->traitController->index($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+
+        try{
+            $this->traitController->sendMail($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+        } catch(\Exception $e){
+            Log::channel('exception')->info($e->getMessage());
+        }
         // End Email Configuration
         Log::channel('info')->info('New company has been registred with email '.$request->email);
 
@@ -127,7 +125,7 @@ class ApiAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|string|email|max:255|unique:users',
             'address' => 'required|string|max:255',
             'postCode' => 'required|string|max:255',
             'city' => 'required|string|max:255',
@@ -136,6 +134,7 @@ class ApiAuthController extends Controller
         ], [
             'companyName.required' => 'This is a required message for company name',
         ]);
+
         if ($validator->fails()) {
             return response($validator->errors(), 422);
         }
@@ -156,6 +155,13 @@ class ApiAuthController extends Controller
         ]);
 
         $user->attachRole('user');
+
+        $mailBody = ["mail" => $request->email, "password" => $request->password , "loginUrl" => envValue('APP_URL').'/auth/login' ];
+        try{
+            $this->traitController->sendMail($mailBody, $request->email, 'Company Account Created', 'emails.registrationMail');
+        } catch(\Exception $e){
+            Log::channel('exception')->info($e->getMessage());
+        }
 
         Log::channel('info')->info('company admin Id :'.$this->traitController->getCurrentId().' has add teh user '.$request->email.' to his company : '.$actualCompanyId);
         return $this->traitController->processResponse(true, [

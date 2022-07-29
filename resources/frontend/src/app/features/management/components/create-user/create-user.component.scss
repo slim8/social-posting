@@ -15,10 +15,14 @@
             }
         }
         .m-form {
-            width : 50%;
-            @media screen and (max-width : 1000px){
-                width : 100%;
+            width : 100%;
+            background: white;
+            padding: 20px;
+
+            @include mq(desktop){
+                width : 50%;
             }
+
             >.m-form-group{
                 margin : 20px;
                 text-transform: uppercase;
@@ -26,43 +30,76 @@
                 font-size: 12px;
                 line-height: 16px;
                 font-style: normal;
-                >div.m-form-input{
+                >.m-form-input{
                     display : flex;
                     justify-content:center;
                     align-items: center;
-                    border: 0.5px solid $color-media-black-opacity-half;
+                    border: 1px solid $color-media-primary-orange;
+                    height: 45px;
                     margin: 10px 0 0 0;
+
+                    >input{
+                        height: 100%;
+                        
+                        &:focus , &:hover{
+                            border-color: $color-media-dark-orange;
+                        }
+                    }
+
                     >i{
                         padding: 10px ;
                         cursor: pointer;
                     }
                 }
-                >div.m-form-input-password{
+                >.m-form-input-password{
                     display : flex;
                     justify-content:center;
                     align-items: center;
-                    border: 0.5px solid $color-media-black-opacity-half;
+                    border: 1px solid $color-media-primary-orange;
+                    height: 45px;
                     margin: 10px 0 0 0;
+
+                    >input{
+                        height: 100%;
+
+                        &:focus , &:hover{
+                            border-color: $color-media-dark-orange;
+                        }
+                    }
+
                     >i{
-                        padding: 10px ;
+                        padding: 15px ;
                         cursor: pointer;
+                        height: 100%;
+                        background: $color-media-primary-orange;
+                        color: $color-white;
+                        font-size: 15px;
                     }
                 }
                 >.error {
                     color : red;
                     padding: 5px 0;
                 }
+
+                nz-switch{
+                    margin: 10px 0 0 0;
+                }
             }
         
             >button{
                 margin : 20px;
+                height: 39px;
+                padding: 10px 30px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
                 &.m-primary-button{
-                    background: $color-media-black-opacity-30;
-                    color: #fff;
-                    border-color: $color-media-black-opacity-30;
+                    background: $color-media-primary-orange;
+                    color: $color-white;
+                    border-color: $color-media-primary-orange;
                     &:hover{
-                        background: $color-media-secondary-button;
-                        border-color: $color-media-black-opacity-half;
+                        background: $color-media-dark-orange;
                     }
                 }
             }

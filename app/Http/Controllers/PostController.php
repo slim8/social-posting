@@ -180,6 +180,7 @@ class PostController extends Controller
                 $posts[] = $postContent;
             }
         }
+
         if ($posts) {
             return $this->traitController->processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
         } else {
@@ -203,30 +204,45 @@ class PostController extends Controller
 
         $isCompanyAdmin = $this->traitController->getUserObject()->hasRole('companyadmin') ? true : false;
         $userCompanyId = $this->traitController->getUserObject()->companyId;
-
-        foreach ($request->postsIds as $postId) {
+        foreach (array_unique($request->postsIds) as $postId) {
             $currentPost = Post::where('id', $postId)->first();
+
+            if(!$currentPost){
+                $errMesage = 'Post '.$postId.' Not Found';
+                $errorLog = $errMesage;
+                Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
+                continue;
+            }
 
             $isDraft = $currentPost->status === 'DRAFT';
             $createdBy = $currentPost->createdBy;
             $postCompany = User::where('id', $createdBy)->first()->companyId;
 
             if ($currentPost->deletedAt) {
-                $errorLog = 'Post '.$postId.' Not Found';
+                $errMesage = 'Post '.$postId.' Not Found';
+                $errorLog = $errMesage;
+                Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
 
             if (!$isDraft) {
-                $errorLog[] = 'Post '.$postId.' Could not be deleted because is not DRAFT';
+                $errMesage = 'Post '.$postId.' Could not be deleted because is not DRAFT';
+                $errorLog[] =$errMesage;
+                Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
             if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
-                $errorLog[] = "You don't have right to delete Post ".$postId;
+                $errMesage = "You don't have right to delete Post ".$postId;
+                $errorLog[] =$errMesage;
+                Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
             if (!$isCompanyAdmin && $createdBy !== $this->traitController->getCurrentId()) {
-                $errorLog[] = "You don't have right to delete Post ".$postId;
+                $errMesage = "You don't have right to delete Post ".$postId;
+                $errorLog[] =$errMesage;
+                Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
         }
 
         if ($errorLog) {
+
             return $this->traitController->processResponse(false, ['errors' => $errorLog]);
         }
 
@@ -250,13 +266,11 @@ class PostController extends Controller
             foreach ($accountPosts as $accountPost) {
                 $accountPostId = $accountPost->id;
                 PostHashtag::where('accountPostId', $accountPostId)->delete();
-
                 AccountPost::where('postId', $postId)->delete();
             }
         }
-
+        Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' delete Draft Post Id: '.$postId);
         Post::where('id', $postId)->delete();
-
         return true;
     }
 
@@ -277,13 +291,14 @@ class PostController extends Controller
         $postObject = Post::where('id', $postId)->first();
         $postImage = PostMedia::where('type', 'image')->where('postId', $postId)->get();
         $postVideo = PostMedia::where('type', 'video')->where('postId', $postId)->get();
+        $accountPost = AccountPost::where('postId', $postId)->first();
 
         if ($postVideo) {
             foreach ($postVideo as $video) {
                 $videoObject = [];
                 $videoObject['url'] = $video->url;
-                $videoObject['seconde'] = null;
-                $videoObject['thumbnail'] = null;
+                $videoObject['seconde'] = $video->thumbnailSeconde;
+                $videoObject['thumbnail'] = $video->thumbnailLink;
                 $videos[] = $videoObject;
             }
         }

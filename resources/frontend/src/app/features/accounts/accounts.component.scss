@@ -155,9 +155,10 @@
                             @include textstyle-size-16-bold();
                         }
                         > .m-date {
-                            @include textstyle-size-12();
-                            color: $color-media-black-opacity-half;
-                            margin-bottom: 19px;
+                          display: inline-flex;
+                          @include textstyle-size-12();
+                          color: $color-media-black-opacity-half;
+                          margin-bottom: 19px;
                         }
                         > .m-followers {
                             @include textstyle-size-12();
@@ -167,6 +168,9 @@
 
                     > .m-alert {
                         width: 24px;
+                        &.m-full-width {
+                          width: 178px;
+                        }
                         position: relative;
 
                         &:hover {
@@ -351,6 +355,7 @@
                     > td {
                         > label {
                             display: flex;
+                            position: relative;
                             align-items: center;
 
                             > input {
@@ -376,6 +381,13 @@
                                     height: 20px;
                                 }
                             }
+
+                            > .m-provider-logo {
+                              position: absolute;
+                              left: 63px;
+                              top: 23px;
+                              width: 26px;
+                            }
                         }
                     }
                 }
@@ -383,6 +395,9 @@
 
             > .m-submit-button {
                 float: right;
+                > button {
+                  @include textstyle-size-14-bold();
+                }
             }
         }
 
@@ -436,10 +451,12 @@
 
                 > .m-success-title {
                     @include textstyle-size-14-bold();
+                    position: relative;
 
                     > img {
-                        margin-right: 18px;
-                        width: 17px;
+                      position: absolute;
+                      left: -42px;
+                      top: -7px;
                     }
                 }
 

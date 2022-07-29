@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Socials;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\TraitController;
 use App\Http\Traits\Services\FacebookService;
 use App\Models\Account;
@@ -22,11 +23,13 @@ class FacebookController extends Controller
     protected $imageManager;
     protected $facebookService;
     protected $traitController;
+    protected $fileController;
 
     public function __construct()
     {
         $this->facebookService = new FacebookService();
         $this->traitController = new TraitController();
+        $this->fileController = new FileController();
         $this->instagramController = new InstagramController();
         $this->imageManager = new ImageManager();
     }
@@ -34,8 +37,9 @@ class FacebookController extends Controller
     public function getFacebookPersonalInformations($accessToken)
     {
         $responseObject = [];
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name&access_token='.$accessToken);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name,picture&access_token='.$accessToken);
         $responseObject['name'] = $response->json('name');
+        $responseObject['picture'] = isset($response->json('picture')['data']) ? $response->json('picture')['data']['url'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
 
         return $responseObject;
     }
@@ -62,7 +66,7 @@ class FacebookController extends Controller
                     'createdBy' => $adminId,
                     'accountUserId' => $accountUserId,
                     'provider' => 'facebook',
-                    'profilePicture' => 'picture file',
+                    'profilePicture' => $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$accountUserId.uniqid(),$personalInformation['picture']),
                     'profileName' => $personalInformation['name'] ? $personalInformation['name'] : '',
                     'userName' => '',
                 ]);
@@ -196,10 +200,11 @@ class FacebookController extends Controller
                 $tagsString = $tagsString.'#'.$this->traitController->formatTags($tag).' ';
             }
         }
-        $object['message'] = $object['message'].$tagsString;
+
+        $object['message'] = (isset($object['message']) ? $object['message'] : '').$tagsString;
 
         if ($videos) {
-            $videos = json_decode($videos[0], true);
+            $videos = gettype($videos[0]) == 'array' ? $videos[0] : json_decode($videos[0], true);
             $object['file_url'] = $videos['url'];
             $object['publihshed'] = true;
 
@@ -293,7 +298,7 @@ class FacebookController extends Controller
         $actualCompanyId = $this->traitController->getCompanyId();
 
         $id = $facebookPage['pageId'];
-        $pageFacebookPageLink = $facebookPage['pagePictureUrl'];
+        $pageFacebookPageLink = $this->fileController->storeFromLinkToDisk($this->traitController->getCurrentId().$id.uniqid(),$facebookPage['pagePictureUrl']);
         $pageToken = $facebookPage['pageToken'];
         $category = $facebookPage['category'];
         $name = $facebookPage['pageName'];

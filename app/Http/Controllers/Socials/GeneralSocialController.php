@@ -44,13 +44,18 @@ class GeneralSocialController extends Controller
         $inc = 0;
         $validator = Validator::make($request->all(), [
             'posts' => 'required',
-            'message' => 'string|max:255',
             'status' => 'string|max:255',
         ]);
         if ($validator->fails()) {
+            if(!$request->posts){
+                $errorLog['accounts'][] = "The Account field is required.";
+            }
+            if(!$request->status){
+                $errorLog['status'][] = "The Status field is required.";
+            }
             Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To create a new post with Invalid Request');
-
-            return response(['errors' => $validator->errors()->all()], 422);
+            //return response(['errors' => $validator->errors()->all()], 422);
+            return $this->traitController->processResponse(false , ["errors" => $errorLog]);
         }
 
         $images = $request->images;
@@ -62,8 +67,8 @@ class GeneralSocialController extends Controller
         if ($requestPostId) {
             if (Post::where('id', $requestPostId)->where('status', POST::$STATUS_PUBLISH)->first()) {
                 Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' Try To edit a Published post Id '.$requestPostId);
-
-                return $this->traitController->processResponse(false, ['message' => 'This Post Is Published and cannot be Updated Or Published']);
+                $error["errors"][] = 'This Post Is Published and cannot be Updated Or Published';
+                return $this->traitController->processResponse(false, ['errors' => $error]);
             }
         }
         if ($request->file('sources')) {
@@ -95,11 +100,14 @@ class GeneralSocialController extends Controller
         $validator = $this->utilitiesController->postValidator($postIds, $images, $videos);
 
         if (!$validator->status) {
-            Log::channel('exception')->notice('[sendToPost] User Id : '.$this->traitController->getCurrentId().' ==> '.$validator->message);
-
-            return $this->traitController->processResponse(false, ['message' => $validator->message]);
+            Log::channel('exception')->notice('[sendToPost] User Id : '.$this->traitController->getCurrentId().' ==> '.$validator->messageString);
+            return $this->traitController->processResponse(false, ['errors' => $validator->message]);
         }
 
+        if ($requestPostId) {
+            // Delete All Saved Account Posts
+            AccountPost::where('postId', $requestPostId)->delete();
+        }
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
 
@@ -117,9 +125,8 @@ class GeneralSocialController extends Controller
 
             if ($account && $accounPermission) {
                 if ($requestPostId) {
-                    // Delete All Saved Account Posts and hashtags
+                    // Delete All Saved hashtags
                     PostHashtag::where('accountPostId', $account->id)->delete();
-                    AccountPost::where('postId', $requestPostId)->delete();
                 }
 
                 $InstagramController = new InstagramController();
@@ -176,19 +183,25 @@ class GeneralSocialController extends Controller
                     }
 
                     if ($videos) {
-                        $videoCounter = 0;
+                        // $videoCounter = 0;
                         foreach ($videos as $video) {
                             $video = json_decode($video, true);
 
-                            if ($videoCounter == 0) {
+                            // if ($videoCounter == 0) {
                                 $videoThunb = $video;
-                            }
-                            ++$videoCounter;
+
+                                // var_dump($videoThunb);
+                                // die;
+                            // }
+                            // ++$videoCounter;
 
                             PostMedia::create([
                                 'url' => $video['url'],
                                 'postId' => $postId->id,
                                 'type' => 'video',
+                                'thumbnailSeconde' => isset($videoThunb["seconde"]) ? $videoThunb["seconde"] : null,
+                                'thumbnailLink' => isset($videoThunb["thumbnail"]) ? $videoThunb["thumbnail"] : null,
+                                'thumbnailRessource' => 'file',
                             ]);
                         }
                     }
@@ -222,9 +235,9 @@ class GeneralSocialController extends Controller
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
-                        'thumbnailSeconde' => isset($videoThunb['seconde']) ? $videoThunb['seconde'] : null,
-                        'thumbnailLink' => isset($videoThunb['thumbnail']) ? $videoThunb['thumbnail'] : null,
-                        'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
+                        // 'thumbnailSeconde' => isset($videoThunb['seconde']) ? $videoThunb['seconde'] : null,
+                        // 'thumbnailLink' => isset($videoThunb['thumbnail']) ? $videoThunb['thumbnail'] : null,
+                        // 'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
                         'accountId' => $post['accountId'],
                         'postIdProvider' => $postProviderId,
                         'localisationText' => null,
@@ -251,17 +264,17 @@ class GeneralSocialController extends Controller
                     }
                 } else {
                     Log::channel('facebook')->error('[sendToPost] User : '.$this->traitController->getCurrentId().' ==> Message : '.$postResponse['message']);
-                    $errorLog[] = $postResponse['message'];
+                    $errorLog["others"][]  = $postResponse['message'];
                 }
             } else {
                 $messageError = 'Cannot find a connected account Or permissions denied for ID  '.$post['accountId'];
-                $errorLog[] = $messageError;
+                $errorLog["accounts"][] = $messageError;
                 Log::channel('notice')->notice('[sendToPost] User : '.$this->traitController->getCurrentId().' ==> Message : '.$messageError);
             }
         }
 
         if ($errorLog) {
-            return $this->traitController->processResponse(false, ['message' => $errorLog]);
+            return $this->traitController->processResponse(false, ['errors' => $errorLog]);
         }
         Log::channel('info')->info('[sendToPost] User : '.$this->traitController->getCurrentId().' create or edit post : '.$postId->id.' successfuly');
 
@@ -390,6 +403,7 @@ class GeneralSocialController extends Controller
         }
         $facebookUserId = $request->id;
 
+        $facebookUserObject = $this->facebookController->getFacebookPersonalInformations($request->accessToken);
         $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', $this->traitController->getCurrentId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
         $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
@@ -408,7 +422,7 @@ class GeneralSocialController extends Controller
         if ($facebookResponse['AllPages']) {
             Log::channel('facebook')->info('User : '.$this->traitController->getCurrentId().' fetch his pages from Facebook user : '.$facebookUserId);
 
-            return $this->traitController->processResponse(true, ['pages' => $facebookResponse['AllPages']]);
+            return $this->traitController->processResponse(true, ['pages' => $facebookResponse['AllPages'] , 'accountName' => $facebookUserObject["name"]]);
         } else {
             return $this->traitController->processResponse(true, ['message' => 'No unauthorized accounts found']);
         }

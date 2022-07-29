@@ -72,9 +72,15 @@
               <li nz-menu-item>menu4 3rd menu item</li>
             </ul>
           </nz-dropdown-menu>
+          <a *ngIf="!loggedIn" class="m-login-button" (click)="showLoginModal()" i18n="MediaFactoryLoginButton|Title for Media factory login button@@mediaFactoryLoginButton">
+            <i nz-icon nzType="login" nzTheme="outline"></i> login to media factory
+          </a>
+          <a *ngIf="loggedIn" class="m-login-button" (click)="logOut()" i18n="MediaFactoryLogoutButton|Title for Media factory logout button@@mediaFactoryLogoutButton">
+            <i nz-icon nzType="logout" nzTheme="outline"></i> Logout of media factory
+          </a>
         </div>
         <div class="m-right">
-          <input type="text" class="m-search-form" placeholder="Suchen" />
+          <input type="text" class="m-search-form" placeholder="search" />
           <button class="m-button">
             <div class="m-button-icon">
               <i nz-icon nzType="ng-zorro:costum-edit"></i>
@@ -91,7 +97,8 @@
 
       <div class="m-album-items-container" *ngIf="!isLoading">
         <div class="m-album-item-container" *ngFor="let item of images">
-          <img nz-image [nzSrc]="item" alt="" class="m-album-item-image" />
+          <i nz-icon class="m-video-icon" *ngIf="item.type == 'video'" nzType="caret-right" nzTheme="outline"></i>
+          <img nz-image [nzSrc]="item.type == 'image' ? item.url : item.thumbnailLink" alt="" class="m-album-item-image" />
         </div>
         <br />
         <br />
@@ -108,6 +115,22 @@
       </div>
 
       <div class="m-gradient"></div>
+    </div>
+    <div *ngIf="displayLoginModal" class="m-login-modal">
+      <div class="m-modal-container">
+        <div class="m-header">
+          <div (click)="closeModal()" class="m-close-icon">
+            <img src="/assets/img/close.png" alt="close" />
+          </div>
+          <h3 i18n="LoginToMediaFactory|Title for login to media factory@@loginToMediaFactory">Login to Media Factory</h3>
+          <p i18n="LoginToMediaFactoryText|Title for login to media factory Text@@loginToMediaFactoryText">You'll be able to access all the media available to your account</p>
+        </div>
+        <div class="m-login-form">
+          <input type="text" class="m-input" placeholder="E-Mail Adresse" [(ngModel)]="credentials.email">
+          <input type="text" class="m-input" placeholder="Password" [(ngModel)]="credentials.password">
+          <button nz-button [nzLoading]="isLoadingButton" class="m-button is-primary no-transparent" (click)="login()" i18n="Login|Title for Login@@login">Login</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -22,14 +22,11 @@ export class AccountsPostsComponent implements OnInit {
     let id=atob(this.activatedRoute.snapshot.params["id"]);
     this.facebookSocialService.getPostsBypageId(id).subscribe({
       next: (response: any) => {
-        console.log('response',response);
         this.listPosts=response.posts;
       },
       error: err => {
-        console.log(err);
       },
       complete: () => {
-        console.log('complete');
       }
     })
   }
