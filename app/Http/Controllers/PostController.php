@@ -166,11 +166,38 @@ class PostController extends Controller
                 $postContent->subPosts = $subPosts;
             }
 
+            $postContent->status = true;
+            $postContent->statusObject = "Success";
             if ($getStat) {
                 if ($postContent->provider == 'facebook') {
-                    $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
+                    $statusObject = $this->facebookController->checkIfPostIdExist($postContent->id);
+                    if($statusObject){
+                        $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
+                    } else {
+                        $statsObject = [];
+                        $postContent->status = false;
+                        $postContent->statusObject = "Not Found";
+                        $statsObject['likes'] ="NA";
+                        $statsObject['comments'] = "NA";
+                        $statsObject['shares'] = "NA";
+                        $postContent->stats = $statsObject;
+                    }
+
                 } elseif ($postContent->provider == 'instagram') {
-                    $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
+
+                    $statusObject = $this->instagramController->checkIfPostIdExist($postContent->id);
+                    if($statusObject){
+                        $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
+                    } else {
+                        $statsObject = [];
+                        $postContent->status = false;
+                        $postContent->statusObject = "Not Found";
+                        $statsObject['engagement'] ="NA";
+                        $statsObject['impressions'] = "NA";
+                        $statsObject['saves'] = "NA";
+                        $postContent->stats = $statsObject;
+                    }
+                     $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
                 }
             }
 
