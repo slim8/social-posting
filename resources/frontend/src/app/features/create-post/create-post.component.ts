@@ -1,3 +1,4 @@
+import { PostService as SocialAccountsPostService } from './../social-accounts/services/post.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { PostService } from './../../shared/services/post.service';
 import { Component, OnInit } from '@angular/core';
@@ -86,17 +87,21 @@ export class CreatePostComponent implements OnInit {
     listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
 
     videoCounter = 0;
-    videoList: { id: number, file: File, videoUrl: string , duration : number }[] = [];
-    selectedThumbnailList: { id: number, imgB64: string, time: number }[] = [];
-    mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+    videoList: { id: number, file: File|null, videoUrl: string , duration : number |null }[] = [];
+    selectedThumbnailList: { id: number, imgB64: string |null , time: number , url :  string |null}[] = [];
+    mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     showAlbum: boolean = false;
     avatarUrl:string = "";
     pageName:string = "";
+
+    editDraftMode : boolean = false;
+    editDraftPost ={id : ''};
 
     constructor(
         private shared: SharedModule,
         private facebookSocialService: FacebookSocialService,
         private postService: PostService,
+        private SocialAccountsPostService: SocialAccountsPostService,
         private modal: NzModalService,
         private notification: NzNotificationService,
         private router: Router,
@@ -115,6 +120,7 @@ export class CreatePostComponent implements OnInit {
                 this.pageId = params['id'];
             }
         });
+
     }
 
     getPages(param: string) {
@@ -146,7 +152,9 @@ export class CreatePostComponent implements OnInit {
                 this.shared.createMessage('error', err.error.message);
             },
             complete: () => {
-
+                if (this.router.url.includes('drafts')) {
+                    this.getDraftToEdit(this.activatedRoute.snapshot.paramMap.get('draft'));
+                }
             }
         });
     }
@@ -233,21 +241,23 @@ export class CreatePostComponent implements OnInit {
         this.isLoading = true;
         let list = this.videoList.map(video => {
             let thumbnail = this.selectedThumbnailList.filter((thumbnail) => thumbnail.id == video.id)[0];
-            return { url: video.videoUrl, ...thumbnail, thumbnail: '' };
+            return { url: video.videoUrl , id: thumbnail.id,imgB64: thumbnail.imgB64 , time: thumbnail.time , thumbnail: thumbnail.url ? thumbnail.url: '' };
         })
 
         await list.forEach(async (videoObject) => {
-            await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
-                next: (response) => {
-                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                },
-                error: (err) => {
-                    this.shared.createMessage('error', err);
-                },
-                complete: () => {
+            if(videoObject.imgB64){
+                await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
+                    next: (response) => {
+                        this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
+                    },
+                    error: (err) => {
+                        this.shared.createMessage('error', err);
+                    },
+                    complete: () => {
 
-                }
-            });
+                    }
+                });
+            }
         })
         setTimeout(() => {
             this.submitForm(param);
@@ -310,16 +320,25 @@ export class CreatePostComponent implements OnInit {
       formData.append('status', param);
       formData.append('message', this.message);
 
-      if (formData) {
-          this.facebookSocialService.postToSocialMedia(formData).subscribe({
-              next: (event) => {
+        if(this.editDraftMode){
+            formData.append('originalId', this.editDraftPost.id);
+            this.videosList.forEach((videoObject) => {
+                if(videoObject['seconde']){
+                    formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+                }
+            })
+        }
+
+        if (formData) {
+            this.facebookSocialService.postToSocialMedia(formData).subscribe({
+                next: (event) => {
 
               },
               error: (err) => {
                   if (err.error.errors) {
-                      err.error.errors.forEach((error: any) => {
-                          this.shared.createMessage('error', error);
-                      });
+                    Object.keys(err.error.errors).forEach(key => {
+                      this.shared.createMessage('error', err.error.errors[key][0]);
+                    });
                   }
                   else {
                       this.shared.createMessage('error', err.error.message);
@@ -372,29 +391,30 @@ export class CreatePostComponent implements OnInit {
                 }
                 this.mediaId++;
                 img.id = this.mediaId;
-                img.url = elem.response.files.url;
-                img.type = elem.response.files.type;
+                if(elem.response){
+                    img.url = elem.response.files.url;
+                    img.type = elem.response.files.type;
+                }else{
+                    img.url = elem.url;
+                    img.type = 'image';
+                }
+
                 this.urlLinks.push(img);
             })
-
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
             this.mediaChange();
         }
-        else if (event.type == 'removed') {
-            this.refreshPages();
-            this.mediaId = 0;
-            this.urlLinks = [];
 
-            event.fileList.forEach((elem: any) => {
-                let img = {
-                    id: 0,
-                    url: "",
                     type: ""
                 }
                 this.mediaId++;
                 img.id = this.mediaId;
-                img.url = elem.response.files.url;
-                img.type = elem.response.files.type;
+                if(elem.response){
+                    img.url = elem.response.files.url;
+                    img.type = elem.response.files.type;
+                }else{
+                    img.url = elem.url;
+                    img.type = 'image';
+                }
                 this.urlLinks.push(img);
             })
             this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
@@ -475,7 +495,7 @@ export class CreatePostComponent implements OnInit {
             if (newVideo) {
                 this.selectedThumbnail.imgB64 = thumbArray[0].imgB64 as string;
                 this.selectedThumbnail.time = thumbArray[0].time as number;
-                this.selectedThumbnailList.push({ id: this.selectedVideo.id, imgB64: this.selectedThumbnail.imgB64, time: this.selectedThumbnail.time })
+                this.selectedThumbnailList.push({ id: this.selectedVideo.id, imgB64: this.selectedThumbnail.imgB64, time: this.selectedThumbnail.time , url : null})
             }
             this.leadThumbnail = false;
         })
@@ -491,7 +511,7 @@ export class CreatePostComponent implements OnInit {
                 selectedThumbnail.time = item.time;
             }
         })
-        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     }
 
     //upload image changes
@@ -524,13 +544,13 @@ export class CreatePostComponent implements OnInit {
         }
     }
 
-    changeSelectedVideo(item: { id: number, imgB64: string, time: number }) {
+    changeSelectedVideo(item: { id: number, imgB64:  string|null, time: number , url : string|null }) {
         this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
         this.generatethumbnails('next');
         this.currentTimePosition = -10;
     }
 
-    deleteVideo(item: { id: number, imgB64: string, time: number }) {
+    deleteVideo(item: { id: number, imgB64: string|null, time: number , url : string|null }) {
         this.modal.confirm({
             nzTitle: 'Are you sure delete this video?',
             nzContent: '<b style="color: red;">remove video </b>',
@@ -552,7 +572,7 @@ export class CreatePostComponent implements OnInit {
                     this.availableVideos = false;
                 }
                 this.refreshPages();
-                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+                this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
             },
             nzCancelText: 'No',
             nzOnCancel: () => {}
@@ -626,5 +646,93 @@ export class CreatePostComponent implements OnInit {
             }
         })
         return result;
+    }
+
+    getDraftToEdit(draft : string | null){
+        this.editDraftMode = true ;
+        this.SocialAccountsPostService.getDraft(draft).subscribe({
+            next: (event: any) => {
+
+                this.editDraftPost = event.post;
+
+                let imageList  : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "image").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
+                        // TODO :: to show mention on edit draft
+                        // this.mentions.push(...item.mentions.map((montion : {username : string , posX : string , posY : string , id : number}) => ({
+                        //     username : montion.username ,
+                        //     posX : montion.posX,
+                        //     posY : montion.posY,
+                        //     image : key ,
+                        //     id : montion.id
+                        // })));
+                        let img = {
+                            id: 0,
+                            url: "",
+                            type: ""
+                        }
+                        this.mediaId++;
+                        img.id = this.mediaId;
+                        img.url = item.url;
+                        img.type = item.type;
+                        this.urlLinks.push(img);
+
+                    return {
+                            uid: -(key+1) ,
+                            name: item.url ,
+                            status: 'done',
+                            url: item.url,
+                            thumbUrl: item.url
+                          }
+                } )
+                this.fileList = [...imageList];
+                this.message = event.post.message ;
+                this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
+
+                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
+
+                    this.mediaList.push( { id: -(key+1), url: item.thumbnailLink, type: "video" })
+                    this.videoList.push({ id: this.videoCounter, file: null , videoUrl: item.url , duration : null });
+                    this.selectedThumbnailList.push( { id: this.videoCounter, imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
+                    this.videoCounter ++;
+                    return {
+                            uid: -(key+1) ,
+                            name: item.url ,
+                            status: 'done',
+                            url: item.url,
+                            seconde: item.thumbnailSeconde,
+                            thumbUrl: item.thumbnailLink
+                          }
+                } )
+
+                this.videosList = [...DraftVideoList];
+
+                    let selectedAccountId = event.post.subPosts.map((item : {accountId : any , provider : string , message : string , hashtags : [{name : string}]}) => {
+
+
+
+                        if(item.provider == "facebook"){
+                            this.facebookMessage = item.message;
+                            if(item.hashtags.length){
+                                this.listOfTagOptionsFacebook = [...item.hashtags.map(tag => tag.name)]
+                            }
+                        }else if(item.provider == "instagram"){
+                            this.instagramMessage = item.message;
+                            if(item.hashtags.length){
+                                this.listOfTagOptionsInsta = [...item.hashtags.map(tag => tag.name)]
+                            }
+                        }
+
+                        return item.accountId;
+                    } )
+                    let selectedAccount = this.listOfPages.filter((item : {id : any}) => selectedAccountId.includes(item.id)).map(item => item.id+'|'+item.provider )
+                    this.accountsValue = [...selectedAccount];
+
+            },
+            error: err => {
+
+            },
+            complete: () => {
+
+            }
+        });
     }
 }

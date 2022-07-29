@@ -86,6 +86,7 @@
           <button
             class="m-button is-primary"
             i18n="CreateNew|Title for the Create new@@createNew"
+            routerLink="/application/create-post"
           >
             <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
             Create new
@@ -147,7 +148,7 @@
                 />
 
                 <img
-                  src="{{ item.thumbnailLink }}"
+                  src="{{ item.postMedia[0].thumbnailLink }}"
                   alt=""
                   *ngIf="item.postMedia.length > 0 && item.postMedia[0].type === 'video' "
                 />

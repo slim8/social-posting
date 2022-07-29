@@ -13,15 +13,18 @@ class PostMedia extends ExtendedModel
         'url',
         'type',
         'postId',
+        'thumbnailSeconde',
+        'thumbnailLink',
+        'thumbnailRessource',
     ];
 
     public function post()
     {
-        $this->belongsTo(Post::class);
+        return $this->belongsTo(Post::class);
     }
 
     public function mentions()
     {
-        return $this->hasMany(Mentions::class , 'postMediaId');
+        return $this->hasMany(Mentions::class, 'postMediaId');
     }
 }

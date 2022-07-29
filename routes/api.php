@@ -30,9 +30,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$redirect = new RedirectIfAuthenticated();
-$request = new Request();
-
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
@@ -97,4 +94,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], f
     Route::post('/change-password', [ProfileController::class, 'changePassword']);
     Route::get('/news',[ NewsController::class ,'index' ]);
     Route::get('/news/{id}',[ NewsController::class ,'show' ]);
+    Route::get('/files/{companyName}',[ FileController::class ,'getCompanyMedia' ]);
 });
+
+

@@ -20,6 +20,7 @@ const openIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xm
 })
 export class DashboardComponent implements OnInit {
 
+    accountName: string = "";
     isVisible: boolean = true;
     isLoadingPages: boolean = true;
     isLoadingPosts: boolean = true;
@@ -82,14 +83,13 @@ export class DashboardComponent implements OnInit {
     }
 
     getNews() {
-
         this.newsService.getNewsList().subscribe({
           next: (event: any) => {
               this.news = event.news.filter((item : any , index : number) => (index < 4) );
               console.log(this.news);
             },
           error: err => {
-            
+
           },
           complete: () => {
           }
@@ -116,6 +116,7 @@ export class DashboardComponent implements OnInit {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
+                this.accountName = response.accountName;
                 this.listpages = response.pages;
                 this.getConnectedAccounts();
                 this.showModal();

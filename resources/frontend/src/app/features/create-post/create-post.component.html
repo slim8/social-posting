@@ -54,7 +54,6 @@
               >
                 <div>
                   <i nz-icon nzType="plus"></i>
-                  <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
               <nz-modal
@@ -81,7 +80,6 @@
               >
                 <div>
                   <i nz-icon nzType="plus"></i>
-                  <div style="margin-top: 8px" i18n="Upload|Title for upload@@upload">Upload</div>
                 </div>
               </nz-upload>
             </div>
@@ -104,7 +102,7 @@
                   ></i>
                   <img
                     *ngIf="item"
-                    [src]="item.imgB64"
+                    [src]="item.imgB64 ? item.imgB64 : item.url "
                     (click)="changeSelectedVideo(item)"
                   />
                 </div>
