@@ -110,7 +110,7 @@ export class CreatePostComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.getPages('mixed');
+        this.getPages('mixed', true);
         const mentioned = document.querySelector('.mentioned');
         if (this.router.url.includes('create-post')) {
             this.sharedModule.initSideMenu('create-post');
@@ -123,7 +123,7 @@ export class CreatePostComponent implements OnInit {
         
     }
 
-    getPages(param: string) {
+    getPages(param: string , fromInit = false) {
         this.listOfPages = [];
         this.accountsValue = [];
         this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
@@ -152,7 +152,7 @@ export class CreatePostComponent implements OnInit {
                 this.shared.createMessage('error', err.error.message);
             },
             complete: () => {
-                if (this.router.url.includes('drafts')) {
+                if (this.router.url.includes('drafts') && fromInit ) {
                     this.getDraftToEdit(this.activatedRoute.snapshot.paramMap.get('draft'));
                 }
             }
