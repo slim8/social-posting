@@ -142,7 +142,8 @@
                 <input type="checkbox" class="m-checkbox-input" [value]="item.postId" #itemValue (click)="check($event, itemValue.value)" />
               </td>
               <td class="m-icon">
-                <img src="/assets/img/test-images/image.svg" alt="" />
+                <img src="/assets/img/test-images/image.svg" alt="" *ngIf="item.postMedia.length > 0 && item.postMedia[0].type != 'video' " />
+                <i nz-icon nzType="play-square" style ="color:#b2b2b2" *ngIf="item.postMedia.length > 0 && item.postMedia[0].type == 'video'"></i>
               </td>
               <td class="m-image">
                 <nz-skeleton-element
@@ -153,8 +154,15 @@
                 <img
                   src="{{ item.thumbnailLink? item.thumbnailLink : item.postMedia[0].url }}"
                   alt=""
-                  *ngIf="item.postMedia.length > 0"
+                  *ngIf="item.postMedia.length > 0 && item.postMedia[0].type != 'video' "
                 />
+
+                <img
+                  src="{{ item.postMedia[0].thumbnailLink }}"
+                  alt=""
+                  *ngIf="item.postMedia.length > 0 && item.postMedia[0].type === 'video' "
+                />
+
               </td>
 
               <td class="m-content">
@@ -191,9 +199,8 @@
               </td>
               <td class="m-actions">
                 <div class="m-left">
-                  <a
-                    href="{{ item.url }}"
-                    target="_blank"
+                  <span
+                    [routerLink]="['/application/drafts/edit' , item.postId]"
                     class="m-button is-disabled"
                   >
                     <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
@@ -204,7 +211,7 @@
                         Text@@continueEditing"
                       >Continue editing
                     </span>
-                  </a>
+                  </span>
                 </div>
                 <div class="m-right">
                   <button class="m-button is-primary" (click)="showPublishDraftModal(item.postId)">
