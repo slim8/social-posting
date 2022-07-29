@@ -376,6 +376,7 @@ export class CreatePostComponent implements OnInit {
                 img.type = elem.response.files.type;
                 this.urlLinks.push(img);
             })
+
             this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
             this.mediaChange();
         }
