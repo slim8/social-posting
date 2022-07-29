@@ -1,6 +1,7 @@
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzIconService } from 'ng-zorro-antd/icon';
+import { Event , Router } from '@angular/router';
 
 const dashboardIcon = '<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 12.5H23.5V10.5H16V12.5ZM24 13V23.5H26V13H24ZM23.5 24H16V26H23.5V24ZM15.5 23.5V13H13.5V23.5H15.5ZM2.5 2H8.5V0H2.5V2ZM9 2.5V13H11V2.5H9ZM8.5 13.5H2.5V15.5H8.5V13.5ZM2 13V2.5H0V13H2ZM2.5 13.5C2.22386 13.5 2 13.2761 2 13H0C0 14.3807 1.11929 15.5 2.5 15.5V13.5ZM9 13C9 13.2761 8.77614 13.5 8.5 13.5V15.5C9.88071 15.5 11 14.3807 11 13H9ZM8.5 2C8.77614 2 9 2.22386 9 2.5H11C11 1.11929 9.88071 0 8.5 0V2ZM2.5 0C1.11929 0 0 1.11929 0 2.5H2C2 2.22386 2.22386 2 2.5 2V0ZM2.5 20H8.5V18H2.5V20ZM9 20.5V23.5H11V20.5H9ZM8.5 24H2.5V26H8.5V24ZM2 23.5V20.5H0V23.5H2ZM2.5 24C2.22386 24 2 23.7761 2 23.5H0C0 24.8807 1.11929 26 2.5 26V24ZM9 23.5C9 23.7761 8.77614 24 8.5 24V26C9.88071 26 11 24.8807 11 23.5H9ZM8.5 20C8.77614 20 9 20.2239 9 20.5H11C11 19.1193 9.88071 18 8.5 18V20ZM2.5 18C1.11929 18 0 19.1193 0 20.5H2C2 20.2239 2.22386 20 2.5 20V18ZM16 2H23.5V0H16V2ZM24 2.5V5.5H26V2.5H24ZM23.5 6H16V8H23.5V6ZM15.5 5.5V2.5H13.5V5.5H15.5ZM16 6C15.7239 6 15.5 5.77614 15.5 5.5H13.5C13.5 6.88071 14.6193 8 16 8V6ZM24 5.5C24 5.77614 23.7761 6 23.5 6V8C24.8807 8 26 6.88071 26 5.5H24ZM23.5 2C23.7761 2 24 2.22386 24 2.5H26C26 1.11929 24.8807 0 23.5 0V2ZM16 0C14.6193 0 13.5 1.11929 13.5 2.5H15.5C15.5 2.22386 15.7239 2 16 2V0ZM16 24C15.7239 24 15.5 23.7761 15.5 23.5H13.5C13.5 24.8807 14.6193 26 16 26V24ZM24 23.5C24 23.7761 23.7761 24 23.5 24V26C24.8807 26 26 24.8807 26 23.5H24ZM23.5 12.5C23.7761 12.5 24 12.7239 24 13H26C26 11.6193 24.8807 10.5 23.5 10.5V12.5ZM16 10.5C14.6193 10.5 13.5 11.6193 13.5 13H15.5C15.5 12.7239 15.7239 12.5 16 12.5V10.5Z" fill="{{color: #FFF}}"/></svg>';
 const profileIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9696 17.5047L15.5225 18.3379L14.9696 17.5047ZM5.03036 17.5047L4.47747 18.3379L5.03036 17.5047ZM9 15H11V13H9V15ZM2 10C2 5.58172 5.58172 2 10 2V0C4.47715 0 0 4.47715 0 10H2ZM10 2C14.4183 2 18 5.58172 18 10H20C20 4.47715 15.5228 0 10 0V2ZM12 8C12 9.10457 11.1046 10 10 10V12C12.2091 12 14 10.2091 14 8H12ZM10 10C8.89543 10 8 9.10457 8 8H6C6 10.2091 7.79086 12 10 12V10ZM8 8C8 6.89543 8.89543 6 10 6V4C7.79086 4 6 5.79086 6 8H8ZM10 6C11.1046 6 12 6.89543 12 8H14C14 5.79086 12.2091 4 10 4V6ZM11 15C12.5303 15 13.7943 16.1467 13.9772 17.6273L15.9621 17.3821C15.657 14.9118 13.5525 13 11 13V15ZM18 10C18 12.7844 16.5784 15.2371 14.4167 16.6714L15.5225 18.3379C18.2189 16.5488 20 13.4826 20 10H18ZM14.4167 16.6714C13.1515 17.511 11.6344 18 10 18V20C12.0398 20 13.9397 19.3882 15.5225 18.3379L14.4167 16.6714ZM6.02282 17.6273C6.20567 16.1467 7.46968 15 9 15V13C6.44747 13 4.34299 14.9118 4.0379 17.3821L6.02282 17.6273ZM10 18C8.36561 18 6.84849 17.511 5.58326 16.6714L4.47747 18.3379C6.06034 19.3882 7.96025 20 10 20V18ZM5.58326 16.6714C3.42161 15.2371 2 12.7844 2 10H0C0 13.4826 1.78112 16.5488 4.47747 18.3379L5.58326 16.6714Z" fill="white"/></svg>';
@@ -28,10 +29,27 @@ export class SidebarComponent implements OnInit {
     @Input() isCollapsed: boolean | undefined;
     roles: any = null;
     timeout: any;
+    isCreatePost: boolean =false;
 
     constructor(
         private iconService: NzIconService,
-        private jwtService: JwtHelperService) {
+        private jwtService: JwtHelperService,
+        private router: Router
+        ) {
+          this.router.events.subscribe({
+            next: (val : any) => {
+             if(val.url=="/application/create-post") {
+              this.isCreatePost = true;
+              this.openSidenav();
+             }
+            },
+            error: err => {
+
+            },
+            complete: () => {
+
+            }
+          })
         this.iconService.addIconLiteral('ng-zorro:dashboard', dashboardIcon);
         this.iconService.addIconLiteral('ng-zorro:profile', profileIcon);
         this.iconService.addIconLiteral('ng-zorro:folder', folderIcon);
@@ -53,8 +71,10 @@ export class SidebarComponent implements OnInit {
         this.roles = this.jwtService.decodeToken().data.roles;
         const sideNav = document.querySelector('.mod-sidebar')?.parentElement?.parentElement;
         const sideNavMenu = document.querySelector('.mod-sidebar');
-        sideNav?.addEventListener('mouseover', this.openSidenav);
-        sideNav?.addEventListener('mouseleave', this.closeSidenav);
+        if(!this.isCreatePost ) {
+          sideNav?.addEventListener('mouseover', this.openSidenav);
+          sideNav?.addEventListener('mouseleave', this.closeSidenav);
+        }
         sideNavMenu?.addEventListener('click', this.toggleActiveItem);
     }
 

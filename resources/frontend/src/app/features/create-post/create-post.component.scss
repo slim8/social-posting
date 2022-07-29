@@ -64,7 +64,23 @@
                         nz-select {
                           width: 100%;
                           max-width: 306px;
-
+                          position: relative;
+                          &:after {
+                            content: '';
+                            background-image: url('/../assets/img/svgs/check-icon.svg');
+                            position: absolute;
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            width: 9px;
+                            right: 20px;
+                            top: 18px;
+                            height: 9px;
+                            }
+                            &.ant-select-open{
+                              &:after {
+                                transform: rotate(180deg);
+                              }
+                            }
 
                         }
 

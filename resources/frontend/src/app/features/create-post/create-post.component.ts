@@ -11,6 +11,7 @@ import { generateVideoThumbnails } from './index';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
+
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -401,9 +402,19 @@ export class CreatePostComponent implements OnInit {
 
                 this.urlLinks.push(img);
             })
+
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
             this.mediaChange();
         }
+        else if (event.type == 'removed') {
+            this.refreshPages();
+            this.mediaId = 0;
+            this.urlLinks = [];
 
+            event.fileList.forEach((elem: any) => {
+                let img = {
+                    id: 0,
+                    url: "",
                     type: ""
                 }
                 this.mediaId++;
@@ -417,7 +428,7 @@ export class CreatePostComponent implements OnInit {
                 }
                 this.urlLinks.push(img);
             })
-            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64, type: "video" } })];
+            this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
             this.mediaChange();
         }
     }

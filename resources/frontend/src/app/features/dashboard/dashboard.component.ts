@@ -86,7 +86,6 @@ export class DashboardComponent implements OnInit {
         this.newsService.getNewsList().subscribe({
           next: (event: any) => {
               this.news = event.news.filter((item : any , index : number) => (index < 4) );
-              console.log(this.news);
             },
           error: err => {
 
