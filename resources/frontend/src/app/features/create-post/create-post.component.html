@@ -447,8 +447,8 @@
           *ngIf="!refresh && mediaList.length > 0 && instagramPreview"
           [mediaList]="mediaList"
           [message]="instagramMessage"
-          [avatarUrl]="avatarUrl"
-          [pageName]="pageName"
+          [avatarUrl]="avatarUrlInsta"
+          [pageName]="pageNameInsta"
           (newItemEvent)="addMentions($event)"
         ></app-instagram-preview>
 
@@ -457,8 +457,8 @@
           [postDescription]="facebookMessage"
           accountName="accountname.test"
           [imgList]="mediaList"
-          [avatarUrl]="avatarUrl"
-          [pageName]="pageName"
+          [avatarUrl]="avatarUrlFacebook"
+          [pageName]="pageNameFacebook"
         ></app-facebook-preview>
       </div>
     </div>
