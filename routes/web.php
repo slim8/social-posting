@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AngularController;
-use App\Http\Controllers\Functions\RoutersController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +18,10 @@ use App\Http\Controllers\Functions\RoutersController;
 //     return view('welcome');
 // });
 
+Route::any('/de/{any}', [AngularController::class, 'index'])->where('any', '^(?!api).*$');
+Route::any('/de', [AngularController::class, 'index'])->where('any', '^(?!api).*$');
 
-Route::any('/{any}', [AngularController::class, 'index'])->where('any', '^(?!api).*$');
-
+Route::any('/{any}', [AngularController::class, 'index'])->where('any', '^(?!api|de).*$');
 
 // Route::group(['middleware' => ['role:user']], function () {
 //     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
@@ -34,4 +34,4 @@ Route::any('/{any}', [AngularController::class, 'index'])->where('any', '^(?!api
 //     Route::get('/admin', 'App\Http\Controllers\AdminController@index')->name('dashboard');
 // });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

@@ -16,6 +16,7 @@
                 [(ngModel)]="accountsValue"
                 [nzSize]="size"
                 nzMode="tags"
+                nzDropdownClassName="account-container"
                 nzPlaceHolder="Please select"
                 (ngModelChange)="accountChange()"
               >
@@ -191,6 +192,7 @@
           <div class="m-form-field">
             <nz-select
               class="general"
+              nzDropdownClassName="tag-general"
               (ngModelChange)="mergeHashtags($event)"
               nzMode="tags"
               nzPlaceHolder="#hashtags"
@@ -278,6 +280,7 @@
                   <div class="m-form-field">
                     <nz-select
                       nzMode="tags"
+                      nzDropdownClassName="tag-instagram"
                       class="instagram"
                       nzPlaceHolder="#hashtags"
                       [(ngModel)]="listOfTagOptionsInsta"
@@ -369,6 +372,7 @@
                   <div class="m-form-field">
                     <nz-select
                       nzMode="tags"
+                      nzDropdownClassName="tag-facebook"
                       class="facebook"
                       nzPlaceHolder="#hashtags"
                       [(ngModel)]="listOfTagOptionsFacebook"
