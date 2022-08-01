@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-class AngularController extends Controller
+class AngularDeController extends Controller
 {
     public function index()
     {
-        // Temporar Redirect for De If Exist
         $deContent = public_path().'/deutch/de/index.html';
         if (file_exists($deContent)) {
+            // return 'Morning';
             return file_get_contents($deContent);
-        } else {
-            return view('angular');
         }
     }
 }
