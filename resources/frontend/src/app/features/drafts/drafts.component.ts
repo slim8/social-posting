@@ -114,8 +114,8 @@ export class DraftsComponent implements OnInit {
 
   showPublishDraftModal(id: string) {
     this.modal.confirm({
-      nzTitle: '<p>Do you want to publish this draft?</p>',
-      nzContent: '<b style="color: red;">All other related drafts will be also published</b>',
+      nzTitle: '<p  class="m-delete-msg">Do you want to publish this draft?</p>',
+      nzContent: '<p  class="m-second-msg">All other related drafts will be also published</p>',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
