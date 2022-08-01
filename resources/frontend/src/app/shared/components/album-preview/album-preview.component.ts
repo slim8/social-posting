@@ -7,10 +7,12 @@ const costumEditIcon = '<svg width="18" height="19" viewBox="0 0 18 19" fill="no
 const arrowIcon = '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.08398 1.24992L5.41313 4.92077C5.18532 5.14858 4.81598 5.14858 4.58817 4.92077L0.917318 1.24992" stroke="black" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 interface image {
-    id: number,
-    url: string,
-    type: string,
-    thumbnailLink: string|null
+  id: number,
+  url: string,
+  type: string,
+  thumbnailLink: string|null,
+  thumbnailRessource: string|null,
+  thumbnailSeconde: string|null
 }
 
 @Component({

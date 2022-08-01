@@ -19,6 +19,15 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
         reader.onerror = (error) => reject(error);
     });
 
+interface image {
+    id: number,
+    url: string,
+    type: string,
+    thumbnailLink: string|null,
+    thumbnailRessource: string|null,
+    thumbnailSeconde: string|null
+}
+
 @Component({
     selector: 'app-create-post',
     templateUrl: './create-post.component.html',
@@ -684,8 +693,54 @@ export class CreatePostComponent implements OnInit {
         this.mentions = event;
     }
 
-    addToPost(event: any) {
-        //TODO : event list of selected media from album
+    addToPost(event: image[]) {
+        console.log(event , this.fileList);
+        let imageList : NzUploadFile[]  = event.filter((media : image) => media.type == 'image' ).map((media : image , key) => {
+            let img = {
+                id: 0,
+                url: "",
+                type: ""
+            }
+            this.mediaId++;
+            img.id = this.mediaId;
+            img.url = media.url;
+            img.type = media.type;
+            this.urlLinks.push(img);
+
+        return {
+                uid: key.toString() ,
+                name: media.url ,
+                status: 'done',
+                url: media.url,
+                thumbUrl: media.url
+              }
+        })
+
+        this.fileList = [...this.fileList,...imageList];
+
+        let selectedVideoList : NzUploadFile[] = event.filter((item : image ) => item.type == "video").map((item : image , key : any) => {
+
+            let id = this.videoList.length ? Math.min.apply(null, this.videoList.map((item) =>  item.id )) - 1 : -1;
+            console.log(id);
+            
+            this.videoList.push({ id: id, file: null , videoUrl: item.url , duration : null });
+            this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSeconde ? +item.thumbnailSeconde : -1 , url : item.thumbnailLink});
+
+            return {
+                    uid: id.toString(),
+                    name: item.url ,
+                    status: 'done',
+                    url: item.url,
+                    seconde: item.thumbnailSeconde,
+                    thumbUrl: item.thumbnailLink ? item.thumbnailLink : undefined
+                  }
+        } )
+
+        this.videosList = [...this.videosList,...selectedVideoList];
+        
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
+        this.accountChange();
+        this.handleOk();
     }
 
     mergeHashtags(e: any) {
