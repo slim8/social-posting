@@ -162,6 +162,7 @@
                         "de": {
                             "localize": ["de"],
                             "outputPath": "public/de/",
+                            "baseHref": "/de/de/",
                             "i18nMissingTranslation": "error"
                         }
                     },
