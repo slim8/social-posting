@@ -167,7 +167,7 @@
                             "i18nMissingTranslation": "error"
                         }
                     },
-                    "defaultConfiguration": "production"
+                    "defaultConfiguration": "production,de"
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
