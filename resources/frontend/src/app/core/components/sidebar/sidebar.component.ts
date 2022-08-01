@@ -30,25 +30,12 @@ export class SidebarComponent implements OnInit {
     @Input() isCollapsed: boolean | undefined;
     roles: any = null;
     timeout: any;
-    isCreatePost: boolean =false;
+    //isCreatePost: boolean =false;
 
     constructor(
         private iconService: NzIconService,
         private jwtService: JwtHelperService,private router: Router) {
-          this.router.events.subscribe({
-            next: (val : any) => {
-             if(val.url=="/application/create-post") {
-              this.isCreatePost = true;
-              this.openSidenav();
-             }
-            },
-            error: err => {
 
-            },
-            complete: () => {
-
-            }
-          })
         this.iconService.addIconLiteral('ng-zorro:dashboard', dashboardIcon);
         this.iconService.addIconLiteral('ng-zorro:profile', profileIcon);
         this.iconService.addIconLiteral('ng-zorro:folder', folderIcon);
@@ -70,10 +57,8 @@ export class SidebarComponent implements OnInit {
         this.roles = this.jwtService.decodeToken().data.roles;
         const sideNav = document.querySelector('.mod-sidebar')?.parentElement?.parentElement;
         const sideNavMenu = document.querySelector('.mod-sidebar');
-        if(!this.isCreatePost ) {
           sideNav?.addEventListener('mouseover', this.openSidenav);
           sideNav?.addEventListener('mouseleave', this.closeSidenav);
-        }
         sideNavMenu?.addEventListener('click', this.toggleActiveItem);
     }
 
@@ -82,20 +67,57 @@ export class SidebarComponent implements OnInit {
     }
 
     openSidenav() {
-        clearTimeout(this.timeout);
-        let modMenu = document.querySelector('.mod-sidebar');
-        let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
-        menu?.classList.add('is-active');
-        modMenu?.classList.add('is-active');
-    }
+      clearTimeout(this.timeout);
+      let modMenu = document.querySelector('.mod-sidebar');
+      let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
+      menu?.classList.add('is-active');
+      modMenu?.classList.add('is-active');
+      //position of select
+      let list = document.querySelector('.cdk-overlay-pane.account-container') as HTMLDivElement;
+      if(list)
+      list.style.left = '271px';
 
-    closeSidenav() {
-        let modMenu = document.querySelector('.mod-sidebar');
-        let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
-        this.timeout = setTimeout(() => {
-            menu?.classList.remove('is-active');
-            modMenu?.classList.remove('is-active');
-        }, 1500);
+
+        //position of select
+        let listtags = document.querySelector('.cdk-overlay-pane.tag-general') as HTMLDivElement;
+        if(listtags)
+        listtags.style.left = '271px';
+
+         //position of select
+         let listtagsinstagram = document.querySelector('.cdk-overlay-pane.tag-instagram') as HTMLDivElement;
+         if(listtagsinstagram)
+         listtagsinstagram.style.left = '620px';
+          //position of select
+          let listtagsfacebook = document.querySelector('.cdk-overlay-pane.tag-facebook') as HTMLDivElement;
+          if(listtagsfacebook)
+          listtagsfacebook.style.left = '620px';
+  }
+
+
+      closeSidenav() {
+      let modMenu = document.querySelector('.mod-sidebar');
+      let menu = document.querySelector('.mod-sidebar')?.parentElement?.parentElement?.parentElement;
+      this.timeout = setTimeout(() => {
+          menu?.classList.remove('is-active');
+          modMenu?.classList.remove('is-active');
+
+          let list = document.querySelector('.cdk-overlay-pane.account-container') as HTMLDivElement;
+          if(list)
+          list.style.left = '130px';
+
+          let listtags = document.querySelector('.cdk-overlay-pane.tag-general') as HTMLDivElement;
+          if(listtags)
+          listtags.style.left = '130px';
+
+          let listtagsinstagram = document.querySelector('.cdk-overlay-pane.tag-instagram') as HTMLDivElement;
+          if(listtagsinstagram)
+          listtagsinstagram.style.left = '480px';
+
+          let listtagsfacebook = document.querySelector('.cdk-overlay-pane.tag-facebook') as HTMLDivElement;
+          if(listtagsfacebook)
+          listtagsfacebook.style.left = '480px';
+
+      }, 1500);
     }
 
     toggleActiveItem(event: any) {
