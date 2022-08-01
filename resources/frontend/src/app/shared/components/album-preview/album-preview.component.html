@@ -40,9 +40,20 @@
             <input type="text" class="m-search-form" placeholder="Suchen" >
           </div>
         </div>
-        <div class="m-album-items-container">
+        <div class="m-album-items-container" *ngIf="!isLoading">
           <div class="m-album-item-container" *ngFor=" let item of images " >
-              <img [src]="item" alt="" class="m-album-item-image" (click)="selectImage(item)" [ngClass]="{'active' : selectedImages.includes(item)}">
+              <i nz-icon class="m-video-icon" *ngIf="item.type == 'video'" nzType="caret-right" (click)="selectImage(item)" nzTheme="outline"></i>
+              <img [src]="item.type == 'image' ? item.url : item.thumbnailLink" alt="" class="m-album-item-image" (click)="selectImage(item)" [ngClass]="{'active' : selectedImages.includes(item)}">
+          </div>
+        </div>
+        <div class="m-album-items-container" *ngIf="isLoading">
+          <div *ngFor="let item of [].constructor(30)">
+            <nz-skeleton-element
+              nzType="avatar"
+              [nzActive]="true"
+              [nzShape]="'square'"
+              [nzSize]="136"
+            ></nz-skeleton-element>
           </div>
         </div>
         <div class="m-action">

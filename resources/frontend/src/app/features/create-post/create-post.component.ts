@@ -685,6 +685,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     addToPost(event: any) {
+        //TODO : event list of selected media from album
     }
 
     mergeHashtags(e: any) {
