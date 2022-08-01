@@ -19,7 +19,7 @@
         <input type="text"
                nz-input
                placeholder="E-Mail Adresse"
-               [(ngModel)]="credentials.email" />
+               [(ngModel)]="credentials.email" (keydown.enter)="login()" />
       </nz-input-group>
       <ng-template #prefixTemplateUser
         ><i nz-icon nzType="user"></i>
@@ -30,7 +30,7 @@
         <input [type]="passwordVisible ? 'text' : 'password'"
                nz-input
                [(ngModel)]="credentials.password"
-               placeholder="Passwort" />
+               placeholder="Passwort" (keydown.enter)="login()"/>
       </nz-input-group>
 
       <ng-template #prefixTemplateLock
