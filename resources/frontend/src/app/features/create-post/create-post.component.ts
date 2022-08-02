@@ -348,12 +348,13 @@ export class CreatePostComponent implements OnInit {
 
         if(this.editDraftMode){
             formData.append('originalId', this.editDraftPost.id);
-            this.videosList.forEach((videoObject) => {
-                if(videoObject['seconde']){
-                    formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
-                }
-            })
         }
+
+        this.videosList.forEach((videoObject) => {
+            if(videoObject['seconde']){
+                formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+            }
+        })
 
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
