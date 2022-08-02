@@ -963,7 +963,7 @@
         <note priority="1" from="meaning">Publish Button</note>
       </trans-unit>
       <trans-unit id="news" datatype="html">
-        <source>Nachrichten</source>
+        <source>Neuigkeiten</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/blog-posts/blog-posts.component.html</context>
           <context context-type="linenumber">4</context>
@@ -976,7 +976,7 @@
         <note priority="1" from="meaning">news</note>
       </trans-unit>
       <trans-unit id="newFeatures" datatype="html">
-        <source>Hier finden Sie neue Funktionen, Updates und Ankündigungen.</source>
+        <source>Neue Features, Updates und Ankündigungen findest Du hier.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/blog-posts/blog-posts.component.html</context>
           <context context-type="linenumber">5</context>
