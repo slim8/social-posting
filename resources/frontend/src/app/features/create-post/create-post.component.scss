@@ -215,6 +215,75 @@
                         }
                     }
 
+                    > .m-upload{
+                        display: grid;
+                        grid-template-columns: 50% 50%;
+                        align-items: end;
+                        justify-content: center;
+                        gap: 6px;
+                        margin-left: 3px;
+
+                        > .clearfix{
+
+                            >nz-upload{
+                                display:flex;
+                                flex-direction:column;
+
+                                button {
+                                    background-color: $color-media-lighter-grey;
+                                    color: $color-base-100;
+                                    padding: 4px 12px;
+                                    gap: 0;
+                                    align-items: center;
+                                    @include textstyle-size-12();
+                                    &.m-image,
+                                    &.m-video {
+                                        width: 149px;
+                                    }
+
+                                    >i {
+                                        > svg {
+                                            font-size: 15px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            >.m-thumb-container{
+                                display: flex;
+                                overflow: auto;
+                                align-items: center;
+                                position: absolute;
+                                z-index: 11;
+                                max-width: 138px;
+                                flex-wrap: wrap;
+
+                                > .m-img-container {
+                                    cursor: pointer;
+                                    display: flex;
+                                    flex-direction: column;
+                                    margin: 0 8px 7px 0;
+
+                                    > img {
+                                        width: 51px;
+                                        height: 40px;
+                                    }
+
+                                    > i {
+                                        position: absolute;
+                                        margin: 0px 0px 0px 31px;
+                                        padding: 3px;
+
+                                        &:hover {
+                                            background: #fff;
+                                            border-radius: 40%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     > .m-upload-video {
                         position: absolute;
                         top: 28px;

@@ -43,7 +43,7 @@
           <div class="m-form-label">
             <h4 i18n="Media|Title for Media@@media">Media</h4>
           </div>
-          <div class="m-upload" [ngClass]="{ 'is-shown': uploadImageActive }">
+          <div class="m-upload" >
             <div class="clearfix">
               <nz-upload
                 [nzAction]="uploadFileAPIURL"
@@ -54,7 +54,11 @@
                 nzAccept="image/*"
               >
                 <div>
-                  <i nz-icon nzType="plus"></i>
+                  <button
+                    class="m-button is-disabled m-image"
+                  >
+                    <i nz-icon nzType="ng-zorro:imagePlus"></i><span i18n="add a Photo|Title for add a photo@@addPhoto" > Add a photo</span>
+                  </button>
                 </div>
               </nz-upload>
               <nz-modal
@@ -68,27 +72,6 @@
                 </ng-template>
               </nz-modal>
             </div>
-          </div>
-          <div class="m-upload" [ngClass]="{ 'is-shown': showUploadVideo }">
-            <div class="clearfix">
-              <nz-upload
-                [nzAction]="uploadFileAPIURL"
-                nzListType="picture-card"
-                [(nzFileList)]="videosList"
-                (nzChange)="uploadVideo($event)"
-                nzAccept="video/*"
-                [nzShowButton]="videosList.length < 8"
-              >
-                <div>
-                  <i nz-icon nzType="plus"></i>
-                </div>
-              </nz-upload>
-            </div>
-          </div>
-          <div
-            class="m-upload-video"
-            [ngClass]="{ 'is-shown': showUploadVideo }"
-          >
             <div class="clearfix">
               <div class="m-thumb-container">
                 <div
@@ -108,24 +91,27 @@
                   />
                 </div>
               </div>
+              <nz-upload
+                [nzAction]="uploadFileAPIURL"
+                nzListType="picture-card"
+                [(nzFileList)]="videosList"
+                (nzChange)="uploadVideo($event)"
+                nzAccept="video/*"
+                [nzShowButton]="videosList.length < 8"
+              >
+                <div>
+                  <button
+                      class="m-button is-disabled m-video"
+                    >
+                     <i nz-icon nzType="ng-zorro:video"></i> <span i18n="Add a Video|Title for add a video@@addVideo" > Add a video</span>
+                  </button>
+                </div>
+              </nz-upload>
+              
             </div>
           </div>
           <div class="m-form-field">
             <div class="m-choose-media">
-              <button
-                class="m-button is-disabled m-image"
-                (click)="collapseImageUpload()"
-                i18n="add a Photo|Title for add a photo@@addPhoto"
-              >
-                <span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Add a photo
-              </button>
-              <button
-                class="m-button is-disabled m-video"
-                (click)="collapseVideoUpload()"
-                i18n="Add a Video|Title for add a video@@addVideo"
-              >
-                <span><i nz-icon nzType="ng-zorro:video"></i></span> Add a video
-              </button>
               <div class="m-button-notice-container">
                 <button
                   class="m-button is-disabled m-gallery"
@@ -306,7 +292,7 @@
                     />
                   </div>
                 </div>
-                <div class="m-form-group" *ngIf="showUploadVideo">
+                <div class="m-form-group" >
                   <div
                     id="loader"
                     *ngIf="leadThumbnail"
@@ -399,7 +385,7 @@
                   </div>
                 </div>
 
-                <div class="m-form-group" *ngIf="showUploadVideo">
+                <div class="m-form-group" >
                   <div
                     id="loader"
                     *ngIf="leadThumbnail"
