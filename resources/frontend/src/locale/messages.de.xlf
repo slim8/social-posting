@@ -860,7 +860,7 @@
         <note priority="1" from="meaning">Location</note>
       </trans-unit>
       <trans-unit id="customizeInstagramPost" datatype="html">
-        <source>Passen Sie den Instagram-Post an</source>
+        <source>Instagram Beitrag anpassen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
           <context context-type="linenumber">258,259</context>
@@ -869,7 +869,7 @@
         <note priority="1" from="meaning">Customize Instagram Post</note>
       </trans-unit>
       <trans-unit id="TextForInstagramOnly" datatype="html">
-        <source>Dieser Text erscheint nur in Ihrem Instagram-Post.</source>
+        <source>Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
           <context context-type="linenumber">259,262</context>
@@ -887,7 +887,7 @@
         <note priority="1" from="meaning">Instagram Text</note>
       </trans-unit>
       <trans-unit id="mention" datatype="html">
-        <source>Mention <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>- optional<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <source>Markierung <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>- optional<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
           <context context-type="linenumber">299,300</context>
