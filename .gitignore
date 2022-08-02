@@ -13,6 +13,8 @@ yarn-error.log
 /.idea
 /.vscode
 public/angular
+public/deutch
+public/de
 public/assets
 resources/views/angular.blade.php
 /docs

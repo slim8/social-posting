@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div *ngIf="!isLoading && connectedAccounts == '' && !isCompanyAdmin" class="m-login">
+      <div *ngIf="!isLoading && connectedAccounts == '' && !isCompanyAdmin && listOfPages == ''" class="m-login">
         <span class="m-login-icon">
           <i nz-icon nzType="ng-zorro:add"></i>
         </span>
@@ -234,11 +234,11 @@
           >
             <button
               class="m-button is-primary"
-              i18n="Create Post|Text for create post@@createPost"
+              
               routerLink="/application/create-post/{{page.id}}"
 
             >
-              <span><i nz-icon nzType="ng-zorro:edit"></i></span> Create Post
+              <i nz-icon nzType="ng-zorro:edit"></i><span i18n="Create Post|Text for create post@@createPost"> Create Post</span>
             </button>
           </div>
           <div class="m-action-manager">

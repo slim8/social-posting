@@ -156,12 +156,14 @@
                         },
                         "fr": {
                             "localize": ["fr"],
-                            "outputPath": "public/fr/",
+                            "outputPath": "public/french/",
+                            "baseHref": "/french/fr/",
                             "i18nMissingTranslation": "error"
                         },
                         "de": {
                             "localize": ["de"],
-                            "outputPath": "public/de/",
+                            "outputPath": "public/deutch/",
+                            "baseHref": "/deutch/de/",
                             "i18nMissingTranslation": "error"
                         }
                     },
