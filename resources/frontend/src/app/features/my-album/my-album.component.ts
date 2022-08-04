@@ -56,10 +56,14 @@ export class MyAlbumComponent implements OnInit {
 
     showLoginModal() {
       this.displayLoginModal = true;
+      let body = document.querySelector("body") as HTMLBodyElement
+      body.style.overflow = 'hidden';
     }
 
     closeModal() {
       this.displayLoginModal = false;
+      let body = document.querySelector("body") as HTMLBodyElement
+      body.style.overflow = 'auto';
     }
 
     logOut() {
