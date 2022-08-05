@@ -280,10 +280,15 @@
           want to link to the mediafactory.
         </div>
         <div
-          *ngIf="this.currentUser != ''"
+          *ngIf="this.currentUser != '' && listpages.length > 0"
           class="m-list-title">
           <span i18n="Pages Linked To Accountname|Text for pages linked to
           accountname@@pagesLinkedToAccount" >Pages Linked To </span> <strong>{{ accountName }}</strong>:
+        </div>
+        <div
+          *ngIf="listpages.length < 1"
+          class="m-list-title">
+          <span i18n="not found account|Text for not found account@@notFoundAccount" >all accounts connected or maybe not account found</span>
         </div>
       </div>
 
