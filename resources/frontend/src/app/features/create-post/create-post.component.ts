@@ -81,7 +81,6 @@ export class CreatePostComponent implements OnInit {
     listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> = [];
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
-    showUploadVideo = false;
     selectedVideo: any = null;
     selectedThumbnail = {
         imgB64: '',
@@ -349,12 +348,13 @@ export class CreatePostComponent implements OnInit {
 
         if(this.editDraftMode){
             formData.append('originalId', this.editDraftPost.id);
-            this.videosList.forEach((videoObject) => {
-                if(videoObject['seconde']){
-                    formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
-                }
-            })
         }
+
+        this.videosList.forEach((videoObject) => {
+            if(videoObject['seconde']){
+                formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+            }
+        })
 
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
@@ -493,11 +493,6 @@ export class CreatePostComponent implements OnInit {
         midCol?.classList.toggle('is-active');
     }
 
-    collapseImageUpload() {
-        this.showUploadVideo = false;
-        this.uploadImageActive = !this.uploadImageActive;
-    }
-
     updateMessage() {
         this.facebookMessage = this.message;
         this.instagramMessage = this.message;
@@ -510,11 +505,6 @@ export class CreatePostComponent implements OnInit {
         } else {
             mainTextField?.removeAttribute("disabled");
         }
-    }
-
-    collapseVideoUpload() {
-        this.showUploadVideo = !this.showUploadVideo
-        this.uploadImageActive = false;
     }
 
     generatethumbnails(action: string, newVideo = false) {

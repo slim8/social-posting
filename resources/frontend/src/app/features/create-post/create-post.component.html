@@ -26,7 +26,6 @@
                   [nzCustomContent]="true"
                   [nzValue]="option.id + '|' + option.provider"
                   >
-
                       <div class="m-image">
                         <img src="{{ option.pagePictureUrl }}" alt="" />
                         <div class="m-provider-logo">
@@ -39,22 +38,24 @@
                           />
                         </div>
                       </div>
-
-
-
-
                     <label>{{ option.pageName }}</label></nz-option>
               </nz-select>
             </nz-form-control>
           </div>
-          <span class="m-hidden" id="accountsFormController" i18n="AccountFormControl|Title for accounts Error@@accountsFormControl">Please fill the accounts field</span>
+          <span
+            class="m-hidden"
+            id="accountsFormController"
+            i18n="
+              AccountFormControl|Title for accounts Error@@accountsFormControl"
+            >Please fill the accounts field</span
+          >
         </div>
 
         <div class="m-form-group">
           <div class="m-form-label">
             <h4 i18n="Media|Title for Media@@media">Media</h4>
           </div>
-          <div class="m-upload" [ngClass]="{ 'is-shown': uploadImageActive }">
+          <div class="m-upload">
             <div class="clearfix">
               <nz-upload
                 [nzAction]="uploadFileAPIURL"
@@ -65,7 +66,12 @@
                 nzAccept="image/*"
               >
                 <div>
-                  <i nz-icon nzType="plus"></i>
+                  <button class="m-button is-disabled m-image">
+                    <i nz-icon nzType="ng-zorro:imagePlus"></i
+                    ><span i18n="add a Photo|Title for add a photo@@addPhoto">
+                      Add a photo</span
+                    >
+                  </button>
                 </div>
               </nz-upload>
               <nz-modal
@@ -79,27 +85,6 @@
                 </ng-template>
               </nz-modal>
             </div>
-          </div>
-          <div class="m-upload" [ngClass]="{ 'is-shown': showUploadVideo }">
-            <div class="clearfix">
-              <nz-upload
-                [nzAction]="uploadFileAPIURL"
-                nzListType="picture-card"
-                [(nzFileList)]="videosList"
-                (nzChange)="uploadVideo($event)"
-                nzAccept="video/*"
-                [nzShowButton]="videosList.length < 8"
-              >
-                <div>
-                  <i nz-icon nzType="plus"></i>
-                </div>
-              </nz-upload>
-            </div>
-          </div>
-          <div
-            class="m-upload-video"
-            [ngClass]="{ 'is-shown': showUploadVideo }"
-          >
             <div class="clearfix">
               <div class="m-thumb-container">
                 <div
@@ -114,40 +99,52 @@
                   ></i>
                   <img
                     *ngIf="item"
-                    [src]="item.imgB64 ? item.imgB64 : item.url "
+                    [src]="item.imgB64 ? item.imgB64 : item.url"
                     (click)="changeSelectedVideo(item)"
                   />
                 </div>
               </div>
+              <nz-upload
+                [nzAction]="uploadFileAPIURL"
+                nzListType="picture-card"
+                [(nzFileList)]="videosList"
+                (nzChange)="uploadVideo($event)"
+                nzAccept="video/*"
+                [nzShowButton]="videosList.length < 8"
+              >
+                <div>
+                  <button class="m-button is-disabled m-video">
+                    <i nz-icon nzType="ng-zorro:video"></i>
+                    <span i18n="Add a Video|Title for add a video@@addVideo">
+                      Video hinzufügen</span
+                    >
+                  </button>
+                </div>
+              </nz-upload>
             </div>
           </div>
           <div class="m-form-field">
             <div class="m-choose-media">
-              <button
-                class="m-button is-disabled m-image"
-                (click)="collapseImageUpload()"
-                i18n="add a Photo|Title for add a photo@@addPhoto"
-              >
-                <span><i nz-icon nzType="ng-zorro:imagePlus"></i></span> Add a photo
-              </button>
-              <button
-                class="m-button is-disabled m-video"
-                (click)="collapseVideoUpload()"
-                i18n="Add a Video|Title for add a video@@addVideo"
-              >
-                <span><i nz-icon nzType="ng-zorro:video"></i></span> Add a video
-              </button>
               <div class="m-button-notice-container">
                 <button
                   class="m-button is-disabled m-gallery"
                   (click)="showAlbumModal()"
                 >
                   <span><i nz-icon nzType="ng-zorro:album"></i></span>
-                  <span  i18n="My gallery|Title for my gallery@@myGallery">My gallery</span>
+                  <span i18n="My gallery|Title for my gallery@@myGallery"
+                    >My gallery</span
+                  >
                 </button>
-                <span class="m-info-icon" >
+                <span class="m-info-icon">
                   <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
-                  <div class="m-text-info" i18n="My Gallery Info Text|Title for my gallery info text@@myGalleryInfoText">Dieses Feld ist erforderlich </div>
+                  <div
+                    class="m-text-info"
+                    i18n="
+                      My Gallery Info Text|Title for my gallery info
+                      text@@myGalleryInfoText"
+                  >
+                    Dieses Feld ist erforderlich
+                  </div>
                 </span>
               </div>
               <nz-modal
@@ -165,7 +162,7 @@
                   "
                   i18n="My gallery|Title for my gallery@@myGallery"
                 >
-                My gallery
+                  My gallery
                 </div>
                 <ng-container *nzModalContent>
                   <app-album-preview
@@ -176,8 +173,12 @@
               </nz-modal>
             </div>
           </div>
-          <span class="m-hidden" id="mediasFormController" i18n="MediaFormControl|Title for medias Error@@mediasFormControl">Dieses Feld ist erforderlich</span>
-
+          <span
+            class="m-hidden"
+            id="mediasFormController"
+            i18n="MediaFormControl|Title for medias Error@@mediasFormControl"
+            >Dieses Feld ist erforderlich</span
+          >
         </div>
 
         <div class="m-form-group">
@@ -220,7 +221,9 @@
 
         <div class="m-form-group">
           <div class="m-form-label">
-            <h4 i18n="Location|Title for location@@location">Location <span>- optional</span></h4>
+            <h4 i18n="Location|Title for location@@location">
+              Location <span>- optional</span>
+            </h4>
           </div>
           <div class="m-form-field">
             <input
@@ -266,12 +269,29 @@
             <div class="m-tab-content">
               <div class="m-content" *ngIf="tabId1 == 'instagram-tab-title'">
                 <div class="m-header">
-                  <h3 i18n="Customize Instagram Post|Title for Customize instagram post@@customizeInstagramPost">Customize Instagram post</h3>
-                  <p i18n="Text for Instagram Only|Title for This text will only appear on your Instagram post@@TextForInstagramOnly">This text will only appear on your Instagram post.</p>
+                  <h3
+                    i18n="
+                      Customize Instagram Post|Title for Customize instagram
+                      post@@customizeInstagramPost"
+                  >
+                    Customize Instagram post
+                  </h3>
+                  <p
+                    i18n="
+                      Text for Instagram Only|Title for This text will only
+                      appear on your Instagram post@@TextForInstagramOnly"
+                  >
+                    This text will only appear on your Instagram post.
+                  </p>
                 </div>
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4 i18n="Instagram Text|Title for Instagram Text@@instagramText">Instagram Text</h4>
+                    <h4
+                      i18n="
+                        Instagram Text|Title for Instagram Text@@instagramText"
+                    >
+                      Instagram Text
+                    </h4>
                   </div>
                   <div class="m-form-field">
                     <textarea
@@ -286,7 +306,9 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
+                    <h4 i18n="Hashtags|Title for Hashtags@@hashtags">
+                      Hashtags
+                    </h4>
                   </div>
                   <div class="m-form-field">
                     <nz-select
@@ -307,7 +329,9 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4 i18n="Mention|Title for Mention@@mention">Mention <span>- optional</span></h4>
+                    <h4 i18n="Mention|Title for Mention@@mention">
+                      Mention <span>- optional</span>
+                    </h4>
                   </div>
                   <div class="m-form-field">
                     <input
@@ -317,7 +341,7 @@
                     />
                   </div>
                 </div>
-                <div class="m-form-group" *ngIf="showUploadVideo">
+                <div class="m-form-group">
                   <div
                     id="loader"
                     *ngIf="leadThumbnail"
@@ -330,7 +354,7 @@
                     <div
                       class="m-previous-icon"
                       (click)="generatethumbnails('previous')"
-                      *ngIf="currentTimePosition  > 10"
+                      *ngIf="currentTimePosition > 10"
                     >
                       <i nz-icon nzType="left" nzTheme="outline"></i>
                     </div>
@@ -346,7 +370,10 @@
                     <div
                       class="m-next-icon"
                       (click)="generatethumbnails('next')"
-                      *ngIf="selectedVideo && (currentTimePosition  < selectedVideo.duration - 10)"
+                      *ngIf="
+                        selectedVideo &&
+                        currentTimePosition < selectedVideo.duration - 10
+                      "
                     >
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
@@ -356,14 +383,28 @@
 
               <div class="m-content" *ngIf="tabId1 == 'facebook-tab-title'">
                 <div class="m-header">
-                  <h3 i18n="Customize Facebook Post|Title for Customize facebook post@@customizeFacebookPost">Customize Facebook Post</h3>
-                  <p i18n="Text for Facebook Only|Title for This text will only appear on your Facebook post@@TextForFacebookOnly">
+                  <h3
+                    i18n="
+                      Customize Facebook Post|Title for Customize facebook
+                      post@@customizeFacebookPost"
+                  >
+                    Customize Facebook Post
+                  </h3>
+                  <p
+                    i18n="
+                      Text for Facebook Only|Title for This text will only
+                      appear on your Facebook post@@TextForFacebookOnly"
+                  >
                     This text will only appear on your Facebook post.
                   </p>
                 </div>
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4 i18n="Facebook Text|Title for Facebook Text@@facebookText">Facebook Text</h4>
+                    <h4
+                      i18n="Facebook Text|Title for Facebook Text@@facebookText"
+                    >
+                      Facebook Text
+                    </h4>
                   </div>
                   <div class="m-form-field">
                     <textarea
@@ -378,7 +419,9 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4 i18n="Hashtags|Title for Hashtags@@hashtags">Hashtags</h4>
+                    <h4 i18n="Hashtags|Title for Hashtags@@hashtags">
+                      Hashtags
+                    </h4>
                   </div>
                   <div class="m-form-field">
                     <nz-select
@@ -399,7 +442,9 @@
 
                 <div class="m-form-group">
                   <div class="m-form-label">
-                    <h4 i18n="Mention|Title for Mention@@mention">Mention <span>- optional</span></h4>
+                    <h4 i18n="Mention|Title for Mention@@mention">
+                      Mention <span>- optional</span>
+                    </h4>
                   </div>
                   <div class="m-form-field">
                     <input
@@ -410,7 +455,7 @@
                   </div>
                 </div>
 
-                <div class="m-form-group" *ngIf="showUploadVideo">
+                <div class="m-form-group">
                   <div
                     id="loader"
                     *ngIf="leadThumbnail"
@@ -423,7 +468,7 @@
                     <div
                       class="m-previous-icon"
                       (click)="generatethumbnails('previous')"
-                      *ngIf="currentTimePosition  > 10"
+                      *ngIf="currentTimePosition > 10"
                     >
                       <i nz-icon nzType="left" nzTheme="outline"></i>
                     </div>
@@ -439,7 +484,10 @@
                     <div
                       class="m-next-icon"
                       (click)="generatethumbnails('next')"
-                      *ngIf="selectedVideo && (currentTimePosition  < selectedVideo.duration - 10)"
+                      *ngIf="
+                        selectedVideo &&
+                        currentTimePosition < selectedVideo.duration - 10
+                      "
                     >
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
@@ -452,8 +500,18 @@
       </div>
       <div class="m-right-col">
         <div *ngIf="mediaList.length <= 0" class="m-no-preview">
-          <h3 i18n="Preview Not Available|Title for preview not available@@previewNotAvailable">Preview not available</h3>
-          <p i18n="Preview Not Available Info Text|Title for preview not available Info@@previewNotAvailableInfoText">
+          <h3
+            i18n="
+              Preview Not Available|Title for preview not
+              available@@previewNotAvailable"
+          >
+            Preview not available
+          </h3>
+          <p
+            i18n="
+              Preview Not Available Info Text|Title for preview not available
+              Info@@previewNotAvailableInfoText"
+          >
             Add one or more images or a video to the post to see a preview here.
           </p>
         </div>
@@ -483,7 +541,8 @@
         (click)="uploadThumbnail('DRAFT')"
         nz-button
         [nzLoading]="isLoading"
-        i18n="Save as Draft Button|Title for Save as draft button@@saveAsDraftButton"
+        i18n="
+          Save as Draft Button|Title for Save as draft button@@saveAsDraftButton"
       >
         <span class="m-button-icon-save"
           ><i nz-icon nzType="ng-zorro:folder"></i

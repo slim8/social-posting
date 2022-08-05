@@ -94,8 +94,10 @@ label, small{
 }
 
 .ant-upload-select {
-    height: 40px !important;
-    width: 51px !important;
+    height: fit-content  !important;
+    width: fit-content !important;
+    border: none !important;
+
     > div {
         > div {
             > div {
