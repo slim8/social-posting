@@ -25,14 +25,25 @@
                   [nzLabel]="option.pageName"
                   [nzCustomContent]="true"
                   [nzValue]="option.id + '|' + option.provider"
-                  ><img
-                    class="m-page-img"
-                    [src]="option.pagePictureUrl"
-                  /><label
-                    ><small class="m-page-item-provider m-small">{{
-                      option.provider
-                    }}</small>
-                    - {{ option.pageName }}</label></nz-option>
+                  >
+
+                      <div class="m-image">
+                        <img src="{{ option.pagePictureUrl }}" alt="" />
+                        <div class="m-provider-logo">
+                          <img
+                            class="instagram"
+                            src="{{
+                              '/assets/img/test-images/' + option.provider + '.svg'
+                            }}"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+
+
+
+
+                    <label>{{ option.pageName }}</label></nz-option>
               </nz-select>
             </nz-form-control>
           </div>

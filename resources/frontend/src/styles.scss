@@ -198,24 +198,67 @@ svg {
 .account-container{
   nz-option-item{
     padding-left: 66px;
+    height: 52px;
   }
   .ant-select-item-option-content{
+    display: flex;
+    align-items: center;
     &:after {
       content: '';
       position: absolute;
       border: 1px solid rgba(0, 0, 0, 0.5);
       width: 9px;
       left: 20px;
-      top: 7px;
+      top: 16px;
       height: 20px;
       width: 20px;
       }
+  }
+   .m-image {
+    position: relative;
+    &.is-disconnected {
+        filter: opacity(0.2);
+    }
+
+    > img {
+        border-radius: 50%;
+        display: block;
+        object-fit: cover;
+        width: 36px;
+        height: 36px;
+    }
+
+    > .m-provider-logo {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        display: flex;
+
+        > img {
+            width: 20px;
+            height: 20px;
+
+            &.facebook {
+                background-color: $color-base-0;
+                padding: 3px;
+                box-shadow: 0 0 5px $color-media-light-grey;
+                width: 25px;
+                @include mq(tablet) {
+                    width: 54px;
+                    padding: 6px;
+                }
+            }
+        }
+    }
+  }
+  label{
+    padding-left: 14px;
   }
   .ant-select-item-option-state{
     position: absolute;
     left: 24px;
     color:rgba(0, 0, 0, 0.5)!important ;
-    top: 7px;
+    top: 16px;
   }
 }
 
