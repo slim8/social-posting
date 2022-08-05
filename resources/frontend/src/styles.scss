@@ -198,9 +198,15 @@ svg {
   }
 }
 .account-container{
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
   nz-option-item{
     padding-left: 66px;
     height: 52px;
+  }
+  .cdk-virtual-scroll-viewport{
+    min-height: 160px;
   }
   .ant-select-item-option-content{
     display: flex;
