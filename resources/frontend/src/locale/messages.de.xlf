@@ -785,7 +785,7 @@
         <note priority="1" from="meaning">AccountFormControl</note>
       </trans-unit>
       <trans-unit id="media" datatype="html">
-        <source>Media</source>
+        <source>Medien</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
           <context context-type="linenumber">52,54</context>
@@ -1321,7 +1321,7 @@
         <note priority="1" from="meaning">My Published Posts Contribution</note>
       </trans-unit>
       <trans-unit id="myPublishedPostsDate" datatype="html">
-        <source> Veröffentlicht unter </source>
+        <source> Erstellt am/von </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
           <context context-type="linenumber">118,120</context>
