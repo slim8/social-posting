@@ -364,7 +364,12 @@ export class CreatePostComponent implements OnInit {
               error: (err) => {
                   if (err.error.errors) {
                     Object.keys(err.error.errors).forEach(key => {
-                      this.shared.createMessage('error', err.error.errors[key][0]);
+                        // TODO :: to confirm 
+                    //   this.shared.createMessage('error', err.error.errors[key][0]);
+                      let handleError = (err.error.errors[key][0]).split('"')
+                      this.shared.createMessage('error', handleError[handleError.length - 1].split('.')[0]);
+                      console.log(err.error.errors[key] , handleError);
+                      
                     });
                   }
                   else {
