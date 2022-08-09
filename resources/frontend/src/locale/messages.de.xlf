@@ -779,7 +779,7 @@
         <source>Bitte füllen Sie das Kontofeld aus</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">46,51</context>
+          <context context-type="linenumber">50,55</context>
         </context-group>
         <note priority="1" from="description">Title for accounts Error</note>
         <note priority="1" from="meaning">AccountFormControl</note>
@@ -788,7 +788,7 @@
         <source>Medien</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">52,54</context>
+          <context context-type="linenumber">56,58</context>
         </context-group>
         <note priority="1" from="description">Title for Media</note>
         <note priority="1" from="meaning">Media</note>
@@ -797,7 +797,7 @@
         <source> Foto hinzufügen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">115,117</context>
+          <context context-type="linenumber">72,74</context>
         </context-group>
         <note priority="1" from="description">Title for add a photo</note>
         <note priority="1" from="meaning">add a Photo</note>
@@ -806,7 +806,7 @@
         <source> Video hinzufügen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">106,108</context>
+          <context context-type="linenumber">119,121</context>
         </context-group>
         <note priority="1" from="description">Title for add a video</note>
         <note priority="1" from="meaning">Add a Video</note>
@@ -815,11 +815,11 @@
         <source>Meine individualisierten Vorlagen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">131,133</context>
+          <context context-type="linenumber">135,137</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">161,163</context>
+          <context context-type="linenumber">165,167</context>
         </context-group>
         <note priority="1" from="description">Title for my gallery</note>
         <note priority="1" from="meaning">My gallery</note>
@@ -828,16 +828,17 @@
         <source>Wählen Sie aus Ihren zuvor angepassten Beiträgen. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">142,146</context>
+          <context context-type="linenumber">146,150</context>
         </context-group>
-        <note priority="1" from="description">Title for my gallery info text</note>
+        <note priority="1" from="description">Title for my gallery info
+        text</note>
         <note priority="1" from="meaning">My Gallery Info Text</note>
       </trans-unit>
       <trans-unit id="mediasFormControl" datatype="html">
         <source>Bitte füllen Sie das Medienfeld aus</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">176,180</context>
+          <context context-type="linenumber">180,184</context>
         </context-group>
         <note priority="1" from="description">Title for medias Error</note>
         <note priority="1" from="meaning">MediaFormControl</note>
@@ -846,15 +847,15 @@
         <source>Hashtags</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">198,200</context>
+          <context context-type="linenumber">202,204</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">306,307</context>
+          <context context-type="linenumber">310,311</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">419,420</context>
+          <context context-type="linenumber">423,424</context>
         </context-group>
         <note priority="1" from="description">Title for Hashtags</note>
         <note priority="1" from="meaning">Hashtags</note>
@@ -863,7 +864,7 @@
         <source>Standort <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>- optional<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">221,222</context>
+          <context context-type="linenumber">225,226</context>
         </context-group>
         <note priority="1" from="description">Title for location</note>
         <note priority="1" from="meaning">Location</note>
@@ -872,25 +873,27 @@
         <source>Instagram Beitrag anpassen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">273,277</context>
+          <context context-type="linenumber">277,281</context>
         </context-group>
-        <note priority="1" from="description">Title for Customize instagram post</note>
+        <note priority="1" from="description">Title for Customize instagram
+         post</note>
         <note priority="1" from="meaning">Customize Instagram Post</note>
       </trans-unit>
       <trans-unit id="TextForInstagramOnly" datatype="html">
         <source>Dieser Text wird nur in deinem Instagram-Beitrag angezeigt.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">280,284</context>
+          <context context-type="linenumber">284,288</context>
         </context-group>
-        <note priority="1" from="description">Title for This text will only appear on your Instagram post</note>
+        <note priority="1" from="description">Title for This text will only
+        appear on your Instagram post</note>
         <note priority="1" from="meaning">Text for Instagram Only</note>
       </trans-unit>
       <trans-unit id="instagramText" datatype="html">
         <source>Instagram Text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">289,291</context>
+          <context context-type="linenumber">293,295</context>
         </context-group>
         <note priority="1" from="description">Title for Instagram Text</note>
         <note priority="1" from="meaning">Instagram Text</note>
@@ -899,11 +902,11 @@
         <source>Markierung <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>- optional<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">329,330</context>
+          <context context-type="linenumber">333,334</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">442,443</context>
+          <context context-type="linenumber">446,447</context>
         </context-group>
         <note priority="1" from="description">Title for Mention</note>
         <note priority="1" from="meaning">Mention</note>
@@ -912,25 +915,27 @@
         <source>Passen Sie den Facebook Post an</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">387,391</context>
+          <context context-type="linenumber">391,395</context>
         </context-group>
-        <note priority="1" from="description">Title for Customize facebook post</note>
+        <note priority="1" from="description">Title for Customize facebook
+         post</note>
         <note priority="1" from="meaning">Customize Facebook Post</note>
       </trans-unit>
       <trans-unit id="TextForFacebookOnly" datatype="html">
         <source> Dieser Text erscheint nur in Ihrem Facebook Post. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">394,398</context>
+          <context context-type="linenumber">398,402</context>
         </context-group>
-        <note priority="1" from="description">Title for This text will only appear on your Facebook post</note>
+        <note priority="1" from="description">Title for This text will only
+         appear on your Facebook post</note>
         <note priority="1" from="meaning">Text for Facebook Only</note>
       </trans-unit>
       <trans-unit id="facebookText" datatype="html">
         <source>Facebook Text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">402,404</context>
+          <context context-type="linenumber">406,408</context>
         </context-group>
         <note priority="1" from="description">Title for Facebook Text</note>
         <note priority="1" from="meaning">Facebook Text</note>
@@ -939,25 +944,27 @@
         <source>Vorschau nicht verfügbar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">504,508</context>
+          <context context-type="linenumber">508,512</context>
         </context-group>
-        <note priority="1" from="description">Title for preview not available</note>
+        <note priority="1" from="description">Title for preview not
+         available</note>
         <note priority="1" from="meaning">Preview Not Available</note>
       </trans-unit>
       <trans-unit id="previewNotAvailableInfoText" datatype="html">
         <source> Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu, um hier eine Vorschau zu sehen.  </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">511,516</context>
+          <context context-type="linenumber">515,520</context>
         </context-group>
-        <note priority="1" from="description">Title for preview not available Info</note>
+        <note priority="1" from="description">Title for preview not available
+         Info</note>
         <note priority="1" from="meaning">Preview Not Available Info Text</note>
       </trans-unit>
       <trans-unit id="saveAsDraftButton" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:folder&quot;&gt;&lt;/i"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="ng-zorro:folder&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="Save"/> Als Entwurf speichern </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">543,547</context>
+          <context context-type="linenumber">547,551</context>
         </context-group>
         <note priority="1" from="description">Title for Save as draft button</note>
         <note priority="1" from="meaning">Save as Draft Button</note>
@@ -966,7 +973,7 @@
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;i nz-icon nzType=&quot;n"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="ng-zorro:send&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="Publi"/> Veröffentlichen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">555,559</context>
+          <context context-type="linenumber">559,563</context>
         </context-group>
         <note priority="1" from="description">Title for Publish button</note>
         <note priority="1" from="meaning">Publish Button</note>
@@ -1682,8 +1689,26 @@
                   Page</note>
         <note priority="1" from="meaning">My Published Posts Status</note>
       </trans-unit>
+            <trans-unit id="success" datatype="html">
+        <source>Erfolg</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
+          <context context-type="linenumber">188</context>
+        </context-group>
+        <note priority="1" from="description">Title for Success</note>
+        <note priority="1" from="meaning">Success</note>
+      </trans-unit>
+      <trans-unit id="error" datatype="html">
+        <source>Fehler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
+          <context context-type="linenumber">191</context>
+        </context-group>
+        <note priority="1" from="description">Title for Error</note>
+        <note priority="1" from="meaning">Error</note>
+      </trans-unit>
       <trans-unit id="publishedPostShares" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ item.stats.shares ?  &quot;Shares&quot; : &quot;Saves&quot;  }}"/></source>
+        <source>Anteile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
           <context context-type="linenumber">211</context>
@@ -1692,31 +1717,61 @@
                       People </note>
         <note priority="1" from="meaning">Published Post Reached People</note>
       </trans-unit>
-      <trans-unit id="publishedPostLikes" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ item.stats.comments ?  &quot;Likes&quot; : &quot;Engagements&quot;  }}"/></source>
+            <trans-unit id="publishedPostSaves" datatype="html">
+        <source>Speichert</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
-          <context context-type="linenumber">223</context>
+          <context context-type="linenumber">217</context>
+        </context-group>
+        <note priority="1" from="description">Published Saves
+                      People </note>
+        <note priority="1" from="meaning">Published Post Saves</note>
+      </trans-unit>
+      <trans-unit id="publishedPostLikes" datatype="html">
+        <source>Likes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
+          <context context-type="linenumber">229</context>
         </context-group>
         <note priority="1" from="description">Published Post Likes
                       </note>
         <note priority="1" from="meaning">Published Post Likes</note>
       </trans-unit>
-      <trans-unit id="publishedPostComments" datatype="html">
-        <source> <x id="INTERPOLATION" equiv-text="{{ item.stats.comments ?  &quot;Comments&quot; : &quot;Impressions&quot;  }}"/> </source>
+      <trans-unit id="publishedPostEngagements" datatype="html">
+        <source>Engagements</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
-          <context context-type="linenumber">235,237</context>
+          <context context-type="linenumber">236</context>
+        </context-group>
+        <note priority="1" from="description">Published Post Engagements
+                      </note>
+        <note priority="1" from="meaning">Published Post Engagements</note>
+      </trans-unit>
+      <trans-unit id="publishedPostComments" datatype="html">
+        <source> Kommentare </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
+          <context context-type="linenumber">248</context>
         </context-group>
         <note priority="1" from="description">Published Post Comments
                       </note>
         <note priority="1" from="meaning">Published Post Comments</note>
       </trans-unit>
+            <trans-unit id="publishedPostImpressions" datatype="html">
+        <source>Impressionen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
+          <context context-type="linenumber">255</context>
+        </context-group>
+        <note priority="1" from="description">Published Post Impressions
+                      </note>
+        <note priority="1" from="meaning">Published Post Impressions</note>
+      </trans-unit>
       <trans-unit id="publishedPostGoTo" datatype="html">
         <source> Gehe zu</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
-          <context context-type="linenumber">248,250</context>
+          <context context-type="linenumber">265,267</context>
         </context-group>
         <note priority="1" from="description">Published Post Go
                       To</note>
