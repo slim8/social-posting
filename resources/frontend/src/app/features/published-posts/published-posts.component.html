@@ -204,13 +204,13 @@
                 <div class="m-container">
                   <span class="m-number">{{ item.stats.shares!== undefined ?  item.stats.shares : item.stats.saves  }}</span>
                   <span
-                    *ngIf="item.stats.shares==0"
+                    *ngIf="item.stats.shares!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Reached People|Published Post Reached
                       People @@publishedPostShares">Shares</span>
                   <span
-                    *ngIf="item.stats.saves==0"
+                    *ngIf="item.stats.saves!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Saves|Published Saves
@@ -221,14 +221,14 @@
                 <div class="m-container">
                   <span class="m-number">{{ item.stats.likes!== undefined ?  item.stats.likes : item.stats.engagement  }}</span>
                   <span
-                    *ngIf="item.stats.likes==0"
+                    *ngIf="item.stats.likes!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Likes|Published Post Likes
                       @@publishedPostLikes"
                     >Likes</span>
                   <span
-                    *ngIf="item.stats.engagement==0"
+                    *ngIf="item.stats.engagement!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Engagements|Published Post Engagements
@@ -240,14 +240,14 @@
                 <div class="m-container">
                   <span class="m-number">{{ item.stats.comments!== undefined ?  item.stats.comments : item.stats.impressions  }}</span>
                   <span
-                    *ngIf="item.stats.comments==0"
+                    *ngIf="item.stats.comments!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Comments|Published Post Comments
                       @@publishedPostComments"
                     >Comments</span>
                   <span
-                    *ngIf="item.stats.impressions==0"
+                    *ngIf="item.stats.impressions!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Impressions|Published Post Impressions
