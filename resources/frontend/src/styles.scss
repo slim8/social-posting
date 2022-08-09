@@ -176,6 +176,11 @@ svg {
   .m-second-msg{
     margin-left: -37px;
   }
+  .ant-modal-confirm-content {
+    .m-msg{
+      padding-left: 40px;
+    }
+  }
 
   .ant-modal-confirm-btns {
     button{

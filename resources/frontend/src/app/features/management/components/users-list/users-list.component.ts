@@ -30,7 +30,7 @@ export class UsersListComponent implements OnInit {
   ngOnInit(): void {
 
     this.getData();
-    
+
 
   }
 
@@ -42,7 +42,7 @@ export class UsersListComponent implements OnInit {
           this.listOfUsers = event.users;
         },
       error: err => {
-        
+
       },
       complete: () => {
       }
@@ -53,7 +53,7 @@ export class UsersListComponent implements OnInit {
           this.listOfPages = event.pages;
         },
       error: err => {
-        
+
       },
       complete: () => {
       }
@@ -117,7 +117,7 @@ export class UsersListComponent implements OnInit {
 
   onItemCheckedPage(id: number, checked: boolean): void {
     this.updateCheckedPageSet(id, checked);
-    
+
   }
 
   updateCheckedPageSet(id: number, checked: boolean): void {
@@ -165,8 +165,8 @@ export class UsersListComponent implements OnInit {
       formData.append('users[]', userId);
 
       this.modal.confirm({
-        nzTitle: '<i>Do you Want to remove this permission ?</i>',
-        nzContent: '<b>remove permissions '+ this.getPermissionName(accountId) + '</b>',
+        nzTitle: 'Do you Want to remove this permission ?',
+        nzContent: '<p class="m-msg">Remove permissions '+ this.getPermissionName(accountId) + '</p>',
         nzOnOk: () => {
           this.userService.removePermission(formData).subscribe({
             next: (event: any) => {
@@ -180,7 +180,7 @@ export class UsersListComponent implements OnInit {
         }
       });
 
-    
+
   }
 
   getPermissionName(tag : any){
@@ -194,6 +194,6 @@ export class UsersListComponent implements OnInit {
   getPermissionProvider(tag : any){
     return (this.listOfPages.filter((page : any) => page.id === tag)[0]).provider ;
   }
-  
+
 
 }
