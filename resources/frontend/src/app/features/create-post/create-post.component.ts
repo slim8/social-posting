@@ -243,6 +243,8 @@ export class CreatePostComponent implements OnInit {
                   this.tabId1 = "facebook-tab-title";
                   this.instagramPreview = false;
                   this.facebookPreview = true;
+                  this.pageNameInsta = "My Page";
+                  this.avatarUrlInsta = "";
                 }
               } else {
                 this.avatarUrlInsta = elem.pagePictureUrl;
@@ -256,6 +258,8 @@ export class CreatePostComponent implements OnInit {
                   this.tabId1 = "instagram-tab-title";
                   this.instagramPreview = true;
                   this.facebookPreview = false;
+                  this.pageNameFacebook = "My Page";
+                  this.avatarUrlFacebook = "";
                 }
               }
             }
