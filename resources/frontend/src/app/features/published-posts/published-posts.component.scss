@@ -24,6 +24,9 @@
             width: 100%;
             overflow-x: auto;
             background-color: $color-base-0;
+            > hr {
+              margin: 0;
+            }
 
             > .m-filter-panel {
                 width: 100%;
@@ -34,7 +37,8 @@
                 flex-wrap: wrap;
                 row-gap: 6px;
                 @include mq(tablet) {
-                    padding: 25px;
+                    padding: 25px 25px 0;
+                    height: fit-content;
                 }
 
                 > .m-left {
@@ -133,7 +137,7 @@
                                 width: 100%;
                             }
                             > .m-image {
-                                padding-top: 16px;
+                                padding-top: 12px;
                                 > img {
                                     max-width: 170px;
                                     max-height: 70px;
@@ -148,7 +152,7 @@
                                 row-gap: 10px;
                                 max-width: 270px;
                                 padding-left: 10px;
-                                padding-top: 16px;
+                                padding-top: 12px;
 
                                 > h6 {
                                     font-weight: bold;
@@ -206,7 +210,7 @@
                             }
 
                             > .m-status {
-                                padding-top: 16px;
+                                padding-top: 12px;
                                 @include mq(desktop) {
                                     min-width: 180px;
                                 }
@@ -217,13 +221,14 @@
                             }
 
                             > .m-date {
-                                padding-top: 16px;
+                                padding-top: 12px;
                                 padding-right: 30px;
                                 flex-wrap: wrap;
                                 @include textstyle-size-10();
                                 max-width: 150px;
                                 > .m-create-date {
                                     @include textstyle-size-10-bold();
+                                    margin: 0;
                                     width: 100%;
                                 }
                             }

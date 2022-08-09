@@ -36,7 +36,6 @@
                 row-gap: 25px;
                 justify-content: space-between;
                 padding: 25px;
-                align-items: end;
 
                 @include mq(desktop) {
                     flex-direction: row;
@@ -44,6 +43,7 @@
 
                 > .m-left {
                     display: flex;
+                    align-items: center;
                     flex-direction: column;
                     row-gap: 10px;
                     width: 100%;
@@ -92,6 +92,10 @@
                             font-size: 14px;
                             color: $color-media-black;
                         }
+                    }
+
+                    > .m-login-button {
+                        color: $color-base-100;
                     }
                 }
 
@@ -168,7 +172,6 @@
                     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
                 }
 
-
                 &::-webkit-scrollbar {
                     width: 8px;
                 }
@@ -191,6 +194,19 @@
                     width: 136px;
                     height: 136px;
                     background: $color-media-background-light-grey;
+                    position: relative;
+
+                    > .m-video-icon {
+                        position: absolute;
+                        font-size: 70px;
+                        color: $color-base-0;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        height: inherit;
+                        width: inherit;
+                        justify-content: center;
+                    }
 
                     > .m-album-item-image {
                         width: 136px;
@@ -213,6 +229,81 @@
                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
             }
         }
-    }
 
+        > .m-login-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $color-media-black-opacity-30;
+            z-index: 100;
+            > .m-modal-container {
+                width: 595px;
+                height: 356px;
+                background-color: $color-base-0;
+                left: 50%;
+                top: 50%;
+                transform: translate3d(-50%, -50%, 0);
+                position: absolute;
+                box-shadow: 0 0 20px 2px $color-media-black-opacity-30;
+
+                > .m-header {
+                    position: relative;
+                    width: 100%;
+                    text-align: center;
+                    padding-top: 49px;
+
+                    > .m-close-icon {
+                        position: absolute;
+                        right: 34px;
+                        top: 30px;
+                        user-select: none;
+                        cursor: pointer;
+
+                        > img {
+                            width: 8px;
+                        }
+                    }
+
+                    > h3 {
+                        @include textstyle-size-14-bold();
+                        margin-bottom: 11px;
+                    }
+
+                    > p {
+                        @include textstyle-size-12();
+                        width: 60%;
+                        margin: 0 auto 26px;
+                    }
+                }
+
+                > .m-login-form {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    > input {
+                        outline: none;
+                        @include textstyle-size-14();
+                        width: 400px;
+                        height: 45px;
+                        border: 1px solid $color-media-dark-orange;
+                        margin-bottom: 10px;
+                        padding-left: 23px;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    > button {
+                        margin-top: 31px;
+                        height: 39px;
+                        @include textstyle-size-14-bold();
+                        padding: 10px 40px;
+                    }
+                }
+            }
+        }
+    }
 }

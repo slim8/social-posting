@@ -25,4 +25,8 @@ export class PostService {
     return this.http.post(sharedConstants.API_ENDPOINT + 'drafts/publish/' + id , params);
   }
 
+  getDraft(id : any ,params : any = []) {
+    return this.http.get(sharedConstants.API_ENDPOINT+ 'posts/'+id, {params})
+  }
+
 }

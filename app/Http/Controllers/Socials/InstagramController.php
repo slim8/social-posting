@@ -193,7 +193,7 @@ class InstagramController extends Controller
     {
         $responseObject = [];
         $client = new Client();
-        $object[$videos ? 'video_url' : 'image_url'] = $videos ? $videos[0] : $imagesUrls[0];
+        $object[$videos ? 'video_url' : 'image_url'] = $videos ? (isset($videos[0]["url"]) ? $videos[0]["url"] : $videos[0]) : $imagesUrls[0];
 
         if ($videos) {
             $object['media_type'] = 'VIDEO';
@@ -276,14 +276,12 @@ class InstagramController extends Controller
             }
         }
 
-        $object['caption'] = isset($object['caption']) ? $object['caption'] : '' . $tagsString;
+        $object['caption'] = (isset($object['caption']) ? $object['caption'] : '') . $tagsString;
 
         if ($counts == 1) {
             if (!$location) {
                 $object['location_id'] = $location;
             }
-
-            $object['location_id'] = '7640348500';
 
             $singlePostResponse = $this->postSingleMedia($igUser, $object, $imagesUrls, $videos, $mentions);
 
@@ -525,5 +523,26 @@ class InstagramController extends Controller
             return $obj;
         }
 
+    }
+
+    /**
+     * Check If Post Exist
+    */
+
+    public function checkIfPostIdExist($accountPostId)
+    {
+        $obj = [];
+        $likes = 0;
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT') . $acountPost->postIdProvider . '/insights?access_token=' . $accessToken . '&metric=engagement,impressions,saved');
+
+        $errors = $request->json('error');
+        if(isset($errors)){
+            return false;
+        }
+
+        return true;
     }
 }

@@ -8,12 +8,12 @@
         margin: 0 0 20px 0;
         > button {
             &.m-primary-button {
-                background: $color-media-black-opacity-30;
+                background: $color-media-primary-orange;
                 color: $color-base-0;
-                border-color: $color-media-black-opacity-30;
+                border-color: $color-media-primary-orange ;
                 &:hover {
-                    background: $color-media-secondary-button;
-                    border-color: $color-media-black-opacity-half;
+                    background: $color-media-dark-orange;
+                    border-color: $color-media-dark-orange;
                 }
             }
 

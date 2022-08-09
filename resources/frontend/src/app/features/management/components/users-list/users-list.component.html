@@ -22,6 +22,7 @@
               <th i18n="First Name|Title for the First Name@@firstName">First Name</th>
               <th i18n="Last Name|Title for the Last Name@@lastName">Last Name</th>
               <th i18n="email|Title for the email@@email">email</th>
+              <th i18n="status|Title for the status@@status">status</th>
             </tr>
           </thead>
           <tbody>
@@ -36,11 +37,12 @@
                 <td>{{ data.firstName }}</td>
                 <td>{{ data.lastName }}</td>
                 <td>{{ data.email }}</td>
+                <td>
+                  <i *ngIf="data.status" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+                  <i *ngIf="!data.status" nz-icon nzType="close-circle" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></i>
+                </td>
               </tr>
               <tr [nzExpand]="expandSet.has(data.id)">
-                <div class="m-table-detail-row">status : {{ data.status ? 'active' : 'not active' }}</div>
-                <div class="m-table-detail-row">{{ data.subscribe ? 'subscribe' : 'not subscribe' }}</div>
-                <div class="m-table-detail-row">{{ data.emailVerifiedAt ? 'email verified' : 'email not verified' }}</div>
                 <div class="m-table-detail-row m-permission-block">
                   <nz-tag
                     *ngFor="let tag of data.accounts; let i = index"
@@ -48,9 +50,21 @@
                     (nzOnClose)="removePermission(data.id , tag , $event)"
                     class="m-permission-tag"
                   >
-                    {{ getPermissionName(tag) }}
+                    <div class="m-permission-tag-card" >
+                      <div class="m-permission-tag-card-img">
+                        <nz-avatar [nzSize]="32" [nzSrc]="getPermissionPagePicture(tag)" ></nz-avatar>
+                      </div>
+                      <div class="m-permission-tag-card-content">
+                        <div class="m-permission-tag-card-provider">
+                          {{ getPermissionName(tag) }}
+                        </div>
+                        <div class="m-permission-tag-card-name">
+                        {{ getPermissionProvider(tag) }}
+                        </div>
+                      </div>
+                    </div>
                 </nz-tag>
-                </div>
+              </div>
               </tr>
             </ng-container>
           </tbody>
@@ -62,6 +76,7 @@
         [nzTitle]="modalTitle"
         [nzContent]="modalContent"
         [nzFooter]="modalFooter"
+        [nzBodyStyle]="{minWidth : '350px'}"
       >
         <ng-template #modalTitle i18n="Add Permissions|Title for the Add Permissions@@addPermissions">Add Permissions</ng-template>
   

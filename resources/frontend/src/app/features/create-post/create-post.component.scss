@@ -43,8 +43,9 @@
                     padding: 0 21px;
                     width: 100%;
 
-                    > .m-upload , .m-upload-video {
-                      display: none;
+                    > .m-upload,
+                    .m-upload-video {
+                        display: none;
                     }
 
                     > .m-form-label {
@@ -62,7 +63,25 @@
                         width: 306px;
 
                         nz-select {
-                          width: 100%;
+                            width: 100%;
+                            max-width: 306px;
+                            position: relative;
+                            &:after {
+                                content: '';
+                                background-image: url('/../assets/img/svgs/check-icon.svg');
+                                position: absolute;
+                                background-position: center;
+                                background-repeat: no-repeat;
+                                width: 9px;
+                                right: 20px;
+                                top: 18px;
+                                height: 9px;
+                            }
+                            &.ant-select-open {
+                                &:after {
+                                    transform: rotate(180deg);
+                                }
+                            }
                         }
 
                         > .m-choose-media {
@@ -92,26 +111,26 @@
                                 }
 
                                 > .m-info-icon {
-                                  position: absolute;
-                                  right: 9px;
-                                  > .m-text-info {
-                                    width: 103px;
                                     position: absolute;
-                                    @include textstyle-size-10();
-                                    height: fit-content;
-                                    padding: 9px 4px 8px 9px;
-                                    background-color: $color-base-0;
-                                    box-shadow: 0px 4px 4px $color-media-secondary-button;
-                                    border-radius: 5px;
-                                    display: none;
-                                    z-index: 9;
-                                    right: -100px;
-                                  }
-                                  &:hover {
+                                    right: 9px;
                                     > .m-text-info {
-                                      display: block;
+                                        width: 103px;
+                                        position: absolute;
+                                        @include textstyle-size-10();
+                                        height: fit-content;
+                                        padding: 9px 4px 8px 9px;
+                                        background-color: $color-base-0;
+                                        box-shadow: 0px 4px 4px $color-media-secondary-button;
+                                        border-radius: 5px;
+                                        display: none;
+                                        z-index: 9;
+                                        right: -100px;
                                     }
-                                  }
+                                    &:hover {
+                                        > .m-text-info {
+                                            display: block;
+                                        }
+                                    }
                                 }
 
                                 > span {
@@ -126,60 +145,60 @@
                             }
 
                             > .m-button-notice-container {
-                              position: relative;
-                              width: 100%;
-                              > button {
-                                  background-color: $color-media-lighter-grey;
-                                  color: $color-base-100;
-                                  padding: 4px 10px;
-                                  gap: 0;
-                                  align-items: center;
-                                  @include textstyle-size-12();
-                                  &.m-image,
-                                  &.m-video {
-                                      width: 149px;
-                                  }
-                                  &.m-gallery {
-                                      width: 100%;
-                                      text-align: left;
-                                      > span {
-                                          margin-left: 3px;
-                                      }
-                                  }
+                                position: relative;
+                                width: 100%;
+                                > button {
+                                    background-color: $color-media-lighter-grey;
+                                    color: $color-base-100;
+                                    padding: 4px 10px;
+                                    gap: 0;
+                                    align-items: center;
+                                    @include textstyle-size-12();
+                                    &.m-image,
+                                    &.m-video {
+                                        width: 149px;
+                                    }
+                                    &.m-gallery {
+                                        width: 100%;
+                                        text-align: left;
+                                        > span {
+                                            margin-left: 3px;
+                                        }
+                                    }
 
-                                  > span {
-                                      margin-right: 9px;
+                                    > span {
+                                        margin-right: 5px;
 
-                                      i {
-                                          > svg {
-                                              font-size: 15px;
-                                          }
-                                      }
-                                  }
-                              }
-                              > .m-info-icon {
-                                position: absolute;
-                                right: 9px;
-                                top: 4px;
-                                > .m-text-info {
-                                  width: 103px;
-                                  position: absolute;
-                                  @include textstyle-size-10();
-                                  height: fit-content;
-                                  padding: 9px 4px 8px 9px;
-                                  background-color: $color-base-0;
-                                  box-shadow: 0px 4px 4px $color-media-secondary-button;
-                                  border-radius: 5px;
-                                  display: none;
-                                  z-index: 9;
-                                  right: -100px;
+                                        i {
+                                            > svg {
+                                                font-size: 15px;
+                                            }
+                                        }
+                                    }
                                 }
-                                &:hover {
-                                  > .m-text-info {
-                                    display: block;
-                                  }
+                                > .m-info-icon {
+                                    position: absolute;
+                                    right: 9px;
+                                    top: 4px;
+                                    > .m-text-info {
+                                        width: 103px;
+                                        position: absolute;
+                                        @include textstyle-size-10();
+                                        height: fit-content;
+                                        padding: 9px 4px 8px 9px;
+                                        background-color: $color-base-0;
+                                        box-shadow: 0px 4px 4px $color-media-secondary-button;
+                                        border-radius: 5px;
+                                        display: none;
+                                        z-index: 9;
+                                        right: -100px;
+                                    }
+                                    &:hover {
+                                        > .m-text-info {
+                                            display: block;
+                                        }
+                                    }
                                 }
-                              }
                             }
                         }
 
@@ -196,6 +215,74 @@
                         }
                     }
 
+                    > .m-upload {
+                        display: grid;
+                        grid-template-columns: 50% 50%;
+                        align-items: end;
+                        justify-content: center;
+                        gap: 6px;
+                        margin-left: 3px;
+
+                        > .clearfix {
+                            > nz-upload {
+                                display: flex;
+                                flex-direction: column;
+
+                                button {
+                                    background-color: $color-media-lighter-grey;
+                                    color: $color-base-100;
+                                    padding: 4px 12px;
+                                    gap: 0;
+                                    align-items: center;
+                                    @include textstyle-size-12();
+                                    &.m-image,
+                                    &.m-video {
+                                        width: 150px;
+                                    }
+
+                                    > i {
+                                        > svg {
+                                            font-size: 15px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            > .m-thumb-container {
+                                display: flex;
+                                overflow: auto;
+                                align-items: center;
+                                position: absolute;
+                                z-index: 11;
+                                max-width: 138px;
+                                flex-wrap: wrap;
+
+                                > .m-img-container {
+                                    cursor: pointer;
+                                    display: flex;
+                                    flex-direction: column;
+                                    margin: 0 8px 7px 0;
+
+                                    > img {
+                                        width: 51px;
+                                        height: 40px;
+                                    }
+
+                                    > i {
+                                        position: absolute;
+                                        margin: 0px 0px 0px 31px;
+                                        padding: 3px;
+
+                                        &:hover {
+                                            background: #fff;
+                                            border-radius: 40%;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     > .m-upload-video {
                         position: absolute;
                         top: 28px;
@@ -207,7 +294,7 @@
                             flex-direction: column;
                             overflow: auto;
 
-                            >.m-thumb-container{
+                            > .m-thumb-container {
                                 display: flex;
                                 overflow: auto;
                                 align-items: center;
@@ -244,6 +331,15 @@
                             display: none;
                             margin-top: 25px;
                         }
+                    }
+
+                    > .m-hidden {
+                        display: none;
+                    }
+
+                    > .m-shown {
+                        display: block;
+                        color: $color-media-primary-orange;
                     }
                 }
             }
@@ -360,7 +456,7 @@
 
                                     > .m-form-field {
                                         > nz-select {
-                                          width: 100%;
+                                            width: 100%;
                                         }
                                         > .m-textarea-message {
                                             height: 132px;

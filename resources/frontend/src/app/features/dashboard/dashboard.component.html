@@ -108,7 +108,7 @@
                           *ngIf="post.postMedia.length > 0 && post.postMedia[0].type != 'video' "
                         />
                         <img
-                          src="{{ post.thumbnailLink }}"
+                          src="{{ post.postMedia[0].thumbnailLink }}"
                           alt=""
                           *ngIf="post.postMedia.length > 0 && post.postMedia[0].type == 'video' "
                         />
@@ -129,7 +129,7 @@
                       <div class="m-page">{{ post.message }}</div>
                       <div class="m-date">{{ post.createdAt | date: "dd.MM.yyyy, HH:mm" }}</div>
                     </td>
-                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
+                    <td *ngIf="post.provider == 'facebook' && post.status" class="m-stats">
                       <div class="m-like-count">{{ post.stats.likes }}</div>
                       <div
                         class="m-text"
@@ -138,13 +138,13 @@
                         reached people
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
+                    <td *ngIf="post.provider == 'facebook' && post.status" class="m-stats">
                       <div class="m-share-count">{{ post.stats.shares }}</div>
                       <div class="m-text" i18n="Likes |Likes @@likes">
                         likes
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'facebook'" class="m-stats">
+                    <td *ngIf="post.provider == 'facebook' && post.status" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.comments }}
                       </div>
@@ -157,9 +157,9 @@
                       </div>
                     </td>
 
-                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                    <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-like-count">
-                        {{ post.stats.engagement }}
+                        {{ post.stats.engagement === "0" ? 0 :  post.stats.engagement}}
                       </div>
                       <div
                         class="m-text"
@@ -168,13 +168,13 @@
                         engagement
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                    <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-share-count">{{ post.stats.saves }}</div>
                       <div class="m-text" i18n="Saves |Saves @@saves">
                         saves
                       </div>
                     </td>
-                    <td *ngIf="post.provider == 'instagram'" class="m-stats">
+                    <td *ngIf="post.provider == 'instagram' && post.status" class="m-stats">
                       <div class="m-comment-count">
                         {{ post.stats.impressions }}
                       </div>
@@ -186,16 +186,29 @@
                         impressions
                       </div>
                     </td>
+                    <td *ngIf="!post.status">
+                      <nz-badge nzStatus="error">
+                        <span class="m-text">{{post.statusObject}}</span>
+                      </nz-badge>
+                    </td>
                     <td class="m-action">
                       <a
+                        *ngIf="post.status"
                         href="{{ post.url }}"
                         target="_blank"
                         class="m-button is-disabled"
                         i18n="
                           To the Post |To the Post or create post @@toThePost"
                         ><span><i nz-icon nzType="ng-zorro:open"></i></span> To
-                        the post</a
-                      >
+                        the post</a>
+
+                        <a
+                        *ngIf="!post.status"
+                        class="m-button is-disabled is-blocked"
+                        i18n="
+                          To the Post |To the Post or create post @@toThePost"
+                        ><span><i class="no-transparent-only" nz-icon nzType="stop" nzTheme="outline"></i></span> To
+                        the post</a>
                     </td>
                   </tr>
                 </tbody>
@@ -284,32 +297,9 @@
           </div>
           <div class="m-notes">
             <ul>
-              <li>
+              <li *ngFor="let item of news">
                 <p>
-                  Beiträge auf
-                  <strong>mehreren Plattformen gleichzeitig</strong>
-                  veröffentlichen. <a href="#">Jetzt ansehen.</a>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Du kannst jetzt Beiträge für die
-                  <strong> Zukunft planen</strong> und in den Kalender
-                  einplanen. Zur Kalenderansicht.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Beiträge auf
-                  <strong>mehreren Plattformen gleichzeitig</strong>
-                  veröffentlichen. <a href="#">Jetzt ansehen.</a>
-                </p>
-              </li>
-              <li>
-                <p>
-                  Du kannst jetzt Beiträge für die
-                  <strong> Zukunft planen </strong> und in den Kalender
-                  einplanen.
+                  {{item.teaser}}. <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
                 </p>
               </li>
             </ul>
@@ -346,7 +336,7 @@
             Pages Linked To Accountname|Text for pages linked to
             accountname@@pagesLinkedToAccount"
         >
-          Pages Linked To <strong>accountname.test</strong>:
+          Pages Linked To <strong>{{ accountName }}</strong>:
         </div>
       </div>
 
@@ -354,19 +344,9 @@
         <tr *ngFor="let page of listpages">
           <td>
             <label>
-              <input
-                class="m-checkbox"
-                type="checkbox"
-                [value]="page.pageId"
-                (change)="onCheckChange($event)"
-              />
-
-              <nz-avatar
-                nzIcon="user"
-                [nzSrc]="page.pagePictureUrl"
-                style="margin: 8px 26px; width: 36px; height: 36px"
-              ></nz-avatar>
-
+              <input class="m-checkbox" type="checkbox" [value]="page.pageId" (change)="onCheckChange($event)" />
+              <nz-avatar nzIcon="user" [nzSrc]="page.pagePictureUrl" style="margin: 8px 26px; width: 36px; height: 36px"></nz-avatar>
+              <img class="m-provider-logo" src="{{ '/assets/img/test-images/' + page.provider + '.svg' }}" alt=""/>
               {{ page.pageName }}
             </label>
           </td>

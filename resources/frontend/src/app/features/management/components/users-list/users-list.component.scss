@@ -22,12 +22,12 @@
             >button{
                 margin : 0 0 0 20px;
                 &.m-primary-button{
-                    background: $color-media-black-opacity-30;
+                    background: $color-media-primary-orange;
                     color: $color-base-0;
-                    border-color: $color-media-black-opacity-30;
+                    border-color: $color-media-primary-orange;
                     &:hover{
-                        background: $color-media-secondary-button;
-                        border-color: $color-media-black-opacity-half;
+                        background: $color-media-dark-orange;
+                        border-color: $color-media-dark-orange;
                     }
                     &[Disabled]{
                         background: rgba(0, 0, 0, 0.1);
@@ -37,12 +37,50 @@
                 }
             }
         }
+
     } 
 }
 
 .m-permission-block{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+
     >.m-permission-tag{
-        width:max-content ;
+        width:260px ;
+        padding: 10px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        background-color: $color-base-0;
+
+        >.m-permission-tag-card{
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            align-items: center;
+            >.m-permission-tag-card-img{
+                
+            }
+
+            >.m-permission-tag-card-content{
+
+                >.m-permission-tag-card-provider{
+                    color: $color-media-black-opacity-30;
+                    font-size: 14px;
+                    line-height: 1.5715;
+                }
+
+                >.m-permission-tag-card-name{
+                    margin-bottom: 4px;
+                    color: $color-media-black-opacity-half;
+                    font-size: 14px;
+                    line-height: 1.5715;
+                    font-weight: 500;
+                }
+            }
+        }
     }
 }
 
