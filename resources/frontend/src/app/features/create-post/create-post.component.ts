@@ -234,9 +234,29 @@ export class CreatePostComponent implements OnInit {
               if(account.split("|", 2)[1] == "facebook") {
                 this.avatarUrlFacebook = elem.pagePictureUrl;
                 this.pageNameFacebook = elem.pageName;
+                if(this.accountsValue.length==1) {
+                  let list = document.querySelector('#tabsList');
+                  list?.childNodes?.forEach((element:any) => {
+                    element.classList.remove('is-active');
+                  });
+                  document.getElementById('facebook-tab-title')?.classList.add('is-active');
+                  this.tabId1 = "facebook-tab-title";
+                  this.instagramPreview = false;
+                  this.facebookPreview = true;
+                }
               } else {
                 this.avatarUrlInsta = elem.pagePictureUrl;
                 this.pageNameInsta = elem.pageName;
+                if(this.accountsValue.length==1) {
+                  let list = document.querySelector('#tabsList');
+                  list?.childNodes?.forEach((element:any) => {
+                    element.classList.remove('is-active');
+                  });
+                  document.getElementById('instagram-tab-title')?.classList.add('is-active');
+                  this.tabId1 = "instagram-tab-title";
+                  this.instagramPreview = true;
+                  this.facebookPreview = false;
+                }
               }
             }
           })
@@ -459,7 +479,7 @@ export class CreatePostComponent implements OnInit {
       }
     }
 
-    tabChange(id: any, event: any) {
+    tabChange(id: any, event: any = []) {
         if (!event.target.closest('li').classList.contains('is-blocked')) {
             let list = [].slice.call(event.target.closest('li').parentNode.children);
             list.forEach((elem: any) => {
@@ -712,7 +732,7 @@ export class CreatePostComponent implements OnInit {
 
             let id = this.videoList.length ? Math.min.apply(null, this.videoList.map((item) =>  item.id )) - 1 : -1;
             console.log(id);
-            
+
             this.videoList.push({ id: id, file: null , videoUrl: item.url , duration : null });
             this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSeconde ? +item.thumbnailSeconde : -1 , url : item.thumbnailLink});
 
@@ -727,7 +747,7 @@ export class CreatePostComponent implements OnInit {
         } )
 
         this.videosList = [...this.videosList,...selectedVideoList];
-        
+
         this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
         this.accountChange();
         this.handleOk();

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { MyAlbumRoutingModule } from './my-album-routing.module';
 import { MyAlbumComponent } from './my-album.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { MyAlbumComponent } from './my-album.component';
     MyAlbumRoutingModule,
     DemoNgZorroAntdModule,
     FormsModule,
-    ReactiveFormsModule ,
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class MyAlbumModule { }
