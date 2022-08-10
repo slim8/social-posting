@@ -9,7 +9,10 @@
         height: 100%;
 
         > .m-title {
-          padding: 0 0 28px 51px;
+          padding-bottom: 28px;
+          @include mq(tablet) {
+            padding: 0 0 28px 51px;
+          }
           > h1 {
             margin-bottom: 10px;
           }
