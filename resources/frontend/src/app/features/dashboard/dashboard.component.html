@@ -186,8 +186,10 @@
                         impressions
                       </div>
                     </td>
+                    <td *ngIf="!post.status"></td>
+                    <td *ngIf="!post.status"></td>
                     <td *ngIf="!post.status">
-                      <nz-badge nzStatus="error">
+                      <nz-badge nzStatus="error" class="m-badge-error">
                         <span class="m-text">{{post.statusObject}}</span>
                       </nz-badge>
                     </td>
