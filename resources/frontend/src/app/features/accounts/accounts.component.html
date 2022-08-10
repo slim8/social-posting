@@ -234,11 +234,11 @@
           >
             <button
               class="m-button is-primary"
-              i18n="Create Post|Text for create post@@createPost"
+              
               routerLink="/application/create-post/{{page.id}}"
 
             >
-              <span><i nz-icon nzType="ng-zorro:edit"></i></span> Create Post
+              <i nz-icon nzType="ng-zorro:edit"></i><span i18n="Create Post|Text for create post@@createPost"> Create Post</span>
             </button>
           </div>
           <div class="m-action-manager">
@@ -280,10 +280,15 @@
           want to link to the mediafactory.
         </div>
         <div
-          *ngIf="this.currentUser != ''"
+          *ngIf="this.currentUser != '' && listpages.length > 0"
           class="m-list-title">
           <span i18n="Pages Linked To Accountname|Text for pages linked to
           accountname@@pagesLinkedToAccount" >Pages Linked To </span> <strong>{{ accountName }}</strong>:
+        </div>
+        <div
+          *ngIf="listpages.length < 1"
+          class="m-list-title">
+          <span i18n="not found account|Text for not found account@@notFoundAccount" >all accounts connected or maybe not account found</span>
         </div>
       </div>
 

@@ -10,6 +10,6 @@ export class FileService {
   constructor(private http: HttpClient) { }
 
   getImagesList() {
-    return this.http.get<{files : [{url: string ,id: number ,type: string , thumbnailLink : string}]}>(sharedConstants.API_ENDPOINT+ 'files' );
+    return this.http.get<{files : [{url: string ,id: number ,type: string , thumbnailLink : string , thumbnailRessource: string|null, thumbnailSeconde: string|null}]}>(sharedConstants.API_ENDPOINT+ 'files' );
   }
 }

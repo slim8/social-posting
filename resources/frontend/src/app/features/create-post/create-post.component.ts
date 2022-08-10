@@ -19,6 +19,15 @@ const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
         reader.onerror = (error) => reject(error);
     });
 
+interface image {
+    id: number,
+    url: string,
+    type: string,
+    thumbnailLink: string|null,
+    thumbnailRessource: string|null,
+    thumbnailSeconde: string|null
+}
+
 @Component({
     selector: 'app-create-post',
     templateUrl: './create-post.component.html',
@@ -72,7 +81,6 @@ export class CreatePostComponent implements OnInit {
     listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> = [];
     size: NzSelectSizeType = 'large';
     accountsValue: any[] = [];
-    showUploadVideo = false;
     selectedVideo: any = null;
     selectedThumbnail = {
         imgB64: '',
@@ -226,9 +234,33 @@ export class CreatePostComponent implements OnInit {
               if(account.split("|", 2)[1] == "facebook") {
                 this.avatarUrlFacebook = elem.pagePictureUrl;
                 this.pageNameFacebook = elem.pageName;
+                if(this.accountsValue.length==1) {
+                  let list = document.querySelector('#tabsList');
+                  list?.childNodes?.forEach((element:any) => {
+                    element.classList.remove('is-active');
+                  });
+                  document.getElementById('facebook-tab-title')?.classList.add('is-active');
+                  this.tabId1 = "facebook-tab-title";
+                  this.instagramPreview = false;
+                  this.facebookPreview = true;
+                  this.pageNameInsta = "My Page";
+                  this.avatarUrlInsta = "";
+                }
               } else {
                 this.avatarUrlInsta = elem.pagePictureUrl;
                 this.pageNameInsta = elem.pageName;
+                if(this.accountsValue.length==1) {
+                  let list = document.querySelector('#tabsList');
+                  list?.childNodes?.forEach((element:any) => {
+                    element.classList.remove('is-active');
+                  });
+                  document.getElementById('instagram-tab-title')?.classList.add('is-active');
+                  this.tabId1 = "instagram-tab-title";
+                  this.instagramPreview = true;
+                  this.facebookPreview = false;
+                  this.pageNameFacebook = "My Page";
+                  this.avatarUrlFacebook = "";
+                }
               }
             }
           })
@@ -340,12 +372,13 @@ export class CreatePostComponent implements OnInit {
 
         if(this.editDraftMode){
             formData.append('originalId', this.editDraftPost.id);
-            this.videosList.forEach((videoObject) => {
-                if(videoObject['seconde']){
-                    formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
-                }
-            })
         }
+
+        this.videosList.forEach((videoObject) => {
+            if(videoObject['seconde']){
+                formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+            }
+        })
 
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
@@ -450,7 +483,7 @@ export class CreatePostComponent implements OnInit {
       }
     }
 
-    tabChange(id: any, event: any) {
+    tabChange(id: any, event: any = []) {
         if (!event.target.closest('li').classList.contains('is-blocked')) {
             let list = [].slice.call(event.target.closest('li').parentNode.children);
             list.forEach((elem: any) => {
@@ -484,11 +517,6 @@ export class CreatePostComponent implements OnInit {
         midCol?.classList.toggle('is-active');
     }
 
-    collapseImageUpload() {
-        this.showUploadVideo = false;
-        this.uploadImageActive = !this.uploadImageActive;
-    }
-
     updateMessage() {
         this.facebookMessage = this.message;
         this.instagramMessage = this.message;
@@ -501,11 +529,6 @@ export class CreatePostComponent implements OnInit {
         } else {
             mainTextField?.removeAttribute("disabled");
         }
-    }
-
-    collapseVideoUpload() {
-        this.showUploadVideo = !this.showUploadVideo
-        this.uploadImageActive = false;
     }
 
     generatethumbnails(action: string, newVideo = false) {
@@ -684,7 +707,54 @@ export class CreatePostComponent implements OnInit {
         this.mentions = event;
     }
 
-    addToPost(event: any) {
+    addToPost(event: image[]) {
+        console.log(event , this.fileList);
+        let imageList : NzUploadFile[]  = event.filter((media : image) => media.type == 'image' ).map((media : image , key) => {
+            let img = {
+                id: 0,
+                url: "",
+                type: ""
+            }
+            this.mediaId++;
+            img.id = this.mediaId;
+            img.url = media.url;
+            img.type = media.type;
+            this.urlLinks.push(img);
+
+        return {
+                uid: key.toString() ,
+                name: media.url ,
+                status: 'done',
+                url: media.url,
+                thumbUrl: media.url
+              }
+        })
+
+        this.fileList = [...this.fileList,...imageList];
+
+        let selectedVideoList : NzUploadFile[] = event.filter((item : image ) => item.type == "video").map((item : image , key : any) => {
+
+            let id = this.videoList.length ? Math.min.apply(null, this.videoList.map((item) =>  item.id )) - 1 : -1;
+            console.log(id);
+
+            this.videoList.push({ id: id, file: null , videoUrl: item.url , duration : null });
+            this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSeconde ? +item.thumbnailSeconde : -1 , url : item.thumbnailLink});
+
+            return {
+                    uid: id.toString(),
+                    name: item.url ,
+                    status: 'done',
+                    url: item.url,
+                    seconde: item.thumbnailSeconde,
+                    thumbUrl: item.thumbnailLink ? item.thumbnailLink : undefined
+                  }
+        } )
+
+        this.videosList = [...this.videosList,...selectedVideoList];
+
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
+        this.accountChange();
+        this.handleOk();
     }
 
     mergeHashtags(e: any) {

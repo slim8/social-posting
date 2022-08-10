@@ -94,12 +94,12 @@
           </button>
         </div>
       </div>
-      <hr />
+
       <div class="m-content">
         <table *ngIf="!isLoading">
           <thead class="m-array-header">
             <tr class="m-titles">
-              <td class="m-checkbox">
+              <td *ngIf="posts.length != 0" class="m-checkbox">
                 <input type="checkbox" class="m-checkbox-input-all" (click)="checkAll($event)" />
               </td>
               <td

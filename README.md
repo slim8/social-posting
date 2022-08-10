@@ -61,3 +61,9 @@ npm run deploy
 npm run start:swagger
 open /request-docs
 ```
+
+## Build Angular Language Env
+
+```sh
+ng build --configuration="dev,de"
+```

@@ -13,6 +13,7 @@
         "laravel/passport": "^10.4",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "lcobucci/jwt": "^4.0",
         "league/flysystem-ftp": "^3.0",
         "paragonie/sodium_compat": "^1.17",
         "santigarcor/laratrust": "^7.1",

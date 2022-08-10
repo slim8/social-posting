@@ -107,15 +107,43 @@ class PostController extends Controller
         $companyId = $this->traitController->getCompanyId();
         // filterBy is used to filter Posts using AcountsPosts
         $filterByAccounts = $request->filterBy === 'AccountsPosts' ? true : false;
-
+        $isCompanyAdmin = $this->traitController->getUserObject()->hasRole('companyadmin') ? true : false;
         $getStat = ($request->getStat == true && $filterByAccounts) ? true : false;
         // If FilterBy Accounts then Get POsts using AccountPost else Get Posts Normally
-        $postRequest = $filterByAccounts ? AccountPost::whereHas('account', function ($query) use ($companyId) {
-            $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
-        })->with('accounts') :
-            Post::whereHas('accounts', function ($query) use ($companyId) {
+
+        if ($filterByAccounts && $request->status == 'PUBLISH') {
+            $postRequest = AccountPost::whereHas('account', function ($query) use ($companyId) {
                 $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
-            });
+            })->with('accounts');
+        } else {
+            if ($filterByAccounts && ($request->status == 'DRAFT')) {
+                if ($isCompanyAdmin) {
+                    $postRequest = AccountPost::whereHas('account', function ($query) use ($companyId) {
+                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
+                    })->with('accounts');
+                } else {
+                    $postRequest = AccountPost::whereHas('account', function ($query) use ($companyId) {
+                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
+                    })->with('accounts')->whereHas('post', function ($query) {
+                        $query->where('posts.createdBy', $this->traitController->getCurrentId());
+                    });
+                }
+            } elseif (!$filterByAccounts && $request->status == 'DRAFT') {
+                $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
+                    $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
+                });
+            } else {
+                if ($isCompanyAdmin) {
+                    $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
+                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
+                    });
+                } else {
+                    $postRequest = Post::where('createdBy', $this->traitController->getCurrentId())->whereHas('accounts', function ($query) use ($companyId) {
+                        $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
+                    });
+                }
+            }
+        }
 
         // $postId Used to return Single Post Id
 
@@ -140,18 +168,22 @@ class PostController extends Controller
         foreach ($postRequest as $postContent) {
             $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->with('mentions')->get();
 
+            $permission = true;
             if ($filterByAccounts) {
-                $postContent->provider = $postContent->accounts[0]->provider;
-                unset($postContent->accounts);
-                $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
-                $account = Account::where('id', $postContent->accountId)->first();
-                $post = Post::where('id', $postContent->postId)->first();
-                $user = User::where('id', $post->createdBy)->first();
-                // $user->firstName . ' ' . $user->lastName
-                $postContent['createdBy'] = $user->firstName . ' ' . $user->lastName;
-                $postContent['accountName'] = $account->name;
-                $postContent['profilePicture'] = $account->profilePicture;
-                $postContent['isScheduled'] = Post::where('id', $postContent->postId)->first()->isScheduled;
+                $permission = $isCompanyAdmin || UsersAccounts::hasAccountPermission($this->traitController->getCurrentId(), $postContent->accountId);
+                if ($permission) {
+                    $postContent->provider = $postContent->accounts[0]->provider;
+                    unset($postContent->accounts);
+                    $postContent->hashtags = $this->getHashTagByPostOrAccountId($postContent->id);
+                    $account = Account::where('id', $postContent->accountId)->first();
+                    $post = Post::where('id', $postContent->postId)->first();
+                    $user = User::where('id', $post->createdBy)->first();
+                    // $user->firstName . ' ' . $user->lastName
+                    $postContent['createdBy'] = $user->firstName.' '.$user->lastName;
+                    $postContent['accountName'] = $account->name;
+                    $postContent['profilePicture'] = $account->profilePicture;
+                    $postContent['isScheduled'] = Post::where('id', $postContent->postId)->first()->isScheduled;
+                }
             } else {
                 $subPosts = [];
                 $subPostsAccounts = AccountPost::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->get();
@@ -166,45 +198,45 @@ class PostController extends Controller
                 $postContent->subPosts = $subPosts;
             }
 
-            $postContent->status = true;
-            $postContent->statusObject = "Success";
-            if ($getStat) {
-                if ($postContent->provider == 'facebook') {
-                    $statusObject = $this->facebookController->checkIfPostIdExist($postContent->id);
-                    if($statusObject){
-                        $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
-                    } else {
-                        $statsObject = [];
-                        $postContent->status = false;
-                        $postContent->statusObject = "Not Found";
-                        $statsObject['likes'] ="NA";
-                        $statsObject['comments'] = "NA";
-                        $statsObject['shares'] = "NA";
-                        $postContent->stats = $statsObject;
-                    }
-
-                } elseif ($postContent->provider == 'instagram') {
-
-                    $statusObject = $this->instagramController->checkIfPostIdExist($postContent->id);
-                    if($statusObject){
+            if ($permission) {
+                $postContent->status = true;
+                $postContent->statusObject = 'Success';
+                if ($getStat) {
+                    if ($postContent->provider == 'facebook') {
+                        $statusObject = $this->facebookController->checkIfPostIdExist($postContent->id);
+                        if ($statusObject) {
+                            $postContent->stats = $this->facebookController->getStatisticsByPost($postContent->id);
+                        } else {
+                            $statsObject = [];
+                            $postContent->status = false;
+                            $postContent->statusObject = 'Not Found';
+                            $statsObject['likes'] = 'NA';
+                            $statsObject['comments'] = 'NA';
+                            $statsObject['shares'] = 'NA';
+                            $postContent->stats = $statsObject;
+                        }
+                    } elseif ($postContent->provider == 'instagram') {
+                        $statusObject = $this->instagramController->checkIfPostIdExist($postContent->id);
+                        if ($statusObject) {
+                            $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
+                        } else {
+                            $statsObject = [];
+                            $postContent->status = false;
+                            $postContent->statusObject = 'Not Found';
+                            $statsObject['engagement'] = 'NA';
+                            $statsObject['impressions'] = 'NA';
+                            $statsObject['saves'] = 'NA';
+                            $postContent->stats = $statsObject;
+                        }
                         $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
-                    } else {
-                        $statsObject = [];
-                        $postContent->status = false;
-                        $postContent->statusObject = "Not Found";
-                        $statsObject['engagement'] ="NA";
-                        $statsObject['impressions'] = "NA";
-                        $statsObject['saves'] = "NA";
-                        $postContent->stats = $statsObject;
                     }
-                     $postContent->stats = $this->instagramController->getStatisticsByPost($postContent->id);
                 }
-            }
 
-            if ($postId) {
-                $posts = $postContent;
-            } else {
-                $posts[] = $postContent;
+                if ($postId) {
+                    $posts = $postContent;
+                } else {
+                    $posts[] = $postContent;
+                }
             }
         }
 
@@ -234,7 +266,7 @@ class PostController extends Controller
         foreach (array_unique($request->postsIds) as $postId) {
             $currentPost = Post::where('id', $postId)->first();
 
-            if(!$currentPost){
+            if (!$currentPost) {
                 $errMesage = 'Post '.$postId.' Not Found';
                 $errorLog = $errMesage;
                 Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
@@ -253,23 +285,22 @@ class PostController extends Controller
 
             if (!$isDraft) {
                 $errMesage = 'Post '.$postId.' Could not be deleted because is not DRAFT';
-                $errorLog[] =$errMesage;
+                $errorLog[] = $errMesage;
                 Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
             if ($isCompanyAdmin && $postCompany !== $userCompanyId) {
                 $errMesage = "You don't have right to delete Post ".$postId;
-                $errorLog[] =$errMesage;
+                $errorLog[] = $errMesage;
                 Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
             if (!$isCompanyAdmin && $createdBy !== $this->traitController->getCurrentId()) {
                 $errMesage = "You don't have right to delete Post ".$postId;
-                $errorLog[] =$errMesage;
+                $errorLog[] = $errMesage;
                 Log::channel('notice')->notice('User : '.$this->traitController->getCurrentId().' Try To delete Draft : '.$errMesage);
             }
         }
 
         if ($errorLog) {
-
             return $this->traitController->processResponse(false, ['errors' => $errorLog]);
         }
 
@@ -298,6 +329,7 @@ class PostController extends Controller
         }
         Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' delete Draft Post Id: '.$postId);
         Post::where('id', $postId)->delete();
+
         return true;
     }
 
