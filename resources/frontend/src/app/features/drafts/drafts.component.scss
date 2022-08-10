@@ -10,7 +10,9 @@
 
         > .m-title {
             padding-bottom: 28px;
+            max-width: 320px;
             @include mq(tablet) {
+              max-width: 100%;
               padding: 0 0 28px 51px;
             }
             > h1 {
@@ -154,6 +156,12 @@
                                     }
                                 }
                             }
+                            .is-empty {
+                              width: 100px;
+                              @include mq(tablet) {
+                                width: auto;
+                              }
+                            }
                         }
                     }
                     > .m-post {
@@ -170,7 +178,9 @@
                                         top: -60%;
                                     }
                                 }
+
                             }
+
                         }
 
                         &:last-child {

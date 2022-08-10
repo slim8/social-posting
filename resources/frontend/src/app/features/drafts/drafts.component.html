@@ -98,11 +98,12 @@
       <div class="m-content">
         <table *ngIf="!isLoading">
           <thead class="m-array-header">
-            <tr class="m-titles">
-              <td *ngIf="posts.length != 0" class="m-checkbox">
+            <tr class="m-titles" >
+              <td *ngIf="posts.length != 0" class="m-checkbox" >
                 <input type="checkbox" class="m-checkbox-input-all" (click)="checkAll($event)" />
               </td>
               <td
+              [ngClass]="{'is-posts': posts.length != 0,  'is-empty' : posts.length == 0}"
                 colspan="2"
                 i18n="
                   My Published Posts Contribution|Contribution Title for My
@@ -111,6 +112,7 @@
                 Contribution
               </td>
               <td
+              [ngClass]="{'is-posts': posts.length != 0,  'is-empty' : posts.length == 0}"
                 i18n="
                   My Published Posts Date|Date Title for My Posts
                   Page@@myPublishedPostsDate"
@@ -118,6 +120,7 @@
                 Published At
               </td>
               <td
+              [ngClass]="{'is-posts': posts.length != 0,  'is-empty' : posts.length == 0}"
                 class="m-activity"
                 i18n="
                   My Drafts Posts Activities|My Drafts Posts
