@@ -281,8 +281,8 @@
                             }
                             > .m-content {
                                 row-gap: 10px;
-                                padding-left: 10px;
-                                padding-top: 16px;
+                                padding: 16px 10px 0 10px;
+
                                 @include mq(tablet) {
                                     padding-left: 30px;
                                 }
