@@ -119,6 +119,9 @@
                                         height: 90px;
 
                                         > td {
+                                          .m-badge-error {
+                                            transform: translateX(-200%);
+                                          }
                                           .m-text {
                                             @include textstyle-size-12();
                                           }
