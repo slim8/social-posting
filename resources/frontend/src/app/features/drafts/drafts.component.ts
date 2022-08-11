@@ -101,7 +101,7 @@ export class DraftsComponent implements OnInit {
   showRemoveDraftModal() {
     this.modal.confirm({
       nzTitle: '<p class="m-delete-msg">Are you sure you want to delete this Draft?</p>',
-      nzContent: '<b style="color: red;">All other drafts related will be also deleted</b>',
+      nzContent: '<p style="color: red;">All other drafts related will be also deleted</b>',
       nzOkText: 'Delete',
       nzOkType: 'primary',
       nzOkDanger: true,
@@ -114,8 +114,8 @@ export class DraftsComponent implements OnInit {
 
   showPublishDraftModal(id: string) {
     this.modal.confirm({
-      nzTitle: '<p>Do you want to publish this draft?</p>',
-      nzContent: '<b style="color: red;">All other related drafts will be also published</b>',
+      nzTitle: '<p  class="m-delete-msg">Do you want to publish this draft?</p>',
+      nzContent: '<p  class="m-second-msg">All other related drafts will be also published</p>',
       nzOkText: 'Yes',
       nzOkType: 'primary',
       nzOkDanger: true,
@@ -148,4 +148,20 @@ export class DraftsComponent implements OnInit {
     this.message.create(type, ` ${message}`);
   }
 
+  checkAll(e:any) {
+    let checkboxes = document.querySelectorAll('.m-checkbox-input');
+    if(e.target.checked) {
+      checkboxes.forEach((elem:any) => {
+        if(!elem.checked){
+          elem.click();
+        }
+      })
+    } else {
+      checkboxes.forEach((elem:any) => {
+        if(elem.checked){
+          elem.click();
+        }
+      })
+    }
+  }
 }

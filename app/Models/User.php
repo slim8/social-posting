@@ -74,4 +74,9 @@ class User extends ExtendedUser
     {
         return $this->belongsToMany(Account::class);
     }
+
+    public function post()
+    {
+        return $this->hasMany(Post::class , 'created_by');
+    }
 }

@@ -85,10 +85,10 @@
         <div class="m-right">
           <button
             class="m-button is-primary"
-            i18n="CreateNew|Title for the Create new@@createNew"
+            routerLink="/application/create-post"
           >
             <i nz-icon nzType="ng-zorro:edit" [nzTheme]="'outline'"></i>
-            Create new
+            <span i18n="CreateNew|Title for the Create new@@createNew">Create new</span>
           </button>
         </div>
       </div>
@@ -147,7 +147,7 @@
                 />
 
                 <img
-                  src="{{ item.thumbnailLink }}"
+                  src="{{ item.postMedia[0].thumbnailLink }}"
                   alt=""
                   *ngIf="item.postMedia.length > 0 && item.postMedia[0].type === 'video' "
                 />
@@ -184,8 +184,11 @@
                 <nz-badge nzStatus="warning" *ngIf="item.isScheduled">
                   <span class="m-text">Planned</span>
                 </nz-badge>
-                <nz-badge nzStatus="success" *ngIf="!item.isScheduled">
-                  <span class="m-text">Success</span>
+                <nz-badge nzStatus="success" *ngIf="item.statusObject=='Success' && !item.isScheduled && item.status">
+                  <span class="m-text" i18n="Success|Title for Success@@success">Success</span>
+                </nz-badge>
+                <nz-badge nzStatus="error" *ngIf="item.statusObject!='Success' && !item.isScheduled && !item.status">
+                  <span class="m-text" i18n="Error|Title for Error@@error">Error</span>
                 </nz-badge>
               </td>
               <td class="m-date">
@@ -194,45 +197,62 @@
                 </p>
                 <span class="m-text"> {{ item.createdBy }} </span>
               </td>
-              <td class="m-collapse" (click)="collapse($event)">collapse</td>
+              <td *ngIf="item.status" class="m-collapse" (click)="collapse($event)">collapse</td>
             </tr>
             <tr class="m-details">
               <td class="m-item" colspan="3">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.shares ?  item.stats.shares : item.stats.saves  }}</span>
+                  <span class="m-number">{{ item.stats.shares!== undefined ?  item.stats.shares : item.stats.saves  }}</span>
                   <span
+                    *ngIf="item.stats.shares!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Reached People|Published Post Reached
-                      People @@publishedPostShares"
-                    >{{ item.stats.shares ?  "Shares" : "Saves"  }}</span
-                  >
+                      People @@publishedPostShares">Shares</span>
+                  <span
+                    *ngIf="item.stats.saves!== undefined"
+                    class="m-text"
+                    i18n="
+                      Published Post Saves|Published Saves
+                      People @@publishedPostSaves">Saves</span>
                 </div>
               </td>
               <td class="m-item">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.likes ?  item.stats.likes : item.stats.engagement  }}</span>
+                  <span class="m-number">{{ item.stats.likes!== undefined ?  item.stats.likes : item.stats.engagement  }}</span>
                   <span
+                    *ngIf="item.stats.likes!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Likes|Published Post Likes
                       @@publishedPostLikes"
-                    >{{ item.stats.comments ?  "Likes" : "Engagements"  }}</span
-                  >
+                    >Likes</span>
+                  <span
+                    *ngIf="item.stats.engagement!== undefined"
+                    class="m-text"
+                    i18n="
+                      Published Post Engagements|Published Post Engagements
+                      @@publishedPostEngagements"
+                    >Engagements</span>
                 </div>
               </td>
               <td class="m-item">
                 <div class="m-container">
-                  <span class="m-number">{{ item.stats.comments ?  item.stats.comments : item.stats.impressions  }}</span>
+                  <span class="m-number">{{ item.stats.comments!== undefined ?  item.stats.comments : item.stats.impressions  }}</span>
                   <span
+                    *ngIf="item.stats.comments!== undefined"
                     class="m-text"
                     i18n="
                       Published Post Comments|Published Post Comments
                       @@publishedPostComments"
-                    > {{ item.stats.comments ?  "Comments" : "Impressions"  }}
-
-                    </span
-                  >
+                    >Comments</span>
+                  <span
+                    *ngIf="item.stats.impressions!== undefined"
+                    class="m-text"
+                    i18n="
+                      Published Post Impressions|Published Post Impressions
+                      @@publishedPostImpressions"
+                    >Impressions</span>
                 </div>
               </td>
               <td class="m-item">

@@ -8,6 +8,7 @@ import { UnauthorizedComponent } from './components/unauthorized/unauthorized.co
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
 import { ItemLoaderComponent } from './components/item-loader/item-loader.component';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
     declarations: [
@@ -32,10 +33,14 @@ import { ItemLoaderComponent } from './components/item-loader/item-loader.compon
 })
 export class SharedModule {
 
-    constructor(private messageService: NzMessageService) { }
+    constructor(private messageService: NzMessageService,private jwtService: JwtHelperService) { }
 
     createMessage(type: string, message: any): void {
         this.messageService.create(type, ` ${message}`);
+    }
+
+    getuserRoles(): Array<string> {
+      return this.jwtService.decodeToken().data.roles;
     }
 
     initSideMenu(param: string = '') {

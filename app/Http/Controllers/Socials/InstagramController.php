@@ -524,4 +524,25 @@ class InstagramController extends Controller
         }
 
     }
+
+    /**
+     * Check If Post Exist
+    */
+
+    public function checkIfPostIdExist($accountPostId)
+    {
+        $obj = [];
+        $likes = 0;
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT') . $acountPost->postIdProvider . '/insights?access_token=' . $accessToken . '&metric=engagement,impressions,saved');
+
+        $errors = $request->json('error');
+        if(isset($errors)){
+            return false;
+        }
+
+        return true;
+    }
 }

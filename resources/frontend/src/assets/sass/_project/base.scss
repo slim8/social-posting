@@ -54,6 +54,7 @@ figure {
     display: flex;
     column-gap: 9px;
     align-items: center;
+    border-radius: 0;
     @include textstyle-size-12();
 
     @include mq(desktop) {
@@ -61,7 +62,7 @@ figure {
     }
 
     > i {
-        margin-right: 12px;
+        margin-right: 10px;
         color: $color-base-0;
     }
 
@@ -90,5 +91,5 @@ figure {
 // behaviours
 
 .is-blocked {
-  cursor: not-allowed!important;
+    cursor: not-allowed !important;
 }

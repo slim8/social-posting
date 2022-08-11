@@ -104,6 +104,10 @@ class GeneralSocialController extends Controller
             return $this->traitController->processResponse(false, ['errors' => $validator->message]);
         }
 
+        if ($requestPostId) {
+            // Delete All Saved Account Posts
+            AccountPost::where('postId', $requestPostId)->delete();
+        }
         foreach ($request->posts as $postJson) {
             $post = json_decode($postJson, true);
 
@@ -121,9 +125,8 @@ class GeneralSocialController extends Controller
 
             if ($account && $accounPermission) {
                 if ($requestPostId) {
-                    // Delete All Saved Account Posts and hashtags
+                    // Delete All Saved hashtags
                     PostHashtag::where('accountPostId', $account->id)->delete();
-                    AccountPost::where('postId', $requestPostId)->delete();
                 }
 
                 $InstagramController = new InstagramController();
@@ -180,19 +183,25 @@ class GeneralSocialController extends Controller
                     }
 
                     if ($videos) {
-                        $videoCounter = 0;
+                        // $videoCounter = 0;
                         foreach ($videos as $video) {
                             $video = json_decode($video, true);
 
-                            if ($videoCounter == 0) {
+                            // if ($videoCounter == 0) {
                                 $videoThunb = $video;
-                            }
-                            ++$videoCounter;
+
+                                // var_dump($videoThunb);
+                                // die;
+                            // }
+                            // ++$videoCounter;
 
                             PostMedia::create([
                                 'url' => $video['url'],
                                 'postId' => $postId->id,
                                 'type' => 'video',
+                                'thumbnailSeconde' => isset($videoThunb["seconde"]) ? $videoThunb["seconde"] : null,
+                                'thumbnailLink' => isset($videoThunb["thumbnail"]) ? $videoThunb["thumbnail"] : null,
+                                'thumbnailRessource' => 'file',
                             ]);
                         }
                     }
@@ -226,9 +235,9 @@ class GeneralSocialController extends Controller
                         'message' => $message,
                         'postId' => $postId->id,
                         'videoTitle' => $post['videoTitle'] ? $post['videoTitle'] : '',
-                        'thumbnailSeconde' => isset($videoThunb['seconde']) ? $videoThunb['seconde'] : null,
-                        'thumbnailLink' => isset($videoThunb['thumbnail']) ? $videoThunb['thumbnail'] : null,
-                        'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
+                        // 'thumbnailSeconde' => isset($videoThunb['seconde']) ? $videoThunb['seconde'] : null,
+                        // 'thumbnailLink' => isset($videoThunb['thumbnail']) ? $videoThunb['thumbnail'] : null,
+                        // 'thumbnailRessource' => isset($videoThunb['seconde']) ? ($videoThunb['seconde'] > 0 ? 'seconde' : 'file') : null,
                         'accountId' => $post['accountId'],
                         'postIdProvider' => $postProviderId,
                         'localisationText' => null,

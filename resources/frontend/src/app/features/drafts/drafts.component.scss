@@ -9,10 +9,15 @@
         height: 100%;
 
         > .m-title {
-          padding: 0 0 28px 51px;
-          > h1 {
-            margin-bottom: 10px;
-          }
+            padding-bottom: 28px;
+            max-width: 320px;
+            @include mq(tablet) {
+              max-width: 100%;
+              padding: 0 0 28px 51px;
+            }
+            > h1 {
+                margin-bottom: 10px;
+            }
         }
 
         .m-container {
@@ -25,12 +30,14 @@
 
             > .m-filter-panel {
                 width: 100%;
-                height: 83px;
+                height: 100%;
                 display: flex;
                 justify-content: space-between;
                 flex-direction: column;
                 padding: 25px;
+                border-bottom: 1px solid $color-media-black-opacity-30;
                 @include mq(tablet) {
+                  height: 83px;
                     flex-direction: row;
                 }
                 > .m-left {
@@ -116,6 +123,47 @@
                 overflow-x: auto;
 
                 > table {
+                    > thead {
+                        > tr {
+                            > .m-checkbox {
+                                transform: translate3d(-44px, -7px, 0);
+                                width: 44px;
+                                > .m-checkbox-input-all {
+                                    -webkit-appearance: none;
+                                    outline: none;
+                                    position: relative;
+                                    margin-right: 28px;
+                                    margin-bottom: 12px;
+
+                                    &::after {
+                                        content: '';
+                                        position: absolute;
+                                        border: 1px solid rgba(0, 0, 0, 0.5);
+                                        border-radius: 5px;
+                                        width: 18px;
+                                        height: 18px;
+                                    }
+
+                                    &:checked::after {
+                                        content: url('/assets/img/check-icon.png');
+                                        position: absolute;
+                                        background: rgba(231, 231, 231, 0.5);
+                                        width: 18px;
+                                        height: 18px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                    }
+                                }
+                            }
+                            .is-empty {
+                              width: 100px;
+                              @include mq(tablet) {
+                                width: auto;
+                              }
+                            }
+                        }
+                    }
                     > .m-post {
                         > tr {
                             > td {
@@ -127,10 +175,12 @@
                                         border-right: 1px solid $color-media-black-opacity-30;
                                         height: 120%;
                                         right: 4px;
-                                        top: -40%;
+                                        top: -60%;
                                     }
                                 }
+
                             }
+
                         }
 
                         &:last-child {
@@ -138,7 +188,7 @@
                                 > td {
                                     &:first-child {
                                         &:after {
-                                            height: 160%;
+                                            height: 180%;
                                         }
                                     }
                                 }
@@ -161,14 +211,14 @@
 
                     > thead {
                         > tr {
-                          position: relative;
-                          &:before {
-                            content: '';
-                            border-bottom: 1px solid $color-media-black-opacity-30;
-                            position: absolute;
-                            width: 100%;
-                            padding-top: 19px;
-                        }
+                            position: relative;
+                            &:before {
+                                content: '';
+                                border-bottom: 1px solid $color-media-black-opacity-30;
+                                position: absolute;
+                                width: 100%;
+                                padding-top: 19px;
+                            }
 
                             > td {
                                 @include textstyle-size-10-bold();
@@ -177,14 +227,15 @@
                                     padding-left: 9px;
                                 }
 
+                                &:first-child {
+                                    padding-left: 5px;
+                                }
                             }
                         }
                     }
                     > .m-post {
                         > .m-headline {
                             position: relative;
-
-
 
                             > .m-icon {
                                 padding: 16px;
@@ -208,14 +259,14 @@
                             }
 
                             > .m-checkbox {
-                              width: 44px;
+                                width: 44px;
+                                padding-left: 5px;
                                 > .m-checkbox-input {
                                     -webkit-appearance: none;
                                     outline: none;
                                     position: relative;
                                     margin-right: 28px;
                                     margin-bottom: 12px;
-
 
                                     &::after {
                                         content: '';
@@ -240,17 +291,16 @@
                             }
                             > .m-content {
                                 row-gap: 10px;
-                                padding-left: 10px;
-                                padding-top: 16px;
+                                padding: 16px 10px 0 10px;
+
                                 @include mq(tablet) {
-                                  padding-left: 30px;
-                              }
+                                    padding-left: 30px;
+                                }
                                 > h6 {
                                     font-weight: bold;
                                     width: 100%;
                                     margin: 0;
                                     padding-bottom: 5px;
-
                                 }
 
                                 > .m-account {
@@ -268,8 +318,8 @@
                                             border-radius: 50%;
                                             display: block;
                                             object-fit: cover;
-                                            width: 19px;
-                                            height: 19px;
+                                            width: 40px;
+                                            height: 40px;
                                         }
 
                                         > .m-provider-logo {
@@ -330,12 +380,12 @@
                                         height: 36px;
                                     }
                                 }
-                                > .m-left{
-                                  >a{
-                                    > i{
-                                    margin-right: 0;
-                                  }
-                                  }
+                                > .m-left {
+                                    > a {
+                                        > i {
+                                            margin-right: 0;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -371,7 +421,7 @@
         }
     }
 }
-.m-delete-msg{
-  margin-bottom: 0;
-  margin-top: 25px;
+.m-delete-msg {
+    margin-bottom: 0;
+    margin-top: 25px;
 }

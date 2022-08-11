@@ -473,6 +473,7 @@ class FacebookController extends Controller
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
         $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
+
         $response = $request->json('data');
 
         if ($response) {
@@ -497,5 +498,26 @@ class FacebookController extends Controller
         $obj['shares'] = $this->shareCount($postIdProvider, $accessToken);
 
         return $obj;
+    }
+
+    /**
+     * Check If Post Exist
+    */
+
+    public function checkIfPostIdExist($accountPostId)
+    {
+        $obj = [];
+        $likes = 0;
+        $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $accessToken = $this->getAccessToken($acountPost->accountId);
+        $postIdProvider = $acountPost->postIdProvider;
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
+
+        $errors = $request->json('error');
+        if(isset($errors)){
+            return false;
+        }
+
+        return true;
     }
 }

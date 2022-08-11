@@ -119,11 +119,17 @@
                                         height: 90px;
 
                                         > td {
-                                            padding-right: 15px;
+                                          .m-badge-error {
+                                            transform: translateX(-200%);
+                                          }
+                                          .m-text {
+                                            @include textstyle-size-12();
+                                          }
+                                          padding-right: 15px;
 
-                                            @include mq(desktop) {
-                                                padding: 0;
-                                            }
+                                          @include mq(desktop) {
+                                              padding: 0;
+                                          }
                                         }
                                         > .m-media-preview {
                                             > .m-media-small {
@@ -160,6 +166,7 @@
 
                                         > .m-page-info {
                                             min-width: 150px;
+                                            padding-left: 20px;
                                             > .m-page {
                                                 @include textstyle-size-12-bold();
                                             }
@@ -171,6 +178,7 @@
                                         }
 
                                         > .m-stats {
+                                            min-width: 103px;
                                             > .m-like-count,
                                             .m-comment-count,
                                             .m-share-count {
@@ -198,9 +206,15 @@
                                                 padding: 7px 13px 9px;
                                                 width: max-content;
                                                 gap: 0;
+                                                user-select: none;
                                                 > span {
                                                     margin-right: 14px;
                                                 }
+                                            }
+
+                                            > .is-blocked {
+                                              cursor: not-allowed;
+                                              color: $color-base-50;
                                             }
                                         }
                                     }
@@ -563,10 +577,12 @@
 
                 > .m-success-title {
                     @include textstyle-size-14-bold();
+                    position: relative;
 
                     > img {
-                        margin-right: 18px;
-                        width: 17px;
+                      position: absolute;
+                      left: -42px;
+                      top: -7px;
                     }
                 }
 

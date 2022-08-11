@@ -7,71 +7,65 @@
       [nzInlineCollapsed]="isCollapsed"
       class="m-menu"
     >
-      <li class="m-item">
+      <li class="m-item" routerLink="./dashboard">
         <span class="m-icon dashboard">
           <i nz-icon nzType="ng-zorro:dashboard"></i>
         </span>
         <a
-          routerLink="./dashboard"
           i18n="Dashboard|Title for the Dashboard page link@@dashboard"
           class="m-label m-menu-item"
           >Dashboard</a
         >
       </li>
-      <li class="m-item">
+      <li class="m-item" routerLink="./accounts">
         <span class="m-icon accounts">
           <i nz-icon nzType="ng-zorro:profile"></i>
         </span>
         <a
-          routerLink="./accounts"
           i18n="Accounts|Title for the Accounts page link@@accounts"
           class="m-label m-menu-item"
           >Accounts</a
         >
       </li>
 
-      <li class="m-item">
+      <li class="m-item" routerLink="./drafts">
         <span class="m-icon drafts">
           <i nz-icon nzType="ng-zorro:folder"></i>
         </span>
         <a
-          routerLink="./drafts"
           i18n="Drafts|Title for the Drafts page link@@drafts"
           class="m-label m-menu-item"
           >Drafts</a
         >
       </li>
 
-      <li class="m-item">
+      <li class="m-item" routerLink="./create-post">
         <span class="m-icon create-post">
           <i nz-icon nzType="ng-zorro:edit"></i>
         </span>
         <a
-          routerLink="./create-post"
           i18n="Create Post|Title for the Create Post form@@createPost"
           class="m-label m-menu-item"
           >Create Post</a
         >
       </li>
 
-      <li class="m-item">
+      <li class="m-item" routerLink="./my-album">
         <span class="m-icon my-album">
           <i nz-icon nzType="ng-zorro:album"></i>
         </span>
         <a
-          routerLink="./my-album"
           i18n="My Album|Title for the Album page@@myAlbum"
           class="m-label m-menu-item"
           >My Album</a
         >
       </li>
 
-      <li class="m-item">
+      <li class="m-item" routerLink="./published-posts">
         <span class="m-icon published-posts">
           <i nz-icon nzType="ng-zorro:send"></i>
         </span>
         <a
-          routerLink="./published-posts"
           i18n="
             Published Posts|Title for the Published Posts page@@publishedPosts"
           class="m-label m-menu-item"
@@ -79,7 +73,7 @@
         >
       </li>
 
-      <li class="m-item" *ngIf="checkRole('companyadmin')">
+      <li class="m-item" *ngIf="checkRole('companyadmin')" routerLink="./management/users-list">
         <i
           nz-icon
           [nzType]="'setting'"
@@ -87,14 +81,13 @@
           class="m-icon"
         ></i>
         <a
-          routerLink="./management/users-list"
           i18n="Managment Users|Title for the Managment Users@@managmentUsers"
           class="m-label m-menu-item"
           >Managment Users</a
         >
       </li>
 
-      <li class="m-item" *ngIf="checkRole('admin')" >
+      <li class="m-item" *ngIf="checkRole('admin')" routerLink="./management/news">
         <img
           i18n-alt
           src="/assets/img/svgs/icons/send.svg"
@@ -102,7 +95,6 @@
           class="m-icon"
         />
         <a
-          routerLink="./management/news"
           i18n="
           Managment news|Title for the Managment news@@managmentNews"
           class="m-label m-menu-item"
@@ -110,7 +102,7 @@
         >
       </li>
 
-      <li class="m-item" *ngIf="checkRole('admin')" >
+      <li class="m-item" *ngIf="checkRole('admin')" routerLink="/application/administration/dictionaries">
         <img
           i18n-alt
           src="/assets/img/svgs/icons/send.svg"
@@ -118,7 +110,6 @@
           class="m-icon"
         />
         <a
-          routerLink="/application/administration/dictionaries"
           i18n="Dictionaries|Title for the Dictionaries@@dictionaries"
           class="m-label m-menu-item"
           >Dictionaries</a
@@ -127,7 +118,7 @@
     </ul>
   </div>
 </div>
-<!-- 
+<!--
 <div class="sidebar-logo">
   <a href="https://ng.ant.design/" target="_blank">
     <img i18n-alt src="/assets/img/svgs/mgo360-logo.svg" alt="logo" />
@@ -210,7 +201,7 @@
           >&nbsp;&nbsp;Users list</a
         >
       </li>
-    </ul> 
+    </ul>
   </li>
   <li nz-menu-item routerLink="/auth/login">
     <i nz-icon nzType="logout"></i>

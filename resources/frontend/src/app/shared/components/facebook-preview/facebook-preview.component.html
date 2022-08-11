@@ -2,10 +2,10 @@
     <div class="m-wrapper" >
         <div class="m-post-header">
             <div class="m-user-post">
-                <nz-avatar class="m-user-avatar" nzSrc="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+                <nz-avatar class="m-user-avatar" nzSrc="{{avatarUrl? avatarUrl : '/assets/img/instapic.jpg'}}"></nz-avatar>
                 <div class="m-user-info">
-                    <div class="m-username">My Page </div>
-                    <div class="m-post-date">8 Std.</div>
+                    <div class="m-username">{{pageName? pageName : "My Page"}} </div>
+                    <div class="m-post-date"></div>
                 </div>
             </div>
             <div class="m-header-dots">
@@ -65,7 +65,7 @@
             </button>
         </div>
         <div class="m-post-comment-section">
-            <nz-avatar class="m-comment-avatar" nzSrc="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
+            <nz-avatar class="m-comment-avatar" nzSrc="{{avatarUrl? avatarUrl : '/assets/img/instapic.jpg'}}"></nz-avatar>
             <input class="m-comment-input" nz-input placeholder="Write a comment..." />
         </div>
     </div>

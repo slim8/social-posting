@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\DictionaryController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\Functions\ExempleController;
+use App\Http\Controllers\MediaFactoryController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Password\ForgotPasswordController;
 use App\Http\Controllers\PostController;
@@ -30,9 +31,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$redirect = new RedirectIfAuthenticated();
-$request = new Request();
-
 Route::group(['middleware' => ['cors']], function () {
     Route::post('/login', [ApiAuthController::class, 'login'])->name('login.api');
     Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
@@ -43,6 +41,9 @@ Route::group(['middleware' => ['cors']], function () {
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
     Route::get('/dictionary', [DictionaryController::class, 'index']);
     Route::get('/dictionary/{lang}/{key}', [DictionaryController::class, 'show']);
+
+    //TODO: remove this endpoint or make it private
+    Route::get('/mediafactory-jwt', [MediaFactoryController::class, 'generateToken']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -82,19 +83,20 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
     Route::apiResource('/dictionary', DictionaryController::class)->except(['show']);
-    Route::post('/text-media-news', [TextMediaNewsController::class , 'store']);
-    Route::get('/text-media-news/{id}', [TextMediaNewsController::class , 'show']);
-    Route::put('/text-media-news/{id}', [TextMediaNewsController::class , 'update']);
-    Route::delete('/text-media-news/{id}', [TextMediaNewsController::class , 'destroy']);
-    Route::post('/news', [ NewsController::class ,'store' ]);
-    Route::put('/news/{id}', [ NewsController::class ,'update' ]);
-    Route::delete('/news/{id}', [ NewsController::class ,'destroy' ]);
+    Route::post('/text-media-news', [TextMediaNewsController::class, 'store']);
+    Route::get('/text-media-news/{id}', [TextMediaNewsController::class, 'show']);
+    Route::put('/text-media-news/{id}', [TextMediaNewsController::class, 'update']);
+    Route::delete('/text-media-news/{id}', [TextMediaNewsController::class, 'destroy']);
+    Route::post('/news', [NewsController::class, 'store']);
+    Route::put('/news/{id}', [NewsController::class, 'update']);
+    Route::delete('/news/{id}', [NewsController::class, 'destroy']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user|admin']], function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('get-profile.api');
     Route::post('/profile', [ProfileController::class, 'update'])->name('update-profile.api');
     Route::post('/change-password', [ProfileController::class, 'changePassword']);
-    Route::get('/news',[ NewsController::class ,'index' ]);
-    Route::get('/news/{id}',[ NewsController::class ,'show' ]);
+    Route::get('/news', [NewsController::class, 'index']);
+    Route::get('/news/{id}', [NewsController::class, 'show']);
+    Route::get('/files', [FileController::class, 'getCompanyMedia']);
 });
