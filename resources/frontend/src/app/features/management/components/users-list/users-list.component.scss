@@ -15,7 +15,7 @@
                 color: $color-media-black-opacity-half;
             }
         }
-        
+
         >.m-button-container {
             text-align: end;
             margin : 0 0 20px 0;
@@ -38,9 +38,15 @@
             }
         }
 
-    } 
-}
+    }
 
+
+}
+ .ant-list-split{
+      .ant-list-item{
+      border-bottom: 0;
+      }
+    }
 .m-permission-block{
     display: flex;
     flex-wrap: wrap;
@@ -61,7 +67,7 @@
             justify-content: center;
             align-items: center;
             >.m-permission-tag-card-img{
-                
+
             }
 
             >.m-permission-tag-card-content{
