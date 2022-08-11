@@ -633,8 +633,7 @@ export class CreatePostComponent implements OnInit {
 
     deleteVideo(item: { id: number, imgB64: string|null, time: number , url : string|null }) {
         this.modal.confirm({
-            nzTitle: 'Are you sure delete this video?',
-            nzContent: '<b style="color: red;">remove video </b>',
+            nzTitle: 'Are you sure you want to remove this Video?',
             nzOkText: 'Yes',
             nzOkType: 'primary',
             nzOkDanger: true,
