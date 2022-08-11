@@ -47,6 +47,19 @@
       border-bottom: 0;
       }
     }
+  .ant-btn-save{
+    background-color: $color-media-primary-orange;
+    border-color: $color-media-primary-orange;
+
+  }
+  .ant-btn-cancel{
+    &:hover{
+      background-color: $color-base-0;
+      border-color:#d9d9d9;
+      color: $color-base-100;
+      opacity: 0.85;
+    }
+  }
 .m-permission-block{
     display: flex;
     flex-wrap: wrap;
