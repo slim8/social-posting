@@ -280,4 +280,13 @@ nz-select-top-control {
   border: none!important;
   box-shadow: none!important;
 }
+.ant-table-content{
+  overflow-x: scroll;
+}
+.ant-table table {
+  width: max-content;
+}
+.ant-table-cell, td{
+    overflow-wrap: normal !important;
+}
 
