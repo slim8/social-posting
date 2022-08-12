@@ -12,11 +12,12 @@
     border-left: 20px solid $color-media-border;
 
   > .m-wrapper {
-    padding-top: 50px;
-    @include mq(desktop) {
+    padding-top: 50%;
+    @include mq(tablet) {
         padding-top: 280px;
+        max-width: 500px;
     }
-    width: 500px;
+    max-width: 300px;
     margin: auto;
     text-align: center;
 
@@ -47,7 +48,10 @@
     > .m-form {
         nz-input-group {
             height: 45px;
-            width: 400px;
+            width: 300px;
+            @include mq(tablet) {
+              width: 400px;
+            }
             border: 1px solid $color-media-primary-orange;
             margin-bottom: 10px;
         }
