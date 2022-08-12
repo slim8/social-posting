@@ -3,78 +3,108 @@
         <div class="m-header">
             <h1 i18n="create Users|title for the create Users@@createUsers">Create Users</h1>
         </div>
+        <div class="m-container">
+            <div class="m-form">
+                <div class="m-form-group">
+                    <label i18n="email|Title for the email@@email">E-mail</label>
+                    <div class="m-form-input">
+                        <input nz-input type="email" [(ngModel)]="email" />
+                    </div>
+                    <small class="error" *ngIf="error && error.email" >{{error.email[0]}}</small>
+                </div>
+                <div class="m-form-group">
+                    <label i18n="First Name|Title for the First Name@@firstName">First name</label>
+                    <div class="m-form-input">
+                        <input nz-input type="text" [(ngModel)]="firstName" />
+                    </div>
+                    <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
+                </div>
+                <div class="m-form-group">
+                    <label i18n="Last Name|Title for the Last Name@@lastName">Last name</label>
+                    <div class="m-form-input">
+                        <input nz-input type="text" [(ngModel)]="lastName" />
+                    </div>
+                    <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
+                </div>
+                <div class="m-form-group">
+                    <label i18n="Adress|Title for the Adress@@adress">Address</label>
+                    <div class="m-form-input">
+                        <input nz-input type="text" [(ngModel)]="address" />
+                    </div>
+                    <small class="error" *ngIf="error && error.adress" >{{error.address[0]}}</small>
+                </div>
+                <div class="m-row">
+                  <div class="m-form-group">
+                    <label i18n="postCode|Title for the postCode@@postCode">Postcode</label>
+                    <div class="m-form-input">
+                      <input nz-input type="text" [(ngModel)]="postCode" />
+                    </div>
+                    <small class="error" *ngIf="error && error.postCode" >{{error.postCode[0]}}</small>
+                  </div>
+                  <div class="m-form-group">
+                      <label class="m-label-custom" i18n="city|Title for the city@@city">City</label>
+                      <div class="m-form-input">
+                          <input nz-input type="text" [(ngModel)]="city" />
+                      </div>
+                      <small class="error" *ngIf="error && error.city" >{{error.city[0]}}</small>
+                  </div>
+                </div>
+                <div class="m-form-group">
+                    <label i18n="Website|Title for the Website@@website">Website</label>
+                    <div class="m-form-input">
+                        <input nz-input type="text" [(ngModel)]="website" />
+                    </div>
+                    <small class="error" *ngIf="error && error.website" >{{error.website[0]}}</small>
+                </div>
 
-        <div class="m-form">
-            <div class="m-form-group">
-                <label i18n="email|Title for the email@@email">E-mail</label>
-                <div class="m-form-input">
-                    <input nz-input type="email" placeholder="email" [(ngModel)]="email" />
+                <div class="m-form-group">
+                    <label i18n="new password|Title for the new password@@newPassword">New password</label>
+                    <div class="m-form-input-password" >
+                        <input nz-input [type]=" showNewPassword ? 'text' : 'password' " placeholder="new password" [(ngModel)]="newPassword" />
+                        <i nz-icon nzType="eye" nzTheme="outline" *ngIf="!showNewPassword" (click)="showNewPasswordAction()"></i>
+                        <i nz-icon nzType="eye-invisible" nzTheme="outline" *ngIf="showNewPassword" (click)="showNewPasswordAction()"></i>
+                    </div>
+                    <small class="error" *ngIf="error && error.password" >{{error.password[0]}}</small>
                 </div>
-                <small class="error" *ngIf="error && error.email" >{{error.email[0]}}</small>
+
+                <div class="m-form-group">
+                  <label i18n="Website|Title for the Website@@website">Permissions</label>
+                  <div class="m-form-input">
+                    <nz-select
+                      [(ngModel)]="accountsValue"
+                      [nzSize]="size"
+                      nzMode="tags"
+                      nzDropdownClassName="account-container"
+                      (ngModelChange)="accountChange()"
+                    >
+                      <nz-option
+                        *ngFor="let option of listOfPages"
+                        [nzLabel]="option.pageName"
+                        [nzCustomContent]="true"
+                        [nzValue]="option.id + '|' + option.provider"
+                        >
+                            <div class="m-image">
+                              <img src="{{ option.pagePictureUrl }}" alt="" />
+                              <div class="m-provider-logo">
+                                <img
+                                  class="instagram"
+                                  src="{{
+                                    '/assets/img/test-images/' + option.provider + '.svg'
+                                  }}"
+                                  alt=""
+                                />
+                              </div>
+                            </div>
+                          <label>{{ option.pageName }}</label></nz-option>
+                    </nz-select>
+                  </div>
+                  <small class="error" *ngIf="error && error.website" >{{error.website[0]}}</small>
+              </div>
+                <button nz-button nzType="primary" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
+                    <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    save
+                </button>
             </div>
-            <div class="m-form-group">
-                <label i18n="First Name|Title for the First Name@@firstName">First name</label>
-                <div class="m-form-input">
-                    <input nz-input type="text" placeholder="First Name" [(ngModel)]="firstName" />
-                </div>
-                <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
-            </div>
-            <div class="m-form-group">
-                <label i18n="Last Name|Title for the Last Name@@lastName">Last Name</label>
-                <div class="m-form-input">
-                    <input nz-input type="text" placeholder="Last Name" [(ngModel)]="lastName" />
-                </div>
-                <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
-            </div>
-            <div class="m-form-group">
-                <label i18n="Adress|Title for the Adress@@adress">Adress</label>
-                <div class="m-form-input">
-                    <input nz-input type="text" placeholder="Adress" [(ngModel)]="address" />
-                </div>
-                <small class="error" *ngIf="error && error.adress" >{{error.address[0]}}</small>
-            </div>
-            <div class="m-form-group">
-                <label i18n="city|Title for the city@@city">city</label>
-                <div class="m-form-input">
-                    <input nz-input type="text" placeholder="city" [(ngModel)]="city" />
-                </div>
-                <small class="error" *ngIf="error && error.city" >{{error.city[0]}}</small>
-            </div>
-            <div class="m-form-group">
-                <label i18n="postCode|Title for the postCode@@postCode">postCode</label>
-                <div class="m-form-input">
-                    <input nz-input type="text" placeholder="postCode" [(ngModel)]="postCode" />
-                </div>
-                <small class="error" *ngIf="error && error.postCode" >{{error.postCode[0]}}</small>
-            </div>
-            <div class="m-form-group">
-                <label i18n="Website|Title for the Website@@website">Website</label>
-                <div class="m-form-input">
-                    <input nz-input type="text" placeholder="Website" [(ngModel)]="website" />
-                </div>
-                <small class="error" *ngIf="error && error.website" >{{error.website[0]}}</small>
-            </div>
-            
-            <div class="m-form-group">
-                <label i18n="new password|Title for the new password@@newPassword">new password</label>
-                <div class="m-form-input-password" >
-                    <input nz-input [type]=" showNewPassword ? 'text' : 'password' " placeholder="new password" [(ngModel)]="newPassword" />
-                    <i nz-icon nzType="eye" nzTheme="outline" *ngIf="!showNewPassword" (click)="showNewPasswordAction()"></i>
-                    <i nz-icon nzType="eye-invisible" nzTheme="outline" *ngIf="showNewPassword" (click)="showNewPasswordAction()"></i>
-                </div>
-                <small class="error" *ngIf="error && error.password" >{{error.password[0]}}</small>
-            </div>
-        
-            <div class="m-form-group">
-                <label i18n="Subscribe newsletter|Title for the Subscribe newsletter@@subscribeNewsletter">Subscribe newsletter</label>
-                <div>
-                    <nz-switch [(ngModel)]="isSubscriber"></nz-switch>
-                </div>
-            </div>
-            <button nz-button nzType="primary" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
-                <i nz-icon nzType="edit" nzTheme="outline"></i>
-                save
-            </button>
         </div>
     </div>
 </div>
