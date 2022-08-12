@@ -20,14 +20,14 @@
                     <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
                 </div>
                 <div class="m-form-group">
-                    <label i18n="Last Name|Title for the Last Name@@lastName">Last Name</label>
+                    <label i18n="Last Name|Title for the Last Name@@lastName">Last name</label>
                     <div class="m-form-input">
                         <input nz-input type="text" [(ngModel)]="lastName" />
                     </div>
                     <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
                 </div>
                 <div class="m-form-group">
-                    <label i18n="Adress|Title for the Adress@@adress">Adress</label>
+                    <label i18n="Adress|Title for the Adress@@adress">Address</label>
                     <div class="m-form-input">
                         <input nz-input type="text" [(ngModel)]="address" />
                     </div>
@@ -35,14 +35,14 @@
                 </div>
                 <div class="m-row">
                   <div class="m-form-group">
-                    <label i18n="postCode|Title for the postCode@@postCode">postCode</label>
+                    <label i18n="postCode|Title for the postCode@@postCode">Postcode</label>
                     <div class="m-form-input">
                       <input nz-input type="text" [(ngModel)]="postCode" />
                     </div>
                     <small class="error" *ngIf="error && error.postCode" >{{error.postCode[0]}}</small>
                   </div>
                   <div class="m-form-group">
-                      <label class="m-label-custom" i18n="city|Title for the city@@city">city</label>
+                      <label class="m-label-custom" i18n="city|Title for the city@@city">City</label>
                       <div class="m-form-input">
                           <input nz-input type="text" [(ngModel)]="city" />
                       </div>
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="m-form-group">
-                    <label i18n="new password|Title for the new password@@newPassword">new password</label>
+                    <label i18n="new password|Title for the new password@@newPassword">New password</label>
                     <div class="m-form-input-password" >
                         <input nz-input [type]=" showNewPassword ? 'text' : 'password' " placeholder="new password" [(ngModel)]="newPassword" />
                         <i nz-icon nzType="eye" nzTheme="outline" *ngIf="!showNewPassword" (click)="showNewPasswordAction()"></i>
