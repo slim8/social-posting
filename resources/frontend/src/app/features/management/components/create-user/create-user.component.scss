@@ -58,6 +58,13 @@
                       font-size: 15px;
                       line-height: 10px;
                     }
+                    &::after {
+                      content: ':';
+                      color: $color-base-100;
+                      padding-left: 2px;
+                      font-size: 15px;
+                      line-height: 10px;
+                    }
                   }
                   >.m-form-input{
                     width: 50%;
@@ -179,6 +186,13 @@
                       content: '*';
                       color: $color-media-dark-orange;
                       padding-right: 5px;
+                      font-size: 15px;
+                      line-height: 10px;
+                    }
+                    &::after {
+                      content: ':';
+                      color: $color-base-100;
+                      padding-left: 2px;
                       font-size: 15px;
                       line-height: 10px;
                     }
