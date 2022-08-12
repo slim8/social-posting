@@ -4,15 +4,17 @@
 
 .mod-create-user{
     .m-wrapper{
+        background-color: $color-base-0;
         width: 100%;
         >.m-header{
-            padding: 18px;
-            font-size: 2.5rem;
-            line-height: 1.36175;
+            padding-top: 18px;
             text-transform: capitalize;
             font-weight: 400;
             >h1{
-                color: $color-media-black-opacity-half;
+              @include textstyle-size-44-bold();
+              color: $color-base-100;
+              text-align: center;
+              margin: 0;
             }
         }
         > .m-container {
@@ -42,16 +44,18 @@
 
                   > label {
                     @include textstyle-size-14();
+                    cursor: default;
                     width: 25%;
                     padding-right: 20px;
                     text-align: right;
                     position: relative;
+                    text-transform: none;
 
                     &::before {
                       content: '*';
                       color: $color-media-dark-orange;
                       padding-right: 5px;
-                      font-size: 22px;
+                      font-size: 15px;
                       line-height: 10px;
                     }
                   }
@@ -159,12 +163,14 @@
                   }
 
                   > label {
+                    cursor: default;
                     @include textstyle-size-14();
                     width: 25%;
                     @include mq (desktop) {
                       width: 31.5%;
                       left: -16px;
                     }
+                    text-transform: none;
                     padding-right: 20px;
                     text-align: right;
                     position: relative;
@@ -173,12 +179,13 @@
                       content: '*';
                       color: $color-media-dark-orange;
                       padding-right: 5px;
-                      font-size: 22px;
+                      font-size: 15px;
                       line-height: 10px;
                     }
                   }
 
                   > .m-label-custom {
+
                     left: 0;
                   }
                   >.m-form-input{
