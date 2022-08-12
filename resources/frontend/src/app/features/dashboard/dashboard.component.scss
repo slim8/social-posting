@@ -8,10 +8,17 @@
         height: 100%;
 
         > .m-title {
-            padding: 28px;
+            padding: 15px;
+            @include mq(tablet) {
+              padding: 28px;
+            }
 
             > h1 {
-                @include textstyle-size-40();
+                @include textstyle-size-24();
+
+                @include mq(tablet) {
+                  @include textstyle-size-40();
+                }
                 color: $color-media-black-opacity-half;
                 user-select: none;
                 margin: 0;
