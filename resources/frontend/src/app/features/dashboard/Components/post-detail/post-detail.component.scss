@@ -18,11 +18,12 @@
 
         >.m-header{
 
-            text-align: end;
+
             margin-bottom : 46px ;
             margin-right: 50px;
 
             @include mq(desktop){
+              text-align: end;
                 margin-right: 0px;
             }
 
