@@ -9,6 +9,7 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { NewsComponent } from './components/news/news.component';
 import { CreateNewsComponent } from './components/create-news/create-news.component';
 import { CreateTextMediaComponent } from './components/create-text-media/create-text-media.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { CreateTextMediaComponent } from './components/create-text-media/create-
     DemoNgZorroAntdModule,
     FormsModule,
     ReactiveFormsModule ,
+    SharedModule
   ]
 })
 export class ManagementModule { }
