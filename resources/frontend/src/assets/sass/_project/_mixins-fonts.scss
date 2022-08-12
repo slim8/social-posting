@@ -102,6 +102,16 @@
     }
 }
 
+@mixin textstyle-size-24 {
+  @include fontfamily-primary;
+  @include font-size(24px);
+  @include line-height(28/24);
+  @include mq(desktop) {
+      @include font-size(24px);
+      @include line-height(28/24);
+  }
+}
+
 @mixin textstyle-size-16-bold {
   @include fontfamily-primary-bold;
   @include font-size(16px);
