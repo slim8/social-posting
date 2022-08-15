@@ -14,6 +14,9 @@ interface success {
 
 export class LoginComponent implements OnInit {
     isLoading = false;
+    isErrorUser = false;
+    isErrorPassword = false;
+    isError = false;
     credentials = {
         email: '',
         password: '',
@@ -32,6 +35,9 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.isLoading = true;
+        this.isErrorPassword = false;
+        this.isErrorUser = false;
+        this.isError = false;
         this.service.login(this.credentials).subscribe(
             {
                 next: (response: any) => {
@@ -40,8 +46,11 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(['/application/dashboard']);
                 },
                 error: (error) => {
-                    this.createMessage('error', error.error.message);
                     this.isLoading = false;
+                    error.error.message==undefined? this.isError = true:this.isError = false;
+                    error.error.message=="User does not exist"? this.isErrorUser = true:this.isErrorUser = false;
+                    error.error.message=="Password mismatch"? this.isErrorPassword = true:this.isErrorPassword = false;
+
                 },
                 complete: () => {
                     this.isLoading = false;

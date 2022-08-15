@@ -4,105 +4,248 @@
 
 .mod-create-user{
     .m-wrapper{
+        background-color: $color-base-0;
+        width: 100%;
         >.m-header{
-            padding: 18px;
-            font-size: 2.5rem;
-            line-height: 1.36175;
+            padding-top: 18px;
             text-transform: capitalize;
             font-weight: 400;
             >h1{
-                color: $color-media-black-opacity-half;
+              @include textstyle-size-44-bold();
+              color: $color-base-100;
+              text-align: center;
+              margin: 0;
             }
         }
-        .m-form {
-            width : 100%;
-            background: white;
-            padding: 20px;
-
-            @include mq(desktop){
-                width : 50%;
+        > .m-container {
+          background-color: $color-base-0;
+          > .m-form {
+            @include mq(desktop) {
+              width : 100%;
             }
+            @include mq(l) {
+              width : 80%;
+            }
+              margin: auto;
+              background: white;
+              padding: 20px;
 
-            >.m-form-group{
-                margin : 20px;
-                text-transform: uppercase;
-                font-weight: 700;
-                font-size: 12px;
-                line-height: 16px;
-                font-style: normal;
-                >.m-form-input{
-                    display : flex;
-                    justify-content:center;
-                    align-items: center;
-                    border: 1px solid $color-media-primary-orange;
-                    height: 45px;
-                    margin: 10px 0 0 0;
+              > .m-form-group{
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  margin : 5px;
+                  text-transform: uppercase;
+                  font-weight: 700;
+                  font-size: 12px;
+                  line-height: 16px;
+                  font-style: normal;
+                  width: 100%;
 
-                    >input{
+                  > label {
+                    @include textstyle-size-14();
+                    cursor: default;
+                    width: 25%;
+                    padding-right: 20px;
+                    text-align: right;
+                    position: relative;
+                    text-transform: none;
+
+                    &::before {
+                      content: '*';
+                      color: $color-media-dark-orange;
+                      padding-right: 5px;
+                      font-size: 15px;
+                      line-height: 10px;
+                    }
+                    &::after {
+                      content: ':';
+                      color: $color-base-100;
+                      padding-left: 2px;
+                      font-size: 15px;
+                      line-height: 10px;
+                    }
+                  }
+                  >.m-form-input{
+                    width: 50%;
+                      display : flex;
+                      justify-content:center;
+                      align-items: center;
+                      border: 1px solid $color-media-primary-orange;
+                      min-height: 45px;
+                      margin: 10px 0 0 0;
+
+                      >input{
+                          width: 100%;
+                          height: 100%;
+                          border: 1px solid $color-base-0;
+
+                          &:focus , &:hover{
+                              border-color: none!important;
+                              box-shadow: none;
+                          }
+                      }
+
+                      nz-select {
+                        border: 0px;
+                        width: 100%;
                         height: 100%;
-                        
-                        &:focus , &:hover{
-                            border-color: $color-media-dark-orange;
+                        border: none;
+
+                        nz-select-top-control {
+                          border: none!important;
                         }
-                    }
+                      }
 
-                    >i{
-                        padding: 10px ;
-                        cursor: pointer;
-                    }
+                      >i{
+                          padding: 10px ;
+                          cursor: pointer;
+                      }
+                  }
+                  >.m-form-input-password{
+                      display : flex;
+                      justify-content:center;
+                      align-items: center;
+                      border: 1px solid $color-media-primary-orange;
+                      height: 45px;
+                      margin: 10px 0 0 0;
+                      width: 50%;
+
+                      >input{
+                          height: 100%;
+                          border: 1px solid $color-base-0;
+                          width: 100%;
+
+                          &:focus , &:hover{
+                            border-color: none!important;
+                            box-shadow: none;
+                          }
+                      }
+
+                      >i{
+                          padding: 15px ;
+                          cursor: pointer;
+                          height: 100%;
+                          background: $color-media-primary-orange;
+                          color: $color-white;
+                          font-size: 15px;
+                          transition: 0.5s all;
+                          &:hover{
+                            background: $color-media-dark-orange;
+                          }
+                      }
+                  }
+                  >.error {
+                      color : red;
+                      padding: 5px 0;
+                  }
+
+                  nz-switch{
+                      margin: 10px 0 0 0;
+                  }
+              }
+
+              > .m-row {
+                @include mq(desktop) {
+                  display: flex;
+                  flex-direction: row;
                 }
-                >.m-form-input-password{
-                    display : flex;
-                    justify-content:center;
-                    align-items: center;
-                    border: 1px solid $color-media-primary-orange;
-                    height: 45px;
-                    margin: 10px 0 0 0;
+                @include mq (desktop) {
+                  width: 59.5%;
+                  margin-left: 16%;
+                }
+                > .m-form-group{
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                  margin : 5px;
+                  text-transform: uppercase;
+                  font-weight: 700;
+                  font-size: 12px;
+                  line-height: 16px;
+                  font-style: normal;
+                  width: 100%;
+                  @include mq (desktop) {
+                    width: 50%;
+                  }
 
-                    >input{
-                        height: 100%;
-
-                        &:focus , &:hover{
-                            border-color: $color-media-dark-orange;
-                        }
+                  > label {
+                    cursor: default;
+                    @include textstyle-size-14();
+                    width: 25%;
+                    @include mq (desktop) {
+                      width: 31.5%;
+                      left: -16px;
                     }
+                    text-transform: none;
+                    padding-right: 20px;
+                    text-align: right;
+                    position: relative;
 
-                    >i{
-                        padding: 15px ;
-                        cursor: pointer;
-                        height: 100%;
-                        background: $color-media-primary-orange;
-                        color: $color-white;
-                        font-size: 15px;
+                    &::before {
+                      content: '*';
+                      color: $color-media-dark-orange;
+                      padding-right: 5px;
+                      font-size: 15px;
+                      line-height: 10px;
                     }
-                }
-                >.error {
-                    color : red;
-                    padding: 5px 0;
-                }
-
-                nz-switch{
-                    margin: 10px 0 0 0;
-                }
-            }
-        
-            >button{
-                margin : 20px;
-                height: 39px;
-                padding: 10px 30px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-
-                &.m-primary-button{
-                    background: $color-media-primary-orange;
-                    color: $color-white;
-                    border-color: $color-media-primary-orange;
-                    &:hover{
-                        background: $color-media-dark-orange;
+                    &::after {
+                      content: ':';
+                      color: $color-base-100;
+                      padding-left: 2px;
+                      font-size: 15px;
+                      line-height: 10px;
                     }
+                  }
+
+                  > .m-label-custom {
+
+                    left: 0;
+                  }
+                  >.m-form-input{
+                      width: 50%;
+                      @include mq(desktop) {
+                        width: 73%;
+                      }
+                      display : flex;
+                      justify-content:center;
+                      align-items: center;
+                      border: 1px solid $color-media-primary-orange;
+                      height: 45px;
+                      margin: 10px 0 0 0;
+
+                      >input{
+                          width: 100%;
+                          height: 100%;
+                          border: 1px solid $color-base-0;
+
+                          &:focus , &:hover{
+                              border-color: none!important;
+                              box-shadow: none;
+                          }
+                      }
+                  }
                 }
-            }
+              }
+
+              >button{
+                  margin: 20px auto;
+                  height: 39px;
+                  padding: 10px 30px;
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+
+                  &.m-primary-button{
+                      background: $color-media-primary-orange;
+                      color: $color-white;
+                      border-color: $color-media-primary-orange;
+                      &:hover{
+                          background: $color-media-dark-orange;
+                      }
+                  }
+              }
+          }
         }
     }
 }

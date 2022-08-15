@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'assets/sass/_project/_config.scss';
 @import 'assets/sass/_global/_mixins.scss';
+@import 'assets/sass/_project/base.scss';
 @import 'assets/sass/_project/mixins-fonts';
 @import 'assets/sass/_project/_placeholders.scss';
 @import 'assets/sass/_project/placeholders-layouts';
@@ -284,3 +285,31 @@ svg {
   }
 }
 
+
+nz-select-top-control {
+  .mod-create-user & {
+    border: none!important;
+    box-shadow: none!important;
+  }
+}
+.ant-table-content{
+  overflow-x: scroll;
+}
+
+.ant-table-cell, td{
+    overflow-wrap: normal !important;
+}
+
+.ant-table table {
+  width: max-content;
+  @include mq(tablet) {
+    width: 100%;
+  }
+}
+
+.ant-modal-header {
+  border-bottom: 0;
+}
+.ant-modal-footer{
+  border-top: 0;
+}
