@@ -204,7 +204,8 @@ class InstagramController extends Controller
 
             foreach ($mentions as $mention) {
                 if ($mention['image'] == 0) {
-                    $object['user_tags'][] = ['username' => $mention['username'], 'x' => $mention['x'], 'y' => $mention['y']];
+                    $userName = trim(str_replace('@' , '' , $mention['username']));
+                    $object['user_tags'][] = ['username' => $userName, 'x' => $mention['x'], 'y' => $mention['y']];
                 }
             }
         }
