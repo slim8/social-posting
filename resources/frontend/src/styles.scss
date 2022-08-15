@@ -279,8 +279,10 @@ svg {
 
 
 nz-select-top-control {
-  border: none!important;
-  box-shadow: none!important;
+  .mod-create-user & {
+    border: none!important;
+    box-shadow: none!important;
+  }
 }
 .ant-table-content{
   overflow-x: scroll;
