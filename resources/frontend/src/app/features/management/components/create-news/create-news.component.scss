@@ -57,6 +57,7 @@
                 border-color: $color-media-primary-orange;
                 border-radius: 0;
                 font-weight: 700;
+                height: 39px;
 
                 > span {
                     @include textstyle-size-14-bold();
