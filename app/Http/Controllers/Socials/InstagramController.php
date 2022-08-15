@@ -314,7 +314,7 @@ class InstagramController extends Controller
                 $videosConatiners = [];
                 $incImages = 0;
                 foreach ($videos as $video) {
-                    $videoObj = json_decode($video, true);
+                    $videoObj = gettype($video) == 'array' ? $video : json_decode($video, true);
                     $video = $videoObj['url'];
                     $videoSecondes = $videoObj['seconde'];
                     $videoContainerId = $this->postMediaUrl($igUser, $object['access_token'], $video, $mentions, $incImages, 'video', $videoSecondes);
