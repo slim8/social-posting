@@ -12,7 +12,11 @@
             text-transform: capitalize;
             font-weight: 400;
             >h1{
-                color: $color-media-black-opacity-half;
+              @include textstyle-size-32-bold();
+              margin-bottom: 5px;
+              @include mq(mobilebig) {
+                  @include textstyle-size-44-bold();
+              }
             }
         }
 
@@ -22,21 +26,25 @@
                 padding: 18px;
 
                 >label {
-                    font-size: 0.75rem;
-                    line-height: 1.4166666667rem;
-                    text-transform: capitalize;
-                    font-weight: 700;
+                  font-size: 14px;
+                  color: $color-media-black;
+                  opacity: 0.85;
+
                 }
 
                 >.m-form-input {
-
-                    >.m-select{
+                    >.m-select,
+                    input{
                         width: 100%;
+                        height: 45px;
+                        border: 1px solid #ff8d69;
+                        background-color: $color-base-0;
+                        display:flex;
+                        align-items: center;
                     }
-                    
                 }
 
-                
+
 
                 >.error{
                     color: red;
@@ -47,9 +55,16 @@
                 margin : 18px ;
                 background-color: $color-media-primary-orange;
                 border-color: $color-media-primary-orange;
+                border-radius: 0;
+                font-weight: 700;
+
+                > span {
+                    @include textstyle-size-14-bold();
+
+                }
             }
         }
 
-        
+
     }
 }
