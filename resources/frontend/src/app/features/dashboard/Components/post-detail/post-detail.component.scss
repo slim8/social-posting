@@ -9,11 +9,11 @@
 
     >.m-wrapper{
         width: 100%;
-        margin-left: 20px;
+        padding-left: 20px;
 
         @include mq(desktop){
             width : 608px ;
-            margin-left: 120px;
+            padding-left: 120px;
         }
 
         >.m-header{
@@ -37,10 +37,6 @@
 
         >.m-container{
             margin-right: 50px;
-
-            @include mq(tablet){
-                margin-right: 0px;
-            }
 
             >.m-post-detail-date{
                 font-weight: 400;
