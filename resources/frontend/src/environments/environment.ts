@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    apiURL: 'http://posting.local/api/'
+    apiURL: 'https://posting.local/api/'
 };
 
 /*

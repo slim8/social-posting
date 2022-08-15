@@ -406,7 +406,7 @@ class GeneralSocialController extends Controller
         $facebookUserObject = $this->facebookController->getFacebookPersonalInformations($request->accessToken);
         $providerToken = ProviderToken::where('longLifeToken', Account::$STATUS_DISCONNECTED)->where('createdBy', $this->traitController->getCurrentId())->where('accountUserId', $facebookUserId)->first();
         $tokenKey = $this->facebookController->generateLongLifeToken($request->accessToken, $facebookUserId)->token;
-        $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $tokenKey, 1);
+        $facebookResponse = $this->facebookController->getAccountPagesAccount($facebookUserId, $request->accessToken, 1);
 
         /* Start Reconnect Block */
         if ($providerToken) {

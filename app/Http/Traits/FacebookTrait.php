@@ -74,4 +74,17 @@ trait FacebookTrait
 
         return $pageInfo;
     }
+
+    /**
+     * Generate App Secret Prof
+     */
+    public static function getAppSecretProf($tokenKey)
+    {
+        return (envValue('FACEBOOK_APP_ENV') == 'Production') ? '&appsecret_proof='.hash_hmac('sha256', $tokenKey, envValue('FACEBOOK_SECRET_KEY')) : '';
+    }
+
+    public static function isProd()
+    {
+        return envValue('FACEBOOK_APP_ENV') == 'Production';
+    }
 }

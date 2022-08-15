@@ -37,7 +37,9 @@ class FacebookController extends Controller
     public function getFacebookPersonalInformations($accessToken)
     {
         $responseObject = [];
-        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name,picture&access_token='.$accessToken);
+        // Add Ahsh Secret key for Production
+        $appProf = $this->facebookService->getAppSecretProf($accessToken);
+        $response = Http::post(envValue('FACEBOOK_ENDPOINT').'/me?fields=id,name,picture&access_token='.$accessToken.$appProf);
         $responseObject['name'] = $response->json('name');
         $responseObject['picture'] = isset($response->json('picture')['data']) ? $response->json('picture')['data']['url'] : 'https://blog.soat.fr/wp-content/uploads/2016/01/Unknown.png';
 
@@ -80,10 +82,13 @@ class FacebookController extends Controller
      */
     public function generateLongLifeToken($tokenKey, string $facebookUserId = '', int $userId = null)
     {
+        $appProf = $this->facebookService->getAppSecretProf($tokenKey);
         $userObj = $userId ? $userId : $this->traitController->getCurrentId();
         $facebookAppKey = envValue('FACEBOOK_APP_ID');
         $facebookSecretKey = envValue('FACEBOOK_SECRET_KEY');
-        $response = Http::get(envValue('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey);
+
+        $response = Http::get(envValue('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey.$appProf);
+        //dd(envValue('FACEBOOK_ENDPOINT').'oauth/access_token?grant_type=fb_exchange_token&client_id='.$facebookAppKey.'&fb_exchange_token='.$tokenKey.'&client_secret='.$facebookSecretKey.$appProf);
         $providerId = $this->updateOrReturnProviderIdUser($userObj, $response->json('access_token'), $facebookUserId);
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
@@ -328,8 +333,10 @@ class FacebookController extends Controller
 
     public function getAccountPagesAccount($facebookUserId, $tokenKey, int $getInstagramAccount = 0, int $checkWithCompany = null)
     {
-        $facebookUri = envValue('FACEBOOK_ENDPOINT').$facebookUserId.'/accounts?access_token='.$tokenKey;
-
+        //$tokenKey = 'EAAHVOmc7RxYBAEHzpY0gfp5uJqroHenoiBhUYFDhC2m7uEpX01JgeUphuozWExFP78EoT3AZABZCWlybrb5c7bo62eZByDSeYSdkmVTH0EYJ5ZBlHb3w0qZCgrpZAZBTNVc16xZBPKRRt0EGvZBjEO4EUaKCjluZBpOjEGk5usZCHgMjvELnhcqeRCpP0VgwjCoUwVdhCmg84dIPAhgXF6p5lJGUJ5M2t6RkyoZD';
+        $appProf = $this->facebookService->getAppSecretProf($tokenKey);
+        $facebookUri = envValue('FACEBOOK_ENDPOINT').(envValue('FACEBOOK_APP_ENV') == 'Production' ? $facebookUserId : $facebookUserId).'/accounts?access_token='.$tokenKey.$appProf;
+        dd($facebookUri);
         $response = Http::get($facebookUri);
 
         $jsonPageList = $response->json('data');
