@@ -6,9 +6,9 @@
     <div class="m-button-container">
       <button nz-button nzType="primary" (click)="showModal()" [disabled]="setOfCheckedId.size === 0" class="m-primary-button" i18n="Set Permissions|Title for the Set Permissions@@setPermissions">
           <i nz-icon nzType="edit"></i>
-          Set Permissions 
+          Set Permissions
       </button>
-  
+
       <button nz-button nzType="primary" (click)="navigateToCreateUser()" class="m-primary-button" i18n="Add User|Title for the Add User@@addUser">
           <i nz-icon nzType="edit"></i>
           Add User
@@ -79,16 +79,16 @@
         [nzBodyStyle]="{minWidth : '350px'}"
       >
         <ng-template #modalTitle i18n="Add Permissions|Title for the Add Permissions@@addPermissions">Add Permissions</ng-template>
-  
+
         <ng-template #modalContent>
             <nz-list>
               <nz-list-item *ngFor="let page of listOfPages">
-                <label nz-checkbox 
+                <label nz-checkbox
                 [nzChecked]="setOfCheckedPageId.has(page.id)"
                 (nzCheckedChange)="onItemCheckedPage(page.id, $event)"
                 ></label>
                 <nz-list-item-meta
-                  nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  nzAvatar="{{page.pagePictureUrl}}"
                   [nzDescription]="page.provider"
                   (click)="onItemCheckedPage(page.id, !setOfCheckedPageId.has(page.id) )"
                 >
@@ -99,10 +99,10 @@
               </nz-list-item>
             </nz-list>
         </ng-template>
-  
+
         <ng-template #modalFooter>
-          <button nz-button nzType="default" (click)="handleCancel()" i18n="Cancel|Title for the Cancel@@cancel">Cancel</button>
-          <button nz-button nzType="primary" (click)="addPermission()" [nzLoading]="isOkLoading" i18n="save|Title for the save@@save">save</button>
+          <button nz-button nzType="default" class="ant-btn ant-btn-cancel" (click)="handleCancel()" i18n="Cancel|Title for the Cancel@@cancel">Cancel</button>
+          <button nz-button nzType="primary" class="ant-btn-primary ant-btn-dangerous ant-btn-save" (click)="addPermission()" [nzLoading]="isOkLoading" i18n="save|Title for the save@@save">save</button>
         </ng-template>
     </nz-modal>
   </div>

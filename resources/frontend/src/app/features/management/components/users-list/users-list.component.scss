@@ -15,7 +15,7 @@
                 color: $color-media-black-opacity-half;
             }
         }
-        
+
         >.m-button-container {
             text-align: end;
             margin : 0 0 20px 0;
@@ -38,9 +38,27 @@
             }
         }
 
-    } 
+    }
 }
 
+ .ant-list-split{
+      .ant-list-item{
+      border-bottom: 0;
+      }
+    }
+  .ant-btn-save{
+    background-color: $color-media-primary-orange;
+    border-color: $color-media-primary-orange;
+
+  }
+  .ant-btn-cancel{
+    &:hover{
+      background-color: $color-base-0;
+      border-color:#d9d9d9;
+      color: $color-base-100;
+      opacity: 0.85;
+    }
+  }
 .m-permission-block{
     display: flex;
     flex-wrap: wrap;
@@ -61,7 +79,7 @@
             justify-content: center;
             align-items: center;
             >.m-permission-tag-card-img{
-                
+
             }
 
             >.m-permission-tag-card-content{

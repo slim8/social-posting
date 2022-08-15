@@ -5,24 +5,25 @@
 
 .mod-post-detail{
     background: white;
-    padding: 25px 0 108px 0;
+    padding: 19px 0 108px 0;
 
     >.m-wrapper{
         width: 100%;
-        margin-left: 20px;
+        padding-left: 20px;
 
         @include mq(desktop){
             width : 608px ;
-            margin-left: 120px;
+            padding-left: 120px;
         }
 
         >.m-header{
-            
-            text-align: end;
+
+
             margin-bottom : 46px ;
             margin-right: 50px;
 
             @include mq(desktop){
+              text-align: end;
                 margin-right: 0px;
             }
 
@@ -36,10 +37,6 @@
 
         >.m-container{
             margin-right: 50px;
-
-            @include mq(tablet){
-                margin-right: 0px;
-            }
 
             >.m-post-detail-date{
                 font-weight: 400;
@@ -56,14 +53,14 @@
 
             >.m-post-detail-img{
                 margin-top: 24px;
-                
+
 
                 >img{
                     width: 100%;
                     height: 180px;
                     object-fit: cover;
                     object-position: center;
-                    
+
                     @include mq(tablet){
                         width: 608px;
                         height: 349px;
@@ -73,6 +70,7 @@
             }
 
             .m-post-detail-description{
+              @include fontfamily-primary;
                 margin : 48px 0;
                 font-weight: 400;
                 font-size: 16px;
@@ -87,7 +85,7 @@
                     font-size: 24px;
                     line-height: 138.68%;
                 }
-    
+
                 >.m-post-detail-img{
                     >img{
                         width: 100%;
@@ -103,7 +101,7 @@
                 }
             }
 
-            
+
         }
 
         >.m-support-footer{
