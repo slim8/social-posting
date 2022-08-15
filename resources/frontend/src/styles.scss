@@ -276,6 +276,7 @@ svg {
   }
 }
 
+
 nz-select-top-control {
   border: none!important;
   box-shadow: none!important;
@@ -283,10 +284,24 @@ nz-select-top-control {
 .ant-table-content{
   overflow-x: scroll;
 }
-.ant-table table {
-  width: max-content;
-}
+
 .ant-table-cell, td{
     overflow-wrap: normal !important;
 }
+
+.ant-table table{
+  width: auto;
+  @include mq(desktop) {
+    width: 100%;
+  }
+}
+
+.ant-modal-header {
+  border-bottom: 0;
+}
+.ant-modal-footer{
+  border-top: 0;
+}
+
+
 
