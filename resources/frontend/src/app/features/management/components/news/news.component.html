@@ -27,7 +27,7 @@
                         <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id)"></td>
                         <td class="m-table-picture" > <img nz-image [nzSrc]="data.img" alt="" ></td>
                         <td class="m-table-title " >{{data.title}}</td>
-                        <td class="m-table-teaser" >{{data.teaser}}</td>
+                        <td class="m-table-teaser" ><div [innerHTML]="data.teaser"></div></td>
                         <td class="m-table-template">{{data.template == '1' ? 'Small' : 'Big'  }}</td>
                         <td class="m-table-action">
                             <button nz-button (click)="addTextMedia(data.id)"  nzType="primary" class="m-primary-button" i18n="Add News|Title for the Add News@@addNews">
