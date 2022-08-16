@@ -36,6 +36,9 @@
                   opacity: 0.85;
                   max-width: 71px;
                   width: 100%;
+                  justify-content: flex-end;
+                  display: flex;
+                  margin-right: 10px;
                 }
 
                 >.m-form-input {
