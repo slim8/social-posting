@@ -5,6 +5,8 @@
 .mod-add-news{
 
     >.m-wrapper {
+        background: white;
+        padding-bottom: 18px;
         >.m-header{
             padding: 18px;
             font-size: 2.5rem;
@@ -14,6 +16,7 @@
             >h1{
               @include textstyle-size-32-bold();
               margin-bottom: 5px;
+              text-align: center;
               @include mq(mobilebig) {
                   @include textstyle-size-44-bold();
               }
@@ -52,12 +55,15 @@
             }
 
             >.m-primary-button{
-                margin : 18px ;
                 background-color: $color-media-primary-orange;
                 border-color: $color-media-primary-orange;
                 border-radius: 0;
                 font-weight: 700;
                 height: 39px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 18px auto;
 
                 > span {
                     @include textstyle-size-14-bold();
