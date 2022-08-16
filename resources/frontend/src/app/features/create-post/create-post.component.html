@@ -507,6 +507,20 @@
                       <i nz-icon nzType="right" nzTheme="outline"></i>
                     </div>
                   </div>
+
+                  <div *ngIf="!leadThumbnail && listThumbnail.length > 0" class="m-custom-upload">
+                    <nz-upload
+                      [nzAction]="uploadFileAPIURL"
+                      [nzHeaders]="{ authorization: 'authorization-text' }"
+                      [(nzFileList)]="customThumbnailList"
+                      (nzChange)="customThumbnail($event)">
+                      <button class="m-button is-disabled is-black-icon" i18n="UploadYourOwn|Title for Upload your own@@uploadYourOwn">
+                        <i nz-icon nzType="upload"></i>
+                        upload your own
+                      </button>
+                    </nz-upload>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -517,8 +531,8 @@
         <div *ngIf="mediaList.length <= 0" class="m-no-preview">
           <h3
             i18n="
-              Preview Not Available|Title for preview not
-              available@@previewNotAvailable"
+            Preview Not Available|Title for preview not
+            available@@previewNotAvailable"
           >
             Preview not available
           </h3>
