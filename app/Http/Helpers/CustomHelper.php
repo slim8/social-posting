@@ -70,3 +70,12 @@ function debugAndDie(...$vars): void
     debugOnly($vars);
     exit;
 }
+
+
+/**
+ * greatest common divisor
+ */
+
+function gcd ($a, $b) {
+    return $b ? gcd($b, $a % $b) : $a;
+}
