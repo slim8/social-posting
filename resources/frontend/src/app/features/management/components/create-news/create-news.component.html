@@ -12,6 +12,8 @@
                 </div>
                 <small class="error" *ngIf="error && error.title" >{{error.title[0]}}</small>
             </div>
+            <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="htmlContent"></angular-editor>
+
             <div class="m-form-group">
                 <label i18n="teaser|Title for the teaser@@teaser">Teaser</label>
                 <div class="m-form-input">

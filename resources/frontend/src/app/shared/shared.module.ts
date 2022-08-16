@@ -9,6 +9,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
 import { ItemLoaderComponent } from './components/item-loader/item-loader.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+
 
 @NgModule({
     declarations: [
@@ -28,7 +30,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
         ItemLoaderComponent,
         NotFoundComponent,
         ServerErrorComponent,
-        UnauthorizedComponent
+        UnauthorizedComponent,
+        AngularEditorModule
     ]
 })
 export class SharedModule {

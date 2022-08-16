@@ -2,6 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NewsService } from './../../../dashboard/services/news.service';
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-create-news',
   templateUrl: './create-news.component.html',
@@ -13,6 +14,7 @@ export class CreateNewsComponent implements OnInit {
   title: string ="";
   teaser: string = "";
   picture: string = "";
+  htmlContent: string = "";
   date: string =  "2022-04-05 00:00:00";
   template: string = '';
   image : File | null = null;
@@ -53,18 +55,18 @@ export class CreateNewsComponent implements OnInit {
     let target = event.target as HTMLInputElement;
     if(target.files)
     this.image = target.files[0] ;
-    
+
   }
 
   saveProfile(){
-    
+
     this.error = null ;
     let data = {
       title : this.title,
-      teaser : this.teaser, 
-      image : this.picture, 
-      date : this.date , 
-      template : this.template 
+      teaser : this.teaser,
+      image : this.picture,
+      date : this.date ,
+      template : this.template
     };
     let formData = new FormData();
     formData.append('title',this.title);
@@ -78,14 +80,14 @@ export class CreateNewsComponent implements OnInit {
     }else{
       this.addNews(formData);
     }
-    
+
   }
 
   addNews(formData : FormData){
     this.newsService.addNews(formData).subscribe({
       next: (event: any) => {
           this.router.navigate(['/application/management/news']);
-          
+
         },
       error: err => {
           this.error = err.error.error;
