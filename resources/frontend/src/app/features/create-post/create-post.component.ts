@@ -25,7 +25,7 @@ interface image {
     type: string,
     thumbnailLink: string|null,
     thumbnailRessource: string|null,
-    thumbnailSeconde: string|null
+    thumbnailSecond: string|null
 }
 
 @Component({
@@ -92,7 +92,7 @@ export class CreatePostComponent implements OnInit {
     duration = 10;
 
     videosList: NzUploadFile[] = [];
-    listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
+    listOfVideos: { url: string, second: number, thumbnail: any }[] = []
 
     videoCounter = 0;
     videoList: { id: number, file: File|null, videoUrl: string , duration : number |null }[] = [];
@@ -283,20 +283,20 @@ export class CreatePostComponent implements OnInit {
             return { url: video.videoUrl , id: thumbnail.id,imgB64: thumbnail.imgB64 , time: thumbnail.time , thumbnail: thumbnail.url ? thumbnail.url: '' };
         })
 
-        let compteur = list.length;
-        if(compteur>0) {
+        let counter = list.length;
+        if(counter>0) {
           await list.forEach(async (videoObject) => {
               if(videoObject.imgB64 ){
                   await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
                       next: (response) => {
-                          this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                          compteur--;
+                          this.listOfVideos.push({ url: videoObject.url, second: videoObject.time, thumbnail: response.files.url });
+                          counter--;
                       },
                       error: (err) => {
                           this.shared.createMessage('error', err);
                       },
                       complete: () => {
-                          if(compteur <= 0){
+                          if(counter <= 0){
                             console.log('im in3');
                             this.submitForm(param);
                           }
@@ -304,10 +304,10 @@ export class CreatePostComponent implements OnInit {
                   });
               }else{
                   if(videoObject.url) {
-                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: videoObject.thumbnail });
+                    this.listOfVideos.push({ url: videoObject.url, second: videoObject.time, thumbnail: videoObject.thumbnail });
                   }
-                  compteur--;
-                  if(compteur <= 0){
+                  counter--;
+                  if(counter <= 0){
                     console.log('im in2');
                     this.submitForm(param);
                   }
@@ -379,8 +379,8 @@ export class CreatePostComponent implements OnInit {
         }
 
         this.videosList.forEach((videoObject) => {
-            if(videoObject['seconde']){
-                formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+            if(videoObject['second']){
+                formData.append('videos[]', JSON.stringify({ url: videoObject.url, second: videoObject['second'] , thumbnail: videoObject.thumbUrl }));
             }
         })
 
@@ -774,14 +774,14 @@ export class CreatePostComponent implements OnInit {
             console.log(id);
 
             this.videoList.push({ id: id, file: null , videoUrl: item.url , duration : null });
-            this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSeconde ? +item.thumbnailSeconde : -1 , url : item.thumbnailLink});
+            this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSecond ? +item.thumbnailSecond : -1 , url : item.thumbnailLink});
 
             return {
                     uid: id.toString(),
                     name: item.url ,
                     status: 'done',
                     url: item.url,
-                    seconde: item.thumbnailSeconde,
+                    second: item.thumbnailSecond,
                     thumbUrl: item.thumbnailLink ? item.thumbnailLink : undefined
                   }
         } )
@@ -855,18 +855,18 @@ export class CreatePostComponent implements OnInit {
                 this.message = event.post.message ;
                 this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
 
-                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
+                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSecond : string} , key : any) => {
 
                     this.mediaList.push( { id: -(key+1), url: item.thumbnailLink, type: "video" })
                     this.videoList.push({ id: -(key+1), file: null , videoUrl: item.url , duration : null });
-                    this.selectedThumbnailList.push( { id: -(key+1) , imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
+                    this.selectedThumbnailList.push( { id: -(key+1) , imgB64: null, time: +item.thumbnailSecond , url : item.thumbnailLink});
 
                     return {
                             uid: -(key+1) ,
                             name: item.url ,
                             status: 'done',
                             url: item.url,
-                            seconde: item.thumbnailSeconde,
+                            second: item.thumbnailSecond,
                             thumbUrl: item.thumbnailLink
                           }
                 } )
