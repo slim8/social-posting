@@ -9,44 +9,54 @@
                 <label i18n="title|Title for the title@@title">Title</label>
                 <div class="m-form-input">
                     <input nz-input type="text" placeholder="title" [(ngModel)]="title" />
+                    <small class="error" *ngIf="error && error.title" >{{error.title[0]}}</small>
                 </div>
-                <small class="error" *ngIf="error && error.title" >{{error.title[0]}}</small>
             </div>
+
             <div class="m-form-group">
                 <label i18n="teaser|Title for the teaser@@teaser">Teaser</label>
                 <div class="m-form-input">
-                    <input nz-input type="text" placeholder="teaser" [(ngModel)]="teaser" />
+                  <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="teaser" [config]="editorConfig" class="m-teaser"></angular-editor>
+                  <small class="error" *ngIf="error && error.teaser" >{{error.teaser[0]}}</small>
                 </div>
-                <small class="error" *ngIf="error && error.teaser" >{{error.teaser[0]}}</small>
             </div>
             <div class="m-form-group">
                 <label i18n="picture|Title for the picture@@picture">Picture</label>
                 <div class="m-form-input">
                     <input nz-input type="file" (change)="loadFile($event)" placeholder="picture" [(ngModel)]="picture" />
+                    <small class="error" *ngIf="error && error.image" >{{error.image[0]}}</small>
                 </div>
-                <small class="error" *ngIf="error && error.image" >{{error.image[0]}}</small>
             </div>
             <div class="m-form-group">
                 <label i18n="date|Title for the date@@date">date</label>
                 <div class="m-form-input">
                     <input nz-input type="date" placeholder="date" [(ngModel)]="date" />
+                    <small class="error" *ngIf="error && error.date" >{{error.date[0]}}</small>
                 </div>
-                <small class="error" *ngIf="error && error.date" >{{error.date[0]}}</small>
             </div>
             <div class="m-form-group">
                 <label i18n="template|Title for the template@@template">Template</label>
                 <div class="m-form-input">
                     <nz-select nzPlaceHolder="Choose" class="m-select" [(ngModel)]="template" >
-                        <nz-option nzValue="1" nzLabel="Vertical"></nz-option>
-                        <nz-option nzValue="2" nzLabel="Horizental"></nz-option>
+                        <nz-option nzValue="1" nzLabel="Small"></nz-option>
+                        <nz-option nzValue="2" nzLabel="Big"></nz-option>
                     </nz-select>
+                    <small class="error" *ngIf="error && error.template" >{{error.template[0]}}</small>
                 </div>
-                <small class="error" *ngIf="error && error.template" >{{error.template[0]}}</small>
             </div>
             <button nz-button nzType="primary" nzShape="round" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
                 <i nz-icon nzType="edit" nzTheme="outline"></i>
-                save
+                Save
             </button>
+        </div>
+         <div class="box-opener" (click)="show = !show">
+            Add sub-news
+        </div>
+
+        <div class="box" [class.opened]="show">
+            <div class="content">
+              two fiels
+            </div>
         </div>
     </div>
 </div>

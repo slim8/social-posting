@@ -27,15 +27,19 @@
 
             >.m-form-group{
                 padding: 18px;
+                display: flex;
+                align-items: baseline;
 
                 >label {
                   font-size: 14px;
                   color: $color-media-black;
                   opacity: 0.85;
-
+                  max-width: 71px;
+                  width: 100%;
                 }
 
                 >.m-form-input {
+                  width: 100%;
                     >.m-select,
                     input{
                         width: 100%;
@@ -64,14 +68,26 @@
                 justify-content: center;
                 align-items: center;
                 margin: 18px auto;
-
-                > span {
-                    @include textstyle-size-14-bold();
-
-                }
+                @include textstyle-size-14-bold();
             }
         }
 
 
     }
+}
+.box-opener {
+  cursor: pointer;
+  padding: 16px;
+  user-select: none;
+}
+
+.box {
+  max-height: 0px;
+  overflow-y: hidden;
+  transition: ease-in-out 400ms max-height;
+}
+
+.box.opened {
+  max-height: 500px;
+  transition: ease-in-out 600ms max-height;
 }

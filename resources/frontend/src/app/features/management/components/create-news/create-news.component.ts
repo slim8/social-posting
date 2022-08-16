@@ -1,14 +1,18 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { NewsService } from './../../../dashboard/services/news.service';
 import { Component, OnInit } from '@angular/core';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { trigger, transition, animate, style } from '@angular/animations'
+
+
 
 @Component({
   selector: 'app-create-news',
   templateUrl: './create-news.component.html',
   styleUrls: ['./create-news.component.scss']
+
 })
 export class CreateNewsComponent implements OnInit {
-
 
   title: string ="";
   teaser: string = "";
@@ -16,7 +20,7 @@ export class CreateNewsComponent implements OnInit {
   date: string =  "2022-04-05 00:00:00";
   template: string = '';
   image : File | null = null;
-
+  public show: boolean = false;
   error : any = null ;
 
   editMode = false ;
@@ -53,18 +57,18 @@ export class CreateNewsComponent implements OnInit {
     let target = event.target as HTMLInputElement;
     if(target.files)
     this.image = target.files[0] ;
-    
+
   }
 
   saveProfile(){
-    
+
     this.error = null ;
     let data = {
       title : this.title,
-      teaser : this.teaser, 
-      image : this.picture, 
-      date : this.date , 
-      template : this.template 
+      teaser : this.teaser,
+      image : this.picture,
+      date : this.date ,
+      template : this.template
     };
     let formData = new FormData();
     formData.append('title',this.title);
@@ -78,14 +82,14 @@ export class CreateNewsComponent implements OnInit {
     }else{
       this.addNews(formData);
     }
-    
+
   }
 
   addNews(formData : FormData){
     this.newsService.addNews(formData).subscribe({
       next: (event: any) => {
           this.router.navigate(['/application/management/news']);
-          
+
         },
       error: err => {
           this.error = err.error.error;
@@ -107,5 +111,23 @@ export class CreateNewsComponent implements OnInit {
       }
     })
   }
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+      spellcheck: false,
+      height: 'auto',
+      minHeight: '0',
+      maxHeight: 'auto',
+      width: 'auto',
+      minWidth: '0',
+      translate: 'yes',
+      enableToolbar: true,
+      sanitize: false,
+      showToolbar: true,
+      placeholder: 'Enter text here...',
+      defaultParagraphSeparator: '',
+      defaultFontName: '',
+      defaultFontSize: '',
+    uploadUrl: 'v1/image',
+};
 
 }
