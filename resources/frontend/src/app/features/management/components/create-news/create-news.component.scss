@@ -79,6 +79,11 @@
   cursor: pointer;
   padding: 16px;
   user-select: none;
+  button{
+     background-color: #ff8d69;
+    border-color: #ff8d69;
+    color: $color-base-0;
+  }
 }
 
 .box {
@@ -88,6 +93,7 @@
 }
 
 .box.opened {
+  padding: 18px;
   max-height: 500px;
   transition: ease-in-out 600ms max-height;
 }
