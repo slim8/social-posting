@@ -576,7 +576,7 @@ export class CreatePostComponent implements OnInit {
     selectThumbnail(item: { imgB64: '', time: 0 }) {
         this.selectedThumbnail = item;
 
-        
+
         this.selectedThumbnailList.forEach(selectedThumbnail => {
             if (selectedThumbnail.id == this.selectedVideo.id) {
                 if(!selectedThumbnail.imgB64){
@@ -590,9 +590,7 @@ export class CreatePostComponent implements OnInit {
         this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     }
 
-    customThumbnail(event: any) {
-      console.log(event);
-
+    customThumbnail(event: any){
       if(event.type == "success") {
         this.selectedThumbnailList.forEach(selectedThumbnail => {
           if (selectedThumbnail.id == this.selectedVideo.id) {
@@ -607,7 +605,6 @@ export class CreatePostComponent implements OnInit {
         this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
       }
       if(event.type=="removed") {
-        console.log(this.selectedVideo);
         this.currentTimePosition = -10;
         this.selectedThumbnailList = this.selectedThumbnailList.filter(thumbnail => thumbnail.id != this.selectedVideo.id.toString());
         this.generatethumbnails('next',true);
