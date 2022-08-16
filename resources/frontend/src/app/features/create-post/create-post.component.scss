@@ -74,7 +74,7 @@
                                 background-repeat: no-repeat;
                                 width: 9px;
                                 right: 20px;
-                                top: 18px;
+                                top: 14px;
                                 height: 9px;
                             }
                             &.ant-select-open {
@@ -455,6 +455,22 @@
                                         > p {
                                           color: $color-media-black-opacity-half;
                                         }
+                                    }
+
+                                    > .m-custom-upload {
+                                      padding-top: 20px;
+                                      button {
+                                        background-color: $color-media-lighter-grey;
+                                        color: $color-base-100;
+                                        padding: 4px 12px;
+                                        gap: 0;
+                                        align-items: center;
+                                        @include textstyle-size-12();
+                                        &.m-image,
+                                        &.m-video {
+                                            width: 149px;
+                                        }
+                                      }
                                     }
 
                                     > .m-form-field {
