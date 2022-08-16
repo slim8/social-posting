@@ -286,7 +286,7 @@ export class CreatePostComponent implements OnInit {
         let compteur = list.length;
         if(compteur>0) {
           await list.forEach(async (videoObject) => {
-              if(videoObject.imgB64){
+              if(videoObject.imgB64 ){
                   await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
                       next: (response) => {
                           this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
@@ -303,6 +303,9 @@ export class CreatePostComponent implements OnInit {
                       }
                   });
               }else{
+                  if(videoObject.url) {
+                    this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: videoObject.thumbnail });
+                  }
                   compteur--;
                   if(compteur <= 0){
                     console.log('im in2');
@@ -595,7 +598,7 @@ export class CreatePostComponent implements OnInit {
         this.selectedThumbnailList.forEach(selectedThumbnail => {
           if (selectedThumbnail.id == this.selectedVideo.id) {
               if(!selectedThumbnail.imgB64){
-                  this.videosList = this.videosList.filter(video => video.uid != selectedThumbnail.id.toString())
+                  this.videoList = this.videoList.filter(video => video.id != selectedThumbnail.id);
               }
               selectedThumbnail.imgB64 = "";
               selectedThumbnail.url =  event.file.response.files.url;
