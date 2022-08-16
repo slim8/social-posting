@@ -28,7 +28,7 @@
                         <td class="m-table-picture" > <img nz-image [nzSrc]="data.img" alt="" ></td>
                         <td class="m-table-title " >{{data.title}}</td>
                         <td class="m-table-teaser" >{{data.teaser}}</td>
-                        <td class="m-table-template">{{data.template == '1' ? 'Vertical' : 'Horizental'  }}</td>
+                        <td class="m-table-template">{{data.template == '1' ? 'Small' : 'Big'  }}</td>
                         <td class="m-table-action">
                             <button nz-button (click)="addTextMedia(data.id)"  nzType="primary" class="m-primary-button" i18n="Add News|Title for the Add News@@addNews">
                                 <i nz-icon nzType="plus" nzTheme="outline"></i>
@@ -42,7 +42,7 @@
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
                         </td>
-                    </tr> 
+                    </tr>
                     <tr [nzExpand]="expandSet.has(data.id)">
                         <nz-table class="m-table" #textMedia [nzData]="data.text_media_news" nzTableLayout="fixed">
                             <thead >
@@ -54,10 +54,10 @@
                                   <th></th>
                                 </tr>
                             </thead>
-                            <tbody class="m-table-body">                            
+                            <tbody class="m-table-body">
                                 <ng-container *ngFor="let subNews of textMedia.data">
                                     <tr>
-                                        <td class="m-table-picture" > <img nz-image [nzSrc]="subNews.img" alt="" ></td>
+                                        <td class="m-table-picture" > <img nz-image [nzSrc]="subNews.img" alt="" class="plus"></td>
                                         <td class="m-table-title" > {{subNews.title}}</td>
                                         <td class="m-table-teaser" >{{subNews.subtitle}}</td>
                                         <td class="m-table-teaser" >{{subNews.description}}</td>

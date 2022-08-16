@@ -1,24 +1,26 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { NewsService } from './../../../dashboard/services/news.service';
 import { Component, OnInit } from '@angular/core';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { trigger, transition, animate, style } from '@angular/animations'
+
 
 
 @Component({
   selector: 'app-create-news',
   templateUrl: './create-news.component.html',
   styleUrls: ['./create-news.component.scss']
+
 })
 export class CreateNewsComponent implements OnInit {
-
 
   title: string ="";
   teaser: string = "";
   picture: string = "";
-  htmlContent: string = "";
   date: string =  "2022-04-05 00:00:00";
   template: string = '';
   image : File | null = null;
-
+  public show: boolean = false;
   error : any = null ;
 
   editMode = false ;
@@ -109,5 +111,23 @@ export class CreateNewsComponent implements OnInit {
       }
     })
   }
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+      spellcheck: false,
+      height: 'auto',
+      minHeight: '0',
+      maxHeight: 'auto',
+      width: 'auto',
+      minWidth: '0',
+      translate: 'yes',
+      enableToolbar: true,
+      sanitize: false,
+      showToolbar: true,
+      placeholder: 'Enter text here...',
+      defaultParagraphSeparator: '',
+      defaultFontName: '',
+      defaultFontSize: '',
+    uploadUrl: 'v1/image',
+};
 
 }

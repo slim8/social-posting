@@ -31,7 +31,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
         NotFoundComponent,
         ServerErrorComponent,
         UnauthorizedComponent,
-        AngularEditorModule
+        AngularEditorModule,
+
     ]
 })
 export class SharedModule {
