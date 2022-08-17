@@ -25,7 +25,7 @@ interface image {
     type: string,
     thumbnailLink: string|null,
     thumbnailRessource: string|null,
-    thumbnailSecond: string|null
+    thumbnailSeconde: string|null
 }
 
 @Component({
@@ -774,14 +774,14 @@ export class CreatePostComponent implements OnInit {
             console.log(id);
 
             this.videoList.push({ id: id, file: null , videoUrl: item.url , duration : null });
-            this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSecond ? +item.thumbnailSecond : -1 , url : item.thumbnailLink});
+            this.selectedThumbnailList.push( { id: id , imgB64: null, time: item.thumbnailSeconde ? +item.thumbnailSeconde : -1 , url : item.thumbnailLink});
 
             return {
                     uid: id.toString(),
                     name: item.url ,
                     status: 'done',
                     url: item.url,
-                    second: item.thumbnailSecond,
+                    second: item.thumbnailSeconde,
                     thumbUrl: item.thumbnailLink ? item.thumbnailLink : undefined
                   }
         } )
@@ -855,18 +855,18 @@ export class CreatePostComponent implements OnInit {
                 this.message = event.post.message ;
                 this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
 
-                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSecond : string} , key : any) => {
+                let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
 
                     this.mediaList.push( { id: -(key+1), url: item.thumbnailLink, type: "video" })
                     this.videoList.push({ id: -(key+1), file: null , videoUrl: item.url , duration : null });
-                    this.selectedThumbnailList.push( { id: -(key+1) , imgB64: null, time: +item.thumbnailSecond , url : item.thumbnailLink});
+                    this.selectedThumbnailList.push( { id: -(key+1) , imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
 
                     return {
                             uid: -(key+1) ,
                             name: item.url ,
                             status: 'done',
                             url: item.url,
-                            second: item.thumbnailSecond,
+                            second: item.thumbnailSeconde,
                             thumbUrl: item.thumbnailLink
                           }
                 } )
