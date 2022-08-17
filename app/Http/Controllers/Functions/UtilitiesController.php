@@ -167,21 +167,21 @@ class UtilitiesController extends Controller
             $responseObject->message['others'][] = $responseObject->messageString;
         }
 
-        if($videos && $isInstagramAccountPage){
-            $incVideo = 0;
-            foreach ($videos as $video){
-                $incVideo++;
-                $videoLink = json_decode($video , true)["url"];
-                $object = $this->validateVideoForInstagram($videoLink);
+        // if($videos && $isInstagramAccountPage){
+        //     $incVideo = 0;
+        //     foreach ($videos as $video){
+        //         $incVideo++;
+        //         $videoLink = json_decode($video , true)["url"];
+        //         $object = $this->validateVideoForInstagram($videoLink);
 
-                if(!$object->status){
-                    $responseObject->status = false;
-                    $responseObject->messageString = $object->message;
-                    $responseObject->message['others'][] = "Video ".$incVideo.' : '.$object->message;
-                }
+        //         if(!$object->status){
+        //             $responseObject->status = false;
+        //             $responseObject->messageString = $object->message;
+        //             $responseObject->message['others'][] = "Video ".$incVideo.' : '.$object->message;
+        //         }
 
-            }
-        }
+        //     }
+        // }
         return $responseObject;
     }
 
