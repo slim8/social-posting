@@ -50,13 +50,12 @@ export class CreateUserComponent implements OnInit {
     let data = {
       email : this.email,
       firstName : this.firstName,
-      lastName : this.lastName ,
-      isSubscriber : this.isSubscriber ,
-      address : this.address ,
-      city : this.city ,
-      postCode : this.postCode ,
-      website : this.website ,
-      password : this.newPassword ,
+      lastName : this.lastName,
+      isSubscriber : this.isSubscriber,
+      address : this.address,
+      city : this.city,
+      postCode : this.postCode,
+      password : this.newPassword,
     };
 
     this.userService.createUser(data).subscribe({
