@@ -6,7 +6,7 @@
         </div>
         <div class="m-container">
             <div class="m-posts-container" *ngFor="let post of posts ; let index = index">
-                <div [class]="post.template =='1' ? 'm-first-post' : 'm-post-item'" >
+                <div [class]="post.template =='2' ? 'm-first-post' : 'm-post-item'" >
                     <div class="m-post-img" *ngIf="post.img">
                         <img [src]="post.img" alt="" class="">
                     </div>
@@ -20,9 +20,9 @@
                                 </a>
                             </div>
                         </div>
-                        <p class="m-post-teaser">{{post.teaser}}</p>
+                        <p class="m-post-teaser" [innerHTML]="post.teaser"></p>
                     </div>
-                    
+
                 </div>
                 <hr class="m-post-line" />
             </div>

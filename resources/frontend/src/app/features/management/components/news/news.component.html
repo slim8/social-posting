@@ -30,11 +30,11 @@
                         <td class="m-table-teaser" ><div [innerHTML]="data.teaser"></div></td>
                         <td class="m-table-template">{{data.template == '1' ? 'Small' : 'Big'  }}</td>
                         <td class="m-table-action">
-                            <button nz-button (click)="editNews(data.id)"  nzType="primary" class="m-secondary-button" i18n="Add News|Title for the Add News@@addNews">
+                            <button nz-button (click)="editNews(data.id)"  nzType="primary" class="m-secondary-button">
                                 <i nz-icon nzType="edit"></i>
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button (click)="deleteNews(data.id , data.title)"  nzType="primary" class="m-danger-button" i18n="Add News|Title for the Add News@@addNews">
+                            <button nz-button (click)="deleteNews(data.id , data.title)"  nzType="primary" class="m-danger-button">
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
                         </td>
