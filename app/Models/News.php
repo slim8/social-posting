@@ -15,10 +15,7 @@ class News extends ExtendedModel
         'picture',
         'date',
         'template',
+        'textImage',
+        'newsText'
     ];
-
-    public function textMediaNews()
-    {
-        return $this->hasMany(TextMediaNews::class);
-    }
 }

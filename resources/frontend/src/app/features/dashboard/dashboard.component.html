@@ -300,9 +300,8 @@
           <div class="m-notes">
             <ul>
               <li *ngFor="let item of news">
-                <p>
-                  {{item.teaser}}. <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
-                </p>
+                <p [innerHTML]="item.teaser"></p>
+                <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
               </li>
             </ul>
           </div>

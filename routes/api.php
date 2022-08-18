@@ -15,7 +15,6 @@ use App\Http\Controllers\Roles\AdminsController;
 use App\Http\Controllers\Roles\CompanyAdminsController;
 use App\Http\Controllers\Socials\FacebookController;
 use App\Http\Controllers\Socials\GeneralSocialController;
-use App\Http\Controllers\TextMediaNewsController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,7 +42,7 @@ Route::group(['middleware' => ['cors']], function () {
     Route::get('/dictionary/{lang}/{key}', [DictionaryController::class, 'show']);
 
     //TODO: remove this endpoint or make it private
-    Route::get('/mediafactory-jwt', [MediaFactoryController::class, 'generateToken']);
+    // Route::get('/mediafactory-jwt', [MediaFactoryController::class, 'generateToken']);
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () {
@@ -83,10 +82,6 @@ Route::group(['middleware' => ['checkroles', 'role:admin']], function () {
     Route::get('/admin/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('get-custom-profile.api');
     Route::apiResource('/dictionary', DictionaryController::class)->except(['show']);
-    Route::post('/text-media-news', [TextMediaNewsController::class, 'store']);
-    Route::get('/text-media-news/{id}', [TextMediaNewsController::class, 'show']);
-    Route::put('/text-media-news/{id}', [TextMediaNewsController::class, 'update']);
-    Route::delete('/text-media-news/{id}', [TextMediaNewsController::class, 'destroy']);
     Route::post('/news', [NewsController::class, 'store']);
     Route::put('/news/{id}', [NewsController::class, 'update']);
     Route::delete('/news/{id}', [NewsController::class, 'destroy']);
