@@ -92,7 +92,7 @@ export class CreatePostComponent implements OnInit {
     duration = 10;
 
     videosList: NzUploadFile[] = [];
-    listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
+    listOfVideos: { url: string, second: number, thumbnail: any }[] = []
 
     videoCounter = 0;
     videoList: { id: number, file: File|null, videoUrl: string , duration : number |null }[] = [];
@@ -283,28 +283,31 @@ export class CreatePostComponent implements OnInit {
             return { url: video.videoUrl , id: thumbnail.id,imgB64: thumbnail.imgB64 , time: thumbnail.time , thumbnail: thumbnail.url ? thumbnail.url: '' };
         })
 
-        let compteur = list.length;
-        if(compteur>0) {
+        let counter = list.length;
+        if(counter>0) {
           await list.forEach(async (videoObject) => {
-              if(videoObject.imgB64){
+              if(videoObject.imgB64 ){
                   await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
                       next: (response) => {
-                          this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                          compteur--;
+                          this.listOfVideos.push({ url: videoObject.url, second: videoObject.time, thumbnail: response.files.url });
+                          counter--;
                       },
                       error: (err) => {
                           this.shared.createMessage('error', err);
                       },
                       complete: () => {
-                          if(compteur <= 0){
+                          if(counter <= 0){
                             console.log('im in3');
                             this.submitForm(param);
                           }
                       }
                   });
               }else{
-                  compteur--;
-                  if(compteur <= 0){
+                  if(videoObject.url) {
+                    this.listOfVideos.push({ url: videoObject.url, second: videoObject.time, thumbnail: videoObject.thumbnail });
+                  }
+                  counter--;
+                  if(counter <= 0){
                     console.log('im in2');
                     this.submitForm(param);
                   }
@@ -376,8 +379,8 @@ export class CreatePostComponent implements OnInit {
         }
 
         this.videosList.forEach((videoObject) => {
-            if(videoObject['seconde']){
-                formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+            if(videoObject['second']){
+                formData.append('videos[]', JSON.stringify({ url: videoObject.url, second: videoObject['second'] , thumbnail: videoObject.thumbUrl }));
             }
         })
 
@@ -595,7 +598,7 @@ export class CreatePostComponent implements OnInit {
         this.selectedThumbnailList.forEach(selectedThumbnail => {
           if (selectedThumbnail.id == this.selectedVideo.id) {
               if(!selectedThumbnail.imgB64){
-                  this.videosList = this.videosList.filter(video => video.uid != selectedThumbnail.id.toString())
+                  this.videoList = this.videoList.filter(video => video.id != selectedThumbnail.id);
               }
               selectedThumbnail.imgB64 = "";
               selectedThumbnail.url =  event.file.response.files.url;
@@ -778,7 +781,7 @@ export class CreatePostComponent implements OnInit {
                     name: item.url ,
                     status: 'done',
                     url: item.url,
-                    seconde: item.thumbnailSeconde,
+                    second: item.thumbnailSeconde,
                     thumbUrl: item.thumbnailLink ? item.thumbnailLink : undefined
                   }
         } )
@@ -863,7 +866,7 @@ export class CreatePostComponent implements OnInit {
                             name: item.url ,
                             status: 'done',
                             url: item.url,
-                            seconde: item.thumbnailSeconde,
+                            second: item.thumbnailSeconde,
                             thumbUrl: item.thumbnailLink
                           }
                 } )
