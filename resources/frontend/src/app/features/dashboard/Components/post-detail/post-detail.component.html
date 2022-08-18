@@ -11,19 +11,13 @@
             <div class="m-post-detail-description">
                 {{news.teaser}}
             </div>
-            <div class="m-text-media-container" *ngFor="let item of news.text_media_news">
-                <div class="m-post-detail-subtitle">
-                    {{item.title}}
-                </div>
-                <div class="m-post-detail-description">
-                    {{item.subtitle}}
-                </div>
-                <div class="m-post-detail-img">
-                    <img nz-image [nzSrc]="item.img" alt="">
-                </div>
-                <div class="m-post-detail-description">
-                    {{item.description}}
-                </div>
+            <div class="m-text-media-container">
+            <div class="m-post-detail-img">
+                <img *ngIf="news.textImage" nz-image [nzSrc]="news.textImage" alt="">
+            </div>
+            <div *ngIf="news.newsText" class="m-post-detail-description">
+                {{news.newsText}}
+            </div>
             </div>
         </div>
         <div class="m-support-footer">

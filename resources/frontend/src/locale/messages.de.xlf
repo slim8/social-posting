@@ -51,7 +51,7 @@
         <source>Dashboard</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <note priority="1" from="description">Title for the Dashboard page link</note>
         <note priority="1" from="meaning">Dashboard</note>
@@ -60,7 +60,7 @@
         <source>Platzierung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
@@ -73,7 +73,7 @@
         <source>Entwürfe</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <note priority="1" from="description">Title for the Drafts page link</note>
         <note priority="1" from="meaning">Drafts</note>
@@ -82,7 +82,7 @@
         <source>Beitrag gestalten</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
@@ -95,7 +95,7 @@
         <source>Meine Vorlagen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/my-album/my-album.component.html</context>
@@ -108,7 +108,7 @@
         <source>Veröffentlicht</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <note priority="1" from="description">Title for the Published Posts page</note>
         <note priority="1" from="meaning">Published Posts</note>
@@ -117,7 +117,7 @@
         <source>Verwaltungsbenutzer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <note priority="1" from="description">Title for the Managment Users</note>
         <note priority="1" from="meaning">Managment Users</note>
@@ -126,11 +126,11 @@
         <source>Symbol senden</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">109</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/components/post-item/post-item.component.html</context>
@@ -142,14 +142,14 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="managmentNews" datatype="html">
         <source>Nachrichten aus der Verwaltung</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <note priority="1" from="description">Title for the Managment news</note>
         <note priority="1" from="meaning">Managment news</note>
@@ -158,7 +158,7 @@
         <source>Wörterbücher</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">115</context>
         </context-group>
         <note priority="1" from="description">Title for the Dictionaries</note>
         <note priority="1" from="meaning">Dictionaries</note>
@@ -282,7 +282,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">322,324</context>
+          <context context-type="linenumber">323,325</context>
         </context-group>
         <note priority="1" from="description">Title for adding pages</note>
         <note priority="1" from="meaning">Add pages</note>
@@ -295,7 +295,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">328,331</context>
+          <context context-type="linenumber">329,332</context>
         </context-group>
         <note priority="1" from="description">Text for add pages</note>
         <note priority="1" from="meaning">Add Pages Text</note>
@@ -308,7 +308,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">338,340</context>
+          <context context-type="linenumber">339,341</context>
         </context-group>
         <note priority="1" from="description">Text for pages linked to
           accountname</note>
@@ -331,7 +331,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">360,362</context>
+          <context context-type="linenumber">361,363</context>
         </context-group>
         <note priority="1" from="description">Link</note>
         <note priority="1" from="meaning">Link</note>
@@ -344,7 +344,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">376,378</context>
+          <context context-type="linenumber">377,379</context>
         </context-group>
         <note priority="1" from="description">Logged in successfully</note>
         <note priority="1" from="meaning">Logged In</note>
@@ -357,7 +357,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">383,386</context>
+          <context context-type="linenumber">384,387</context>
         </context-group>
         <note priority="1" from="description">Text for redirection after
             success</note>
@@ -432,7 +432,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
-          <context context-type="linenumber">47,49</context>
+          <context context-type="linenumber">62,64</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
@@ -440,7 +440,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">75,77</context>
+          <context context-type="linenumber">96,98</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
@@ -560,7 +560,7 @@
         <source>Passwort vergessen?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <note priority="1" from="description">Title for the Forgot Password</note>
         <note priority="1" from="meaning">Forgot Password</note>
@@ -569,7 +569,7 @@
         <source> Klicke hier.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <note priority="1" from="description">Title for the Click here</note>
         <note priority="1" from="meaning">Click here</note>
@@ -578,7 +578,7 @@
         <source>Noch kein Konto ?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <note priority="1" from="description">Title for the No account yet</note>
         <note priority="1" from="meaning">No account yet</note>
@@ -587,7 +587,7 @@
         <source>Registriere dich hier.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">63</context>
         </context-group>
         <note priority="1" from="description">Title for the Sign up here</note>
         <note priority="1" from="meaning">Sign up here</note>
@@ -596,7 +596,7 @@
         <source> Login </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.html</context>
-          <context context-type="linenumber">65,67</context>
+          <context context-type="linenumber">74,76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="registration" datatype="html">
@@ -699,7 +699,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <note priority="1" from="description">Title for the Postcode </note>
         <note priority="1" from="meaning">Postcode</note>
@@ -712,7 +712,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <note priority="1" from="description">Title for the City </note>
         <note priority="1" from="meaning">City</note>
@@ -731,10 +731,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
           <context context-type="linenumber">185</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">51</context>
         </context-group>
         <note priority="1" from="description">Title for the Website </note>
         <note priority="1" from="meaning">Website</note>
@@ -855,7 +851,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">423,424</context>
+          <context context-type="linenumber">430,431</context>
         </context-group>
         <note priority="1" from="description">Title for Hashtags</note>
         <note priority="1" from="meaning">Hashtags</note>
@@ -906,16 +902,42 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">446,447</context>
+          <context context-type="linenumber">453,454</context>
         </context-group>
         <note priority="1" from="description">Title for Mention</note>
         <note priority="1" from="meaning">Mention</note>
+      </trans-unit>
+      <trans-unit id="thumbnailTitle" datatype="html">
+        <source> Thumbnail auswählen </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
+          <context context-type="linenumber">354,356</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
+          <context context-type="linenumber">475,477</context>
+        </context-group>
+        <note priority="1" from="description">Title for Thumbnails title</note>
+        <note priority="1" from="meaning">Thumbnail Title</note>
+      </trans-unit>
+      <trans-unit id="thumbnailInfo" datatype="html">
+        <source> Wähle ein Foto, das als Standbild des Videos angezeigt wird. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
+          <context context-type="linenumber">357,359</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
+          <context context-type="linenumber">478,480</context>
+        </context-group>
+        <note priority="1" from="description">Title for Thumbnails info</note>
+        <note priority="1" from="meaning">Thumbnail Info</note>
       </trans-unit>
       <trans-unit id="customizeFacebookPost" datatype="html">
         <source>Passen Sie den Facebook Post an</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">391,395</context>
+          <context context-type="linenumber">398,402</context>
         </context-group>
         <note priority="1" from="description">Title for Customize facebook
          post</note>
@@ -925,7 +947,7 @@
         <source> Dieser Text erscheint nur in Ihrem Facebook Post. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">398,402</context>
+          <context context-type="linenumber">405,409</context>
         </context-group>
         <note priority="1" from="description">Title for This text will only
          appear on your Facebook post</note>
@@ -935,16 +957,26 @@
         <source>Facebook Text</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">406,408</context>
+          <context context-type="linenumber">413,415</context>
         </context-group>
         <note priority="1" from="description">Title for Facebook Text</note>
         <note priority="1" from="meaning">Facebook Text</note>
+      </trans-unit>
+      <trans-unit id="uploadYourOwn" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;
+                        upload your"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i"/> eigenes hochladen </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
+          <context context-type="linenumber">518,519</context>
+        </context-group>
+        <note priority="1" from="description">Title for Upload your own</note>
+        <note priority="1" from="meaning">UploadYourOwn</note>
       </trans-unit>
       <trans-unit id="previewNotAvailable" datatype="html">
         <source>Vorschau nicht verfügbar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">508,512</context>
+          <context context-type="linenumber">537,541</context>
         </context-group>
         <note priority="1" from="description">Title for preview not
          available</note>
@@ -954,7 +986,7 @@
         <source> Füge dem Beitrag ein oder mehrere Bilder oder ein Video hinzu, um hier eine Vorschau zu sehen.  </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">515,520</context>
+          <context context-type="linenumber">544,549</context>
         </context-group>
         <note priority="1" from="description">Title for preview not available
          Info</note>
@@ -964,7 +996,7 @@
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:folder&quot;&gt;&lt;/i"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="ng-zorro:folder&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="Save"/> Als Entwurf speichern </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">547,551</context>
+          <context context-type="linenumber">576,580</context>
         </context-group>
         <note priority="1" from="description">Title for Save as draft button</note>
         <note priority="1" from="meaning">Save as Draft Button</note>
@@ -973,7 +1005,7 @@
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;i nz-icon nzType=&quot;n"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="ng-zorro:send&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="Publi"/> Veröffentlichen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/create-post/create-post.component.html</context>
-          <context context-type="linenumber">559,563</context>
+          <context context-type="linenumber">588,592</context>
         </context-group>
         <note priority="1" from="description">Title for Publish button</note>
         <note priority="1" from="meaning">Publish Button</note>
@@ -1013,7 +1045,7 @@
         <source>Bei Fragen steht Ihnen unser Support-Team zur Seite: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/post-detail/post-detail.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <note priority="1" from="description">Title for the support team</note>
         <note priority="1" from="meaning">support team</note>
@@ -1122,7 +1154,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">210,211</context>
+          <context context-type="linenumber">212,213</context>
         </context-group>
         <note priority="1" from="description">To the Post or create post </note>
         <note priority="1" from="meaning">To the Post </note>
@@ -1131,7 +1163,7 @@
         <source> Keine Einträge gefunden </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">221,223</context>
+          <context context-type="linenumber">223,225</context>
         </context-group>
         <note priority="1" from="description">Text for no posts found </note>
         <note priority="1" from="meaning">No Posts Found </note>
@@ -1140,7 +1172,7 @@
         <source> Beginnen Sie jetzt mit der Erstellung Ihrer Beiträge </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">229,231</context>
+          <context context-type="linenumber">231,233</context>
         </context-group>
         <note priority="1" from="description">Text for start creating your posts now
                     </note>
@@ -1150,11 +1182,11 @@
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Beitrag erstellen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">248,250</context>
+          <context context-type="linenumber">250,252</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">266,268</context>
+          <context context-type="linenumber">268,270</context>
         </context-group>
         <note priority="1" from="description">Text for create post button </note>
         <note priority="1" from="meaning">Create Post </note>
@@ -1163,7 +1195,7 @@
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:profile&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/>Verknüpfte Konten</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">276,277</context>
+          <context context-type="linenumber">278,279</context>
         </context-group>
         <note priority="1" from="description">Text for linked accounts button
               </note>
@@ -1173,7 +1205,7 @@
         <source> Neuigkeiten des Social Media Publishers </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">286,288</context>
+          <context context-type="linenumber">288,290</context>
         </context-group>
         <note priority="1" from="description">Text for the news title section inside dashboard
                 </note>
@@ -1183,7 +1215,7 @@
         <source> Neue Features, Updates und Ankündigungen findest Du hier. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">294,296</context>
+          <context context-type="linenumber">296,298</context>
         </context-group>
         <note priority="1" from="description">Text for the news sub title section inside
                 dashboard </note>
@@ -1193,7 +1225,7 @@
         <source> Jetzt ansehen.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">302</context>
+          <context context-type="linenumber">304</context>
         </context-group>
         <note priority="1" from="description">Text for Watch now </note>
         <note priority="1" from="meaning">Watch now </note>
@@ -1202,7 +1234,7 @@
         <source>Mehr lesen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
-          <context context-type="linenumber">311,312</context>
+          <context context-type="linenumber">312,313</context>
         </context-group>
         <note priority="1" from="description">Text for read more button </note>
         <note priority="1" from="meaning">Read More </note>
@@ -1224,7 +1256,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
-          <context context-type="linenumber">211,212</context>
+          <context context-type="linenumber">213,214</context>
         </context-group>
         <note priority="1" from="description">Continue Editing Button
                     Text</note>
@@ -1238,7 +1270,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
-          <context context-type="linenumber">218</context>
+          <context context-type="linenumber">220</context>
         </context-group>
         <note priority="1" from="description">Publish Button Text</note>
         <note priority="1" from="meaning">Publish</note>
@@ -1331,7 +1363,7 @@
         <source> Erstellt am/von </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
-          <context context-type="linenumber">118,120</context>
+          <context context-type="linenumber">119,121</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
@@ -1345,7 +1377,7 @@
         <source> Aktivitäten </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
-          <context context-type="linenumber">126,128</context>
+          <context context-type="linenumber">128,130</context>
         </context-group>
         <note priority="1" from="description">My Drafts Posts
                   Activities</note>
@@ -1355,7 +1387,7 @@
         <source> <x id="INTERPOLATION" equiv-text="{{ item.message }}"/> </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
-          <context context-type="linenumber">172,174</context>
+          <context context-type="linenumber">174,176</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
@@ -1397,10 +1429,6 @@
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
           <context context-type="linenumber">18</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
         <note priority="1" from="description">Title for the title</note>
         <note priority="1" from="meaning">title</note>
       </trans-unit>
@@ -1408,7 +1436,7 @@
         <source>Teaser</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
@@ -1421,7 +1449,11 @@
         <source>Bild</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
@@ -1431,18 +1463,27 @@
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
         <note priority="1" from="description">Title for the picture</note>
         <note priority="1" from="meaning">picture</note>
+      </trans-unit>
+      <trans-unit id="chooseAnImage" datatype="html">
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;upload&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Choose an image<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+        <note priority="1" from="description">Title for Choose an Image</note>
+        <note priority="1" from="meaning">Choose an Image</note>
       </trans-unit>
       <trans-unit id="date" datatype="html">
         <source>Datum</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <note priority="1" from="description">Title for the date</note>
         <note priority="1" from="meaning">date</note>
@@ -1451,7 +1492,7 @@
         <source>Schablone</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
@@ -1459,6 +1500,15 @@
         </context-group>
         <note priority="1" from="description">Title for the template</note>
         <note priority="1" from="meaning">template</note>
+      </trans-unit>
+      <trans-unit id="text" datatype="html">
+        <source>Text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <note priority="1" from="description">Title for the text</note>
+        <note priority="1" from="meaning">Text</note>
       </trans-unit>
       <trans-unit id="textMedia" datatype="html">
         <source>Textmedien aktualisieren</source>
@@ -1484,10 +1534,6 @@
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
         <note priority="1" from="description">Title for the subtitle</note>
         <note priority="1" from="meaning">subtitle</note>
       </trans-unit>
@@ -1496,10 +1542,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-text-media/create-text-media.component.html</context>
           <context context-type="linenumber">30</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">53</context>
         </context-group>
         <note priority="1" from="description">Title for the description</note>
         <note priority="1" from="meaning">description</note>
@@ -1517,19 +1559,19 @@
         <source>Neues Passwort</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <note priority="1" from="description">Title for the new password</note>
         <note priority="1" from="meaning">new password</note>
       </trans-unit>
-      <trans-unit id="subscribeNewsletter" datatype="html">
-        <source>Newsletter abonnieren</source>
+      <trans-unit id="permissions" datatype="html">
+        <source>Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">63</context>
         </context-group>
-        <note priority="1" from="description">Title for the Subscribe newsletter</note>
-        <note priority="1" from="meaning">Subscribe newsletter</note>
+        <note priority="1" from="description">Title for the Permissions</note>
+        <note priority="1" from="meaning">Permissions</note>
       </trans-unit>
       <trans-unit id="addNews" datatype="html">
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Nachrichten hinzufügen </source>
@@ -1544,18 +1586,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
           <context context-type="linenumber">38</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">66</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">70</context>
         </context-group>
         <note priority="1" from="description">Title for the Add News</note>
         <note priority="1" from="meaning">Add News</note>

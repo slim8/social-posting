@@ -50,14 +50,6 @@
                   </div>
                 </div>
                 <div class="m-form-group">
-                    <label i18n="Website|Title for the Website@@website">Website</label>
-                    <div class="m-form-input">
-                        <input nz-input type="text" [(ngModel)]="website" />
-                    </div>
-                    <small class="error" *ngIf="error && error.website" >{{error.website[0]}}</small>
-                </div>
-
-                <div class="m-form-group">
                     <label i18n="new password|Title for the new password@@newPassword">New password</label>
                     <div class="m-form-input-password" >
                         <input nz-input [type]=" showNewPassword ? 'text' : 'password' " placeholder="new password" [(ngModel)]="newPassword" />
@@ -68,7 +60,7 @@
                 </div>
 
                 <div class="m-form-group">
-                  <label i18n="Website|Title for the Website@@website">Permissions</label>
+                  <label i18n="Permissions|Title for the Permissions@@permissions">Permissions</label>
                   <div class="m-form-input">
                     <nz-select
                       [(ngModel)]="accountsValue"

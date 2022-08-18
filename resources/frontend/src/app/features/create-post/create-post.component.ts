@@ -92,11 +92,12 @@ export class CreatePostComponent implements OnInit {
     duration = 10;
 
     videosList: NzUploadFile[] = [];
-    listOfVideos: { url: string, seconde: number, thumbnail: any }[] = []
+    listOfVideos: { url: string, second: number, thumbnail: any }[] = []
 
     videoCounter = 0;
     videoList: { id: number, file: File|null, videoUrl: string , duration : number |null }[] = [];
     selectedThumbnailList: { id: number, imgB64: string |null , time: number , url :  string |null}[] = [];
+    customThumbnailList: NzUploadFile[] = [];
     mediaList: any[] = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     showAlbum: boolean = false;
     avatarUrlInsta:string = "";
@@ -282,28 +283,31 @@ export class CreatePostComponent implements OnInit {
             return { url: video.videoUrl , id: thumbnail.id,imgB64: thumbnail.imgB64 , time: thumbnail.time , thumbnail: thumbnail.url ? thumbnail.url: '' };
         })
 
-        let compteur = list.length;
-        if(compteur>0) {
+        let counter = list.length;
+        if(counter>0) {
           await list.forEach(async (videoObject) => {
-              if(videoObject.imgB64){
+              if(videoObject.imgB64 ){
                   await this.postService.uploadFileB64(videoObject.imgB64).subscribe({
                       next: (response) => {
-                          this.listOfVideos.push({ url: videoObject.url, seconde: videoObject.time, thumbnail: response.files.url });
-                          compteur--;
+                          this.listOfVideos.push({ url: videoObject.url, second: videoObject.time, thumbnail: response.files.url });
+                          counter--;
                       },
                       error: (err) => {
                           this.shared.createMessage('error', err);
                       },
                       complete: () => {
-                          if(compteur <= 0){
+                          if(counter <= 0){
                             console.log('im in3');
                             this.submitForm(param);
                           }
                       }
                   });
               }else{
-                  compteur--;
-                  if(compteur <= 0){
+                  if(videoObject.url) {
+                    this.listOfVideos.push({ url: videoObject.url, second: videoObject.time, thumbnail: videoObject.thumbnail });
+                  }
+                  counter--;
+                  if(counter <= 0){
                     console.log('im in2');
                     this.submitForm(param);
                   }
@@ -375,8 +379,8 @@ export class CreatePostComponent implements OnInit {
         }
 
         this.videosList.forEach((videoObject) => {
-            if(videoObject['seconde']){
-                formData.append('videos[]', JSON.stringify({ url: videoObject.url, seconde: videoObject['seconde'] , thumbnail: videoObject.thumbUrl }));
+            if(videoObject['second']){
+                formData.append('videos[]', JSON.stringify({ url: videoObject.url, second: videoObject['second'] , thumbnail: videoObject.thumbUrl }));
             }
         })
 
@@ -581,6 +585,7 @@ export class CreatePostComponent implements OnInit {
                 if(!selectedThumbnail.imgB64){
                     this.videosList = this.videosList.filter(video => video.uid != selectedThumbnail.id.toString())
                 }
+                selectedThumbnail.url = "";
                 selectedThumbnail.imgB64 = item.imgB64;
                 selectedThumbnail.time = item.time;
             }
@@ -588,50 +593,82 @@ export class CreatePostComponent implements OnInit {
         this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
     }
 
+    customThumbnail(event: any){
+      if(event.type == "success") {
+        this.selectedThumbnailList.forEach(selectedThumbnail => {
+          if (selectedThumbnail.id == this.selectedVideo.id) {
+              if(!selectedThumbnail.imgB64){
+                  this.videoList = this.videoList.filter(video => video.id != selectedThumbnail.id);
+              }
+              selectedThumbnail.imgB64 = "";
+              selectedThumbnail.url =  event.file.response.files.url;
+              selectedThumbnail.time = 0;
+          }
+        })
+        this.mediaList = [...this.urlLinks, ...this.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
+      }
+      if(event.type=="removed") {
+        this.currentTimePosition = -10;
+        this.selectedThumbnailList = this.selectedThumbnailList.filter(thumbnail => thumbnail.id != this.selectedVideo.id.toString());
+        this.generatethumbnails('next',true);
+      }
+    }
+
     //upload image changes
     uploadVideo(event: any): void {
-        if (event.type === "success") {
-            if (event.file) {
-                this.availableVideos = true;
-                let tempVideoEl = document.createElement('video');
-                let that = this;
-                tempVideoEl.addEventListener('loadedmetadata', function() {
-                    let loadedFile = { id: that.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url , duration : tempVideoEl.duration };
-                    that.videoList.push(loadedFile)
-                    that.selectedVideo = loadedFile;
-                    that.videoCounter++;
-                    that.generatethumbnails('next', true);
-                    that.currentTimePosition = -10;
-                    that.refreshPages();
-                    setTimeout(() => {
-                      that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
-                      that.validateMedia();
-                    }, 2500);
-                });
-                tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
+      this.customThumbnailList = [];
+      if (event.type === "success") {
+          if (event.file) {
+              this.availableVideos = true;
+              let tempVideoEl = document.createElement('video');
+              let that = this;
+              tempVideoEl.addEventListener('loadedmetadata', function() {
+                  let loadedFile = { id: that.videoCounter, file: event.file.originFileObj, videoUrl: event.file.response.files.url , duration : tempVideoEl.duration };
+                  that.videoList.push(loadedFile)
+                  that.selectedVideo = loadedFile;
+                  that.videoCounter++;
+                  that.currentTimePosition = -10;
+                  that.generatethumbnails('next', true);
+                  that.refreshPages();
+                  setTimeout(() => {
+                    that.mediaList = [...that.urlLinks, ...that.selectedThumbnailList.map(r => { return { id: r.id, url: r.imgB64 ? r.imgB64 : r.url, type: "video" } })];
+                    that.validateMedia();
+                  }, 2500);
+              });
+              tempVideoEl.src = window.URL.createObjectURL(event.file.originFileObj);
 
-                // TODO:: end video duration
-            } else {
-                this.availableVideos = false;
-            }
+              // TODO:: end video duration
+          } else {
+              this.availableVideos = false;
+          }
 
-        }
+      }
     }
 
     changeSelectedVideo(item: { id: number, imgB64:  string|null, time: number , url : string|null }) {
-        this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
-        this.generateVideoDurationFromUrl(this.selectedVideo.videoUrl).then(res => {
-            if(!this.selectedVideo.duration){
-                this.videoList = this.videoList.map(video => {
-                    if(this.selectedVideo.id == video.id){
-                        video.duration = res
-                    }
-                    return video ;
-                } );
-            }
-            this.currentTimePosition = -10;
-            this.generatethumbnails('next');
+      this.customThumbnailList = [];
+      let thumbnail=this.selectedThumbnailList.filter(elem => elem.id == item.id)[0];
+      if(thumbnail.url) {
+        this.customThumbnailList.push({
+          uid: '-1',
+          name: thumbnail.url,
+          status: 'done',
+          url: thumbnail.url
         })
+      }
+      this.selectedVideo = this.videoList.filter(video => item.id == video.id)[0];
+      this.generateVideoDurationFromUrl(this.selectedVideo.videoUrl).then(res => {
+          if(!this.selectedVideo.duration){
+              this.videoList = this.videoList.map(video => {
+                  if(this.selectedVideo.id == video.id){
+                      video.duration = res
+                  }
+                  return video ;
+              } );
+          }
+          this.currentTimePosition = -10;
+          this.generatethumbnails('next');
+      })
 
     }
 
@@ -744,7 +781,7 @@ export class CreatePostComponent implements OnInit {
                     name: item.url ,
                     status: 'done',
                     url: item.url,
-                    seconde: item.thumbnailSeconde,
+                    second: item.thumbnailSeconde,
                     thumbUrl: item.thumbnailLink ? item.thumbnailLink : undefined
                   }
         } )
@@ -829,7 +866,7 @@ export class CreatePostComponent implements OnInit {
                             name: item.url ,
                             status: 'done',
                             url: item.url,
-                            seconde: item.thumbnailSeconde,
+                            second: item.thumbnailSeconde,
                             thumbUrl: item.thumbnailLink
                           }
                 } )

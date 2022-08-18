@@ -19,17 +19,8 @@ export class PostDetailComponent implements OnInit {
     createdAt: "",
     updatedAt: "",
     img : '',
-    text_media_news : [{
-      id: 1,
-      title: "",
-      subtitle: "",
-      description: "",
-      picture: "",
-      newsId: 0,
-      createdAt: "",
-      updatedAt: "" ,
-      img : ''
-    }]
+    newsText:"",
+    textImage:""
   }
 
   constructor(private newsService : NewsService ,private route: ActivatedRoute ,private router: Router) { }
@@ -42,8 +33,7 @@ export class PostDetailComponent implements OnInit {
     this.newsService.getNewsById(news).subscribe({
       next: (event: any) => {
         if(event.new){
-          this.news = {...event.new , img : JSON.parse(event.new.picture).url , text_media_news : event.new.text_media_news.map((media : any) => ({...media , img : JSON.parse(media.picture).url}))};
-
+          this.news = {...event.new , img : JSON.parse(event.new.picture).url, textImage : JSON.parse(event.new.textImage).url};
         }else{
           this.router.navigate(['/application/dashboard/blog-posts'])
         }

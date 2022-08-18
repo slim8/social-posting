@@ -53,6 +53,26 @@ class FileController extends Controller
     }
 
     /**
+     * Store Video To Disk
+     */
+    public function storeVideoToDisk($fileName, $link, $extension = 'mp4' , $folderName = 'pageAssets')
+    {
+        $curlCh = curl_init();
+        curl_setopt($curlCh, CURLOPT_URL, $link);
+        curl_setopt($curlCh, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlCh, CURLOPT_SSLVERSION, 0);
+        $curlData = curl_exec($curlCh);
+        curl_close($curlCh);
+
+        Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' Fetch link to '.$link);
+
+        if (!empty($curlData)) {
+            Storage::disk('public')->put($folderName.'/'.$fileName.'.'.$extension, $curlData);
+            return $folderName.'/'.$fileName.'.'.$extension;
+        }
+    }
+
+    /**
      * Convert Image To Jpeg.
      */
     public function convertToJpeg($folderName, $image, int $isOnDisk = 0, string $filePathName = null)
