@@ -155,4 +155,23 @@ class AdminsController extends Controller
 
         return $this->traitController->processResponse(true, $object);
     }
+
+    /**
+     * display user.
+     */
+    public function displayUser(int $userId = null)
+    {
+        if (!$userId) {
+            Log::channel('notice')->notice('[suspensionUser] User : '.$this->traitController->getCurrentId().' Try To display User without Account ID');
+
+            return $this->traitController->processResponse(false, ['message' => 'Please choose a valid account ID']);
+        }
+
+        if (!$this->utilitiesController->checkUserRight($userId)) {
+            return $this->traitController->processResponse(false, ['message' => 'This user is not linked to this admin']);
+        }
+        $user = User::where('id', $userId)->first();
+
+        return $this->traitController->processResponse(true, ['User' => $user]);
+    }
 }

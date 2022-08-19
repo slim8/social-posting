@@ -61,6 +61,7 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::get('/managment/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
     Route::post('/managment/users/delete/{userId}', [AdminsController::class, 'deleteUser'])->name('get-admin-users.api');
     Route::post('/managment/users/suspension/{userId}/{action}', [AdminsController::class, 'suspensionUser'])->name('get-admin-users.api');
+    Route::get('/managment/users/{userId}', [AdminsController::class, 'displayUser'])->name('get-custom-user.api');
     // Route::get('/managment/users/edit', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
 });
 
