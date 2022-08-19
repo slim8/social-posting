@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Functions;
 
 use App\Http\Controllers\Controller;
-use App\Models\Account;
-use Intervention\Image\ImageManager;
-use App\Http\Controllers\TraitController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\TraitController;
+use App\Models\Account;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
 use \getID3;
-
 
 class UtilitiesController extends Controller
 {
@@ -24,108 +24,108 @@ class UtilitiesController extends Controller
     }
 
     /**
-     * Get aspect ratio from resolution
+     * Get aspect ratio from resolution.
      */
-
     public function getAspectRatio($imageWidth, $imageHeight)
     {
-        $object=[];
-        $divisor = array_reduce(array($imageWidth, $imageHeight), 'gcd');
+        $object = [];
+        $divisor = array_reduce([$imageWidth, $imageHeight], 'gcd');
         $object['x'] = $imageWidth / $divisor;
         $object['y'] = $imageHeight / $divisor;
+
         return $object;
     }
 
     /**
-     * Validate Instagram Video
+     * Validate Instagram Video.
      */
     public function validateVideoForInstagram($link)
     {
         $isLocal = envValue('APP_ENV') == 'local';
 
-        $object = new \StdClass;
+        $object = new \stdClass();
         $object->status = true;
 
-        if($isLocal){
-            $name = explode('/' , $link);
-            $name = $name[count($name) -1];
-            $extension = explode('.' , $name)[1];
-            $name = explode('.' , $name)[0];
-            $file= $this->fileController->storeVideoToDisk($this->traitController->getCurrentId().uniqid().$name, $link, $extension ,'videoControls');
+        if ($isLocal) {
+            $name = explode('/', $link);
+            $name = $name[count($name) - 1];
+            $extension = explode('.', $name)[1];
+            $name = explode('.', $name)[0];
+            $file = $this->fileController->storeVideoToDisk($this->traitController->getCurrentId().uniqid().$name, $link, $extension, 'videoControls');
         } else {
-            $linkArray = explode("/storage/",$link);
+            $linkArray = explode('/storage/', $link);
             $file = $linkArray[1];
         }
 
         $path = Storage::path($file);
         $object->message = '';
-        $getID3 = new \getID3;
+        $getID3 = new \getID3();
         $file = $getID3->analyze($path);
-        $aspectRatio = $this->getAspectRatio($file['video']['resolution_x'] , $file['video']['resolution_y']);
+        $aspectRatio = $this->getAspectRatio($file['video']['resolution_x'], $file['video']['resolution_y']);
 
-        if (!(strtoupper($file['fileformat']) == 'MP4' || strtoupper($file['fileformat']) == 'MOV')){
+        if (!(strtoupper($file['fileformat']) == 'MP4' || strtoupper($file['fileformat']) == 'MOV')) {
             $object->status = false;
             $object->message = $object->message.' - File format must be MP4 Or MOV , Given :'.strtoupper($file['fileformat']);
         }
 
-        if($file['video']['resolution_x'] > 1920){
+        if ($file['video']['resolution_x'] > 1920) {
             $object->status = false;
             $object->message = $object->message.' - Video width must be smaller than 1920px , Given: '.$file['video']['resolution_x'];
         }
-        if(!str_contains($file['video']['fourcc_lookup'], 'H.264')){
+        if (!str_contains($file['video']['fourcc_lookup'], 'H.264')) {
             $object->status = false;
             $object->message = $object->message.' - Video codec must be of type H264 , Given: '.$file['video']['fourcc_lookup'];
         }
 
-        if (!($file['video']['frame_rate'] >=23 && $file['video']['frame_rate']<=60)){
+        if (!($file['video']['frame_rate'] >= 23 && $file['video']['frame_rate'] <= 60)) {
             $object->status = false;
             $object->message = $object->message.' - Video frame rate must be between 23-60 , Given: '.$file['video']['frame_rate'];
         }
 
-        if (($file['bitrate'] >= (5*1024*1000))){
+        if ($file['bitrate'] >= (5 * 1024 * 1000)) {
             $object->status = false;
-            $object->message = $object->message.' - Video bitrate must be lower than 5Mbps , Given: '.$file['bitrate']/1024000;
+            $object->message = $object->message.' - Video bitrate must be lower than 5Mbps , Given: '.$file['bitrate'] / 1024000;
         }
 
-        if (!($aspectRatio['x'] >= 4 && $aspectRatio['x'] <= 16 && $aspectRatio['y'] >= 5 && $aspectRatio['y'] <= 9)){
+        if (!($aspectRatio['x'] >= 4 && $aspectRatio['x'] <= 16 && $aspectRatio['y'] >= 5 && $aspectRatio['y'] <= 9)) {
             $object->status = false;
             $object->message = $object->message.' - Video aspect ratio must be between 4 / 5 and 16 / 9 , Given: '.$aspectRatio['x'].' /'.$aspectRatio['y'];
         }
 
-        if (!($file['playtime_seconds'] >= 3 && $file['playtime_seconds'] <= 60)){
+        if (!($file['playtime_seconds'] >= 3 && $file['playtime_seconds'] <= 60)) {
             $object->status = false;
             $object->message = $object->message.' - Video duration must be between 3s and 60s , Given: '.$file['playtime_seconds'];
         }
 
-        if(isset($file['audio'])){
-
-            if (!(str_contains(strtoupper($file['audio']['codec']) , 'AAC'))){
+        if (isset($file['audio'])) {
+            if (!str_contains(strtoupper($file['audio']['codec']), 'AAC')) {
                 $object->status = false;
                 $object->message = $object->message.' - Audio codec must be AAC , Given :'.strtoupper($file['audio']['codec']);
             }
 
-            if (!($file['audio']['sample_rate'] / 1000 <= 48)){
+            if (!($file['audio']['sample_rate'] / 1000 <= 48)) {
                 $object->status = false;
                 $object->message = $object->message.' - Audio Simple rate must be lower than 48khz , Given :'.$file['audio']['sample_rate'] / 1000;
             }
 
-            if (!($file['audio']['channels'] >=1 && $file['audio']['channels'] <= 2)){
+            if (!($file['audio']['channels'] >= 1 && $file['audio']['channels'] <= 2)) {
                 $object->status = false;
                 $object->message = $object->message.' - Audio Channel  must be 1 or 2 , Given :'.$file['audio']['channels'];
             }
 
-            if (!(strtoupper($file['audio']['channelmode']) == 'STEREO' || strtoupper($file['audio']['channelmode']) == 'MONO')){
+            if (!(strtoupper($file['audio']['channelmode']) == 'STEREO' || strtoupper($file['audio']['channelmode']) == 'MONO')) {
                 $object->status = false;
                 $object->message = $object->message.' - Audio Channel mode must be mono or stereo , Given :'.$file['audio']['channelmode'];
             }
         }
 
-        if($isLocal){
+        if ($isLocal) {
             unlink($path);
         }
 
         return $object;
     }
+
     /**
      * Validate Post (check if Eg Post without media to instagram Or Video + Images on se same post to facebook page).
      */
@@ -167,21 +167,21 @@ class UtilitiesController extends Controller
             $responseObject->message['others'][] = $responseObject->messageString;
         }
 
-        // if($videos && $isInstagramAccountPage){
+        // if ($videos && $isInstagramAccountPage) {
         //     $incVideo = 0;
-        //     foreach ($videos as $video){
-        //         $incVideo++;
-        //         $videoLink = json_decode($video , true)["url"];
+        //     foreach ($videos as $video) {
+        //         ++$incVideo;
+        //         $videoLink = json_decode($video, true)['url'];
         //         $object = $this->validateVideoForInstagram($videoLink);
 
-        //         if(!$object->status){
+        //         if (!$object->status) {
         //             $responseObject->status = false;
         //             $responseObject->messageString = $object->message;
-        //             $responseObject->message['others'][] = "Video ".$incVideo.' : '.$object->message;
+        //             $responseObject->message['others'][] = 'Video '.$incVideo.' : '.$object->message;
         //         }
-
         //     }
         // }
+
         return $responseObject;
     }
 
@@ -212,6 +212,19 @@ class UtilitiesController extends Controller
             if (!$account) {
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if admin has right to this user
+     */
+    public function checkUserRight($accountId)
+    {
+        $account = User::where('id', $accountId)->where('CompanyId', $this->traitController->getCompanyId())->first();
+        if (!$account) {
+            return false;
         }
 
         return true;
