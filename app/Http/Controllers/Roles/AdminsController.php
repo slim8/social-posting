@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Roles;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Functions\UtilitiesController;
 use App\Http\Controllers\Repositories\CompanyRepository;
 use App\Http\Controllers\Repositories\PlanRepository;
 use App\Http\Controllers\Repositories\UserRepository;
@@ -17,6 +18,7 @@ class AdminsController extends Controller
     protected $planRepository;
     protected $userRepository;
     protected $traitController;
+    protected $utilitiesController;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class AdminsController extends Controller
         $this->planRepository = new PlanRepository();
         $this->userRepository = new UserRepository();
         $this->traitController = new TraitController();
+        $this->utilitiesController = new UtilitiesController();
     }
 
     /**
@@ -75,7 +78,7 @@ class AdminsController extends Controller
     public function getAllUsers()
     {
         $users = [];
-        $usersObject = $this->traitController->getUserObject()->hasRole('companyadmin') ? User::where('companyId', $this->traitController->getCompanyId())->where('id', 'not like', $this->traitController->getCurrentId())->get() : $this->getUsers();
+        $usersObject = $this->traitController->getUserObject()->hasRole('companyadmin') ? User::where('companyId', $this->traitController->getCompanyId())->where('id', 'not like', $this->traitController->getCurrentId())->where('deleted', 0)->get() : $this->getUsers();
 
         if (!$usersObject) {
             return $this->traitController->processResponse(false, ['users' => [], 'message' => 'No User Found']);
@@ -97,8 +100,12 @@ class AdminsController extends Controller
      */
     public function deleteUser($userId)
     {
+        if ($userId == $this->traitController->getCurrentId()) {
+            return $this->traitController->processResponse(false, ['message' => 'You can not delete your account']);
+        }
+
         if (!$this->utilitiesController->checkUserRight($userId)) {
-            return RequestsTrait::processResponse(false, ['message' => 'This account is not linked to this admin']);
+            return $this->traitController->processResponse(false, ['message' => 'This account is not linked to this admin']);
         }
 
         $user = User::where('id', $userId)->first();
@@ -107,7 +114,7 @@ class AdminsController extends Controller
 
         Log::channel('notice')->notice('[deleteUser] User : '.$this->traitController->getCurrentId().' Delete User '.$userId);
 
-        return RequestsTrait::processResponse(true);
+        return $this->traitController->processResponse(true);
     }
 
     /**
@@ -127,8 +134,12 @@ class AdminsController extends Controller
             return $this->traitController->processResponse(false, ['message' => 'Please choose a valid account ID']);
         }
 
+        if ($userId == $this->traitController->getCurrentId()) {
+            return $this->traitController->processResponse(false, ['message' => 'You can not Disable/Enable your account']);
+        }
+
         if (!$this->utilitiesController->checkUserRight($accounts)) {
-            return RequestsTrait::processResponse(false, ['message' => 'This account is not linked to this admin']);
+            return $this->traitController->processResponse(false, ['message' => 'This account is not linked to this admin']);
         }
         $user = User::where('id', $userId)->first();
         $user->update(['status' => $action]);
