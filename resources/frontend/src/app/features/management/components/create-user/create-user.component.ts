@@ -15,9 +15,11 @@ export class CreateUserComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private facebookSocialService: FacebookSocialService,
-    private shared: SharedModule
+    private shared: SharedModule,
+    private route:ActivatedRoute
   ) {}
 
+  isLoading: boolean = false;
   email = null;
   firstName = null;
   lastName = null;
@@ -30,18 +32,37 @@ export class CreateUserComponent implements OnInit {
   newPassword = Math.random().toString(36).slice(-8);
   accountsValue: any[] = [];
   size: NzSelectSizeType = 'large';
-  listOfPages: Array<{
-    id: number;
-    pageName: string;
-    provider: string;
-    pagePictureUrl: string;
-  }> = [];
-  pageId: string = '';
-
-  showNewPassword: Boolean = false;
+  listOfPages: Array<{ id: number; pageName: string; provider: string; pagePictureUrl: string }> = [];
+  pageId: string = "";
+  showNewPassword : Boolean = false ;
+  userEditId: string | null = null;
+  editMode: boolean = false;
 
   ngOnInit(): void {
-    this.getPages('mixed');
+    this.getPages();
+    this.userEditId = this.route.snapshot.paramMap.get('id');
+    if(this.userEditId) {
+      this.editMode = true;
+      this.getUserToEdit(this.userEditId);
+    }
+  }
+
+  getUserToEdit(news : any){
+    this.userService.getUserById(news).subscribe({
+      next: (event: any) => {
+        this.email = event.User.email;
+        this.firstName  = event.User.firstName;
+        this.lastName =  event.User.lastName;
+        this.address = event.User.address;
+        this.city = event.User.city;
+        this.postCode = event.User.postCode;
+      },
+      error: err => {
+          this.error = err.error.error;
+      },
+      complete: () => {
+      }
+    })
   }
 
   showNewPasswordAction() {
@@ -49,6 +70,7 @@ export class CreateUserComponent implements OnInit {
   }
 
   saveProfile() {
+    this.isLoading = true;
     this.error = null;
     let data = {
       email: this.email,
@@ -61,49 +83,58 @@ export class CreateUserComponent implements OnInit {
       password: this.newPassword,
       accounts: this.accountsValue
     };
-
-    this.userService.createUser(data).subscribe({
-      next: (event: any) => {
-        this.router.navigate(['/application/management/users-list']);
-      },
-      error: (err) => {
-        this.error = err.error;
-      },
-      complete: () => {},
-    });
+    if(this.editMode == false) {
+      this.userService.createUser(data).subscribe({
+        next: (event: any) => {
+          this.router.navigate(['/application/management/users-list']);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.error = err.error;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    } else {
+      if(this.userEditId) {
+        this.userService.updateUser(this.userEditId, data).subscribe({
+          next: (event: any) => {
+            this.router.navigate(['/application/management/users-list']);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.error = err.error;
+          },
+          complete: () => {
+            this.isLoading = false;
+          },
+        });
+      }
+    }
   }
 
   accountChange() {
   }
 
-  getPages(param: string, fromInit = false) {
+  getPages() {
     this.listOfPages = [];
     this.accountsValue = [];
     this.facebookSocialService.getCurrentApprovedFBPages().subscribe({
-      next: (event: any) => {
-        this.listOfPages = new Array();
-        event.pages.forEach((page: any) => {
-          if (param == 'mixed') {
-            if (page.isConnected == true) {
-              this.listOfPages.push(page);
-            }
-            if (this.pageId != '') {
-              if (page.id == this.pageId) {
-                let selectedPage = page.id + '|' + page.provider;
-                this.accountsValue.push(selectedPage);
+        next: (event: any) => {
+            this.listOfPages = new Array();
+            event.pages.forEach((page: any) => {
+              if (page.isConnected == true) {
+                  this.listOfPages.push(page);
               }
-            }
-          } else if (param == 'instagram') {
-            if (page.isConnected == true && page.provider == 'instagram') {
-              this.listOfPages.push(page);
-            }
-          }
-        });
-      },
-      error: (err) => {
-        this.shared.createMessage('error', err.error.message);
-      },
-      complete: () => {},
+            })
+        },
+        error: err => {
+            this.shared.createMessage('error', err.error.message);
+        },
+        complete: () => {
+
+        }
     });
   }
 }

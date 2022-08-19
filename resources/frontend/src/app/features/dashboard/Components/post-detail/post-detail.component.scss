@@ -33,6 +33,10 @@
         }
 
         >.m-container{
+            >.m-date {
+              @include textstyle-size-12();
+              color: $color-media-black-opacity-half;
+            }
             >.m-post-detail-date{
                 font-weight: 400;
                 font-size: 12px;

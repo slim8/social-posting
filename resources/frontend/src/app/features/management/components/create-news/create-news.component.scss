@@ -24,21 +24,24 @@
         }
 
         >.m-form{
-
+          width: 100%;
+          @include mq(tablet) {
+            width: 92%;
+          }
             >.m-form-group{
-                padding: 18px;
+                padding: 5px 10px;
                 display: flex;
                 align-items: baseline;
 
                 >label {
-                  font-size: 14px;
-                  color: $color-media-black;
-                  opacity: 0.85;
+                  @include textstyle-size-14();
+                  color: $color-media-dark-grey;
+                  cursor: default;
                   max-width: 71px;
                   width: 100%;
                   justify-content: flex-end;
                   display: flex;
-                  margin-right: 10px;
+                  margin-right: 18px;
                 }
 
                 >.m-form-input {
