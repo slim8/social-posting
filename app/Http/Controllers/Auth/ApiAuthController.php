@@ -95,6 +95,7 @@ class ApiAuthController extends Controller
             'address' => $request->adress,
             'postCode' => $request->postCode,
             'city' => $request->city,
+            'deleted' => 0
         ]);
 
         $user->attachRole('companyadmin');
@@ -150,6 +151,7 @@ class ApiAuthController extends Controller
             'address' => $request->address,
             'postCode' => $request->postCode,
             'city' => $request->city,
+            'deleted' => 0,
         ]);
 
         $user->attachRole('user');
@@ -192,7 +194,7 @@ class ApiAuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if ($user->status) {
-                if ($user->deleted) {
+                if (!$user->deleted) {
                     if (Hash::check($request->password, $user->password)) {
                         Log::channel('info')->info('User '.$request->email.' has been connected');
                         $token = $user->createToken('Laravel Password Grant Client')->accessToken;
@@ -231,16 +233,16 @@ class ApiAuthController extends Controller
                             'roles' => $this->userRepository->getCurrentRoles($user),
                         ]);
                     } else {
-                        Log::channel('notice')->notice('User '.$request->email.' this account is disabled for life');
+                        Log::channel('notice')->notice('User '.$request->email.' try to connect with mismatch password');
 
-                        $response = ['message' => 'this account is disabled for life', 'status' => false];
+                        $response = ['message' => trans('message.password_mismatch'), 'status' => false];
 
                         return response($response, 422);
                     }
                 } else {
-                    Log::channel('notice')->notice('User '.$request->email.' try to connect with mismatch password');
+                    Log::channel('notice')->notice('User '.$request->email.' this account is disabled for life');
 
-                    $response = ['message' => trans('message.password_mismatch'), 'status' => false];
+                    $response = ['message' => 'this account is disabled for life', 'status' => false];
 
                     return response($response, 422);
                 }
