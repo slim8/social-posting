@@ -166,6 +166,7 @@ class PostController extends Controller
 
         $posts = $postId ? null : [];
         foreach ($postRequest as $postContent) {
+
             $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->with('mentions')->get();
 
             $permission = true;
