@@ -11,7 +11,8 @@ class AngularController extends Controller
         if (file_exists($deContent)) {
             return file_get_contents($deContent);
         } else {
-            return view('angular');
+            return file_get_contents(public_path().'/angular/index.html');
+            // return view('angular');
         }
     }
 }
