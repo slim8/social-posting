@@ -190,10 +190,7 @@ class AdminsController extends Controller
 
         $validator = Validator::make($request->all(), [
             'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'postCode' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255'
         ], [
             'companyName.required' => 'This is a required message for company name',
         ]);
