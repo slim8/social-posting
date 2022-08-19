@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProviderTokenController;
 use App\Http\Controllers\Repositories\UserRepository;
 use App\Http\Controllers\TraitController;
-use App\Http\Traits\UserTrait;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\UsersAccounts;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -158,10 +158,10 @@ class ApiAuthController extends Controller
 
         $accounts = $request->accounts;
 
-        if($request->accounts){
+        if ($request->accounts) {
             foreach ($accounts as $account) {
                 if (!UsersAccounts::hasAccountPermission($user->id, $account)) {
-                    UserTrait::setPermissionaccountToUser($user->id, $account);
+                    $this->traitController->setPermissionaccountToUser($user->id, $account);
                 }
             }
         }

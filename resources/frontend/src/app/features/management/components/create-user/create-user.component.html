@@ -73,7 +73,7 @@
                         *ngFor="let option of listOfPages"
                         [nzLabel]="option.pageName"
                         [nzCustomContent]="true"
-                        [nzValue]="option.id + '|' + option.provider"
+                        [nzValue]="option.id"
                         >
                             <div class="m-image">
                               <img src="{{ option.pagePictureUrl }}" alt="" />
