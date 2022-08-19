@@ -12,13 +12,11 @@
         padding-left: 20px;
 
         @include mq(desktop){
-            width : 608px ;
+            width : 725px ;
             padding-left: 120px;
         }
 
         >.m-header{
-
-
             margin-bottom : 46px ;
             margin-right: 50px;
 
@@ -26,7 +24,6 @@
               text-align: end;
                 margin-right: 0px;
             }
-
             >a {
                 font-weight: 400;
                 font-size: 12px;
@@ -36,24 +33,19 @@
         }
 
         >.m-container{
-            margin-right: 50px;
-
             >.m-post-detail-date{
                 font-weight: 400;
                 font-size: 12px;
                 line-height: 138.68%;
                 color: $color-media-black-opacity-half;
             }
-
             >.m-post-detail-title{
                 font-weight: 700;
                 font-size: 24px;
                 line-height: 138.68%;
             }
-
             >.m-post-detail-img{
                 margin-top: 24px;
-
 
                 >img{
                     width: 100%;
@@ -78,14 +70,12 @@
             }
 
             .m-text-media-container{
-
                 >.m-post-detail-subtitle{
                     font-style: italic;
                     font-weight: 600;
                     font-size: 24px;
                     line-height: 138.68%;
                 }
-
                 >.m-post-detail-img{
                     >img{
                         width: 100%;
@@ -100,8 +90,6 @@
                     }
                 }
             }
-
-
         }
 
         >.m-support-footer{
