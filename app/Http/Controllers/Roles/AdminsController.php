@@ -120,7 +120,7 @@ class AdminsController extends Controller
     /**
      * Activate Or Suspend Account.
      */
-    public function suspensionUser(Request $request, int $userId = null, int $action = null)
+    public function suspensionUser(int $userId = null, int $action = null)
     {
         if ($action !== 0 && $action !== 1) {
             Log::channel('notice')->notice('[suspensionUser] User : '.$this->traitController->getCurrentId().' Try To Disable/Enable User without Specify Action');
@@ -138,8 +138,8 @@ class AdminsController extends Controller
             return $this->traitController->processResponse(false, ['message' => 'You can not Disable/Enable your account']);
         }
 
-        if (!$this->utilitiesController->checkUserRight($accounts)) {
-            return $this->traitController->processResponse(false, ['message' => 'This account is not linked to this admin']);
+        if (!$this->utilitiesController->checkUserRight($userId)) {
+            return $this->traitController->processResponse(false, ['message' => 'This user is not linked to this admin']);
         }
         $user = User::where('id', $userId)->first();
         $user->update(['status' => $action]);
