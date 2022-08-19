@@ -95,6 +95,7 @@ class ApiAuthController extends Controller
             'address' => $request->adress,
             'postCode' => $request->postCode,
             'city' => $request->city,
+            'deleted' => 0
         ]);
 
         $user->attachRole('companyadmin');
@@ -150,6 +151,7 @@ class ApiAuthController extends Controller
             'address' => $request->address,
             'postCode' => $request->postCode,
             'city' => $request->city,
+            'deleted' => 0,
         ]);
 
         $user->attachRole('user');
@@ -192,47 +194,55 @@ class ApiAuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if ($user->status) {
-                if (Hash::check($request->password, $user->password)) {
-                    Log::channel('info')->info('User '.$request->email.' has been connected');
-                    $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                    $secret_key = envValue('JWT_SECRET_KEY');
-                    $issuer_claim = envValue('JWT_ISSUER_CLAIMER'); // this can be the servername
-                    $audience_claim = envValue('JWT_AUDIANCE_KLAIMER');
-                    $issuedat_claim = time(); // issued at
-                    $notbefore_claim = $issuedat_claim + 0; // not before in seconds
-                    $expiration_time_env = (int) envValue('JWT_EXPIRATION_TIME');
-                    $expire_claim = $issuedat_claim + $expiration_time_env; // expire time in seconds
-                    $token = [
-                        'iss' => $issuer_claim,
-                        'aud' => $audience_claim,
-                        'iat' => $issuedat_claim,
-                        'nbf' => $notbefore_claim,
-                        'exp' => $expire_claim,
-                        'data' => [
-                            'id' => $user['id'],
-                            'fullName' => $user['firstName'].' '.$user['lastName'],
-                            'email' => $user['email'],
+                if (!$user->deleted) {
+                    if (Hash::check($request->password, $user->password)) {
+                        Log::channel('info')->info('User '.$request->email.' has been connected');
+                        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                        $secret_key = envValue('JWT_SECRET_KEY');
+                        $issuer_claim = envValue('JWT_ISSUER_CLAIMER'); // this can be the servername
+                        $audience_claim = envValue('JWT_AUDIANCE_KLAIMER');
+                        $issuedat_claim = time(); // issued at
+                        $notbefore_claim = $issuedat_claim + 0; // not before in seconds
+                        $expiration_time_env = (int) envValue('JWT_EXPIRATION_TIME');
+                        $expire_claim = $issuedat_claim + $expiration_time_env; // expire time in seconds
+                        $token = [
+                            'iss' => $issuer_claim,
+                            'aud' => $audience_claim,
+                            'iat' => $issuedat_claim,
+                            'nbf' => $notbefore_claim,
+                            'exp' => $expire_claim,
+                            'data' => [
+                                'id' => $user['id'],
+                                'fullName' => $user['firstName'].' '.$user['lastName'],
+                                'email' => $user['email'],
+                                'roles' => $this->userRepository->getCurrentRoles($user),
+                            ],
+                        ];
+
+                        $jwt = JWT::encode($token, $secret_key, envValue('JWT_HASH_ALGORITHME'));
+
+                        // Check and disconnect Inactif Account
+                        Auth::login($user);
+                        $providerTokenController = new ProviderTokenController();
+                        $providerTokenController->checkAccountToken();
+
+                        return $this->traitController->processResponse(true, [
+                            'message' => trans('message.sucess_login'),
+                            'token' => $jwt,
+                            'expireAt' => $expire_claim,
                             'roles' => $this->userRepository->getCurrentRoles($user),
-                        ],
-                    ];
+                        ]);
+                    } else {
+                        Log::channel('notice')->notice('User '.$request->email.' try to connect with mismatch password');
 
-                    $jwt = JWT::encode($token, $secret_key, envValue('JWT_HASH_ALGORITHME'));
+                        $response = ['message' => trans('message.password_mismatch'), 'status' => false];
 
-                    // Check and disconnect Inactif Account
-                    Auth::login($user);
-                    $providerTokenController = new ProviderTokenController();
-                    $providerTokenController->checkAccountToken();
-
-                    return $this->traitController->processResponse(true, [
-                        'message' => trans('message.sucess_login'),
-                        'token' => $jwt,
-                        'expireAt' => $expire_claim,
-                        'roles' => $this->userRepository->getCurrentRoles($user),
-                    ]);
+                        return response($response, 422);
+                    }
                 } else {
-                    Log::channel('notice')->notice('User '.$request->email.' try to connect with mismatch password');
+                    Log::channel('notice')->notice('User '.$request->email.' this account is disabled for life');
 
-                    $response = ['message' => trans('message.password_mismatch'), 'status' => false];
+                    $response = ['message' => 'this account is disabled for life', 'status' => false];
 
                     return response($response, 422);
                 }
