@@ -419,7 +419,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">114</context>
         </context-group>
         <note priority="1" from="description">Title for the Cancel</note>
         <note priority="1" from="meaning">Cancel</note>
@@ -444,7 +444,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">115</context>
         </context-group>
         <note priority="1" from="description">Title for the save</note>
         <note priority="1" from="meaning">save</note>
@@ -1045,7 +1045,7 @@
         <source>If you have any questions, our support team is at your side: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/post-detail/post-detail.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <note priority="1" from="description">Title for the support team</note>
         <note priority="1" from="meaning">support team</note>
@@ -1618,14 +1618,41 @@
         <note priority="1" from="description">Title for the status</note>
         <note priority="1" from="meaning">status</note>
       </trans-unit>
+      <trans-unit id="action" datatype="html">
+        <source>action</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Action</note>
+        <note priority="1" from="meaning">Action</note>
+      </trans-unit>
       <trans-unit id="addPermissions" datatype="html">
         <source>Add Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">91</context>
         </context-group>
         <note priority="1" from="description">Title for the Add Permissions</note>
         <note priority="1" from="meaning">Add Permissions</note>
+      </trans-unit>
+      <trans-unit id="yes" datatype="html">
+        <source> Yes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <note priority="1" from="description">Title for the yes</note>
+        <note priority="1" from="meaning">Yes</note>
+      </trans-unit>
+      <trans-unit id="no" datatype="html">
+        <source> No</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+        <note priority="1" from="description">Title for the no</note>
+        <note priority="1" from="meaning">No</note>
       </trans-unit>
       <trans-unit id="chooseMediafactory" datatype="html">
         <source> Choose a meme you designed from the mediafactory and publish it. </source>

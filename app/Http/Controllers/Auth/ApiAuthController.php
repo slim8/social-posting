@@ -125,9 +125,6 @@ class ApiAuthController extends Controller
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'address' => 'required|string|max:255',
-            'postCode' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
             'password' => 'required|string|min:8',
             'isSubscriber' => '',
         ], [

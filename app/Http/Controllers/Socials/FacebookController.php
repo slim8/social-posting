@@ -7,6 +7,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\TraitController;
 use App\Http\Traits\Services\FacebookService;
 use App\Models\Account;
+use App\Models\PostMedia;
 use App\Models\AccountPost;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
@@ -509,9 +510,11 @@ class FacebookController extends Controller
         $obj = [];
         $likes = 0;
         $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $postMediaVideo = PostMedia::where('postId' , $acountPost->postId)->where('type' , 'video')->first();
+        $insight = $postMediaVideo ? 'video_insights' : 'insights';
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/'.$insight.'?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
 
         $errors = $request->json('error');
         if(isset($errors)){

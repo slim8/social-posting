@@ -4,6 +4,7 @@
            <a href="/application/dashboard/blog-posts" i18n="back|Title for the back@@back"> Back to overview </a>
         </div>
         <div class="m-container">
+            <div class="m-date">{{news.date | date: "dd.MM.yyyy"}}</div>
             <div class="m-post-detail-title">{{news.title}}</div>
             <div class="m-post-detail-img">
                 <img nz-image [nzSrc]="news.img" alt="">

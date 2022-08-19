@@ -13,62 +13,72 @@
           <i nz-icon nzType="edit"></i>
           Add User
       </button>
-      </div>
-      <nz-table #nzTable [nzData]="listOfUsers" nzTableLayout="fixed">
-          <thead>
-            <tr>
-              <th nzWidth="60px"></th>
-              <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
-              <th i18n="First Name|Title for the First Name@@firstName">First Name</th>
-              <th i18n="Last Name|Title for the Last Name@@lastName">Last Name</th>
-              <th i18n="email|Title for the email@@email">email</th>
-              <th i18n="status|Title for the status@@status">status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let data of nzTable.data">
-              <tr>
-                <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
-                <td
-                  [nzChecked]="setOfCheckedId.has(data.id)"
-                  [nzDisabled]="data.disabled"
-                  (nzCheckedChange)="onItemChecked(data.id, $event)"
-                ></td>
-                <td>{{ data.firstName }}</td>
-                <td>{{ data.lastName }}</td>
-                <td>{{ data.email }}</td>
-                <td>
-                  <i *ngIf="data.status" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
-                  <i *ngIf="!data.status" nz-icon nzType="close-circle" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></i>
-                </td>
-              </tr>
-              <tr [nzExpand]="expandSet.has(data.id)">
-                <div class="m-table-detail-row m-permission-block">
-                  <nz-tag
-                    *ngFor="let tag of data.accounts; let i = index"
-                    [nzMode]="'closeable'"
-                    (nzOnClose)="removePermission(data.id , tag , $event)"
-                    class="m-permission-tag"
-                  >
-                    <div class="m-permission-tag-card" >
-                      <div class="m-permission-tag-card-img">
-                        <nz-avatar [nzSize]="32" [nzSrc]="getPermissionPagePicture(tag)" ></nz-avatar>
-                      </div>
-                      <div class="m-permission-tag-card-content">
-                        <div class="m-permission-tag-card-provider">
-                          {{ getPermissionName(tag) }}
-                        </div>
-                        <div class="m-permission-tag-card-name">
-                        {{ getPermissionProvider(tag) }}
-                        </div>
-                      </div>
+    </div>
+    <nz-table #nzTable [nzData]="listOfUsers" nzTableLayout="fixed">
+      <thead>
+        <tr>
+          <th nzWidth="60px"></th>
+          <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+          <th i18n="First Name|Title for the First Name@@firstName">First Name</th>
+          <th i18n="Last Name|Title for the Last Name@@lastName">Last Name</th>
+          <th i18n="email|Title for the email@@email">email</th>
+          <th i18n="status|Title for the status@@status">status</th>
+          <th i18n="Action|Title for the Action@@action">action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let data of nzTable.data">
+          <tr>
+            <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
+            <td
+              [nzChecked]="setOfCheckedId.has(data.id)"
+              [nzDisabled]="data.disabled"
+              (nzCheckedChange)="onItemChecked(data.id, $event)"
+            ></td>
+            <td>{{ data.firstName }}</td>
+            <td>{{ data.lastName }}</td>
+            <td>{{ data.email }}</td>
+            <td>
+              <i *ngIf="data.status" nz-icon [nzType]="'check-circle'" [nzTheme]="'twotone'" [nzTwotoneColor]="'#52c41a'"></i>
+              <i *ngIf="!data.status" nz-icon nzType="close-circle" nzTheme="twotone" [nzTwotoneColor]="'#ff4d4f'"></i>
+            </td>
+            <td>
+              <button nz-button (click)="editUser(data.id)"  nzType="primary" class="m-secondary-button">
+                <i nz-icon nzType="edit"></i>
+              </button>
+              <nz-divider nzType="vertical"></nz-divider>
+              <button nz-button (click)="showDeleteModal('user',data.id, 0,$event)"  nzType="primary" class="m-danger-button">
+                <i nz-icon nzType="delete" nzTheme="outline"></i>
+              </button>
+            </td>
+          </tr>
+          <tr [nzExpand]="expandSet.has(data.id)">
+            <div class="m-table-detail-row m-permission-block">
+              <nz-tag
+                *ngFor="let tag of data.accounts; let i = index"
+                [nzMode]="'closeable'"
+                (nzOnClose)="showDeleteModal('permission',data.id , tag , $event)"
+                class="m-permission-tag"
+              >
+                <div class="m-permission-tag-card" >
+                  <div class="m-permission-tag-card-img">
+                    <nz-avatar [nzSize]="32" [nzSrc]="getPermissionPagePicture(tag)" ></nz-avatar>
+                  </div>
+                  <div class="m-permission-tag-card-content">
+                    <div class="m-permission-tag-card-provider">
+                      {{ getPermissionName(tag) }}
                     </div>
-                </nz-tag>
-              </div>
-              </tr>
-            </ng-container>
-          </tbody>
-        </nz-table>
+                    <div class="m-permission-tag-card-name">
+                    {{ getPermissionProvider(tag) }}
+                    </div>
+                  </div>
+                </div>
+            </nz-tag>
+          </div>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
     <nz-modal
         [(nzVisible)]="isVisible"
         (nzOnCancel)="handleCancel()"
@@ -105,5 +115,24 @@
           <button nz-button nzType="primary" class="ant-btn-primary ant-btn-dangerous ant-btn-save" (click)="addPermission()" [nzLoading]="isOkLoading" i18n="save|Title for the save@@save">save</button>
         </ng-template>
     </nz-modal>
+
+    <div *ngIf="isModalVisible" class="m-modal">
+      <div class="m-modal-container">
+        <div  class="m-close-icon" (click)="closeModal()">
+          <img src="/assets/img/close.png" alt="close" />
+        </div>
+        <div class="m-header">
+          <i nz-icon nzType="question-circle" nzTheme="outline"></i>
+          <label>{{ modalMessage }}</label>
+        </div>
+        <div class="m-text">
+          {{ modalSubMessage }}
+        </div>
+        <div class="m-buttons">
+          <button class="m-button is-primary" i18n="Yes|Title for the yes@@yes" (click)="remove()"> Yes</button>
+          <button class="m-button is-disabled" i18n="No|Title for the no@@no" (click)="closeModal()"> No</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

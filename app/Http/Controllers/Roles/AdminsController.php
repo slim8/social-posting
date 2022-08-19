@@ -10,6 +10,8 @@ use App\Http\Controllers\Repositories\UserRepository;
 use App\Http\Controllers\TraitController;
 use App\Models\Company;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 
 class AdminsController extends Controller
@@ -173,5 +175,44 @@ class AdminsController extends Controller
         $user = User::where('id', $userId)->first();
 
         return $this->traitController->processResponse(true, ['User' => $user]);
+    }
+
+    /**
+     * Update User.
+     */
+    public function updateUser(Request $request, int $userId = null)
+    {
+        if (!$userId) {
+            Log::channel('notice')->notice('[updateUser] User : '.$this->traitController->getCurrentId().' Try To update User without Account ID');
+
+            return $this->traitController->processResponse(false, ['message' => 'Please choose a valid account ID']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255'
+        ], [
+            'companyName.required' => 'This is a required message for company name',
+        ]);
+
+        if ($validator->fails()) {
+            return response(['errors' => $validator->errors()->all()], 422);
+        }
+
+        if (!$this->utilitiesController->checkUserRight($userId)) {
+            return $this->traitController->processResponse(false, ['message' => 'This user is not linked to this admin']);
+        }
+
+        $user = User::where('id', $userId)->first();
+
+        $user = $user->update([
+            'firstName' => $request->firstName,
+            'lastName' => $request->lastName,
+            'address' => $request->address,
+            'postCode' => $request->postCode,
+            'city' => $request->city,
+        ]);
+
+        return $this->traitController->processResponse(true);
     }
 }
