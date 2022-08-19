@@ -334,3 +334,21 @@ nz-select-top-control {
   }
 
 }
+.m-delete-textinfo {
+  max-width: 259px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.ant-pagination-item-active a {
+  color: $color-media-primary-orange;
+  &:hover {
+    border-color: $color-media-primary-orange;
+  }
+}
+.ant-pagination-item-active {
+  border-color: $color-media-primary-orange;
+  &:hover {
+    border-color: $color-media-primary-orange;
+  }
+}

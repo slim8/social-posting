@@ -57,8 +57,8 @@ export class NewsComponent implements OnInit {
 
   deleteNews(id : number , title : string){
     this.modal.confirm({
-      nzTitle: '<i>Do you Want to remove this news ?</i>',
-      nzContent: '<b>'+ title + '</b>',
+      nzTitle: '<p class="m-delete-msg">Are you sure you want to delete this news?</p>',
+      nzContent: '<p class="m-delete-textinfo">'+ title + '</p>',
       nzOnOk: () => {
         this.newsService.deleteNews(id).subscribe({
           next: (event: any) => {
