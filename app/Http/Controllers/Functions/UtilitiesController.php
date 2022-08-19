@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
+use \getID3;
 
 class UtilitiesController extends Controller
 {
