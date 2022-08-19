@@ -5,7 +5,7 @@
         </div>
         <div class="m-container">
             <div class="m-form">
-                <div class="m-form-group">
+                <div *ngIf="!editMode" class="m-form-group">
                     <label class="m-required" i18n="email|Title for the email@@email">E-mail</label>
                     <div class="m-form-input">
                         <input nz-input type="email" [(ngModel)]="email" />
