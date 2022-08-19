@@ -59,6 +59,9 @@ Route::group(['middleware' => ['checkroles', 'role:companyadmin']], function () 
     Route::post('/managment/permissions/add', [CompanyAdminsController::class, 'addAccountToUser'])->name('add-permissions.api');
     Route::post('/managment/permissions/remove', [CompanyAdminsController::class, 'removeAccountFromUser'])->name('remove-permissions.api');
     Route::get('/managment/users', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
+    Route::get('/managment/users/delete/{userId}', [AdminsController::class, 'deleteUser'])->name('get-admin-users.api');
+    Route::get('/managment/users/suspension/{userId}/{action}', [AdminsController::class, 'suspensionUser'])->name('get-admin-users.api');
+    // Route::get('/managment/users/edit', [AdminsController::class, 'getAllUsers'])->name('get-admin-users.api');
 });
 
 Route::group(['middleware' => ['checkroles', 'role:companyadmin|user']], function () {
