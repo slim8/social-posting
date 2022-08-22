@@ -79,7 +79,7 @@
         <note priority="1" from="meaning">Drafts</note>
       </trans-unit>
       <trans-unit id="createPost" datatype="html">
-        <source>Beitrag gestalten</source>
+        <source>Beitrag erstellen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
           <context context-type="linenumber">49</context>
@@ -92,7 +92,7 @@
         <note priority="1" from="meaning">Create Post</note>
       </trans-unit>
       <trans-unit id="myAlbum" datatype="html">
-        <source>Meine Vorlagen</source>
+        <source>Meine individuellen Vorlagen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
           <context context-type="linenumber">60</context>
@@ -182,7 +182,7 @@
         <note priority="1" from="meaning">add Account or page </note>
       </trans-unit>
       <trans-unit id="NoConnectedAccountTitle" datatype="html">
-        <source> Keine Konten gefunden. </source>
+        <source> Noch kein Profil verknüpft. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
           <context context-type="linenumber">26,28</context>
@@ -199,7 +199,7 @@
         <note priority="1" from="meaning">No account</note>
       </trans-unit>
       <trans-unit id="NoConnectedAccountMessage" datatype="html">
-        <source> Verknüpfen Sie Ihre Social Media Kanäle mit der mediafactory zu Design und veröffentlichen Sie Beiträge direkt. </source>
+        <source> Verknüpfe Deine Social Media Kanäle mit der mediafactory, um Beiträge zu gestalten und direkt zu veröffenltichen. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
           <context context-type="linenumber">33,36</context>
@@ -217,7 +217,7 @@
         <note priority="1" from="meaning">No account message</note>
       </trans-unit>
       <trans-unit id="LoginAccount" datatype="html">
-        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:add&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>Konto verbinden </source>
+        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:add&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>Konto verknüpfen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
           <context context-type="linenumber">44,45</context>
@@ -1146,6 +1146,15 @@
         <note priority="1" from="description">Saves </note>
         <note priority="1" from="meaning">Saves </note>
       </trans-unit>
+      <trans-unit id="notFound" datatype="html">
+        <source>nicht gefunden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">193</context>
+        </context-group>
+        <note priority="1" from="description">Not Found</note>
+        <note priority="1" from="meaning">Not Found</note>
+      </trans-unit>
       <trans-unit id="toThePost" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:open&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> Zum Beitrag</source>
         <context-group purpose="location">
@@ -1374,7 +1383,7 @@
         <note priority="1" from="meaning">My Published Posts Date</note>
       </trans-unit>
       <trans-unit id="myDraftsActivities" datatype="html">
-        <source> Aktivitäten </source>
+        <source> Tätigkeiten </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
           <context context-type="linenumber">128,130</context>
@@ -1719,7 +1728,7 @@
         <note priority="1" from="meaning">My Published Posts Title</note>
       </trans-unit>
       <trans-unit id="myPublishedPostsSubTitle" datatype="html">
-        <source> Hier finden Sie alle Ihre bisher geplanten oder veröffentlichten Beiträge </source>
+        <source> Hier findest Du all deine bisherig geplanten oder veröffentlichten Beiträge </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -1739,7 +1748,7 @@
         <note priority="1" from="meaning">My Published Posts Status</note>
       </trans-unit>
             <trans-unit id="success" datatype="html">
-        <source>Erfolg</source>
+        <source>Veröffentlicht</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
           <context context-type="linenumber">188</context>
@@ -1817,7 +1826,7 @@
         <note priority="1" from="meaning">Published Post Impressions</note>
       </trans-unit>
       <trans-unit id="publishedPostGoTo" datatype="html">
-        <source> Gehe zu</source>
+        <source> Zum Beitrag</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
           <context context-type="linenumber">265,267</context>
