@@ -9,6 +9,7 @@ import { UsersListComponent } from './components/users-list/users-list.component
 const routes: Routes = [
     { path: 'users-list', component: UsersListComponent },
     { path: 'create-user', component: CreateUserComponent },
+    { path: 'edit-user/:id', component: CreateUserComponent },
     { path: 'create-news', component: CreateNewsComponent },
     { path: 'edit-news/:id', component: CreateNewsComponent },
     { path: 'news/:news/create-text-media', component: CreateTextMediaComponent },

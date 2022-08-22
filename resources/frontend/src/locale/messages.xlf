@@ -419,7 +419,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">114</context>
         </context-group>
         <note priority="1" from="description">Title for the Cancel</note>
         <note priority="1" from="meaning">Cancel</note>
@@ -444,7 +444,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">115</context>
         </context-group>
         <note priority="1" from="description">Title for the save</note>
         <note priority="1" from="meaning">save</note>
@@ -1045,7 +1045,7 @@
         <source>If you have any questions, our support team is at your side: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/Components/post-detail/post-detail.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <note priority="1" from="description">Title for the support team</note>
         <note priority="1" from="meaning">support team</note>
@@ -1446,7 +1446,7 @@
         <note priority="1" from="meaning">teaser</note>
       </trans-unit>
       <trans-unit id="picture" datatype="html">
-        <source>Bild</source>
+        <source>Picture</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
           <context context-type="linenumber">24</context>
@@ -1467,7 +1467,7 @@
         <note priority="1" from="meaning">picture</note>
       </trans-unit>
       <trans-unit id="chooseAnImage" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;upload&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Wählen Sie ein Bild aus<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;upload&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Choose an image<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1480,7 +1480,7 @@
         <note priority="1" from="meaning">Choose an Image</note>
       </trans-unit>
       <trans-unit id="date" datatype="html">
-        <source>Datum</source>
+        <source>Date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-news/create-news.component.html</context>
           <context context-type="linenumber">32</context>
@@ -1565,7 +1565,7 @@
         <note priority="1" from="meaning">new password</note>
       </trans-unit>
       <trans-unit id="permissions" datatype="html">
-        <source>Berechtigungen</source>
+        <source>Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html</context>
           <context context-type="linenumber">63</context>
@@ -1578,14 +1578,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
           <context context-type="linenumber">9,11</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">34</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/news/news.component.html</context>
-          <context context-type="linenumber">38</context>
         </context-group>
         <note priority="1" from="description">Title for the Add News</note>
         <note priority="1" from="meaning">Add News</note>
@@ -1626,14 +1618,41 @@
         <note priority="1" from="description">Title for the status</note>
         <note priority="1" from="meaning">status</note>
       </trans-unit>
+      <trans-unit id="action" datatype="html">
+        <source>action</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Action</note>
+        <note priority="1" from="meaning">Action</note>
+      </trans-unit>
       <trans-unit id="addPermissions" datatype="html">
         <source>Add Permissions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">91</context>
         </context-group>
         <note priority="1" from="description">Title for the Add Permissions</note>
         <note priority="1" from="meaning">Add Permissions</note>
+      </trans-unit>
+      <trans-unit id="yes" datatype="html">
+        <source> Yes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <note priority="1" from="description">Title for the yes</note>
+        <note priority="1" from="meaning">Yes</note>
+      </trans-unit>
+      <trans-unit id="no" datatype="html">
+        <source> No</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+        <note priority="1" from="description">Title for the no</note>
+        <note priority="1" from="meaning">No</note>
       </trans-unit>
       <trans-unit id="chooseMediafactory" datatype="html">
         <source> Choose a meme you designed from the mediafactory and publish it. </source>

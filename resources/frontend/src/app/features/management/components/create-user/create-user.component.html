@@ -5,22 +5,22 @@
         </div>
         <div class="m-container">
             <div class="m-form">
-                <div class="m-form-group">
-                    <label i18n="email|Title for the email@@email">E-mail</label>
+                <div *ngIf="!editMode" class="m-form-group">
+                    <label class="m-required" i18n="email|Title for the email@@email">E-mail</label>
                     <div class="m-form-input">
                         <input nz-input type="email" [(ngModel)]="email" />
                     </div>
                     <small class="error" *ngIf="error && error.email" >{{error.email[0]}}</small>
                 </div>
                 <div class="m-form-group">
-                    <label i18n="First Name|Title for the First Name@@firstName">First name</label>
+                    <label class="m-required" i18n="First Name|Title for the First Name@@firstName">First name</label>
                     <div class="m-form-input">
                         <input nz-input type="text" [(ngModel)]="firstName" />
                     </div>
                     <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
                 </div>
                 <div class="m-form-group">
-                    <label i18n="Last Name|Title for the Last Name@@lastName">Last name</label>
+                    <label class="m-required" i18n="Last Name|Title for the Last Name@@lastName">Last name</label>
                     <div class="m-form-input">
                         <input nz-input type="text" [(ngModel)]="lastName" />
                     </div>
@@ -49,8 +49,8 @@
                       <small class="error" *ngIf="error && error.city" >{{error.city[0]}}</small>
                   </div>
                 </div>
-                <div class="m-form-group">
-                    <label i18n="new password|Title for the new password@@newPassword">New password</label>
+                <div *ngIf="!editMode" class="m-form-group">
+                    <label class="m-required" i18n="new password|Title for the new password@@newPassword">New password</label>
                     <div class="m-form-input-password" >
                         <input nz-input [type]=" showNewPassword ? 'text' : 'password' " placeholder="new password" [(ngModel)]="newPassword" />
                         <i nz-icon nzType="eye" nzTheme="outline" *ngIf="!showNewPassword" (click)="showNewPasswordAction()"></i>
@@ -59,8 +59,8 @@
                     <small class="error" *ngIf="error && error.password" >{{error.password[0]}}</small>
                 </div>
 
-                <div class="m-form-group">
-                  <label i18n="Permissions|Title for the Permissions@@permissions">Permissions</label>
+                <div *ngIf="!editMode" class="m-form-group">
+                  <label class="m-required" i18n="Permissions|Title for the Permissions@@permissions">Permissions</label>
                   <div class="m-form-input">
                     <nz-select
                       [(ngModel)]="accountsValue"
@@ -73,7 +73,7 @@
                         *ngFor="let option of listOfPages"
                         [nzLabel]="option.pageName"
                         [nzCustomContent]="true"
-                        [nzValue]="option.id + '|' + option.provider"
+                        [nzValue]="option.id"
                         >
                             <div class="m-image">
                               <img src="{{ option.pagePictureUrl }}" alt="" />
@@ -92,7 +92,7 @@
                   </div>
                   <small class="error" *ngIf="error && error.website" >{{error.website[0]}}</small>
               </div>
-                <button nz-button nzType="primary" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
+                <button [nzLoading]="isLoading" nz-button nzType="primary" class="m-primary-button" (click)="saveProfile()" i18n="save|Title for the save@@save">
                     <i nz-icon nzType="edit" nzTheme="outline"></i>
                     save
                 </button>

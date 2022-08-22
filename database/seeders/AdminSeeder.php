@@ -53,6 +53,7 @@ class AdminSeeder extends Seeder
             'companyId' => $company->id,
             'password' => hash::make('Soft1to2do'),
             'autoRefresh' => 1,
+            'deleted' => 0,
         ]);
 
         $user->attachRole('admin');

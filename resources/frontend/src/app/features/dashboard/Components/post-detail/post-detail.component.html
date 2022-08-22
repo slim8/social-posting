@@ -4,19 +4,18 @@
            <a href="/application/dashboard/blog-posts" i18n="back|Title for the back@@back"> Back to overview </a>
         </div>
         <div class="m-container">
+            <div class="m-date">{{news.date | date: "dd.MM.yyyy"}}</div>
             <div class="m-post-detail-title">{{news.title}}</div>
             <div class="m-post-detail-img">
                 <img nz-image [nzSrc]="news.img" alt="">
             </div>
-            <div class="m-post-detail-description">
-                {{news.teaser}}
+            <div class="m-post-detail-description" [innerHTML]="news.teaser">
             </div>
             <div class="m-text-media-container">
             <div class="m-post-detail-img">
                 <img *ngIf="news.textImage" nz-image [nzSrc]="news.textImage" alt="">
             </div>
-            <div *ngIf="news.newsText" class="m-post-detail-description">
-                {{news.newsText}}
+            <div *ngIf="news.newsText" class="m-post-detail-description" [innerHTML]="news.newsText">
             </div>
             </div>
         </div>

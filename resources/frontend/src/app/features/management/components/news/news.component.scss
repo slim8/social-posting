@@ -1,4 +1,3 @@
-
 @import '../../../../../assets/sass/_project/_config.scss';
 @import '../../../../../assets/sass/_global/_mixins.scss';
 @import '../../../../../assets/sass/_project/base.scss';
@@ -63,7 +62,7 @@
                         line-height: 1.4166666667;
                         font-weight: bold;
                     }
-                 
+
 
 
 
@@ -86,7 +85,7 @@
                         }
 
                         >.m-secondary-button{
-                            background-color: $color-media-light-grey;;
+                            background-color: $color-media-light-grey;
                             border-color: $color-media-light-grey;
                         }
 
@@ -101,3 +100,4 @@
         }
     }
 }
+

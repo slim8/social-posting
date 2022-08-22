@@ -21,6 +21,10 @@ export class UserService {
     return this.http.post(sharedConstants.API_ENDPOINT+ 'register-user',data );
   }
 
+  updateUser(id: string, data : any= []) {
+    return this.http.post(sharedConstants.API_ENDPOINT+ 'managment/users/update/'+id ,data );
+  }
+
   addPermission(data : any) {
     return this.http.post(sharedConstants.API_ENDPOINT+ 'managment/permissions/add',data );
   }
@@ -29,4 +33,11 @@ export class UserService {
     return this.http.post(sharedConstants.API_ENDPOINT+ 'managment/permissions/remove',data );
   }
 
+  deleteUser(id:string, data: any = []) {
+    return this.http.post(sharedConstants.API_ENDPOINT+ 'managment/users/delete/'+id, data );
+  }
+
+  getUserById( id : number , params : any = []) {
+    return this.http.get(sharedConstants.API_ENDPOINT+ 'managment/users/'+id,{params});
+  }
 }

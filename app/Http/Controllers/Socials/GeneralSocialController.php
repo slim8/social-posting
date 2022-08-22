@@ -189,7 +189,7 @@ class GeneralSocialController extends Controller
                             $video = json_decode($video, true);
 
                             $videoObject['url'] = $video['url'];
-                            $videoObject['seconde'] = $video['seconde'];
+                            $videoObject['seconde'] = $video['second'];
                             $videoObject['thumbnail'] = $video['thumbnail'];
                             $videosInsta[] = $videoObject;
                             $videoThunb = $video;
