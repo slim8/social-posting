@@ -1146,6 +1146,15 @@
         <note priority="1" from="description">Saves </note>
         <note priority="1" from="meaning">Saves </note>
       </trans-unit>
+      <trans-unit id="notFound" datatype="html">
+        <source>Not found</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">193</context>
+        </context-group>
+        <note priority="1" from="description">Not Found</note>
+        <note priority="1" from="meaning">Not Found</note>
+      </trans-unit>
       <trans-unit id="toThePost" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;ng-zorro:open&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> To the post</source>
         <context-group purpose="location">
