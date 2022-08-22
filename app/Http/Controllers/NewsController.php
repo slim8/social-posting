@@ -29,7 +29,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return $this->traitController->processResponse(true, ['news' => News::with('textMediaNews')->orderBy('id', 'desc')->get()]);
+        return $this->traitController->processResponse(true, ['news' => News::orderBy('id', 'desc')->get()]);
     }
 
     /**
@@ -46,6 +46,7 @@ class NewsController extends Controller
             'teaser' => 'required',
             'date' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg',
+            'textImage' => 'mimes:png,jpg,jpeg',
         ]);
 
         if ($validation->fails()) {
@@ -53,6 +54,10 @@ class NewsController extends Controller
         }
 
         try {
+            $textImage = '';
+            if ($request->file('textImage')){
+                $textImage = $this->fileController->uploadLocalAndReturnObject($request->file('textImage'), 'image');
+            }
             $picture = $this->fileController->uploadLocalAndReturnObject($request->file('image'), 'image');
             $newsObject = News::create([
                 'title' => $request->title,
@@ -60,6 +65,8 @@ class NewsController extends Controller
                 'date' => $request->date,
                 'picture' => json_encode($picture),
                 'template' => $request->template,
+                'textImage' => json_encode($textImage),
+                'newsText' => $request->text,
             ]);
             Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' add new News Id : '.$newsObject->id);
 
@@ -80,7 +87,7 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        return $this->traitController->processResponse(true, ['new' => News::where('id', $id)->with('textMediaNews')->first()]);
+        return $this->traitController->processResponse(true, ['new' => News::where('id', $id)->first()]);
     }
 
     /**

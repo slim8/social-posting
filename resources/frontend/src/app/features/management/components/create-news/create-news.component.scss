@@ -5,6 +5,8 @@
 .mod-add-news{
 
     >.m-wrapper {
+        background: white;
+        padding-bottom: 18px;
         >.m-header{
             padding: 18px;
             font-size: 2.5rem;
@@ -12,31 +14,60 @@
             text-transform: capitalize;
             font-weight: 400;
             >h1{
-                color: $color-media-black-opacity-half;
+              @include textstyle-size-32-bold();
+              margin-bottom: 5px;
+              text-align: center;
+              @include mq(mobilebig) {
+                  @include textstyle-size-44-bold();
+              }
             }
         }
 
         >.m-form{
-
+          width: 100%;
+          @include mq(tablet) {
+            width: 92%;
+          }
             >.m-form-group{
-                padding: 18px;
+                padding: 5px 10px;
+                display: flex;
+                align-items: baseline;
 
                 >label {
-                    font-size: 0.75rem;
-                    line-height: 1.4166666667rem;
-                    text-transform: capitalize;
-                    font-weight: 700;
+                  @include textstyle-size-14();
+                  color: $color-media-dark-grey;
+                  cursor: default;
+                  max-width: 71px;
+                  width: 100%;
+                  justify-content: flex-end;
+                  display: flex;
+                  margin-right: 18px;
                 }
 
                 >.m-form-input {
-
-                    >.m-select{
-                        width: 100%;
-                    }
-                    
+                  position: relative;
+                  width: 100%;
+                  >.m-select,
+                  input{
+                      width: 100%;
+                      height: 45px;
+                      border: 1px solid #ff8d69;
+                      background-color: $color-base-0;
+                      display:flex;
+                      align-items: center;
+                  }
+                  > .m-upload-image {
+                    background-color: $color-base-0;
+                    border: 1px solid $color-media-primary-orange;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1;
+                    color: $color-base-100;
+                  }
                 }
 
-                
+
 
                 >.error{
                     color: red;
@@ -44,12 +75,41 @@
             }
 
             >.m-primary-button{
-                margin : 18px ;
                 background-color: $color-media-primary-orange;
                 border-color: $color-media-primary-orange;
+                border-radius: 0;
+                font-weight: 700;
+                height: 39px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 18px auto;
+                @include textstyle-size-14-bold();
             }
         }
 
-        
+
     }
+}
+.box-opener {
+  cursor: pointer;
+  padding: 16px;
+  user-select: none;
+  button{
+     background-color: #ff8d69;
+    border-color: #ff8d69;
+    color: $color-base-0;
+  }
+}
+
+.box {
+  max-height: 0px;
+  overflow-y: hidden;
+  transition: ease-in-out 400ms max-height;
+}
+
+.box.opened {
+  padding: 18px;
+  max-height: 500px;
+  transition: ease-in-out 600ms max-height;
 }

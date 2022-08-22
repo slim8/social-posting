@@ -127,7 +127,7 @@
 
                                         > td {
                                           .m-badge-error {
-                                            transform: translateX(-200%);
+                                            transform: translateX(-100%);
                                           }
                                           .m-text {
                                             @include textstyle-size-12();
@@ -358,25 +358,35 @@
                                 width: 80%;
                                 position: relative;
                                 margin-left: 7px;
+                                margin-bottom: 15px;
 
                                 &:before {
                                     content: '';
                                     position: absolute;
                                     top: 2px;
                                     left: -22px;
-                                    background-image: url('../../../assets/img/svgs/icons/Bell.svg');
+                                    background-image: url('/assets/img/svgs/icons/Bell.svg');
                                     width: 14px;
                                     height: 14px;
                                 }
 
                                 p {
                                     @include textstyle-size-12();
-
+                                    margin: 0;
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 3;
+                                    -webkit-box-orient: vertical;
+                                    overflow: hidden;
                                     > a {
                                         color: $color-base-100;
                                         text-decoration: underline;
                                         cursor: pointer;
                                     }
+                                }
+                                > a {
+                                  color: $color-base-100;
+                                  text-decoration: underline;
+                                  cursor: pointer;
                                 }
                             }
                         }

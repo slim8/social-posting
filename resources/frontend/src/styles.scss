@@ -61,7 +61,7 @@
     }
 }
 label, small{
-  cursor: pointer !important;
+  cursor: pointer;
   }
 /* Importing Bootstrap SCSS file. */
 
@@ -127,6 +127,11 @@ label, small{
         .anticon svg {
             fill: transparent;
         }
+    }
+    &.is-black-icon {
+      .anticon svg {
+        fill: $color-base-100!important;
+      }
     }
 }
 
@@ -277,10 +282,20 @@ svg {
   }
 }
 
+.ant-select {
+  &:not(.ant-select-customize-input) {
+    .ant-select-selector {
+      border:0;
+    }
+  }
+}
+
 
 nz-select-top-control {
-  border: none!important;
-  box-shadow: none!important;
+  .mod-create-user & {
+    border: none!important;
+    box-shadow: none!important;
+  }
 }
 .ant-table-content{
   overflow-x: scroll;
@@ -304,5 +319,44 @@ nz-select-top-control {
   border-top: 0;
 }
 
+.angular-editor-textarea {
+  min-height: 150px!important;
+  border: 1px solid #ff8d69!important;
+}
 
+.m-table-teaser{
+  span{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
 
+}
+.m-delete-textinfo {
+  max-width: 259px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.ant-pagination-item-active a {
+  color: $color-media-primary-orange;
+  &:hover {
+    border-color: $color-media-primary-orange;
+  }
+}
+.ant-pagination-item-active {
+  border-color: $color-media-primary-orange;
+  &:hover {
+    border-color: $color-media-primary-orange;
+  }
+}
+
+svg {
+  .m-modal-container &{
+      width: 23px;
+      height: 23px;
+      fill: $color-media-primary-orange;
+  }
+}

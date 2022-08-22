@@ -181,19 +181,18 @@ class GeneralSocialController extends Controller
                             ++$imgInc;
                         }
                     }
-
+                    $videosInsta = [];
                     if ($videos) {
                         // $videoCounter = 0;
+
                         foreach ($videos as $video) {
                             $video = json_decode($video, true);
 
-                            // if ($videoCounter == 0) {
-                                $videoThunb = $video;
-
-                                // var_dump($videoThunb);
-                                // die;
-                            // }
-                            // ++$videoCounter;
+                            $videoObject['url'] = $video['url'];
+                            $videoObject['seconde'] = $video['second'];
+                            $videoObject['thumbnail'] = $video['thumbnail'];
+                            $videosInsta[] = $videoObject;
+                            $videoThunb = $video;
 
                             PostMedia::create([
                                 'url' => $video['url'],
@@ -224,7 +223,7 @@ class GeneralSocialController extends Controller
                     $BusinessIG = $account->uid;
                     $obj['access_token'] = $this->instagramController->getAccessToken($account->id);
                     Log::channel('instagram')->info('[sendToPost] User Id : '.$this->traitController->getCurrentId().' Try to post To Instagaram Uid :'.$BusinessIG.' with account Id '.$account->id.' Post Id : '.$postId);
-                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videos, $localisation, $mentions) : POST::$STATUS_DRAFT;
+                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $InstagramController->postToInstagramMethod($obj, $BusinessIG, $images, $post['hashtags'], $videosInsta, $localisation, $mentions) : POST::$STATUS_DRAFT;
                 }
 
                 if ((gettype($postResponse) == 'array' && $postResponse['status']) || $statusPost == POST::$STATUS_DRAFT) {

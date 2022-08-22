@@ -204,7 +204,8 @@ class InstagramController extends Controller
 
             foreach ($mentions as $mention) {
                 if ($mention['image'] == 0) {
-                    $object['user_tags'][] = ['username' => $mention['username'], 'x' => $mention['x'], 'y' => $mention['y']];
+                    $userName = trim(str_replace('@' , '' , $mention['username']));
+                    $object['user_tags'][] = ['username' => $userName, 'x' => $mention['x'], 'y' => $mention['y']];
                 }
             }
         }
@@ -314,7 +315,7 @@ class InstagramController extends Controller
                 $videosConatiners = [];
                 $incImages = 0;
                 foreach ($videos as $video) {
-                    $videoObj = json_decode($video, true);
+                    $videoObj = gettype($video) == 'array' ? $video : json_decode($video, true);
                     $video = $videoObj['url'];
                     $videoSecondes = $videoObj['seconde'];
                     $videoContainerId = $this->postMediaUrl($igUser, $object['access_token'], $video, $mentions, $incImages, 'video', $videoSecondes);
