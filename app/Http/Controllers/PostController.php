@@ -157,12 +157,27 @@ class PostController extends Controller
             }) : $postRequest->where('status', $request->status);
         }
 
-        // to Limit the request ny number of records
-        if ($request->limit) {
-            $postRequest = $postRequest->limit($request->limit);
+        $postRequest = $postRequest->orderBy('id', 'DESC');
+
+        $paginator = null;
+        if($request->perPage){
+            $count = $postRequest->count();
+            $postRequest = $postRequest->simplePaginate($request->perPage);
+            $links = $postRequest->links();
+            $postRequest = $postRequest->all();
+
+            $paginator["total"] = $count;
+            $paginator["pageNumber"] = ceil($count / $request->perPage);
+            $paginator["currentPage"] = $request->page ? $request->page : 1;
+        } else {
+            if ($request->limit) {
+                $postRequest = $postRequest->limit($request->limit);
+                    $postRequest = $postRequest->get();
+            } else {
+               $postRequest = $postRequest->get();
+            }
         }
 
-        $postRequest = $postRequest->orderBy('id', 'DESC')->get();
 
         $posts = $postId ? null : [];
         foreach ($postRequest as $postContent) {
@@ -242,7 +257,7 @@ class PostController extends Controller
         }
 
         if ($posts) {
-            return $this->traitController->processResponse(true, [$postId ? 'post' : 'posts' => $posts]); // if single post return posts else return all Posts
+            return $this->traitController->processResponse(true, [$postId ? 'post' : 'posts' => $posts , "pagination" => $paginator]); // if single post return posts else return all Posts
         } else {
             return $this->traitController->processResponse(false, ['message' => 'No posts found Or some account are disconnected']);
         }
