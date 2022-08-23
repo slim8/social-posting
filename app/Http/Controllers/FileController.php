@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
-use Image;
 
 class FileController extends Controller
 {
@@ -27,7 +27,7 @@ class FileController extends Controller
 
     public function __construct()
     {
-        $this->imageManager = new ImageManager();
+        $this->imageManager = new ImageManager(['driver' => 'imagick']);
         $this->utilitiesController = new UtilitiesController();
         $this->traitController = new TraitController();
     }
@@ -86,7 +86,7 @@ class FileController extends Controller
         $fileName = $exploded[count($exploded) - 1];
         $newFileName = explode('.', $fileName)[0];
         $newFile = storage_path() . '/app/public/' . $folderName . '/' . $newFileName . '.jpeg';
-        $this->imageManager->make($object)->encode('jpg', 80)->save($newFile);
+        $this->imageManager->make($object)->resize(1000, 1000)->save($newFile, 90, 'jpeg');
 
         unlink($object);
 
@@ -98,15 +98,7 @@ class FileController extends Controller
      */
     public function uploadFile(Request $request)
     {
-
-        $file = $request->file('file');
-
-        if (strstr($file->getClientMimeType(), "image/")) {
-            $image = Image::make($file);
-            $image->resize(1200, 800);
-        }
-
-        $response = $file ? $this->uploadSimpleFile($file) : false;
+        $response = $request->file('file') ? $this->uploadSimpleFile($request->file('file')) : false;
 
         return $this->traitController->processResponse($response ? true : false, ['files' => $response]);
     }
