@@ -86,7 +86,7 @@ class FileController extends Controller
         $fileName = $exploded[count($exploded) - 1];
         $newFileName = explode('.', $fileName)[0];
         $newFile = storage_path() . '/app/public/' . $folderName . '/' . $newFileName . '.jpeg';
-        $this->imageManager->make($object)->resizeDown(1000, 1000)->save($newFile, 90, 'jpeg');
+        $this->imageManager->make($object)->resizeCanvas(1280, 720, 'center', true)->save($newFile, 90, 'jpeg');
 
         unlink($object);
 
