@@ -11,7 +11,10 @@
           Add User
       </button>
     </div>
-    <nz-table #nzTable [nzData]="listOfUsers" nzTableLayout="fixed">
+    <div *ngIf="isUsersLoading" class="isUsersLoading">
+      <i nz-icon nzType="loading" nzTheme="outline"></i>
+    </div>
+    <nz-table #nzTable [nzData]="listOfUsers" nzTableLayout="fixed" *ngIf="!isUsersLoading">
       <thead>
         <tr>
           <th nzWidth="60px"></th>
