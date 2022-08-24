@@ -204,7 +204,7 @@ class PostController extends Controller
                     $postContent['ScheduleDate'] = $postContent->scheduled;
 
                     if($postContent->scheduled){
-                        $dateOfToday = str_replace(' ','T',$dateOfToday);
+                        $dateOfToday = str_replace(' ','T',$postContent->scheduled);
                         $time_input = strtotime($dateOfToday);
                         $date_input = getDate($time_input);
                         $postContent['isPosted'] = $dateOfTodayDate > $date_input;
