@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { LoginResponse } from 'ngx-facebook';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { sharedConstants } from 'src/app/shared/sharedConstants';
+
 import { FacebookSocialService } from '../facebook-social/services/facebook-social.service';
 import { AccountsService } from '../social-accounts/services/accounts.service';
 
@@ -32,7 +33,7 @@ export class AccountsComponent implements OnInit {
     user: any = [];
     validateForm!: FormGroup;
     isLoading: boolean = true;
-    userRoles:Array<string> = [];
+    userRoles: Array<string> = [];
     isCompanyAdmin: boolean = false;
 
     constructor(
@@ -51,16 +52,16 @@ export class AccountsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-      this.validateForm = this.formBuilder.group({
-          myChoices: new FormArray([]),
-      });
-      this.getConnectedAccounts();
-      this.getPages();
-      if (this.router.url.includes('accounts')) {
-          this.sharedModule.initSideMenu('accounts');
-      }
-      this.userRoles = this.sharedModule.getuserRoles();
-      this.userRoles.includes('companyadmin')? this.isCompanyAdmin = true: this.isCompanyAdmin = false;
+        this.validateForm = this.formBuilder.group({
+            myChoices: new FormArray([]),
+        });
+        this.getConnectedAccounts();
+        this.getPages();
+        if (this.router.url.includes('accounts')) {
+            this.sharedModule.initSideMenu('accounts');
+        }
+        this.userRoles = this.sharedModule.getuserRoles();
+        this.userRoles.includes('companyadmin') ? this.isCompanyAdmin = true : this.isCompanyAdmin = false;
     }
 
     getPages() {
@@ -86,8 +87,8 @@ export class AccountsComponent implements OnInit {
                 accessToken: this.user.accessToken,
                 id: this.user.id,
             }).subscribe((response: any) => {
-              this.accountName = response.accountName;
-              this.listpages = response.pages;
+                this.accountName = response.accountName;
+                this.listpages = response.pages;
                 if (param != 'add') {
                     this.getConnectedAccounts();
                 }
@@ -217,33 +218,40 @@ export class AccountsComponent implements OnInit {
             nzOkDanger: true,
             nzOnOk: () => this.disconnectPage(id),
             nzCancelText: 'Cancel',
-            nzOnCancel: () => {}
+            nzOnCancel: () => { }
         });
     }
 
     showDeleteConfirm(id: any): void {
-      this.modal.confirm({
-          nzTitle: 'Do you really want to delete this account?',
-          nzOkText: 'Delete',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          nzOnOk: () => this.deletePage(id),
-          nzCancelText: 'Cancel',
-          nzOnCancel: () => console.log('Cancel')
-      });
+        const title = $localize`Do you really want to delete this account?`;
+        const deleteButtonText = $localize`Delete`;
+        const cancelButtonText = $localize`Cancel`;
+        this.modal.confirm({
+            nzTitle: title,
+            nzOkText: deleteButtonText,
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => this.deletePage(id),
+            nzCancelText: cancelButtonText,
+            nzOnCancel: () => console.log('Cancel')
+        });
     }
 
     showDeleteAccountConfirm(id: any): void {
-      this.modal.confirm({
-          nzTitle: 'Do you really want to delete this personnel account?',
-          nzContent: '<b style="color: red;">this account will be deleted permenantly</b>',
-          nzOkText: 'Yes',
-          nzOkType: 'primary',
-          nzOkDanger: true,
-          nzOnOk: () => this.deleteAccount(id),
-          nzCancelText: 'No',
-          nzOnCancel: () => console.log('Cancel')
-      });
+        const title = $localize`Do you really want to delete this personnel account?`;
+        const content = $localize`this account will be deleted permenantly`;
+        const yesButtonText = $localize`Yes`;
+        const noButtonText = $localize`No`;
+        this.modal.confirm({
+            nzTitle: title,
+            nzContent: `<b style="color: red;">${content}</b>`,
+            nzOkText: yesButtonText,
+            nzOkType: 'primary',
+            nzOkDanger: true,
+            nzOnOk: () => this.deleteAccount(id),
+            nzCancelText: noButtonText,
+            nzOnCancel: () => console.log('Cancel')
+        });
     }
 
     reconnectPage(event: any, id: any) {
@@ -260,39 +268,39 @@ export class AccountsComponent implements OnInit {
         })
     }
 
-    deletePage (id:string) {
-      this.isLoading = true;
-      this.listOfPages = [];
-      this.accountsService.deletePage(id).subscribe({
-        next: (event: any) => {
+    deletePage(id: string) {
+        this.isLoading = true;
+        this.listOfPages = [];
+        this.accountsService.deletePage(id).subscribe({
+            next: (event: any) => {
 
-        },
-        error: err => {
+            },
+            error: err => {
 
-        },
-        complete: () => {
-          this.isLoading = false;
-          this.getPages();
-        }
-      })
+            },
+            complete: () => {
+                this.isLoading = false;
+                this.getPages();
+            }
+        })
     }
 
-    deleteAccount (id:string) {
-      this.isLoading = true;
-      this.listOfPages = [];
-      this.connectedAccounts = [];
-      this.accountsService.deleteAccount(id).subscribe({
-        next: (event: any) => {
+    deleteAccount(id: string) {
+        this.isLoading = true;
+        this.listOfPages = [];
+        this.connectedAccounts = [];
+        this.accountsService.deleteAccount(id).subscribe({
+            next: (event: any) => {
 
-        },
-        error: err => {
+            },
+            error: err => {
 
-        },
-        complete: () => {
-          this.isLoading = false;
-          this.getConnectedAccounts();
-          this.getPages();
-        }
-      })
+            },
+            complete: () => {
+                this.isLoading = false;
+                this.getConnectedAccounts();
+                this.getPages();
+            }
+        })
     }
 }
