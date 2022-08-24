@@ -61,7 +61,6 @@ export class DraftsComponent implements OnInit {
         this.isLoading = false;
         this.totalDrafts = event.pagination.total;
         this.currentPage = event.pagination.currentPage;
-        console.log(this.totalDrafts)
       },
       error: (err) => {
         this.posts = [];
