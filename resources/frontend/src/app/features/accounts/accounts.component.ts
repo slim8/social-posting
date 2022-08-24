@@ -210,14 +210,18 @@ export class AccountsComponent implements OnInit {
     }
 
     showDisconnectConfirm(id: any): void {
+        const title = $localize`Do you really want to disconnect from this page?`;
+        const content = $localize`You will have to connect this acocunt via facebook to reconnect`;
+        const disconnectButtonText = $localize`Disconnect`;
+        const cancelButtonText = $localize`Cancel`;
         this.modal.confirm({
-            nzTitle: '<b>Do you really want to disconnect from this page?</b>',
-            nzContent: '<span style="color: red;">You will have to connect this acocunt via facebook to reconnect</span>',
-            nzOkText: 'Disconnect',
+            nzTitle: `<b>${title}</b>`,
+            nzContent: `<span style="color: red;">${content}</span>`,
+            nzOkText: disconnectButtonText,
             nzOkType: 'primary',
             nzOkDanger: true,
             nzOnOk: () => this.disconnectPage(id),
-            nzCancelText: 'Cancel',
+            nzCancelText: cancelButtonText,
             nzOnCancel: () => { }
         });
     }
