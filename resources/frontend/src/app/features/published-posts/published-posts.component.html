@@ -181,10 +181,11 @@
                 </div>
               </td>
               <td class="m-status">
-                <nz-badge nzStatus="warning" *ngIf="item.isScheduled">
-                  <span class="m-text">Planned</span>
+                <nz-badge nzStatus="warning" *ngIf="item.isScheduled && !item.isPosted">
+                  <span class="m-text">Planned</span><br>
+                  <span class="m-text">{{item.scheduleDate | date: "dd-MM-yyyy HH:mm:00"}}</span>
                 </nz-badge>
-                <nz-badge nzStatus="success" *ngIf="item.statusObject=='Success' && !item.isScheduled && item.status">
+                <nz-badge nzStatus="success" *ngIf="item.statusObject=='Success' && item.isPosted && item.status">
                   <span class="m-text" i18n="Success|Title for Success@@success">Success</span>
                 </nz-badge>
                 <nz-badge nzStatus="error" *ngIf="item.statusObject!='Success' && !item.isScheduled && !item.status">
@@ -275,8 +276,8 @@
         <ng-template #renderItemTemplate let-type let-page="page">
           <ng-container [ngSwitch]="type">
             <a *ngSwitchCase="'page'" (change)="getPosts(page)">{{ page }}</a>
-            <a *ngSwitchCase="'prev|prev@@prev'" i18n="previous">Previous</a>
-            <a *ngSwitchCase="'next|next@@next'" i18n="next">Next</a>
+            <a *ngSwitchCase="'prev'" i18n="previous">Previous</a>
+            <a *ngSwitchCase="'next'" i18n="next">Next</a>
             <a *ngSwitchCase="'prev_5'"><<</a>
             <a *ngSwitchCase="'next_5'">>></a>
           </ng-container>

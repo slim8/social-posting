@@ -463,6 +463,24 @@
                 </div>
 
                 <div class="m-form-group">
+                  <div class="m-form-label">
+                    <h4 i18n="Schedule|Title for Schedule@@schedule">
+                      Schedule <span>- optional</span>
+                    </h4>
+                  </div>
+                  <div class="m-form-field">
+                    <nz-date-picker
+                      id="datePicker"
+                      nzShowTime
+                      nzFormat="yyyy-MM-ddTHH:mm:ss"
+                      [(ngModel)]="schedule"
+                      (ngModelChange)="onChange($event)"
+                      (nzOnOk)="onOk($event)"
+                    ></nz-date-picker>
+                  </div>
+                </div>
+
+                <div class="m-form-group">
                   <div
                     id="loader"
                     *ngIf="leadThumbnail"

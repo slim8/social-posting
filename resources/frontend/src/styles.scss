@@ -362,7 +362,7 @@ svg {
 }
 
 a {
-  .mod-drafts & {
+  .mod-drafts &, .mod-my-posts & {
     color: $color-media-primary-orange;
     &:hover {
       color: $color-media-dark-orange;

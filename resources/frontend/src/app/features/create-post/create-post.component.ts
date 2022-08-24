@@ -104,7 +104,8 @@ export class CreatePostComponent implements OnInit {
     pageNameInsta:string = "";
     avatarUrlFacebook:string = "";
     pageNameFacebook:string = "";
-
+    schedule: any = null;
+    scheduleTime: any = null;
     editDraftMode : boolean = false;
     editDraftPost ={id : ''};
 
@@ -343,6 +344,7 @@ export class CreatePostComponent implements OnInit {
               post.mentions = this.mentions;
               post.accountId = id;
               post.videoTitle = "";
+              if(this.scheduleTime!=""){post.scheduled = this.scheduleTime;}
           } else if (accountId.includes('instagram')) {
               post.message = this.instagramMessage;
               post.hashtags = this.listOfTagOptionsInsta;
@@ -903,5 +905,25 @@ export class CreatePostComponent implements OnInit {
 
             }
         });
+    }
+
+    onChange(event: any) {
+      let date = document.querySelector("#datePicker");
+      let input = date?.childNodes[0].firstChild as HTMLInputElement;
+      let dateVal = input?.value;
+      let timeZone = this.schedule.toString().split("(")[1];
+      timeZone = timeZone.split("+")[1];
+      timeZone = timeZone.replace(')' , '');
+      this.scheduleTime = dateVal+'+'+timeZone;
+    }
+
+    onOk(event: any) {
+      let date = document.querySelector("#datePicker");
+      let input = date?.childNodes[0].firstChild as HTMLInputElement;
+      let dateVal = input?.value;
+      let timeZone = this.schedule.toString().split("(")[1];
+      timeZone = timeZone.split("+")[1];
+      timeZone = timeZone.replace(')' , '');
+      this.scheduleTime = dateVal+'+'+timeZone;
     }
 }
