@@ -419,7 +419,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">116</context>
         </context-group>
         <note priority="1" from="description">Title for the Cancel</note>
         <note priority="1" from="meaning">Cancel</note>
@@ -444,7 +444,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">117</context>
         </context-group>
         <note priority="1" from="description">Title for the save</note>
         <note priority="1" from="meaning">save</note>
@@ -630,7 +630,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <note priority="1" from="description">Title for the FirstName </note>
         <note priority="1" from="meaning">FirstName</note>
@@ -647,7 +647,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <note priority="1" from="description">Title for the lastName </note>
         <note priority="1" from="meaning">lastName</note>
@@ -673,7 +673,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <note priority="1" from="description">Title for the E-mail </note>
         <note priority="1" from="meaning">E-mail</note>
@@ -1406,6 +1406,22 @@
                     </note>
         <note priority="1" from="meaning">Published Post Title</note>
       </trans-unit>
+      <trans-unit id="4452427314943113135" datatype="html">
+        <source>früher</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
+        <note priority="1" from="description">previous</note>
+      </trans-unit>
+      <trans-unit id="3885497195825665706" datatype="html">
+        <source>nächste</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
+          <context context-type="linenumber">232</context>
+        </context-group>
+        <note priority="1" from="description">next</note>
+      </trans-unit>
       <trans-unit id="updateNews" datatype="html">
         <source>Neuigkeiten aktualisieren</source>
         <context-group purpose="location">
@@ -1613,7 +1629,7 @@
         <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Nutzer hinzufügen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">13,15</context>
+          <context context-type="linenumber">12,14</context>
         </context-group>
         <note priority="1" from="description">Title for the Add User</note>
         <note priority="1" from="meaning">Add User</note>
@@ -1622,7 +1638,7 @@
         <source>status</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <note priority="1" from="description">Title for the status</note>
         <note priority="1" from="meaning">status</note>
@@ -1631,7 +1647,7 @@
         <source>action</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <note priority="1" from="description">Title for the Action</note>
         <note priority="1" from="meaning">Action</note>
@@ -1640,7 +1656,7 @@
         <source>Berechtigungen hinzufügen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <note priority="1" from="description">Title for the Add Permissions</note>
         <note priority="1" from="meaning">Add Permissions</note>
@@ -1649,7 +1665,7 @@
         <source> Ja</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">134</context>
         </context-group>
         <note priority="1" from="description">Title for the yes</note>
         <note priority="1" from="meaning">Yes</note>
@@ -1658,7 +1674,7 @@
         <source> Nein</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">135</context>
         </context-group>
         <note priority="1" from="description">Title for the no</note>
         <note priority="1" from="meaning">No</note>
