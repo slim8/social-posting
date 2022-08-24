@@ -180,8 +180,9 @@ class PostController extends Controller
 
 
         $posts = $postId ? null : [];
+        $dateOfTodayDate = date('y-m-d h:i:s+01:00');
+        $dateOfToday = str_replace(' ','T',$dateOfTodayDate);
         foreach ($postRequest as $postContent) {
-
             $postContent->postMedia = PostMedia::where('postId', $filterByAccounts ? $postContent->postId : $postContent->id)->with('mentions')->get();
 
             $permission = true;
@@ -198,7 +199,17 @@ class PostController extends Controller
                     $postContent['createdBy'] = $user->firstName.' '.$user->lastName;
                     $postContent['accountName'] = $account->name;
                     $postContent['profilePicture'] = $account->profilePicture;
-                    $postContent['isScheduled'] = Post::where('id', $postContent->postId)->first()->isScheduled;
+                    $postContent['isScheduled'] = $postContent->scheduled !== null ? true : false;
+                    $postContent['isPosted'] = $postContent->scheduled  ? false : true;
+                    $postContent['ScheduleDate'] = $postContent->scheduled;
+
+                    if($postContent->scheduled){
+                        $dateOfToday = str_replace(' ','T',$dateOfToday);
+                        $time_input = strtotime($dateOfToday);
+                        $date_input = getDate($time_input);
+                        $postContent['isPosted'] = $dateOfTodayDate > $date_input;
+                    }
+
                 }
             } else {
                 $subPosts = [];
