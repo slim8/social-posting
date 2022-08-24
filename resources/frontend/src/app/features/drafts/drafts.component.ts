@@ -46,7 +46,7 @@ export class DraftsComponent implements OnInit {
     this.draftsList = event;
   }
 
-  getDrafts(page: any, direction:string = "") {
+  getDrafts(page: any) {
     this.isLoading = true;
     const params = new HttpParams()
       .set("filterBy", "AccountsPosts")
