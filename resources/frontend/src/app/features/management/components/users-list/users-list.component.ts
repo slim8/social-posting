@@ -28,14 +28,13 @@ export class UsersListComponent implements OnInit {
   type = "";
   isVisible = false;
   isOkLoading = false;
+  isUsersLoading = false;
 
   constructor( private router: Router ,  private userService: UserService , private modal: NzModalService) { }
 
   ngOnInit(): void {
-
+    this.isUsersLoading = true;
     this.getData();
-
-
   }
 
   expandSet = new Set<number>();
@@ -60,6 +59,7 @@ export class UsersListComponent implements OnInit {
 
       },
       complete: () => {
+        this.isUsersLoading = false;
       }
     })
   }

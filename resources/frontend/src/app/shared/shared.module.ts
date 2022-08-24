@@ -1,17 +1,15 @@
 
 import { NgModule } from '@angular/core';
-import { DemoNgZorroAntdModule } from './ng-zorro-antd.module';
-import { IconsProviderModule } from './icons-provider.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ServerErrorComponent } from './components/server-error/server-error.component';
-import { ItemLoaderComponent } from './components/item-loader/item-loader.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-
-
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ItemLoaderComponent } from './components/item-loader/item-loader.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ServerErrorComponent } from './components/server-error/server-error.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { IconsProviderModule } from './icons-provider.module';
+import { DemoNgZorroAntdModule } from './ng-zorro-antd.module';
 @NgModule({
     declarations: [
         NotFoundComponent,
