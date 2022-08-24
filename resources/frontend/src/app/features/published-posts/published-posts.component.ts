@@ -19,6 +19,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
 export class PublishedPostsComponent implements OnInit {
     isLoading = false;
     posts: any = [];
+    totalDrafts = null;
+    currentPage = 1;
+
     constructor(private iconService: NzIconService, private postService: PostService, private router: Router, private sharedModule: SharedModule) {
         this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
         this.iconService.addIconLiteral('ng-zorro:customArrow', arrowIcon);
@@ -30,20 +33,24 @@ export class PublishedPostsComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.getPosts();
+        this.getPosts(1);
     }
 
 
-    getPosts(pageNumber = 1) {
+    getPosts(page: any) {
         this.isLoading = true;
         const params = new HttpParams()
             .set("filterBy", "AccountsPosts")
-            .set("limit", "10")
+            .set("perPage", "5")
+            .set("page", page)
             .set("status", "PUBLISH")
             .set("getStat", true);
+
         this.postService.getPosts(params).subscribe({
             next: (event: any) => {
                 this.posts = event.posts;
+                this.totalDrafts = event.pagination.total;
+                this.currentPage = event.pagination.currentPage;
                 this.isLoading = false;
             },
             error: (err) => {

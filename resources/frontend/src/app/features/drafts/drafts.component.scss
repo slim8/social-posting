@@ -196,6 +196,10 @@
                         }
                     }
                 }
+
+                nz-pagination {
+                  float: right;
+                }
                 @include mq(desktop) {
                     overflow-x: hidden;
                 }
