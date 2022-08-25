@@ -41,6 +41,49 @@
         }
 
         > .m-form {
+
+          .m-go-back {
+            width: 60%;
+            margin: auto;
+            text-align: left;
+            position: relative;
+            margin-bottom: 20px;
+            cursor: pointer;
+
+            &::before {
+              content: "";
+              background-image: url("/assets/img/arrow-left-circle.svg");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: 20px;
+              transition: 0.3s;
+              width: 30px;
+              top: -5px;
+              height: 30px;
+              position: absolute;
+              left: -33px;
+            }
+            &:hover {
+              &::before {
+                background-image: url("/assets/img/arrow-left-circle.svg");
+              background-repeat: no-repeat;
+              background-position: center;
+              background-size: 20px;
+              width: 30px;
+              top: -5px;
+              height: 30px;
+              position: absolute;
+              left: -38px;
+              }
+            }
+
+            > h3 {
+              @include textstyle-size-16-bold();
+              color: $color-media-primary-orange;
+              margin: 0;
+            }
+          }
+
             nz-form-item {
 
                 width: 100%;
