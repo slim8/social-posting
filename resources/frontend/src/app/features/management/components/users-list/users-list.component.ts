@@ -218,15 +218,15 @@ export class UsersListComponent implements OnInit {
   }
 
   getPermissionName(tag : any){
-    return (this.listOfPages.filter((page : any) => page.id === tag)[0]).pageName ;
+    return (this.listOfPages.filter((page : any) => page.id === tag)[0])?.pageName ;
   }
 
   getPermissionPagePicture(tag : any){
-    return (this.listOfPages.filter((page : any) => page.id === tag)[0]).pagePictureUrl;
+    return (this.listOfPages.filter((page : any) => page.id === tag)[0])?.pagePictureUrl;
   }
 
   getPermissionProvider(tag : any){
-    return (this.listOfPages.filter((page : any) => page.id === tag)[0]).provider ;
+    return (this.listOfPages.filter((page : any) => page.id === tag)[0])?.provider ;
   }
 
   editUser(id: string) {
