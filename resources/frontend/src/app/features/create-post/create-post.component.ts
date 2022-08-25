@@ -344,7 +344,7 @@ export class CreatePostComponent implements OnInit {
               post.mentions = this.mentions;
               post.accountId = id;
               post.videoTitle = "";
-              if(this.scheduleTime!=""){post.scheduled = this.scheduleTime;}
+              if(this.scheduleTime!="" && this.scheduleTime!= null){post.scheduled = this.scheduleTime;}
           } else if (accountId.includes('instagram')) {
               post.message = this.instagramMessage;
               post.hashtags = this.listOfTagOptionsInsta;
