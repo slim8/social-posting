@@ -299,8 +299,13 @@
                                 > h6 {
                                     font-weight: bold;
                                     width: 100%;
-                                    margin: 0;
-                                    padding-bottom: 5px;
+                                    margin: 0 0 5px 0;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 2; /* number of lines to show */
+                                    line-clamp: 2;
+                                    -webkit-box-orient: vertical;
                                 }
 
                                 > .m-account {
