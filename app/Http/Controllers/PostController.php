@@ -427,11 +427,28 @@ class PostController extends Controller
             $hashtags = [];
             $obj = [];
             $currentAccountId = $accountPost->accountId;
+            $scheduled = $accountPost->scheduled;
+
+
+
             $currentAccountObject = Account::where('id', $currentAccountId)->first();
             $currentaccountPostId = $accountPost->id;
             $accounPermission = $this->traitController->getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission($this->traitController->getCurrentId(), $currentAccountId) ? true : false;
 
             if ($accounPermission) {
+                $dateOfTodayDate = date('y-m-d H:i:s+01:00');
+                $dateOfToday = str_replace(' ','T',$dateOfTodayDate);
+
+                if($scheduled){
+                    $dateOfSchedule = str_replace(' ','T',$scheduled);
+                    $time_input = strtotime($dateOfSchedule);
+                    $scheduleDate = getDate($time_input);
+                    $dateOfToday = str_replace(' ','T',$dateOfToday );
+                    $time_input = strtotime($dateOfToday);
+                    $date_input = getDate($time_input);
+                    $scheduled = ($date_input[0] < $scheduleDate[0]) ? $scheduled : null;
+                }
+
                 $localisation = null;
                 $accountProvider = $currentAccountObject->provider;
                 $postResponse = [];
@@ -454,7 +471,7 @@ class PostController extends Controller
                     }
                     $obj['access_token'] = $currentAccountObject->accessToken;
 
-                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $currentAccountObject->uid, $images, $hashtags, $videos, $accountPost->videoTitle);
+                    $postResponse = $this->facebookController->postToFacebookMethod($obj, $currentAccountObject->uid, $images, $hashtags, $videos, $accountPost->videoTitle , $scheduled);
                 } elseif ($accountProvider == 'instagram') {
                     $obj['caption'] = $message;
                     if ($accountPost->message) {
