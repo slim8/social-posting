@@ -1721,7 +1721,7 @@
         <note priority="1" from="meaning">Set Permissions</note>
       </trans-unit>
       <trans-unit id="addUser" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add User </source>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;plus&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Add User </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
           <context context-type="linenumber">12,14</context>
