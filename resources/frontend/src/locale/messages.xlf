@@ -1801,6 +1801,15 @@
         <note priority="1" from="description">Title for Media factory logout button</note>
         <note priority="1" from="meaning">MediaFactoryLogoutButton</note>
       </trans-unit>
+      <trans-unit id="search" datatype="html">
+        <source>search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/my-album/my-album.component.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <note priority="1" from="description">search</note>
+        <note priority="1" from="meaning">search</note>
+      </trans-unit>
       <trans-unit id="loginToMediaFactory" datatype="html">
         <source>Login to Media Factory</source>
         <context-group purpose="location">
