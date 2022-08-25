@@ -378,12 +378,14 @@
                                     -webkit-box-orient: vertical;
                                     overflow: hidden;
                                     > a {
+                                        @include textstyle-size-12();
                                         color: $color-base-100;
                                         text-decoration: underline;
                                         cursor: pointer;
                                     }
                                 }
                                 > a {
+                                  @include textstyle-size-12();
                                   color: $color-base-100;
                                   text-decoration: underline;
                                   cursor: pointer;

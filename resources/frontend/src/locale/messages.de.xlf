@@ -1181,7 +1181,7 @@
         <note priority="1" from="meaning">Dashboard container side note</note>
       </trans-unit>
       <trans-unit id="reachedPeople" datatype="html">
-        <source> Menschen erreicht </source>
+        <source> Erreichte Personen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">137,139</context>
@@ -1190,7 +1190,7 @@
         <note priority="1" from="meaning">Reached People </note>
       </trans-unit>
       <trans-unit id="likes" datatype="html">
-        <source> likes </source>
+        <source> Gefällt mir-Angaben </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">143,145</context>
@@ -1199,7 +1199,7 @@
         <note priority="1" from="meaning">Likes </note>
       </trans-unit>
       <trans-unit id="Commment" datatype="html">
-        <source> comments </source>
+        <source> Kommentare </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">155,157</context>
@@ -1490,7 +1490,7 @@
         <note priority="1" from="meaning">Published Post Title</note>
       </trans-unit>
       <trans-unit id="4452427314943113135" datatype="html">
-        <source>früher</source>
+        <source>Zurück</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.html</context>
           <context context-type="linenumber">231</context>
@@ -1893,7 +1893,7 @@
         <note priority="1" from="meaning">Published Post Saves</note>
       </trans-unit>
       <trans-unit id="publishedPostLikes" datatype="html">
-        <source>Likes</source>
+        <source> Gefällt mir-Angaben </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
           <context context-type="linenumber">230</context>
