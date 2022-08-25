@@ -108,6 +108,7 @@ export class CreatePostComponent implements OnInit {
     scheduleTime: any = null;
     editDraftMode : boolean = false;
     editDraftPost ={id : ''};
+    scheduleFront: any = null;
 
     constructor(
         private shared: SharedModule,
@@ -344,7 +345,10 @@ export class CreatePostComponent implements OnInit {
               post.mentions = this.mentions;
               post.accountId = id;
               post.videoTitle = "";
-              if(this.scheduleTime!="" && this.scheduleTime!= null){post.scheduled = this.scheduleTime;}
+              if(this.scheduleTime!="" && this.scheduleTime!= null){
+                post.scheduled = this.scheduleTime;
+                post.scheduledFront = this.scheduleFront;
+              }
           } else if (accountId.includes('instagram')) {
               post.message = this.instagramMessage;
               post.hashtags = this.listOfTagOptionsInsta;
@@ -822,7 +826,6 @@ export class CreatePostComponent implements OnInit {
         this.editDraftMode = true ;
         this.SocialAccountsPostService.getDraft(draft).subscribe({
             next: (event: any) => {
-
                 this.editDraftPost = event.post;
 
                 let imageList  : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "image").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
@@ -855,6 +858,12 @@ export class CreatePostComponent implements OnInit {
                 } )
                 this.fileList = [...imageList];
                 this.message = event.post.message ;
+                event.post.subPosts.forEach((post: any) => {
+                  if(post.provider=="facebook") {
+                    this.schedule = post.scheduledFront;
+                    this.scheduleTime = post.scheduled;
+                  }
+                })
                 this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
 
                 let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
@@ -908,6 +917,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     onChange(event: any) {
+      this.scheduleFront = event.toString();
       let date = document.querySelector("#datePicker");
       let input = date?.childNodes[0].firstChild as HTMLInputElement;
       let dateVal = input?.value;
@@ -918,6 +928,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     onOk(event: any) {
+      this.scheduleFront = event.toString();
       let date = document.querySelector("#datePicker");
       let input = date?.childNodes[0].firstChild as HTMLInputElement;
       let dateVal = input?.value;
