@@ -429,8 +429,6 @@ class PostController extends Controller
             $currentAccountId = $accountPost->accountId;
             $scheduled = $accountPost->scheduled;
 
-
-
             $currentAccountObject = Account::where('id', $currentAccountId)->first();
             $currentaccountPostId = $accountPost->id;
             $accounPermission = $this->traitController->getUserObject()->hasRole('companyadmin') || UsersAccounts::hasAccountPermission($this->traitController->getCurrentId(), $currentAccountId) ? true : false;
