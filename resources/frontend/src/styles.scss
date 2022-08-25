@@ -360,3 +360,12 @@ svg {
       fill: $color-media-primary-orange;
   }
 }
+
+a {
+  .mod-drafts &, .mod-my-posts & {
+    color: $color-media-primary-orange;
+    &:hover {
+      color: $color-media-dark-orange;
+    }
+  }
+}
