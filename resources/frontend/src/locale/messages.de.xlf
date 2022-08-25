@@ -57,7 +57,7 @@
         <note priority="1" from="meaning">Dashboard</note>
       </trans-unit>
       <trans-unit id="accounts" datatype="html">
-        <source>Platzierung</source>
+        <source>Accounts</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
           <context context-type="linenumber">27</context>
@@ -79,7 +79,7 @@
         <note priority="1" from="meaning">Drafts</note>
       </trans-unit>
       <trans-unit id="createPost" datatype="html">
-        <source>Beitrag erstellen</source>
+        <source>Beitrag gestalten</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
           <context context-type="linenumber">49</context>
@@ -92,7 +92,7 @@
         <note priority="1" from="meaning">Create Post</note>
       </trans-unit>
       <trans-unit id="myAlbum" datatype="html">
-        <source>Meine individuellen Vorlagen</source>
+        <source>Meine Vorlagen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/core/components/sidebar/sidebar.component.html</context>
           <context context-type="linenumber">60</context>
@@ -1712,7 +1712,7 @@
         <note priority="1" from="meaning">Users list</note>
       </trans-unit>
       <trans-unit id="setPermissions" datatype="html">
-        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;edit&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Berechtigungen festlegen </source>
+        <source><x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i nz-icon nzType=&quot;plus&quot;&gt;"/><x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> Berechtigungen festlegen </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/management/components/users-list/users-list.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -1775,7 +1775,7 @@
         <note priority="1" from="meaning">No</note>
       </trans-unit>
       <trans-unit id="chooseMediafactory" datatype="html">
-        <source> Wählen Sie ein von Ihnen gestaltetes Meme aus der Mediafactory und veröffentlichen Sie es. </source>
+        <source> Wähle ein von dir gestaltetes Meme aus der mediafactory aus und veröffentliche es. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/my-album/my-album.component.html</context>
           <context context-type="linenumber">8,10</context>
@@ -1800,6 +1800,15 @@
         </context-group>
         <note priority="1" from="description">Title for Media factory logout button</note>
         <note priority="1" from="meaning">MediaFactoryLogoutButton</note>
+      </trans-unit>
+      <trans-unit id="search" datatype="html">
+        <source>Suchen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/my-album/my-album.component.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <note priority="1" from="description">search</note>
+        <note priority="1" from="meaning">search</note>
       </trans-unit>
       <trans-unit id="loginToMediaFactory" datatype="html">
         <source>Melden Sie sich bei Media Factory an</source>
@@ -1877,7 +1886,7 @@
         <note priority="1" from="meaning">Error</note>
       </trans-unit>
       <trans-unit id="publishedPostShares" datatype="html">
-        <source>Anteile</source>
+        <source>erreichte Personen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/published-posts/published-posts.component.html</context>
           <context context-type="linenumber">212</context>
