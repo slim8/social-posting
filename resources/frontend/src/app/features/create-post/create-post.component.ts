@@ -826,9 +826,7 @@ export class CreatePostComponent implements OnInit {
         this.editDraftMode = true ;
         this.SocialAccountsPostService.getDraft(draft).subscribe({
             next: (event: any) => {
-                console.log(event);
                 this.editDraftPost = event.post;
-
                 let imageList  : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "image").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
                   this.mentions.push(...item.mentions.map((mention : {username : string , posX : number , posY : number , id : number}) => ({
                       username : mention.username ,
