@@ -24,12 +24,7 @@
                 </div>
                 <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
             </div>
-            <div class="m-form-group">
-                <label>Subscribe newsletter</label>
-                <div class="m-form-switch">
-                    <nz-switch [(ngModel)]="isSubscriber"></nz-switch>
-                </div>
-            </div>
+
             <div class="m-form-group" *ngIf="roles.includes('admin')" >
                 <label>auto refrech </label>
                 <div class="m-form-switch">

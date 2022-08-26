@@ -10,11 +10,11 @@
             border-radius: 5px;
             background: $color-white;
             padding: 20px;
-        
+
             @include mq(desktop){
                 width : 50%;
             }
-        
+
             >.m-form-group{
                 margin : 20px;
                 text-transform: uppercase;
@@ -22,6 +22,15 @@
                 font-size: 12px;
                 line-height: 16px;
                 font-style: normal;
+                display: flex;
+                align-items: baseline;
+                label{
+                  max-width: 90px;
+                  width: 100%;
+                  justify-content: flex-end;
+                  display: flex;
+                  margin-right: 18px;
+                }
                 >.m-form-input{
                     display : flex;
                     justify-content:center;
@@ -29,6 +38,8 @@
                     border: 0.5px solid $color-media-primary-orange;
                     margin: 10px 0 0 0;
                     height: 45px;
+                    position: relative;
+                    width: 100%;
 
                     >input{
                         height: -webkit-fill-available;
@@ -49,13 +60,14 @@
                     padding: 5px 0;
                 }
             }
-        
+
             >button{
                 margin : 20px;
                 height: 39px;
                 padding: 10px 40px;
                 display: flex;
                 align-items: center;
+                margin: auto;
 
                 &.m-primary-button{
                     background: $color-media-primary-orange;
