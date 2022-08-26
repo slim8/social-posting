@@ -4,17 +4,27 @@
 
 .mod-edit-profile{
     .m-wrapper{
+      >.m-header{
+        padding: 18px;
+        font-size: 2.5rem;
+        line-height: 1.36175;
+        text-transform: capitalize;
+        font-weight: 400;
+        >h1{
+          @include textstyle-size-32-bold();
+          margin-bottom: 5px;
+          text-align: center;
+          @include mq(mobilebig) {
+              @include textstyle-size-44-bold();
+          }
+        }
+    }
 
         .m-form {
             width : 100%;
             border-radius: 5px;
             background: $color-white;
             padding: 20px;
-
-            @include mq(desktop){
-                width : 50%;
-            }
-
             >.m-form-group{
                 margin : 20px;
                 text-transform: uppercase;
