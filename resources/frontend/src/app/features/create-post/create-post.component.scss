@@ -61,6 +61,9 @@
                     }
                     > .m-form-field {
                         width: 306px;
+                        nz-date-picker {
+                          width: 100%;
+                        }
 
                         nz-select {
                             width: 100%;
@@ -474,6 +477,9 @@
                                     }
 
                                     > .m-form-field {
+                                        nz-date-picker {
+                                          width: 100%;
+                                        }
                                         > nz-select {
                                             width: 100%;
                                         }

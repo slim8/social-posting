@@ -215,7 +215,7 @@ class GeneralSocialController extends Controller
                     }
                     $obj['access_token'] = $account->accessToken;
                     Log::channel('facebook')->info('[sendToPost] User Id : '.$this->traitController->getCurrentId().' Try to post To facebook Uid :'.$account->uid.' with account Id '.$account->id.' Post Id : '.$postId);
-                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $post['hashtags'], $videos, $post['videoTitle']) : POST::$STATUS_DRAFT;
+                    $postResponse = ($statusPost == POST::$STATUS_PUBLISH) ? $this->facebookController->postToFacebookMethod($obj, $account->uid, $images, $post['hashtags'], $videos, $post['videoTitle'] , isset($post['scheduled']) && $post['scheduled'] != null ? $post['scheduled'] : false) : POST::$STATUS_DRAFT;
                 } elseif ($accountProvider == 'instagram') {
                     if ($message) {
                         $obj['caption'] = $message;
@@ -241,6 +241,8 @@ class GeneralSocialController extends Controller
                         'postIdProvider' => $postProviderId,
                         'localisationText' => null,
                         'localisationRessource' => null,
+                        'scheduled' => isset($post['scheduled']) && ($post['scheduled']) ? $post['scheduled'] : null,
+                        'scheduledFront' => isset($post['scheduledFront']) && ($post['scheduledFront']) ? $post['scheduledFront'] : null,
                     ]);
 
                     if ($post['hashtags']) {

@@ -25,6 +25,9 @@
       [formGroup]="validateForm"
       (ngSubmit)="onSaveCompany()"
     >
+    <div class="m-go-back" routerLink="/auth/login">
+      <h3 i18n="back|back@@back">back</h3>
+    </div>
       <nz-form-item class="m-form-field">
         <nz-form-label
           class="m-form-label"
