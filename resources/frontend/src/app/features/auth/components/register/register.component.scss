@@ -4,9 +4,10 @@
 
 .mod-register {
     min-width: auto;
-
+    padding: 0 10px;
     @include mq(desktop) {
         min-width: 650px;
+        padding: 0;
     }
 
     //TODO: place it in the right place and add multi-devices check
@@ -29,6 +30,7 @@
             > h1 {
                 @include textstyle-size-32-bold();
                 margin-bottom: 5px;
+                line-height: 1.5;
                 @include mq(mobilebig) {
                     @include textstyle-size-44-bold();
                 }
