@@ -360,3 +360,17 @@ svg {
       fill: $color-media-primary-orange;
   }
 }
+.mod-user-list{
+  .m-modal-container{
+    .m-buttons{
+      padding-top: 20px;
+      .m-button{
+        font-weight: 700;
+        &:last-child{
+          color: #000000d9;
+        }
+      }
+    }
+  }
+
+}
