@@ -827,35 +827,34 @@ export class CreatePostComponent implements OnInit {
         this.SocialAccountsPostService.getDraft(draft).subscribe({
             next: (event: any) => {
                 this.editDraftPost = event.post;
-
                 let imageList  : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "image").map((item : { id: 0,url: string,type: string,postId: 0,mentions: []} , key : any) => {
-                        // TODO :: to show mention on edit draft
-                        // this.mentions.push(...item.mentions.map((montion : {username : string , posX : string , posY : string , id : number}) => ({
-                        //     username : montion.username ,
-                        //     posX : montion.posX,
-                        //     posY : montion.posY,
-                        //     image : key ,
-                        //     id : montion.id
-                        // })));
-                        let img = {
-                            id: 0,
-                            url: "",
-                            type: ""
-                        }
-                        this.mediaId++;
-                        img.id = this.mediaId;
-                        img.url = item.url;
-                        img.type = item.type;
-                        this.urlLinks.push(img);
+                  this.mentions.push(...item.mentions.map((mention : {username : string , posX : number , posY : number , id : number}) => ({
+                      username : mention.username ,
+                      x : mention.posX,
+                      y : mention.posY,
+                      image : key ,
+                      id : mention.id
+                  })));
 
-                    return {
-                            uid: -(key+1) ,
-                            name: item.url ,
-                            status: 'done',
-                            url: item.url,
-                            thumbUrl: item.url
-                          }
-                } )
+                  let img = {
+                      id: 0,
+                      url: "",
+                      type: ""
+                  }
+                  this.mediaId++;
+                  img.id = this.mediaId;
+                  img.url = item.url;
+                  img.type = item.type;
+                  this.urlLinks.push(img);
+
+                  return {
+                    uid: -(key+1) ,
+                    name: item.url ,
+                    status: 'done',
+                    url: item.url,
+                    thumbUrl: item.url
+                  }
+                })
                 this.fileList = [...imageList];
                 this.message = event.post.message ;
                 event.post.subPosts.forEach((post: any) => {
@@ -867,27 +866,21 @@ export class CreatePostComponent implements OnInit {
                 this.mediaList.push( ...imageList.map(item => ({ id: item.uid, url: item.url, type: "image" }) ))
 
                 let DraftVideoList : NzUploadFile[] = event.post.postMedia.filter((item : {type: string}) => item.type == "video").map((item : { id: 0,url: string,type: string,postId: 0,mentions: [] , thumbnailLink : string , thumbnailSeconde : string} , key : any) => {
-
                     this.mediaList.push( { id: -(key+1), url: item.thumbnailLink, type: "video" })
                     this.videoList.push({ id: -(key+1), file: null , videoUrl: item.url , duration : null });
                     this.selectedThumbnailList.push( { id: -(key+1) , imgB64: null, time: +item.thumbnailSeconde , url : item.thumbnailLink});
-
                     return {
-                            uid: -(key+1) ,
-                            name: item.url ,
-                            status: 'done',
-                            url: item.url,
-                            second: item.thumbnailSeconde,
-                            thumbUrl: item.thumbnailLink
-                          }
-                } )
+                      uid: -(key+1) ,
+                      name: item.url ,
+                      status: 'done',
+                      url: item.url,
+                      second: item.thumbnailSeconde,
+                      thumbUrl: item.thumbnailLink
+                    }
+                })
 
                 this.videosList = [...DraftVideoList];
-
                     let selectedAccountId = event.post.subPosts.map((item : {accountId : any , provider : string , message : string , hashtags : [{name : string}]}) => {
-
-
-
                         if(item.provider == "facebook"){
                             this.facebookMessage = item.message;
                             if(item.hashtags.length){
@@ -899,13 +892,11 @@ export class CreatePostComponent implements OnInit {
                                 this.listOfTagOptionsInsta = [...item.hashtags.map(tag => tag.name)]
                             }
                         }
-
                         return item.accountId;
-                    } )
+                    })
                     let selectedAccount = this.listOfPages.filter((item : {id : any}) => selectedAccountId.includes(item.id)).map(item => item.id+'|'+item.provider )
                     this.accountsValue = [...selectedAccount];
                     this.accountChange();
-
             },
             error: err => {
 
