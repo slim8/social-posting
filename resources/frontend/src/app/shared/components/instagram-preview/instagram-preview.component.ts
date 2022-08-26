@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges, OnChanges, Output, EventEmitter, OnInit } from '@angular/core';
-import { Mention } from 'ng-zorro-antd/mention';
+import $ from 'jquery';
 
 @Component({
     selector: 'app-instagram-preview',
@@ -11,10 +11,14 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
     @Input() mediaList: any[] = [];
     @Input() message: string = "";
     @Input() pageName: string = "";
+    @Input() mentionsList: any = [];
     @Input() avatarUrl: string = "";
     @Output() newItemEvent = new EventEmitter<any[]>();
     mentions: any = [];
     isliked: boolean = false;
+    edit:boolean = true;
+    imageContanerWidth : number = 370;
+    imageContanerHeight : number = 390;
 
     //tags variables.
     displaMentions: boolean = false;
@@ -47,8 +51,14 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
      *  the mentions object still have the data, so we'll have to
      *  empty it to avoid compromises and duplicates.
      */
+      if(this.mentionsList.length > 0 && this.edit==true) {
+        this.mentions = this.mentionsList;
+        this.edit = false;
+        $( document ).ready(() => {
+          this.prepareMentions(this.mentions);
+        });
+      }
 
-      this.mentions = [];
       document.addEventListener('click', this.resetPostView);
       if(changes['mediaList']) {
         this.nbrSlides = changes['mediaList'].currentValue.length;
@@ -396,5 +406,39 @@ export class InstagramPreviewComponent implements  OnInit, OnChanges {
     // mentions on change
     onChange(e:any) {
       //todo
+    }
+
+    prepareMentions(list:any) {
+        list.forEach((mention:any) => {
+          let myClass = ".image_"+mention.image;
+          let image = $(myClass).parent();
+          let tooltip = document.createElement('div');
+          tooltip.setAttribute('data-index', mention.id.toString());
+          tooltip.setAttribute('class', 'mentioned');
+          let close = document.createElement('div');
+          let imagetop = mention.y;
+          let imageleft = mention.x;
+          let username = mention.username;
+          let id = mention.id;
+          close.classList.add('m-close');
+          close.innerHTML = 'x';
+          close?.setAttribute('style', 'border-radius: 50%; background-color: black; filter: invert(1); width: 12px; height: 12px; margin: 0 4px 0 10px;');
+          tooltip.innerHTML = username;
+          image?.append(tooltip);
+          tooltip.appendChild(close);
+          tooltip?.setAttribute(
+              'style',
+              'top: ' +
+              this.imageContanerWidth * imagetop +
+              'px;left: ' +
+              this.imageContanerHeight * imageleft +
+              'px;display: inline-flex;user-select: none;background: #000;border-radius: 6px;bottom: 135%;font-size: 12px;color: #fff;width: fit-content;height: 19px;line-height:10px;opacity: 0.3;padding: 4px 4px;position: absolute;text-align: center;transform: translateX(-50%);transition: 0.2s all;'
+          );
+        })
+        let mentioned = document.querySelectorAll('.mentioned');
+        mentioned.forEach((elem:any)=>{
+          let that = this;
+          elem.children[0].addEventListener('click', function(){ that.removeMention(elem) });
+        })
     }
 }
