@@ -12,8 +12,8 @@
             padding-bottom: 28px;
             max-width: 320px;
             @include mq(tablet) {
-              max-width: 100%;
-              padding: 0 0 28px 51px;
+                max-width: 100%;
+                padding: 0 0 28px 51px;
             }
             > h1 {
                 margin-bottom: 10px;
@@ -37,7 +37,7 @@
                 padding: 25px;
                 border-bottom: 1px solid $color-media-black-opacity-30;
                 @include mq(tablet) {
-                  height: 83px;
+                    height: 83px;
                     flex-direction: row;
                 }
                 > .m-left {
@@ -157,10 +157,10 @@
                                 }
                             }
                             .is-empty {
-                              width: 100px;
-                              @include mq(tablet) {
-                                width: auto;
-                              }
+                                width: 100px;
+                                @include mq(tablet) {
+                                    width: auto;
+                                }
                             }
                         }
                     }
@@ -173,14 +173,12 @@
                                         content: '';
                                         position: absolute;
                                         border-right: 1px solid $color-media-black-opacity-30;
-                                        height: 120%;
+                                        height: 123%;
                                         right: 4px;
                                         top: -60%;
                                     }
                                 }
-
                             }
-
                         }
 
                         &:last-child {
@@ -198,7 +196,7 @@
                 }
 
                 nz-pagination {
-                  float: right;
+                    float: right;
                 }
                 @include mq(desktop) {
                     overflow-x: hidden;
