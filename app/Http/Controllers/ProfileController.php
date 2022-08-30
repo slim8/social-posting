@@ -53,7 +53,23 @@ class ProfileController extends Controller
             return Response()->json($validation->errors(), 422);
         }
 
-        User::where('id', $this->traitController->getCurrentId())->update($request->all());
+        $currentUser = $this->traitController->getUserObject();
+
+        if($currentUser->hasRole('companyadmin') && $request->companyName !==null){
+            Company::where('id' , $this->traitController->getCompanyId())->update(['name' => $request->companyName]);
+        }
+
+        $requestAll = $request->all();
+
+        if(isset($requestAll['companyName'])){
+            unset($requestAll['companyName']);
+        }
+
+        if(isset($requestAll['companyName'])){
+            unset($requestAll['companyName']);
+        }
+
+        User::where('id', $this->traitController->getCurrentId())->update($requestAll);
 
         return $this->traitController->processResponse(true);
     }
