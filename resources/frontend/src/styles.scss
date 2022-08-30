@@ -345,6 +345,7 @@ td {
 .ant-pagination-item {
     border-radius: 0;
 }
+
 .ant-pagination-item-active a {
     color: $color-media-primary-orange;
     &:hover {
@@ -356,9 +357,10 @@ td {
         }
     }
 }
-.ant-pagination-item-active {
-    border-color: $color-media-primary-orange;
-    &:hover {
+.ant-pagination-item-active,
+.ant-pagination-item {
+  border-color: $color-media-primary-orange;
+  &:hover {
         border-color: $color-media-primary-orange;
         color: $color-media-primary-orange;
 
