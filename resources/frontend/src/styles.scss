@@ -346,7 +346,8 @@ nz-select-top-control {
     border-color: $color-media-primary-orange;
   }
 }
-.ant-pagination-item-active {
+.ant-pagination-item-active,
+.ant-pagination-item {
   border-color: $color-media-primary-orange;
   &:hover {
     border-color: $color-media-primary-orange;
