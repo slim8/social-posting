@@ -123,7 +123,7 @@ class ProviderTokenController extends Controller
         $providerAcounts = $providerAcounts->get();
 
         if ($providerAcounts) {
-            Log::channel('info')->info('[refreshToken] User '.$this->traitController->getCurrentId().' Try to refresh token for his provider token');
+            Log::channel('info')->info('[refreshToken] User '.($this->traitController->getUserObject() ? $this->traitController->getCurrentId() : 'guest').' Try to refresh token for his provider token');
             $now = strtotime(date('Y-m-d'));
             foreach ($providerAcounts as $providerAcount) {
                 $this->refreshTokenForAccount($providerAcount, $now); // Function To Refresh Token
