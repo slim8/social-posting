@@ -241,7 +241,8 @@ class GeneralSocialController extends Controller
                         'postIdProvider' => $postProviderId,
                         'localisationText' => null,
                         'localisationRessource' => null,
-                        'scheduled' => isset($post['scheduled']) && ($post['scheduled']) ? $post['scheduled'] : ''
+                        'scheduled' => isset($post['scheduled']) && ($post['scheduled']) ? $post['scheduled'] : null,
+                        'scheduledFront' => isset($post['scheduledFront']) && ($post['scheduledFront']) ? $post['scheduledFront'] : null,
                     ]);
 
                     if ($post['hashtags']) {

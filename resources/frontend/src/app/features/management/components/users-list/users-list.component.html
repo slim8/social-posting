@@ -9,7 +9,7 @@
         Set Permissions
       </button>
       <button nz-button nzType="primary" (click)="navigateToCreateUser()" class="m-primary-button" i18n="Add User|Title for the Add User@@addUser">
-          <i nz-icon nzType="edit"></i>
+          <i nz-icon nzType="plus"></i>
           Add User
       </button>
     </div>
@@ -23,7 +23,7 @@
           <th [nzChecked]="checked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
           <th i18n="First Name|Title for the First Name@@firstName">First Name</th>
           <th i18n="Last Name|Title for the Last Name@@lastName">Last Name</th>
-          <th i18n="email|Title for the email@@email">email</th>
+          <th nzWidth="280px" i18n="email|Title for the email@@email">email</th>
           <th i18n="status|Title for the status@@status">status</th>
           <th i18n="Action|Title for the Action@@action">action</th>
         </tr>

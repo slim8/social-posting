@@ -18,7 +18,8 @@ class AccountPost extends ExtendedModel
         'videoTitle',
         'localisationText',
         'localisationRessource',
-        'scheduled'
+        'scheduled',
+        'scheduledFront'
     ];
 
     public function account()
