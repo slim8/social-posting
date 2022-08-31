@@ -351,9 +351,11 @@ td {
     &:hover {
         border-color: $color-media-primary-orange;
         color: $color-media-primary-orange;
+        font-weight: 700;
 
         > a {
             color: $color-media-primary-orange;
+            font-weight: 700;
         }
     }
 }
