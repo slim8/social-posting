@@ -33,7 +33,8 @@ class User extends ExtendedUser
         'companyId',
         'address',
         'postCode',
-        'city'
+        'city',
+        'deleted'
     ];
 
     /**

@@ -43,12 +43,12 @@
 
                 > .m-left {
                     display: flex;
-                    align-items: center;
+                    align-items: baseline;
                     flex-direction: column;
                     row-gap: 10px;
                     width: 100%;
 
-                    @include mq(mobilebig) {
+                    @include mq(tablet) {
                         flex-direction: row;
                         width: auto;
                     }

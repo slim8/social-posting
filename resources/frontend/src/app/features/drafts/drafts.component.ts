@@ -19,6 +19,8 @@ export class DraftsComponent implements OnInit {
   isLoading = false;
   posts: any[] = [];
   draftsList: any = [];
+  totalDrafts = null;
+  currentPage = 1;
 
   constructor(
     private iconService: NzIconService,
@@ -37,18 +39,19 @@ export class DraftsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getDrafts();
+    this.getDrafts(1);
   }
 
   update(event: any) {
     this.draftsList = event;
   }
 
-  getDrafts() {
+  getDrafts(page: any) {
     this.isLoading = true;
     const params = new HttpParams()
       .set("filterBy", "AccountsPosts")
-      .set("limit", "10")
+      .set("perPage", "5")
+      .set("page", page)
       .set("status", "DRAFT")
       .set("getStat", false);
 
@@ -56,6 +59,8 @@ export class DraftsComponent implements OnInit {
       next: (event: any) => {
         this.posts = event.posts;
         this.isLoading = false;
+        this.totalDrafts = event.pagination.total;
+        this.currentPage = event.pagination.currentPage;
       },
       error: (err) => {
         this.posts = [];
@@ -63,6 +68,7 @@ export class DraftsComponent implements OnInit {
       },
       complete: () => {
         this.isLoading = false;
+
       }
     })
   }
@@ -92,7 +98,7 @@ export class DraftsComponent implements OnInit {
         error: (err) => {
         },
         complete: () => {
-          this.getDrafts();
+          this.getDrafts(1);
         }
       })
     }
@@ -135,11 +141,11 @@ export class DraftsComponent implements OnInit {
         error: (err) => {
           this.createMessage('error', err.error);
           this.isLoading = false;
-          this.getDrafts();
+          this.getDrafts(1);
         },
         complete: () => {
           this.isLoading = false;
-          this.getDrafts();
+          this.getDrafts(1);
         }
     })
   }

@@ -14,24 +14,27 @@ export class UsersListComponent implements OnInit {
 
   listOfUsers : any = [];
   listOfPages : any = [];
-
+  isModalVisible:boolean = false;
   checked = false;
   loading = false;
   indeterminate = false;
   setOfCheckedId = new Set<number>();
-
   setOfCheckedPageId = new Set<number>();
-
+  pageName = "";
+  accountId = "";
+  userId = "";
+  modalMessage = "";
+  modalSubMessage = "";
+  type = "";
   isVisible = false;
   isOkLoading = false;
+  isUsersLoading = false;
 
   constructor( private router: Router ,  private userService: UserService , private modal: NzModalService) { }
 
   ngOnInit(): void {
-
+    this.isUsersLoading = true;
     this.getData();
-
-
   }
 
   expandSet = new Set<number>();
@@ -56,6 +59,7 @@ export class UsersListComponent implements OnInit {
 
       },
       complete: () => {
+        this.isUsersLoading = false;
       }
     })
   }
@@ -156,44 +160,76 @@ export class UsersListComponent implements OnInit {
 
   }
 
-  removePermission(userId : any ,accountId : any , e : Event){
+  showDeleteModal(type: string, userId : any ,accountId : any = 0 , e : Event){
     e.preventDefault();
-    const formData: FormData = new FormData();
+    this.isModalVisible = true;
+    this.type = type;
+    this.userId = userId;
+    if(type=="permission") {
+      this.pageName = this.getPermissionName(accountId);
+      this.accountId = accountId;
+      this.modalMessage = "Do you Want to remove this permission ?";
+      this.modalSubMessage = "Remove permissions "+ this.pageName;
+    } else {
+      this.modalMessage = "Do you Want to delete this user ?";
+      this.modalSubMessage = "";
+    }
+  }
 
-      formData.append('accounts[]', accountId);
-
-      formData.append('users[]', userId);
-
-      this.modal.confirm({
-        nzTitle: 'Do you Want to remove this permission ?',
-        nzContent: '<p class="m-msg">Remove permissions '+ this.getPermissionName(accountId) + '</p>',
-        nzOnOk: () => {
-          this.userService.removePermission(formData).subscribe({
-            next: (event: any) => {
-                this.getData();
-              },
-            error: err => {
-            },
-            complete: () => {
-            }
-          })
+  remove() {
+    if(this.type=="permission") {
+      const formData: FormData = new FormData();
+      formData.append('accounts[]', this.accountId);
+      formData.append('users[]', this.userId);
+      this.userService.removePermission(formData).subscribe({
+        next: (event: any) => {
+            this.getData();
+          },
+        error: err => {
+        },
+        complete: () => {
+          this.accountId = "";
+          this.userId = "";
+          this.isModalVisible = false;
         }
-      });
+      })
+    }else {
+      this.userService.deleteUser(this.userId).subscribe({
+        next: (event:any) => {
 
+        },
+        error: err => {
+        },
+        complete: () => {
+          this.accountId = "";
+          this.userId = "";
+          this.isModalVisible = false;
+          this.getData();
+        }
+      })
+    }
+  }
 
+  closeModal() {
+    this.isModalVisible = false;
+    this.pageName = "";
+    this.accountId = "";
+    this.userId = "";
   }
 
   getPermissionName(tag : any){
-    return (this.listOfPages.filter((page : any) => page.id === tag)[0]).pageName ;
+    return (this.listOfPages.filter((page : any) => page.id === tag)[0])?.pageName ;
   }
 
   getPermissionPagePicture(tag : any){
-    return (this.listOfPages.filter((page : any) => page.id === tag)[0]).pagePictureUrl;
+    return (this.listOfPages.filter((page : any) => page.id === tag)[0])?.pagePictureUrl;
   }
 
   getPermissionProvider(tag : any){
-    return (this.listOfPages.filter((page : any) => page.id === tag)[0]).provider ;
+    return (this.listOfPages.filter((page : any) => page.id === tag)[0])?.provider ;
   }
 
-
+  editUser(id: string) {
+    this.router.navigate(['/application/management/edit-user' , id]);
+  }
 }

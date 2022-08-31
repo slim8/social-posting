@@ -186,9 +186,11 @@
                         impressions
                       </div>
                     </td>
+                    <td *ngIf="!post.status"></td>
+                    <td *ngIf="!post.status"></td>
                     <td *ngIf="!post.status">
-                      <nz-badge nzStatus="error">
-                        <span class="m-text">{{post.statusObject}}</span>
+                      <nz-badge nzStatus="error" class="m-badge-error">
+                        <span class="m-text" i18n="Not Found|Not Found@@notFound">Not found</span>
                       </nz-badge>
                     </td>
                     <td class="m-action">
@@ -298,9 +300,8 @@
           <div class="m-notes">
             <ul>
               <li *ngFor="let item of news">
-                <p>
-                  {{item.teaser}}. <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
-                </p>
+                <p [innerHTML]="item.teaser"></p>
+                <a [routerLink]="['/application/dashboard/post', item.id]" i18n="Watch now |Text for Watch now @@watchNow">Watch now.</a>
               </li>
             </ul>
           </div>

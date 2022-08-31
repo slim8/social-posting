@@ -43,14 +43,23 @@
           (click)="passwordVisible = !passwordVisible"
         ></i>
       </ng-template>
+      <p *ngIf="isErrorUser" class="m-error">
+        User was not found, please check your email
+      </p>
+      <p *ngIf="isErrorPassword" class="m-error">
+        Invalid password, please re-check again
+      </p>
+      <p *ngIf="isError" class="m-error">
+        Invalid e-mail address or password!
+      </p>
 
       <div class="m-sign-up">
-        <p> 
-          <span i18n="Forgot Password|Title for the Forgot Password@@forgotPassword">Forgot Password?</span>  
+        <p>
+          <span i18n="Forgot Password|Title for the Forgot Password@@forgotPassword">Forgot Password?</span>
           <a routerLink="../forget-password" i18n="Click here|Title for the Click here@@clickHere">Click here.</a>
         </p>
         <p>
-          <span i18n="No account yet|Title for the No account yet@@noAccountYet">No account yet?</span> 
+          <span i18n="No account yet|Title for the No account yet@@noAccountYet">No account yet?</span>
           <a routerLink="../register" i18n="Sign up here|Title for the Sign up here@@signUpHere">Sign up here.</a>
         </p>
       </div>

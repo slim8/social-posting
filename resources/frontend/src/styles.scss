@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'assets/sass/_project/_config.scss';
 @import 'assets/sass/_global/_mixins.scss';
+@import 'assets/sass/_project/base.scss';
 @import 'assets/sass/_project/mixins-fonts';
 @import 'assets/sass/_project/_placeholders.scss';
 @import 'assets/sass/_project/placeholders-layouts';
@@ -59,9 +60,10 @@
         }
     }
 }
-label, small{
-  cursor: pointer !important;
-  }
+label,
+small {
+    cursor: pointer;
+}
 /* Importing Bootstrap SCSS file. */
 
 /* width */
@@ -94,7 +96,7 @@ label, small{
 }
 
 .ant-upload-select {
-    height: fit-content  !important;
+    height: fit-content !important;
     width: fit-content !important;
     border: none !important;
 
@@ -127,15 +129,20 @@ label, small{
             fill: transparent;
         }
     }
+    &.is-black-icon {
+        .anticon svg {
+            fill: $color-base-100 !important;
+        }
+    }
 }
 
 svg {
-  .m-info-icon & {
-    fill: $color-media-black-opacity-half!important;
-  }
-  .no-transparent-only & {
-    fill: $color-base-50!important;
-  }
+    .m-info-icon & {
+        fill: $color-media-black-opacity-half !important;
+    }
+    .no-transparent-only & {
+        fill: $color-base-50 !important;
+    }
 }
 
 .ant-modal {
@@ -143,136 +150,260 @@ svg {
 }
 
 .is-shown {
-  display: block!important;
+    display: block !important;
 }
 .ant-modal-content {
-  .ant-modal-close{
-      &:after {
-        content: '';
-        background-image: url('/../assets/img/svgs/close.svg');
-        position: absolute;
-        background-position: center;
-        background-repeat: no-repeat;
-        width: 9px;
-        right: 25px;
-        top: 22px;
-        height: 9px;
+    .ant-modal-close {
+        &:after {
+            content: '';
+            background-image: url('/../assets/img/svgs/close.svg');
+            position: absolute;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 9px;
+            right: 25px;
+            top: 22px;
+            height: 9px;
         }
-        i{
-          color: $color-base-100;
-          opacity: 0;
+        i {
+            color: $color-base-100;
+            opacity: 0;
         }
-  }
-  .ant-modal-confirm-body{
-  margin-top: 25px;
-  .m-delete-msg{
-    margin-bottom: 0;
-    font-weight: 700;
-  }
-  }
-  .ant-modal-confirm-content p{
-    padding-left: 15px;
-  }
-  .m-second-msg{
-    margin-left: -37px;
-  }
-  .ant-modal-confirm-content {
-    .m-msg{
-      padding-left: 0;
-      text-align: center;
     }
-  }
-
-  .ant-modal-confirm-btns {
-    button{
-      font-weight: 700;
-      &.ant-btn-primary,&.ant-btn-primary:hover{
-      background-color: $color-media-primary-orange;
-      border: 0;
-      }
-      &:first-child {
-        background-color: $color-media-background-light-grey;
-        border:0;
-        &:hover{
-          background-color: $color-media-background-light-grey;
-          border:0;
-          color: $color-base-100;
-          opacity: 0.85;
+    .ant-modal-confirm-body {
+        margin-top: 25px;
+        .m-delete-msg {
+            margin-bottom: 0;
+            font-weight: 700;
         }
-      }
     }
-  }
-}
-.account-container{
-  ::-webkit-scrollbar {
-    width: 4px;
-  }
-  nz-option-item{
-    padding-left: 66px;
-    height: 52px;
-  }
-  .cdk-virtual-scroll-viewport{
-    min-height: 160px;
-  }
-  .ant-select-item-option-content{
-    display: flex;
-    align-items: center;
-    &:after {
-      content: '';
-      position: absolute;
-      border: 1px solid  #d9d9d9;
-      width: 9px;
-      left: 20px;
-      top: 16px;
-      height: 20px;
-      width: 20px;
-      }
-  }
-   .m-image {
-    position: relative;
-    &.is-disconnected {
-        filter: opacity(0.2);
+    .ant-modal-confirm-content p {
+        padding-left: 15px;
+    }
+    .m-second-msg {
+        margin-left: -37px;
+    }
+    .ant-modal-confirm-content {
+        .m-msg {
+            padding-left: 0;
+            text-align: center;
+        }
     }
 
-    > img {
-        border-radius: 50%;
-        display: block;
-        object-fit: cover;
-        width: 36px;
-        height: 36px;
-    }
-
-    > .m-provider-logo {
-        position: absolute;
-        bottom: -5px;
-        right: -5px;
-        display: flex;
-
-        > img {
-            width: 20px;
-            height: 20px;
-
-            &.facebook {
-                background-color: $color-base-0;
-                padding: 3px;
-                box-shadow: 0 0 5px $color-media-light-grey;
-                width: 25px;
-                @include mq(tablet) {
-                    width: 54px;
-                    padding: 6px;
+    .ant-modal-confirm-btns {
+        button {
+            font-weight: 700;
+            &.ant-btn-primary,
+            &.ant-btn-primary:hover {
+                background-color: $color-media-primary-orange;
+                border: 0;
+            }
+            &:first-child {
+                background-color: $color-media-background-light-grey;
+                border: 0;
+                &:hover {
+                    background-color: $color-media-background-light-grey;
+                    border: 0;
+                    color: $color-base-100;
+                    opacity: 0.85;
                 }
             }
         }
     }
-  }
-  label{
-    padding-left: 14px;
-  }
-  .ant-select-item-option-state{
-    position: absolute;
-    left: 24px;
-    color:rgba(0, 0, 0, 0.5)!important ;
-    top: 16px;
-  }
+}
+.account-container {
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+    nz-option-item {
+        padding-left: 66px;
+        height: 52px;
+    }
+    .cdk-virtual-scroll-viewport {
+        min-height: 160px;
+    }
+    .ant-select-item-option-content {
+        display: flex;
+        align-items: center;
+        &:after {
+            content: '';
+            position: absolute;
+            border: 1px solid #d9d9d9;
+            width: 9px;
+            left: 20px;
+            top: 16px;
+            height: 20px;
+            width: 20px;
+        }
+    }
+    .m-image {
+        position: relative;
+        &.is-disconnected {
+            filter: opacity(0.2);
+        }
+
+        > img {
+            border-radius: 50%;
+            display: block;
+            object-fit: cover;
+            width: 36px;
+            height: 36px;
+        }
+
+        > .m-provider-logo {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            display: flex;
+
+            > img {
+                width: 20px;
+                height: 20px;
+
+                &.facebook {
+                    background-color: $color-base-0;
+                    padding: 3px;
+                    box-shadow: 0 0 5px $color-media-light-grey;
+                    width: 25px;
+                    @include mq(tablet) {
+                        width: 54px;
+                        padding: 6px;
+                    }
+                }
+            }
+        }
+    }
+    label {
+        padding-left: 14px;
+    }
+    .ant-select-item-option-state {
+        position: absolute;
+        left: 24px;
+        color: rgba(0, 0, 0, 0.5) !important ;
+        top: 16px;
+    }
 }
 
+.ant-select {
+    &:not(.ant-select-customize-input) {
+        .ant-select-selector {
+            border: 0;
+        }
+    }
+}
+
+nz-select-top-control {
+    .mod-create-user & {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}
+.ant-table-content {
+    overflow-x: scroll;
+}
+
+.ant-table-cell,
+td {
+    overflow-wrap: normal !important;
+}
+
+.ant-table table {
+    width: max-content;
+    @include mq(tablet) {
+        width: 100%;
+    }
+}
+
+.ant-modal-header {
+    border-bottom: 0;
+}
+.ant-modal-footer {
+    border-top: 0;
+}
+
+.angular-editor-textarea {
+    min-height: 150px !important;
+    border: 1px solid #ff8d69 !important;
+}
+
+.m-table-teaser {
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+}
+.m-delete-textinfo {
+    max-width: 259px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ant-pagination-item {
+    border-radius: 0;
+}
+
+.ant-pagination-item-active a {
+    color: $color-media-primary-orange;
+    &:hover {
+        border-color: $color-media-primary-orange;
+        color: $color-media-primary-orange;
+
+        > a {
+            color: $color-media-primary-orange;
+        }
+    }
+}
+.ant-pagination-item-active,
+.ant-pagination-item {
+  border-color: $color-media-primary-orange;
+  &:hover {
+        border-color: $color-media-dark-orange;
+        color: $color-media-dark-orange;
+
+        > a {
+            color: $color-media-dark-orange;
+        }
+    }
+}
+
+.ant-pagination-disabled,
+.ant-pagination-disabled:hover {
+    > a {
+        cursor: not-allowed;
+    }
+}
+
+svg {
+    .m-modal-container & {
+        width: 23px;
+        height: 23px;
+        fill: $color-media-primary-orange;
+    }
+}
+.mod-user-list {
+    .m-modal-container {
+        .m-buttons {
+            padding-top: 20px;
+            .m-button {
+                font-weight: 700;
+                &:last-child {
+                    color: #000000d9;
+                }
+            }
+        }
+    }
+}
+
+a {
+    .mod-drafts &,
+    .mod-my-posts & {
+        color: $color-media-primary-orange;
+        &:hover {
+            color: $color-media-dark-orange;
+        }
+    }
+}

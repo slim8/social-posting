@@ -7,6 +7,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\TraitController;
 use App\Http\Traits\Services\FacebookService;
 use App\Models\Account;
+use App\Models\PostMedia;
 use App\Models\AccountPost;
 use App\Models\ProviderToken;
 use GuzzleHttp\Client;
@@ -190,7 +191,7 @@ class FacebookController extends Controller
     /**
      * post to facebook from Route.
      */
-    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags, $videos, $videoTitle)
+    public function postToFacebookMethod($object, $pageId, $imagesUrls, $tags, $videos, $videoTitle , $scheduled)
     {
         $images = [];
 
@@ -207,6 +208,11 @@ class FacebookController extends Controller
             $videos = gettype($videos[0]) == 'array' ? $videos[0] : json_decode($videos[0], true);
             $object['file_url'] = $videos['url'];
             $object['publihshed'] = true;
+
+            if($scheduled){
+                $object['publihshed'] = false;
+                $object['scheduled_publish_time'] = $scheduled;
+            }
 
             if ($videos['thumbnail'] && envValue('UPLOAD_PROVIDER') !== 'hoster' && envValue('APP_ENV') == 'local') {
                 $fileUrl = $videos['thumbnail'];
@@ -239,6 +245,10 @@ class FacebookController extends Controller
         }
 
         try {
+            if($scheduled){
+                $object['scheduled_publish_time'] = $scheduled;
+                $object['published'] = false;
+            }
             $client = new Client();
             $response = $client->request('POST', envValue('FACEBOOK_ENDPOINT').$pageId.'/feed', [
                 'form_params' => $object,
@@ -509,9 +519,11 @@ class FacebookController extends Controller
         $obj = [];
         $likes = 0;
         $acountPost = AccountPost::where('id', $accountPostId)->first();
+        $postMediaVideo = PostMedia::where('postId' , $acountPost->postId)->where('type' , 'video')->first();
+        $insight = $postMediaVideo ? 'video_insights' : 'insights';
         $accessToken = $this->getAccessToken($acountPost->accountId);
         $postIdProvider = $acountPost->postIdProvider;
-        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/insights?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
+        $request = Http::get(envValue('FACEBOOK_ENDPOINT').$acountPost->postIdProvider.'/'.$insight.'?access_token='.$accessToken.'&metric=post_reactions_by_type_total');
 
         $errors = $request->json('error');
         if(isset($errors)){

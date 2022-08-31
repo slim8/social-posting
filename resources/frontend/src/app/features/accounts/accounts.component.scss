@@ -219,13 +219,9 @@
                         }
 
                         > .m-button {
-                            width: 156px;
+                            width: 170px;
                             &.is-disabled {
                                 color: $color-base-100;
-                            }
-
-                            > span {
-                                margin-right: 14px;
                             }
                         }
                     }

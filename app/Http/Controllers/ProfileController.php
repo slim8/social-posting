@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\RequestsTrait;
 use App\Http\Traits\UserTrait;
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +27,10 @@ class ProfileController extends Controller
      */
     public function show(int $id = null)
     {
-        return $id ? User::findOrFail($id) : $this->traitController->getUserObject();
+        $userObject = $id ? User::findOrFail($id) : $this->traitController->getUserObject();
+        $userObject->companyName = Company::where('id' , $userObject->companyId)->first()->name;
+
+        return $userObject;
     }
 
     /**
@@ -49,7 +53,23 @@ class ProfileController extends Controller
             return Response()->json($validation->errors(), 422);
         }
 
-        User::where('id', $this->traitController->getCurrentId())->update($request->all());
+        $currentUser = $this->traitController->getUserObject();
+
+        if($currentUser->hasRole('companyadmin') && $request->companyName !==null){
+            Company::where('id' , $this->traitController->getCompanyId())->update(['name' => $request->companyName]);
+        }
+
+        $requestAll = $request->all();
+
+        if(isset($requestAll['companyName'])){
+            unset($requestAll['companyName']);
+        }
+
+        if(isset($requestAll['companyName'])){
+            unset($requestAll['companyName']);
+        }
+
+        User::where('id', $this->traitController->getCurrentId())->update($requestAll);
 
         return $this->traitController->processResponse(true);
     }

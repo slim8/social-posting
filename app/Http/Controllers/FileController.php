@@ -27,7 +27,7 @@ class FileController extends Controller
 
     public function __construct()
     {
-        $this->imageManager = new ImageManager();
+        $this->imageManager = new ImageManager(['driver' => 'imagick']);
         $this->utilitiesController = new UtilitiesController();
         $this->traitController = new TraitController();
     }
@@ -44,12 +44,32 @@ class FileController extends Controller
         $curlData = curl_exec($curlCh);
         curl_close($curlCh);
         if (!empty($curlData)) {
-            Storage::disk('public')->put($folderName.'/'.$fileName.'.jpg', $curlData);
-            $url = Storage::url($folderName.'/'.$fileName.'.jpg');
+            Storage::disk('public')->put($folderName . '/' . $fileName . '.jpg', $curlData);
+            $url = Storage::url($folderName . '/' . $fileName . '.jpg');
         }
-        Log::channel('info')->info('User : '.$this->traitController->getCurrentId().' Fetch link to '.$link);
+        Log::channel('info')->info('User : ' . $this->traitController->getCurrentId() . ' Fetch link to ' . $link);
 
         return $url;
+    }
+
+    /**
+     * Store Video To Disk
+     */
+    public function storeVideoToDisk($fileName, $link, $extension = 'mp4', $folderName = 'pageAssets')
+    {
+        $curlCh = curl_init();
+        curl_setopt($curlCh, CURLOPT_URL, $link);
+        curl_setopt($curlCh, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curlCh, CURLOPT_SSLVERSION, 0);
+        $curlData = curl_exec($curlCh);
+        curl_close($curlCh);
+
+        Log::channel('info')->info('User : ' . $this->traitController->getCurrentId() . ' Fetch link to ' . $link);
+
+        if (!empty($curlData)) {
+            Storage::disk('public')->put($folderName . '/' . $fileName . '.' . $extension, $curlData);
+            return $folderName . '/' . $fileName . '.' . $extension;
+        }
     }
 
     /**
@@ -58,15 +78,22 @@ class FileController extends Controller
     public function convertToJpeg($folderName, $image, int $isOnDisk = 0, string $filePathName = null)
     {
         if (!$isOnDisk) {
-            $object = $image->store('temporar'.'s/'.date('Y').'/'.date('m').'/'.date('d'));
+            $object = $image->store('temporar' . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
         }
 
-        $object = $isOnDisk ? $filePathName : storage_path().'/app/public/'.$object;
+        $object = $isOnDisk ? $filePathName : storage_path() . '/app/public/' . $object;
         $exploded = explode('/', $object);
         $fileName = $exploded[count($exploded) - 1];
         $newFileName = explode('.', $fileName)[0];
-        $newFile = storage_path().'/app/public/'.$folderName.'/'.$newFileName.'.jpeg';
-        $this->imageManager->make($object)->encode('jpg', 80)->save($newFile);
+        $newFile = storage_path() . '/app/public/' . $folderName . '/' . $newFileName . '.jpeg';
+        $this->imageManager->make($object)
+            ->widen(1400, function ($constraint) {
+                $constraint->upsize();
+            })
+            ->heighten(1000, function ($constraint) {
+                $constraint->upsize();
+            })
+            ->save($newFile, 90, 'jpeg');
 
         unlink($object);
 
@@ -97,12 +124,12 @@ class FileController extends Controller
             }
             $base64_str = substr($request->file, strpos($request->file, ',') + 1);
             $image = base64_decode($base64_str);
-            $imageName = $token = Str::random(20).'.png';
-            $newImagePath = Storage::disk('public')->put('temporarStored/'.$imageName, $image);
+            $imageName = $token = Str::random(20) . '.png';
+            $newImagePath = Storage::disk('public')->put('temporarStored/' . $imageName, $image);
             if (!$newImagePath) {
                 return $this->traitController->processResponse(false);
             }
-            $newImagePath = storage_path().'/app/public/temporarStored/'.$imageName;
+            $newImagePath = storage_path() . '/app/public/temporarStored/' . $imageName;
             $fileObject->type = 'image';
 
             if (envValue('APP_ENV') == 'local') {
@@ -166,9 +193,9 @@ class FileController extends Controller
             }
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
 
-            return Storage::url('postedImages/'.$imageName);
+            return Storage::url('postedImages/' . $imageName);
         } else {
-            $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
+            $object = $file->store($type . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
 
             return Storage::url($object);
         }
@@ -183,10 +210,10 @@ class FileController extends Controller
         if ($type == 'image') {
             $imageLink = $this->convertToJpeg('images/', $file);
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
-            $response->url = Storage::url('images/'.$imageName);
-            $response->name = 'images/'.$imageName;
+            $response->url = Storage::url('images/' . $imageName);
+            $response->name = 'images/' . $imageName;
         } else {
-            $object = $file->store($type.'s/'.date('Y').'/'.date('m').'/'.date('d'));
+            $object = $file->store($type . 's/' . date('Y') . '/' . date('m') . '/' . date('d'));
             $response->url = Storage::url($object);
             $response->name = $object;
         }
@@ -202,7 +229,7 @@ class FileController extends Controller
         if ($type == 'image') {
             $imageLink = $this->convertToJpeg('temporarStored', $image, $isOnDisk, $filePathName);
             $imageName = explode('/', $imageLink)[count(explode('/', $imageLink)) - 1];
-            $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/'.$imageName);
+            $image = envValue('UPLOAD_PROVIDER') == 'hoster' ? $imageLink : Storage::disk('public')->get('temporarStored/' . $imageName);
         }
 
         if (envValue('UPLOAD_PROVIDER') == 'hoster') {
@@ -230,15 +257,15 @@ class FileController extends Controller
                 $this->traitController->processResponse(false, ['message' => 'Upload Failed']);
             }
         } else {
-            $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images/'.$imageName : 'others', $image);
+            $ftpFile = Storage::disk('custom-ftp')->put($type == 'image' ? 'images/' . $imageName : 'others', $image);
 
             if ($type == 'image') {
                 unlink($imageLink);
 
-                return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').'images/'.$imageName;
+                return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER') . 'images/' . $imageName;
             }
 
-            return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER').$ftpFile;
+            return envValue('UPLOAD_FTP_SERVER_PUBLIC_SERVER') . $ftpFile;
         }
     }
 
@@ -250,29 +277,28 @@ class FileController extends Controller
         $files = [];
         $companyId = $this->traitController->getCompanyId();
 
-        $postsMedias = User::where('companyId' , $companyId)->with(['post' => function ($query) {
+        $postsMedias = User::where('companyId', $companyId)->with(['post' => function ($query) {
             $query->with('postMedia');
         }])->get();
 
-        if($postsMedias){
-            foreach($postsMedias as $postMedia){
-                if($postMedia->post){
-                    foreach($postMedia->post as $post){
-                        if($post->postMedia){
-                            foreach($post->postMedia as $medias){
+        if ($postsMedias) {
+            foreach ($postsMedias as $postMedia) {
+                if ($postMedia->post) {
+                    foreach ($postMedia->post as $post) {
+                        if ($post->postMedia) {
+                            foreach ($post->postMedia as $medias) {
                                 unset($medias->postId);
                                 unset($medias->createdAt);
                                 unset($medias->updatedAt);
                                 $files[] = $medias;
                             }
                         }
-
                     }
                 }
             }
         }
 
 
-        return $this->traitController->processResponse(count($files) > 0 , ['files' => $files]);
+        return $this->traitController->processResponse(count($files) > 0, ['files' => $files]);
     }
 }

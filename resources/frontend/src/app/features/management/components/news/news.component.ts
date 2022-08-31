@@ -20,17 +20,8 @@ export class NewsComponent implements OnInit {
     createdAt: "",
     updatedAt: "",
     img : '',
-    text_media_news : [{
-      id: 1,
-      title: "",
-      subtitle: "",
-      description: "",
-      picture: "",
-      newsId: 0,
-      createdAt: "",
-      updatedAt: "" ,
-      img : ''
-    }]
+    text:"",
+    textImage:""
   }]
 
   expandSet = new Set<number>();
@@ -46,10 +37,10 @@ export class NewsComponent implements OnInit {
   getNewsList(){
     this.newsService.getNewsList().subscribe({
       next: (event: any) => {
-          this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url , text_media_news : item.text_media_news.map((media : any) => ({...media , img : JSON.parse(media.picture).url}))}));
+          this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url }));
         },
       error: err => {
-        
+
       },
       complete: () => {
       }
@@ -60,65 +51,27 @@ export class NewsComponent implements OnInit {
     this.router.navigate(['/application/management/create-news']);
   }
 
-  addTextMedia(news : number){
-    this.router.navigate(['/application/management/news/'+news+'/create-text-media' ]);
-  }
-  
-
   editNews(id : number ){
     this.router.navigate(['/application/management/edit-news' , id]);
   }
 
-  editTextMedia(news : number ,id : number ){
-    this.router.navigate(['/application/management/news/'+news+'/edit-text-media' , id]);
-  }
-
   deleteNews(id : number , title : string){
     this.modal.confirm({
-      nzTitle: '<i>Do you Want to remove this news ?</i>',
-      nzContent: '<b>'+ title + '</b>',
+      nzTitle: '<p class="m-delete-msg">Are you sure you want to delete this news?</p>',
+      nzContent: '<p class="m-delete-textinfo">'+ title + '</p>',
       nzOnOk: () => {
         this.newsService.deleteNews(id).subscribe({
           next: (event: any) => {
               this.getNewsList();
             },
           error: err => {
-            
+
           },
           complete: () => {
           }
         })
       }
     });
-    
-  }
 
-  deleteNewsTextMedia(id : number , title : string){
-    this.modal.confirm({
-      nzTitle: '<i>Do you Want to remove this text media ?</i>',
-      nzContent: '<b>'+ title + '</b>',
-      nzOnOk: () => {
-        this.newsService.deleteNewsTextMedia(id).subscribe({
-          next: (event: any) => {
-              this.getNewsList();
-            },
-          error: err => {
-            
-          },
-          complete: () => {
-          }
-        })
-      }
-    });
-    
   }
-
-  onExpandChange(id: number): void {
-    if(!this.expandSet.has(id)) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
-  }
-
 }

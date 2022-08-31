@@ -24,56 +24,20 @@
                 <tbody class="m-table-body">
                 <ng-container *ngFor="let data of news.data">
                     <tr  class="m-table-row">
-                        <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id)"></td>
+                        <td></td>
                         <td class="m-table-picture" > <img nz-image [nzSrc]="data.img" alt="" ></td>
                         <td class="m-table-title " >{{data.title}}</td>
-                        <td class="m-table-teaser" >{{data.teaser}}</td>
-                        <td class="m-table-template">{{data.template == '1' ? 'Vertical' : 'Horizental'  }}</td>
+                        <td class="m-table-teaser" ><div [innerHTML]="data.teaser"></div></td>
+                        <td class="m-table-template">{{data.template == '1' ? 'Small' : 'Big'  }}</td>
                         <td class="m-table-action">
-                            <button nz-button (click)="addTextMedia(data.id)"  nzType="primary" class="m-primary-button" i18n="Add News|Title for the Add News@@addNews">
-                                <i nz-icon nzType="plus" nzTheme="outline"></i>
-                            </button>
-                            <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button (click)="editNews(data.id)"  nzType="primary" class="m-secondary-button" i18n="Add News|Title for the Add News@@addNews">
+                            <button nz-button (click)="editNews(data.id)"  nzType="primary" class="m-secondary-button">
                                 <i nz-icon nzType="edit"></i>
                             </button>
                             <nz-divider nzType="vertical"></nz-divider>
-                            <button nz-button (click)="deleteNews(data.id , data.title)"  nzType="primary" class="m-danger-button" i18n="Add News|Title for the Add News@@addNews">
+                            <button nz-button (click)="deleteNews(data.id , data.title)"  nzType="primary" class="m-danger-button">
                                 <i nz-icon nzType="delete" nzTheme="outline"></i>
                             </button>
                         </td>
-                    </tr> 
-                    <tr [nzExpand]="expandSet.has(data.id)">
-                        <nz-table class="m-table" #textMedia [nzData]="data.text_media_news" nzTableLayout="fixed">
-                            <thead >
-                                <tr class="m-table-header">
-                                  <th i18n="picture|Title for the picture@@picture" >Picture</th>
-                                  <th i18n="title|Title for the title@@title">Title</th>
-                                  <th i18n="subtitle|Title for the subtitle@@subtitle">subtitle</th>
-                                  <th i18n="description|Title for the description@@description">description</th>
-                                  <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="m-table-body">                            
-                                <ng-container *ngFor="let subNews of textMedia.data">
-                                    <tr>
-                                        <td class="m-table-picture" > <img nz-image [nzSrc]="subNews.img" alt="" ></td>
-                                        <td class="m-table-title" > {{subNews.title}}</td>
-                                        <td class="m-table-teaser" >{{subNews.subtitle}}</td>
-                                        <td class="m-table-teaser" >{{subNews.description}}</td>
-                                        <td class="m-table-action">
-                                            <button nz-button (click)="editTextMedia(data.id , subNews.id)"  nzType="primary" class="m-secondary-button" i18n="Add News|Title for the Add News@@addNews">
-                                                <i nz-icon nzType="edit"></i>
-                                            </button>
-                                            <nz-divider nzType="vertical"></nz-divider>
-                                            <button nz-button (click)="deleteNewsTextMedia(subNews.id , subNews.title)"  nzType="primary" class="m-danger-button" i18n="Add News|Title for the Add News@@addNews">
-                                                <i nz-icon nzType="delete" nzTheme="outline"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </ng-container>
-                            </tbody>
-                        </nz-table>
                     </tr>
                 </ng-container>
                 </tbody>

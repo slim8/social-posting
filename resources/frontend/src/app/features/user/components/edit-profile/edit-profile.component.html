@@ -1,7 +1,8 @@
 <div class="mod-edit-profile">
     <div class="m-wrapper">
-
-
+        <div class="m-header">
+        <h1 i18n="Edit Profile|Edit Profile@@editProfile">Edit Profile</h1>
+        </div>
         <div class="m-form">
             <div class="m-form-group">
                 <label>E-mail</label>
@@ -17,6 +18,13 @@
                 </div>
                 <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
             </div>
+            <div class="m-form-group"  *ngIf="roles.includes('admin')">
+              <label>Company</label>
+              <div class="m-form-input">
+                  <input nz-input type="text" placeholder="Company" [(ngModel)]="companyName" />
+              </div>
+              <small class="error" *ngIf="error && error.companyName" >{{error.companyName[0]}}</small>
+          </div>
             <div class="m-form-group">
                 <label>Last Name</label>
                 <div class="m-form-input">
@@ -24,12 +32,7 @@
                 </div>
                 <small class="error" *ngIf="error && error.lastName" >{{error.lastName[0]}}</small>
             </div>
-            <div class="m-form-group">
-                <label>Subscribe newsletter</label>
-                <div class="m-form-switch">
-                    <nz-switch [(ngModel)]="isSubscriber"></nz-switch>
-                </div>
-            </div>
+
             <div class="m-form-group" *ngIf="roles.includes('admin')" >
                 <label>auto refrech </label>
                 <div class="m-form-switch">
