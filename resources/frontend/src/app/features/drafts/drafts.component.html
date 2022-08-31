@@ -224,7 +224,7 @@
             </tr>
           </tbody>
         </table>
-        <nz-pagination *ngIf="!isLoading" [nzPageSize]="5" [nzPageIndex]="currentPage" [nzTotal]="totalDrafts" (nzPageIndexChange)="getDrafts($event)" [nzItemRender]="renderItemTemplate"></nz-pagination>
+        <nz-pagination *ngIf="!isLoading && pageNumber > 1" [nzPageSize]="5"   [nzPageIndex]="currentPage" [nzTotal]="totalDrafts" (nzPageIndexChange)="getDrafts($event)" [nzItemRender]="renderItemTemplate"></nz-pagination>
         <ng-template #renderItemTemplate let-type let-page="page">
           <ng-container [ngSwitch]="type">
             <a *ngSwitchCase="'page'" (change)="getDrafts(page)">{{ page }}</a>

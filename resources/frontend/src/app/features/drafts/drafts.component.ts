@@ -21,6 +21,7 @@ export class DraftsComponent implements OnInit {
   draftsList: any = [];
   totalDrafts = null;
   currentPage = 1;
+  pageNumber = 0;
 
   constructor(
     private iconService: NzIconService,
@@ -61,6 +62,7 @@ export class DraftsComponent implements OnInit {
         this.isLoading = false;
         this.totalDrafts = event.pagination.total;
         this.currentPage = event.pagination.currentPage;
+        this.pageNumber = event.pagination.pageNumber;
       },
       error: (err) => {
         this.posts = [];
