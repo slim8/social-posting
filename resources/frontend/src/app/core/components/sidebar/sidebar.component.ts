@@ -83,6 +83,10 @@ export class SidebarComponent implements OnInit {
       listDraft.style.left = '140px';
 
         //position of select
+        let listDraft2 = document.querySelector('.account-container-draft2') as HTMLDivElement;
+        if(listDraft2)
+        listDraft2.style.left = '140px';
+        //position of select
         let listtags = document.querySelector('.cdk-overlay-pane.tag-general') as HTMLDivElement;
         if(listtags)
         listtags.style.left = '271px';
@@ -121,10 +125,14 @@ export class SidebarComponent implements OnInit {
           if(listtagsfacebook)
           listtagsfacebook.style.left = '480px';
 
-
           let listDraft = document.querySelector('.account-container-draft') as HTMLDivElement;
           if(listDraft)
           listDraft.style.left = '0';
+
+
+          let listDraft2 = document.querySelector('.account-container-draft2') as HTMLDivElement;
+          if(listDraft2)
+          listDraft2.style.left = '0';
 
       }, 1500);
     }
