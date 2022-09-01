@@ -410,3 +410,67 @@ a {
         }
     }
 }
+
+.m-container-draft{
+   nz-select-top-control{
+      display: none;
+    }
+    .ant-select-selection-item{
+      display: none;
+      background-color: blue;
+    }
+}
+
+.account-container-draft{
+  margin: 0;
+  ul{
+    background: $color-media-background-light-grey;
+
+    li{
+        &:hover{
+          background: $color-media-background-light-grey;
+        }
+        .m-check{
+          &::hover{
+            border: none;
+          }
+
+          .ant-checkbox-inner{
+            -webkit-appearance: none;
+            outline: none;
+            position: relative;
+
+            &::before{
+                content: '';
+                position: absolute;
+                border: 1px solid $color-base-100;
+                background: $color-media-background-light-grey;
+                border-radius: 4px;
+                width: 14px;
+                height: 14px;
+            }
+
+          }
+      }
+
+      .ant-checkbox-checked{
+        .ant-checkbox-inner{
+          &::after {
+            -webkit-appearance: none;
+            outline: none;
+            position: relative;
+            border: 0;
+            transform: none;
+            content: url('/assets/img/check-icon.png');
+            position: absolute;
+            top: -1px;
+            width: 5px;
+            height: 3.5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+
