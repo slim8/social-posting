@@ -22,6 +22,8 @@ export class DraftsComponent implements OnInit {
   totalDrafts = null;
   currentPage = 1;
   pageNumber = 0;
+  accountsValue: any[] = [];
+  checkedElements: string[] = [];
 
   constructor(
     private iconService: NzIconService,
@@ -171,5 +173,23 @@ export class DraftsComponent implements OnInit {
         }
       })
     }
+  }
+
+  openSelect(){
+    let selectClass=document.querySelector("m-select-draft") as HTMLDivElement;
+    if(selectClass){
+      selectClass.focus();
+    }
+
+  }
+
+  // checkbox
+  addToCheckbox(checked: string){
+      let exist = this.checkedElements.filter(item=>item == checked);
+      if(exist){
+        this.checkedElements = this.checkedElements.filter(item=>item != checked);
+      }else{
+        this.checkedElements.push(checked);
+      }
   }
 }

@@ -12,13 +12,15 @@
         Here you will find all your previously published articles
       </h3>
     </div>
-    <div class="m-container">
+    <div class="m-container m-container-draft">
       <div class="m-filter-panel">
         <div class="m-left">
-          <button
+        <button
             nz-button
             nz-dropdown
+            nzTrigger="click"
             [nzDropdownMenu]="postType"
+            nzOverlayClassName="account-container-draft"
             class="m-button is-secondary"
           >
             <div class="m-button-icon">
@@ -38,17 +40,28 @@
               ></i>
             </div>
           </button>
-          <nz-dropdown-menu #postType="nzDropdownMenu">
+          <nz-dropdown-menu #postType="nzDropdownMenu"  autoClose="false" nzTrigger="click"  nzOverlayClassName="account-container-draft">
             <ul nz-menu>
-              <li nz-menu-item>menu4 1st menu item</li>
-              <li nz-menu-item>menu4 2nd menu item</li>
-              <li nz-menu-item>menu4 3rd menu item</li>
+
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('foto')" class="m-check" (click)="addToCheckbox('foto')">
+                    Foto
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('video')"  class="m-check" (click)="addToCheckbox('video')">
+                  Video
+                </label>
+              </li>
             </ul>
           </nz-dropdown-menu>
           <button
             nz-button
             nz-dropdown
             [nzDropdownMenu]="postings"
+            nzOverlayClassName="account-container-draft"
+            nzTrigger="click"
+
             class="m-button is-secondary"
           >
             <div class="m-button-icon">
@@ -68,11 +81,34 @@
               <i nz-icon nzType="ng-zorro:customArrow"></i>
             </div>
           </button>
-          <nz-dropdown-menu #postings="nzDropdownMenu">
+          <nz-dropdown-menu #postings="nzDropdownMenu" nzOverlayClassName="account-container-draft">
             <ul nz-menu>
-              <li nz-menu-item>menu4 1st menu item</li>
-              <li nz-menu-item>menu4 2nd menu item</li>
-              <li nz-menu-item>menu4 3rd menu item</li>
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('allePostings')" class="m-check" (click)="addToCheckbox('allePostings')">
+                  Alle Postings
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('letzteWoche')" class="m-check" (click)="addToCheckbox('letzteWoche')">
+                  letzte Woche
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('letzterMonat')" class="m-check" (click)="addToCheckbox('letzterMonat')">
+                  letzter Monat
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('letzten6Monate')" class="m-check" (click)="addToCheckbox('letzten6Monate')">
+                  letzten 6 Monate
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox :checked="checkedElements.include('>letztesJahr')" class="m-check" (click)="addToCheckbox('letztesJahr')">
+                  letztes Jahr
+                </label>
+                </li>
+
             </ul>
           </nz-dropdown-menu>
           <div class="m-remove" (click)="showRemoveDraftModal()">

@@ -47,13 +47,23 @@
                     > .m-button {
                         margin-right: 10px;
                         height: 36px;
-                        padding: 5px;
+                        padding: 5px 10px;
                         background: $color-media-background-light-grey;
                         align-items: center;
                         display: flex;
-                        justify-content: center;
-                        max-width: 141px;
+                        max-width: 160px;
                         width: 100%;
+                        justify-content: space-between;
+                        width: 100%;
+
+                        &:first-child{
+                          width: 160px;
+                          padding: 11px;
+                        }
+                        &:last-child{
+                          width: 133px;
+                          padding: 11px;
+                        }
 
                         > .m-button-icon {
                             font-size: 19px;
@@ -81,6 +91,32 @@
                             }
                         }
                     }
+                    .m-select-draft {
+                      width: 100%;
+                      max-width: 133px;
+                      position: relative;
+
+                      &:after {
+                          content: '';
+                          background-image: url('/../assets/img/svgs/check-icon.svg');
+                          position: absolute;
+                          background-position: center;
+                          background-repeat: no-repeat;
+                          width: 9px;
+                          right: 20px;
+                          top: 14px;
+                          height: 9px;
+                      }
+                      &.ant-select-open {
+                          &:after {
+                              transform: rotate(180deg);
+                          }
+                      }
+                      .ant-select-selection-item{
+                        display: none;
+                      }
+
+                  }
 
                     > .m-remove {
                         display: flex;
