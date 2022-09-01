@@ -24,8 +24,8 @@ export class DraftsComponent implements OnInit {
   pageNumber = 0;
   accountsValue: any[] = [];
   checkedElements: string[] = [];
-  isoppened = false;
-  isoppened2 = false;
+  isoppenedDropdownPostType = false;
+  isoppenedDropdownPostTime = false;
 
   constructor(
     private iconService: NzIconService,

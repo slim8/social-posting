@@ -78,12 +78,12 @@ export class SidebarComponent implements OnInit {
       list.style.left = '271px';
 
       //position of select
-      let listDraft = document.querySelector('.account-container-draft') as HTMLDivElement;
+      let listDraft = document.querySelector('.dropdown-post-type') as HTMLDivElement;
       if(listDraft)
       listDraft.style.left = '140px';
 
         //position of select
-        let listDraft2 = document.querySelector('.account-container-draft2') as HTMLDivElement;
+        let listDraft2 = document.querySelector('.dropdown-post-time') as HTMLDivElement;
         if(listDraft2)
         listDraft2.style.left = '140px';
         //position of select
@@ -125,12 +125,12 @@ export class SidebarComponent implements OnInit {
           if(listtagsfacebook)
           listtagsfacebook.style.left = '480px';
 
-          let listDraft = document.querySelector('.account-container-draft') as HTMLDivElement;
+          let listDraft = document.querySelector('.dropdown-post-type') as HTMLDivElement;
           if(listDraft)
           listDraft.style.left = '0';
 
 
-          let listDraft2 = document.querySelector('.account-container-draft2') as HTMLDivElement;
+          let listDraft2 = document.querySelector('.dropdown-post-time') as HTMLDivElement;
           if(listDraft2)
           listDraft2.style.left = '0';
 
