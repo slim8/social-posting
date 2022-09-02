@@ -10,7 +10,7 @@ trait FacebookTrait
 {
     use UserTrait;
 
-    public static function ReconnectOrRefrech($selectedPages, $providerTokenId, int $refrech = 0)
+    public static function ReconnectOrRefrech($selectedPages, $providerTokenId, int $refrech = 0 , int $reconnect = 1)
     {
         if ($selectedPages) {
             foreach ($selectedPages as $page) {
@@ -22,10 +22,26 @@ trait FacebookTrait
                         $accountModel->where('accessToken', Account::$STATUS_DISCONNECTED);
                     }
 
-                    $accountModel->update(['status' => 1, 'accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+                    $accountModelObject = $accountModel->first();
+
+                    if($accountModelObject){
+                        if($accountModelObject->status){
+                            $accountModel->update(['accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+                        }
+                        else if ($reconnect){
+                            $accountModel->update(['status' => 1, 'accessToken' => $page['pageToken'], 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+
+                        }
+                    }
+
                 } else {
                     $instagramAccount = Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId'])->first();
-                    if ($instagramAccount) {
+
+                    if($instagramAccount){
+                        if($instagramAccount->status){
+                            Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId'])->update(['accessToken' => $instagramAccount->related_account_id == null ? $page['accessToken'] : 'NA', 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
+                        }
+                    } else if  ($reconnect){
                         Account::where('providerTokenId', $providerTokenId)->where('uid', $page['pageId'])->update(['status' => 1, 'accessToken' => $instagramAccount->related_account_id == null ? $page['accessToken'] : 'NA', 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
                     }
                 }

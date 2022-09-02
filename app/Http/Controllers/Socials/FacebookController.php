@@ -55,7 +55,7 @@ class FacebookController extends Controller
         $personalInformation = $this->getFacebookPersonalInformations($longLifeToken);
 
         if ($account) {
-            ProviderToken::whereId($account)->update(['longLifeToken' => $longLifeToken]);
+            ProviderToken::whereId($account)->update(['longLifeToken' => $longLifeToken , 'expiryDate' => date('Y-m-d', strtotime('+60 days'))]);
 
             return $account;
         } else {
@@ -89,7 +89,12 @@ class FacebookController extends Controller
         $providerObject = new \stdClass();
         $providerObject->id = $providerId;
         $providerObject->token = $response->json('access_token');
-        Log::channel('facebook')->info('[generateLongLifeToken] User : '.$this->traitController->getCurrentId().' has generate long life token for facebook account id : '.$facebookUserId);
+
+        if($this->traitController->getUserObject()){
+            Log::channel('facebook')->info('[generateLongLifeToken] User : '.$this->traitController->getCurrentId().' has generate long life token for facebook account id : '.$facebookUserId);
+        } else {
+            Log::channel('facebook')->info('[generateLongLifeToken] User : TASKCHRON has generate long life token for facebook account id : '.$facebookUserId);
+        }
 
         return $providerObject;
     }

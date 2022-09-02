@@ -103,7 +103,7 @@ class ProviderTokenController extends Controller
         if ($expiry == $now) {
             $tokenKey = $this->facebookController->generateLongLifeToken($providerAcount->longLifeToken, $providerAcount->accountUserId, $providerAcount->createdBy)->token;
             $facebookResponse = $this->facebookController->getAccountPagesAccount($providerAcount->accountUserId, $tokenKey, 1, 1);
-            $this->facebookService->ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerAcount->id, 1);
+            $this->facebookService->ReconnectOrRefrech($facebookResponse['SelectedPages'], $providerAcount->id, 1 , 0);
         }
     }
 
@@ -132,6 +132,28 @@ class ProviderTokenController extends Controller
 
         return $this->traitController->processResponse(true);
     }
+
+
+    /**
+     * Refresh Token Job
+     */
+    public function refreshTokenJob()
+    {
+        $providerAcounts = ProviderToken::where('longLifeToken', 'not like', '%'.Account::$STATUS_DISCONNECTED.'%')->where('provider', 'facebook');
+
+        $providerAcounts = $providerAcounts->get();
+
+        if ($providerAcounts) {
+            Log::channel('info')->info('[refreshToken] User '.($this->traitController->getUserObject() ? $this->traitController->getCurrentId() : 'guest').' Try to refresh token for his provider token');
+            $now = strtotime(date('Y-m-d'));
+            foreach ($providerAcounts as $providerAcount) {
+                $this->refreshTokenForAccount($providerAcount, $now); // Function To Refresh Token
+            }
+        }
+
+        return $this->traitController->processResponse(true);
+    }
+
 
     /**
      * Delete Token Provider.
