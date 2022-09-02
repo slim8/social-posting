@@ -489,6 +489,24 @@ a {
   outline: 0;
 }
 }
-
-
+.ant-checkbox{
+  .mod-user-list &{
+    &.ant-checkbox-checked{
+        &:after {
+          border: none;
+        }
+        .ant-checkbox-inner{
+                background-color: $color-media-primary-orange;
+                border-color: $color-media-primary-orange;
+        }
+    }
+    &.ant-checkbox-indeterminate{
+        .ant-checkbox-inner{
+            &::after {
+              background-color: $color-media-primary-orange;
+            }
+        }
+    }
+  }
+}
 
