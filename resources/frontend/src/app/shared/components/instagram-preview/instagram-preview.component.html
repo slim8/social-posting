@@ -24,8 +24,8 @@
 
                   <ul id="data-slides" data-slides>
                       <li *ngFor="let item of mediaList; let index = index;" class="m-slide-insta active {{item.type}}" data-active>
-                          <img *ngIf="item.url!=''"  class="m-image" (dblclick)="tag($event)" (click)="viewMentions()"  src="{{item.url}}" alt="image #{{index}}">
-                        </li>
+                        <img *ngIf="item.url!=''"  class="m-image image_{{index}}" (dblclick)="tag($event)" (click)="viewMentions()"  src="{{item.url}}" alt="image #{{index}}">
+                      </li>
                   </ul>
 
                   <ul id="dots" class="m-dots">

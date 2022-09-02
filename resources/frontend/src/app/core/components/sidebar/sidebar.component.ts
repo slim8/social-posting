@@ -77,7 +77,15 @@ export class SidebarComponent implements OnInit {
       if(list)
       list.style.left = '271px';
 
+      //position of select
+      let listDraft = document.querySelector('.dropdown-post-type') as HTMLDivElement;
+      if(listDraft)
+      listDraft.style.left = '140px';
 
+        //position of select
+        let listDraft2 = document.querySelector('.dropdown-post-time') as HTMLDivElement;
+        if(listDraft2)
+        listDraft2.style.left = '140px';
         //position of select
         let listtags = document.querySelector('.cdk-overlay-pane.tag-general') as HTMLDivElement;
         if(listtags)
@@ -116,6 +124,15 @@ export class SidebarComponent implements OnInit {
           let listtagsfacebook = document.querySelector('.cdk-overlay-pane.tag-facebook') as HTMLDivElement;
           if(listtagsfacebook)
           listtagsfacebook.style.left = '480px';
+
+          let listDraft = document.querySelector('.dropdown-post-type') as HTMLDivElement;
+          if(listDraft)
+          listDraft.style.left = '0';
+
+
+          let listDraft2 = document.querySelector('.dropdown-post-time') as HTMLDivElement;
+          if(listDraft2)
+          listDraft2.style.left = '0';
 
       }, 1500);
     }

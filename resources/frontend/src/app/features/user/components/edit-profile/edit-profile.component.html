@@ -18,6 +18,13 @@
                 </div>
                 <small class="error" *ngIf="error && error.firstName" >{{error.firstName[0]}}</small>
             </div>
+            <div class="m-form-group"  *ngIf="roles.includes('admin')">
+              <label>Company</label>
+              <div class="m-form-input">
+                  <input nz-input type="text" placeholder="Company" [(ngModel)]="companyName" />
+              </div>
+              <small class="error" *ngIf="error && error.companyName" >{{error.companyName[0]}}</small>
+          </div>
             <div class="m-form-group">
                 <label>Last Name</label>
                 <div class="m-form-input">
