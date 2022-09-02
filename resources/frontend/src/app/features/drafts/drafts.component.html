@@ -18,10 +18,11 @@
         <button
             nz-button
             nz-dropdown
+            [(nzVisible)]="isoppenedDropdownPostType"
             nzTrigger="click"
             [nzDropdownMenu]="postType"
-            nzOverlayClassName="account-container-draft"
-            class="m-button is-secondary"
+            nzOverlayClassName="dropdown-post-type"
+            class="m-button is-secondary m-dropdown-type-post"
           >
             <div class="m-button-icon">
               <i nz-icon nzType="ng-zorro:image"></i>
@@ -36,11 +37,19 @@
               <i
                 nz-icon
                 nzType="ng-zorro:customArrow"
+                *ngIf="!isoppenedDropdownPostType"
                 [nzTheme]="'outline'"
+              ></i>
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                *ngIf="isoppenedDropdownPostType"
+                [nzTheme]="'outline'"
+                style="transform: rotate(180deg);"
               ></i>
             </div>
           </button>
-          <nz-dropdown-menu #postType="nzDropdownMenu"  autoClose="false" nzTrigger="click"  nzOverlayClassName="account-container-draft">
+          <nz-dropdown-menu #postType="nzDropdownMenu"  autoClose="false" nzTrigger="click"  nzOverlayClassName="dropdown-post-type">
             <ul nz-menu>
 
               <li nz-menu-item>
@@ -58,10 +67,10 @@
           <button
             nz-button
             nz-dropdown
+            [(nzVisible)]="isoppenedDropdownPostTime"
             [nzDropdownMenu]="postings"
-            nzOverlayClassName="account-container-draft"
+            nzOverlayClassName="dropdown-post-time"
             nzTrigger="click"
-
             class="m-button is-secondary"
           >
             <div class="m-button-icon">
@@ -78,10 +87,17 @@
               All Postings
             </div>
             <div class="m-button-arrow">
-              <i nz-icon nzType="ng-zorro:customArrow"></i>
+              <i nz-icon nzType="ng-zorro:customArrow"  *ngIf="!isoppenedDropdownPostTime"></i>
+              <i
+              nz-icon
+              nzType="ng-zorro:customArrow"
+              *ngIf="isoppenedDropdownPostTime"
+              [nzTheme]="'outline'"
+              style="transform: rotate(180deg);"
+            ></i>
             </div>
           </button>
-          <nz-dropdown-menu #postings="nzDropdownMenu" nzOverlayClassName="account-container-draft">
+          <nz-dropdown-menu #postings="nzDropdownMenu"  nzOverlayClassName="dropdown-post-time">
             <ul nz-menu>
               <li nz-menu-item>
                 <label nz-checkbox :checked="checkedElements.include('allePostings')" class="m-check" (click)="addToCheckbox('allePostings')">
