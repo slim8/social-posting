@@ -104,6 +104,8 @@ class PostController extends Controller
      */
     public function getPosts(Request $request, int $postId = null)
     {
+        $hasPicture = $request->hasPicture;
+        $hasVideo = $request->hasVideo;
         $companyId = $this->traitController->getCompanyId();
         // filterBy is used to filter Posts using AcountsPosts
         $filterByAccounts = $request->filterBy === 'AccountsPosts' ? true : false;
@@ -115,6 +117,19 @@ class PostController extends Controller
             $postRequest = AccountPost::whereHas('account', function ($query) use ($companyId) {
                 $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
             })->with('accounts');
+
+            if($hasPicture && !$hasVideo){
+                $postRequest = $postRequest->whereHas('postMedia' , function ($query){
+                    $query = $query->where('post_media.type', 'image');
+                });
+            }
+
+            if($hasVideo && !$hasPicture){
+                $postRequest = $postRequest->whereHas('postMedia' , function ($query){
+                    $query = $query->where('post_media.type', 'video');
+                });
+            }
+
         } else {
             if ($filterByAccounts && ($request->status == 'DRAFT')) {
                 if ($isCompanyAdmin) {
@@ -126,6 +141,18 @@ class PostController extends Controller
                         $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
                     })->with('accounts')->whereHas('post', function ($query) {
                         $query->where('posts.createdBy', $this->traitController->getCurrentId());
+                    });
+                }
+
+                if($hasPicture && !$hasVideo){
+                    $postRequest = $postRequest->whereHas('postMedia' , function ($query){
+                        $query = $query->where('post_media.type', 'image');
+                    });
+                }
+
+                if($hasVideo && !$hasPicture){
+                    $postRequest = $postRequest->whereHas('postMedia' , function ($query){
+                        $query = $query->where('post_media.type', 'video');
                     });
                 }
             } elseif (!$filterByAccounts && $request->status == 'DRAFT') {

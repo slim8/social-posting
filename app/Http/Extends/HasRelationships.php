@@ -395,7 +395,14 @@ trait HasRelationships
 
     protected function ExtendednewHasMany(ExtendedBuilder $query, ExtendedModel $parent, $foreignKey, $localKey)
     {
-        $foreignKey = Str::camel($foreignKey);
+
+        // To Do -> This will be Verified if is fully Not Used !
+        // $foreignKey = Str::camel($foreignKey);
+
+
+        //  if(!$foreignKey == 'post_media.post_id'){
+        //     $foreignKey = Str::camel($foreignKey);
+        //  }
 
         return new \App\Http\Extends\ExtendedHasMany($query, $parent, $foreignKey, $localKey);
     }

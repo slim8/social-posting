@@ -36,4 +36,9 @@ class AccountPost extends ExtendedModel
     {
         return $this->belongsTo(Post::class, 'postId');
     }
+
+    public function postMedia()
+    {
+        return $this->hasMany(PostMedia::class, 'post_id' ,'post_id');
+    }
 }
