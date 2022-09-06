@@ -104,8 +104,9 @@ class PostController extends Controller
      */
     public function getPosts(Request $request, int $postId = null)
     {
-        $hasPicture = $request->hasPicture;
-        $hasVideo = $request->hasVideo;
+        $hasPicture = $request->hasPicture == 1;
+        $hasVideo = $request->hasVideo == 1;
+
         $companyId = $this->traitController->getCompanyId();
         // filterBy is used to filter Posts using AcountsPosts
         $filterByAccounts = $request->filterBy === 'AccountsPosts' ? true : false;

@@ -58,7 +58,9 @@ export class DraftsComponent implements OnInit {
       .set("perPage", "5")
       .set("page", page)
       .set("status", "DRAFT")
-      .set("getStat", false);
+      .set("getStat", false)
+      .set("hasPicture", this.checkedElements.includes('foto')? 1 : 0)
+      .set("hasVideo", this.checkedElements.includes('video')? 1 : 0);
 
     this.postService.getPosts(params).subscribe({
       next: (event: any) => {
@@ -187,11 +189,11 @@ export class DraftsComponent implements OnInit {
 
   // checkbox
   addToCheckbox(checked: string){
-      let exist = this.checkedElements.filter(item=>item == checked);
-      if(exist){
+      if(this.checkedElements.includes(checked)){
         this.checkedElements = this.checkedElements.filter(item=>item != checked);
       }else{
         this.checkedElements.push(checked);
       }
+      this.getDrafts(1);
   }
 }
