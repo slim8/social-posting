@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UsersAccounts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -35,6 +36,36 @@ class PostController extends Controller
         $this->utilitiesController = new UtilitiesController();
     }
 
+    /**
+     * Post Filter Functions
+     */
+
+    public function filterPosts($postRequest , $hasPicture , $hasVideo , $postDates)
+    {
+        if($hasPicture && !$hasVideo){
+            $postRequest = $postRequest->whereHas('postMedia' , function ($query){
+                $query = $query->where('post_media.type', 'image');
+            });
+        }
+
+        if($hasVideo && !$hasPicture){
+            $postRequest = $postRequest->whereHas('postMedia' , function ($query){
+                $query = $query->where('post_media.type', 'video');
+            });
+        }
+
+        if($postDates == 'WEEK'){
+            $postRequest = $postRequest->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+        } elseif($postDates == 'MONTH'){
+            $postRequest = $postRequest->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+        } elseif ($postDates == 'HALFYEAR'){
+            $postRequest=$postRequest->where("created_at",">", Carbon::now()->subMonths(6));
+        }elseif ($postDates == 'YEAR'){
+            $postRequest=$postRequest->where("created_at",">", [Carbon::now()->subYear(), Carbon::now()]);
+        }
+
+        return $postRequest;
+    }
     /**
      * Get Posts By Account Id.
      */
@@ -106,6 +137,7 @@ class PostController extends Controller
     {
         $hasPicture = $request->hasPicture == 1;
         $hasVideo = $request->hasVideo == 1;
+        $postDates =  $request->filterDate;
 
         $companyId = $this->traitController->getCompanyId();
         // filterBy is used to filter Posts using AcountsPosts
@@ -119,20 +151,13 @@ class PostController extends Controller
                 $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
             })->with('accounts');
 
-            if($hasPicture && !$hasVideo){
-                $postRequest = $postRequest->whereHas('postMedia' , function ($query){
-                    $query = $query->where('post_media.type', 'image');
-                });
-            }
-
-            if($hasVideo && !$hasPicture){
-                $postRequest = $postRequest->whereHas('postMedia' , function ($query){
-                    $query = $query->where('post_media.type', 'video');
-                });
-            }
+            // Start Filter By Pictures , Videos and Date For Publish
+            $postRequest = $this->filterPosts($postRequest , $hasPicture , $hasVideo , $postDates);
+            // Start Filter By Pictures , Videos and Date For Publish
 
         } else {
             if ($filterByAccounts && ($request->status == 'DRAFT')) {
+
                 if ($isCompanyAdmin) {
                     $postRequest = AccountPost::whereHas('account', function ($query) use ($companyId) {
                         $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
@@ -145,17 +170,11 @@ class PostController extends Controller
                     });
                 }
 
-                if($hasPicture && !$hasVideo){
-                    $postRequest = $postRequest->whereHas('postMedia' , function ($query){
-                        $query = $query->where('post_media.type', 'image');
-                    });
-                }
+                // Start Filter By Pictures , Videos And Dates for DRAFTS
+                $postRequest = $this->filterPosts($postRequest , $hasPicture , $hasVideo , $postDates);
+                 // End Filter By Pictures , Videos And Dates for DRAFTS
 
-                if($hasVideo && !$hasPicture){
-                    $postRequest = $postRequest->whereHas('postMedia' , function ($query){
-                        $query = $query->where('post_media.type', 'video');
-                    });
-                }
+
             } elseif (!$filterByAccounts && $request->status == 'DRAFT') {
                 $postRequest = Post::whereHas('accounts', function ($query) use ($companyId) {
                     $query->where('accounts.companyId', $companyId)->where('accounts.status', 1);
