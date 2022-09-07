@@ -23,7 +23,13 @@ export class DraftsComponent implements OnInit {
   currentPage = 1;
   pageNumber = 0;
   accountsValue: any[] = [];
-  checkedElements: string[] = [];
+  checkedElementsMedia: string[] = [];
+  checkedElementsCalendar: string[] = [];
+  filterAll = false;
+  filterWeek = false;
+  filterMonth = false;
+  filterHalf = false;
+  filterYear = false;
   isoppenedDropdownPostType = false;
   isoppenedDropdownPostTime = false;
 
@@ -58,7 +64,10 @@ export class DraftsComponent implements OnInit {
       .set("perPage", "5")
       .set("page", page)
       .set("status", "DRAFT")
-      .set("getStat", false);
+      .set("getStat", false)
+      .set("filterDate", this.checkedElementsCalendar[0])
+      .set("hasPicture", this.checkedElementsMedia.includes('foto')? 1 : 0)
+      .set("hasVideo", this.checkedElementsMedia.includes('video')? 1 : 0);
 
     this.postService.getPosts(params).subscribe({
       next: (event: any) => {
@@ -186,12 +195,44 @@ export class DraftsComponent implements OnInit {
   }
 
   // checkbox
-  addToCheckbox(checked: string){
-      let exist = this.checkedElements.filter(item=>item == checked);
-      if(exist){
-        this.checkedElements = this.checkedElements.filter(item=>item != checked);
-      }else{
-        this.checkedElements.push(checked);
-      }
+  addToCheckboxMedia(checked: string){
+    if(this.checkedElementsMedia.includes(checked)){
+      this.checkedElementsMedia = this.checkedElementsMedia.filter(item=>item != checked);
+    }else{
+      this.checkedElementsMedia.push(checked);
+    }
+    this.getDrafts(1);
+  }
+
+  addToCheckboxCalendar(checked: string) {
+    this.checkedElementsCalendar = [];
+    this.checkedElementsCalendar.push(checked);
+    this.getDrafts(1);
+  }
+
+  handleChange(selected: string) {
+    this.filterAll = false;
+    this.filterWeek = false;
+    this.filterMonth = false;
+    this.filterHalf = false;
+    this.filterYear = false;
+    switch(selected) {
+      case 'All':
+        this.filterAll = true;
+        break;
+      case 'Week':
+        this.filterWeek = true;
+        break;
+      case 'Month':
+        this.filterMonth = true;
+        break;
+      case 'Half':
+        this.filterHalf = true;
+        break;
+      case 'Year':
+        this.filterYear = true;
+        break;
+      default:
+    }
   }
 }

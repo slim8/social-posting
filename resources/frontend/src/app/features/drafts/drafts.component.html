@@ -53,12 +53,12 @@
             <ul nz-menu>
 
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('foto')" class="m-check" (click)="addToCheckbox('foto')">
+                <label nz-checkbox (ngModel)="checkedElementsMedia.includes('foto')" class="m-check" (click)="addToCheckboxMedia('foto')">
                     Foto
                 </label>
               </li>
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('video')"  class="m-check" (click)="addToCheckbox('video')">
+                <label nz-checkbox (ngModel)="checkedElementsMedia.includes('video')"  class="m-check" (click)="addToCheckboxMedia('video')">
                   Video
                 </label>
               </li>
@@ -100,27 +100,27 @@
           <nz-dropdown-menu #postings="nzDropdownMenu"  nzOverlayClassName="dropdown-post-time">
             <ul nz-menu>
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('allePostings')" class="m-check" (click)="addToCheckbox('allePostings')">
+                <label nz-checkbox [(ngModel)]="filterAll" class="m-check" (ngModelChange)="handleChange('All')" (click)="addToCheckboxCalendar('ALL')">
                   Alle Postings
                 </label>
               </li>
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('letzteWoche')" class="m-check" (click)="addToCheckbox('letzteWoche')">
+                <label nz-checkbox [(ngModel)]="filterWeek" class="m-check" (ngModelChange)="handleChange('Week')" (click)="addToCheckboxCalendar('WEEK')">
                   letzte Woche
                 </label>
               </li>
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('letzterMonat')" class="m-check" (click)="addToCheckbox('letzterMonat')">
+                <label nz-checkbox [(ngModel)]="filterMonth" class="m-check" (ngModelChange)="handleChange('Month')" (click)="addToCheckboxCalendar('MONTH')">
                   letzter Monat
                 </label>
               </li>
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('letzten6Monate')" class="m-check" (click)="addToCheckbox('letzten6Monate')">
+                <label nz-checkbox [(ngModel)]="filterHalf" class="m-check" (ngModelChange)="handleChange('Half')" (click)="addToCheckboxCalendar('HALFYEAR')">
                   letzten 6 Monate
                 </label>
               </li>
               <li nz-menu-item>
-                <label nz-checkbox :checked="checkedElements.include('>letztesJahr')" class="m-check" (click)="addToCheckbox('letztesJahr')">
+                <label nz-checkbox [(ngModel)]="filterYear" class="m-check" (ngModelChange)="handleChange('Year')" (click)="addToCheckboxCalendar('YEAR')">
                   letztes Jahr
                 </label>
                 </li>
