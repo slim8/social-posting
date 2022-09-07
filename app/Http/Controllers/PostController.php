@@ -55,7 +55,7 @@ class PostController extends Controller
         }
 
         if($postDates == 'WEEK'){
-            $postRequest = $postRequest->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+        $postRequest=$postRequest->where("created_at",">=", Carbon::now()->subDays(7));
         } elseif($postDates == 'MONTH'){
             $postRequest=$postRequest->where("created_at",">", Carbon::now()->subMonths(1));
         } elseif ($postDates == 'HALFYEAR'){

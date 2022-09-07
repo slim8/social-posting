@@ -191,7 +191,6 @@ export class DraftsComponent implements OnInit {
     if(selectClass){
       selectClass.focus();
     }
-
   }
 
   // checkbox

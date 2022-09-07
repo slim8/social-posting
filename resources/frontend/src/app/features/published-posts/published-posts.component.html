@@ -24,8 +24,11 @@
           <button
             nz-button
             nz-dropdown
+            [(nzVisible)]="isoppenedDropdownPostType"
+            nzTrigger="click"
             [nzDropdownMenu]="postType"
-            class="m-button is-secondary"
+            nzOverlayClassName="dropdown-post-type"
+            class="m-button is-secondary m-dropdown-type-post"
           >
             <div class="m-button-icon">
               <i nz-icon nzType="ng-zorro:image"></i>
@@ -40,21 +43,40 @@
               <i
                 nz-icon
                 nzType="ng-zorro:customArrow"
+                *ngIf="!isoppenedDropdownPostType"
                 [nzTheme]="'outline'"
+              ></i>
+              <i
+                nz-icon
+                nzType="ng-zorro:customArrow"
+                *ngIf="isoppenedDropdownPostType"
+                [nzTheme]="'outline'"
+                style="transform: rotate(180deg);"
               ></i>
             </div>
           </button>
-          <nz-dropdown-menu #postType="nzDropdownMenu">
+          <nz-dropdown-menu #postType="nzDropdownMenu"  autoClose="false" nzTrigger="click"  nzOverlayClassName="dropdown-post-type">
             <ul nz-menu>
-              <li nz-menu-item>menu4 1st menu item</li>
-              <li nz-menu-item>menu4 2nd menu item</li>
-              <li nz-menu-item>menu4 3rd menu item</li>
+
+              <li nz-menu-item>
+                <label nz-checkbox (ngModel)="checkedElementsMedia.includes('foto')" class="m-check" (click)="addToCheckboxMedia('foto')">
+                    Foto
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox (ngModel)="checkedElementsMedia.includes('video')"  class="m-check" (click)="addToCheckboxMedia('video')">
+                  Video
+                </label>
+              </li>
             </ul>
           </nz-dropdown-menu>
           <button
             nz-button
             nz-dropdown
+            [(nzVisible)]="isoppenedDropdownPostTime"
             [nzDropdownMenu]="postings"
+            nzOverlayClassName="dropdown-post-time"
+            nzTrigger="click"
             class="m-button is-secondary"
           >
             <div class="m-button-icon">
@@ -71,14 +93,44 @@
               All Postings
             </div>
             <div class="m-button-arrow">
-              <i nz-icon nzType="ng-zorro:customArrow"></i>
+              <i nz-icon nzType="ng-zorro:customArrow"  *ngIf="!isoppenedDropdownPostTime"></i>
+              <i
+              nz-icon
+              nzType="ng-zorro:customArrow"
+              *ngIf="isoppenedDropdownPostTime"
+              [nzTheme]="'outline'"
+              style="transform: rotate(180deg);"
+            ></i>
             </div>
           </button>
-          <nz-dropdown-menu #postings="nzDropdownMenu">
+          <nz-dropdown-menu #postings="nzDropdownMenu"  nzOverlayClassName="dropdown-post-time">
             <ul nz-menu>
-              <li nz-menu-item>menu4 1st menu item</li>
-              <li nz-menu-item>menu4 2nd menu item</li>
-              <li nz-menu-item>menu4 3rd menu item</li>
+              <li nz-menu-item>
+                <label nz-checkbox [(ngModel)]="filterAll" class="m-check" (ngModelChange)="handleChange('All')" (click)="addToCheckboxCalendar('ALL')">
+                  Alle Postings
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox [(ngModel)]="filterWeek" class="m-check" (ngModelChange)="handleChange('Week')" (click)="addToCheckboxCalendar('WEEK')">
+                  letzte Woche
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox [(ngModel)]="filterMonth" class="m-check" (ngModelChange)="handleChange('Month')" (click)="addToCheckboxCalendar('MONTH')">
+                  letzter Monat
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox [(ngModel)]="filterHalf" class="m-check" (ngModelChange)="handleChange('Half')" (click)="addToCheckboxCalendar('HALFYEAR')">
+                  letzten 6 Monate
+                </label>
+              </li>
+              <li nz-menu-item>
+                <label nz-checkbox [(ngModel)]="filterYear" class="m-check" (ngModelChange)="handleChange('Year')" (click)="addToCheckboxCalendar('YEAR')">
+                  letztes Jahr
+                </label>
+                </li>
+
             </ul>
           </nz-dropdown-menu>
         </div>

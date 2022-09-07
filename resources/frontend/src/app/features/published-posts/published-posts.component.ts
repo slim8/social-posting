@@ -21,6 +21,15 @@ export class PublishedPostsComponent implements OnInit {
     posts: any = [];
     totalDrafts = null;
     currentPage = 1;
+    checkedElementsMedia: string[] = [];
+    checkedElementsCalendar: string[] = [];
+    filterAll = false;
+    filterWeek = false;
+    filterMonth = false;
+    filterHalf = false;
+    filterYear = false;
+    isoppenedDropdownPostType = false;
+    isoppenedDropdownPostTime = false;
 
     constructor(private iconService: NzIconService, private postService: PostService, private router: Router, private sharedModule: SharedModule) {
         this.iconService.addIconLiteral('ng-zorro:customCalendar', calendarIcon);
@@ -38,13 +47,17 @@ export class PublishedPostsComponent implements OnInit {
 
 
     getPosts(page: any) {
+        this.posts = [];
         this.isLoading = true;
         const params = new HttpParams()
             .set("filterBy", "AccountsPosts")
             .set("perPage", "5")
             .set("page", page)
             .set("status", "PUBLISH")
-            .set("getStat", true);
+            .set("getStat", true)
+            .set("filterDate", this.checkedElementsCalendar[0])
+            .set("hasPicture", this.checkedElementsMedia.includes('foto')? 1 : 0)
+            .set("hasVideo", this.checkedElementsMedia.includes('video')? 1 : 0);
 
         this.postService.getPosts(params).subscribe({
             next: (event: any) => {
@@ -67,5 +80,47 @@ export class PublishedPostsComponent implements OnInit {
         element.toggleClass('is-active');
         element.parent().parent().find('.m-details').toggleClass('is-active');
     }
+
+    // checkbox
+  addToCheckboxMedia(checked: string){
+    if(this.checkedElementsMedia.includes(checked)){
+      this.checkedElementsMedia = this.checkedElementsMedia.filter(item=>item != checked);
+    }else{
+      this.checkedElementsMedia.push(checked);
+    }
+    this.getPosts(1);
+  }
+
+  addToCheckboxCalendar(checked: string) {
+    this.checkedElementsCalendar = [];
+    this.checkedElementsCalendar.push(checked);
+    this.getPosts(1);
+  }
+
+  handleChange(selected: string) {
+    this.filterAll = false;
+    this.filterWeek = false;
+    this.filterMonth = false;
+    this.filterHalf = false;
+    this.filterYear = false;
+    switch(selected) {
+      case 'All':
+        this.filterAll = true;
+        break;
+      case 'Week':
+        this.filterWeek = true;
+        break;
+      case 'Month':
+        this.filterMonth = true;
+        break;
+      case 'Half':
+        this.filterHalf = true;
+        break;
+      case 'Year':
+        this.filterYear = true;
+        break;
+      default:
+    }
+  }
 
 }
