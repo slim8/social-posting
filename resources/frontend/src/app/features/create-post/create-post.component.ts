@@ -908,14 +908,7 @@ export class CreatePostComponent implements OnInit {
     }
 
     onChange(event: any) {
-      this.scheduleFront = event.toString();
-      let date = document.querySelector("#datePicker");
-      let input = date?.childNodes[0].firstChild as HTMLInputElement;
-      let dateVal = input?.value;
-      let timeZone = this.schedule.toString().split("(")[1];
-      timeZone = timeZone.split("+")[1];
-      timeZone = timeZone.replace(')' , '');
-      this.scheduleTime = dateVal+'+'+timeZone;
+      this.onOk(event);
     }
 
     onOk(event: any) {
@@ -923,9 +916,9 @@ export class CreatePostComponent implements OnInit {
       let date = document.querySelector("#datePicker");
       let input = date?.childNodes[0].firstChild as HTMLInputElement;
       let dateVal = input?.value;
-      let timeZone = this.schedule.toString().split("(")[1];
-      timeZone = timeZone.split("+")[1];
-      timeZone = timeZone.replace(')' , '');
-      this.scheduleTime = dateVal+'+'+timeZone;
+      var d = new Date();
+      let sign = d.getTimezoneOffset() > 0 ? "-" : "+";
+      let UTCTimeZone = sign +( "0" + (-(d.getTimezoneOffset() / 60)) ).slice(-2) + ":00";
+      this.scheduleTime = dateVal+UTCTimeZone;
     }
 }
