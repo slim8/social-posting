@@ -1,5 +1,5 @@
 # Apache configurations
-P .htaccess
+#P .htaccess
 P .htpasswd
 
 # Log files
@@ -13,7 +13,6 @@ P /__LIVE__
 P /public/google*.html
 
 # Laravel specific
-P /bootstrap/cache/
 - /node_modules/
 - /resources/**.js
 - /resources/**.scss
@@ -21,9 +20,7 @@ P /bootstrap/cache/
 - /resources/frontend/
 P /storage/
 - /tests/
-P /vendor/
 - /.*
-P /composer.json
 - package.json
 - package-lock.json
 - phpunit.xml
@@ -33,4 +30,5 @@ P /composer.json
 # Add project specific filters below
 P /public/assets
 P /public/storage
+P /public/angular/.htaccess
 P /tmp/
