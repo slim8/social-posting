@@ -38,8 +38,8 @@ export const importFileandPreview = (file: File, revoke?: boolean): Promise<stri
  * @returns {string[]} An array of `base64` images
  *
  */
-export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnails: number, type: string , startPosition: number = 0 , BandDuration : number = 0): Promise<{ imgB64 : String , time : Number }[]> => {
-    let thumbnail: { imgB64 : String , time : Number }[] = [];
+export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnails: number, type: string, startPosition: number = 0, BandDuration: number = 0): Promise<{ imgB64: String, time: Number }[]> => {
+    let thumbnail: { imgB64: String, time: Number }[] = [];
     let fractions: number[] = [];
     return type !== "url" ? new Promise(async (resolve, reject) => {
         if (!videoFile.type?.includes("video")) reject("not a valid video file");
@@ -48,20 +48,17 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
             // ex if time is 10 and numOfthumbnails is 4 then result will be -> 0, 2.5, 5, 7.5 ,10
             // we will use this timestamp to take snapshots
             let endDuration = BandDuration > 0 ? startPosition + BandDuration : duration
-            let compteur =   BandDuration > 0 ? BandDuration / numberOfThumbnails : (startPosition > 0 ? (endDuration - startPosition) / numberOfThumbnails : endDuration / numberOfThumbnails )
-            for (let i = startPosition ; i <= endDuration ; i += compteur) {
-                if(i <= duration )
-                fractions.push(Math.floor(i));
+            let compteur = BandDuration > 0 ? BandDuration / numberOfThumbnails : (startPosition > 0 ? (endDuration - startPosition) / numberOfThumbnails : endDuration / numberOfThumbnails)
+            for (let i = startPosition; i <= endDuration; i += compteur) {
+                if (i <= duration)
+                    fractions.push(Math.floor(i));
             }
             // the array of promises
             let promiseArray = fractions.map((time, index) => getVideoThumbnail(videoFile, index >= fractions.length - 1 ? time - 2 : time));
-            // console.log('duration', duration)
-            // console.log('fractions', fractions)
             await Promise.all(promiseArray).then((res) => {
-                res.forEach((res , key) => {
-                    thumbnail.push({ imgB64 : res , time : fractions[key] });
+                res.forEach((res, key) => {
+                    thumbnail.push({ imgB64: res, time: fractions[key] });
                 });
-                // console.log('thumbnail', thumbnail)
                 resolve(thumbnail);
             }).catch((err) => {
                 reject(err)
@@ -73,7 +70,6 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
     })
         : new Promise(async (resolve, reject) => {
             await getVideoDurationFromVideoFile(videoFile).then(async (duration) => {
-                console.log('duration', duration)
                 // divide the video timing into particular timestamps in respective to number of thumbnails
                 // ex if time is 10 and numOfthumbnails is 4 then result will be -> 0, 2.5, 5, 7.5 ,10
                 // we will use this timestamp to take snapshots
@@ -82,15 +78,10 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
                 }
                 // the array of promises
                 let promiseArray = fractions.map((time, index) => getVideoThumbnail(videoFile, index >= fractions.length - 1 ? time - 2 : time))
-                console.log('promiseArray', promiseArray)
-                console.log('duration', duration)
-                console.log('fractions', fractions)
                 await Promise.all(promiseArray).then((res) => {
-                    res.forEach((res , key) => {
-                        // console.log('res', res.slice(0,8))
-                        thumbnail.push({ imgB64 : res , time : fractions[key] });
+                    res.forEach((res, key) => {
+                        thumbnail.push({ imgB64: res, time: fractions[key] });
                     });
-                    // console.log('thumbnail', thumbnail)
                     resolve(thumbnail);
                 }).catch((err) => {
                     reject(err);
@@ -164,7 +155,6 @@ export const getVideoCover = (urlOfFIle: string, seekTo = 0.0): Promise<string> 
                 }, 200);
                 // extract video thumbnail once seeking is complete
                 videoPlayer.addEventListener('seeked', () => {
-                    // console.log('video is now paused at %ss.', seekTo);
                     // define a canvas to have the same dimension as the video
                     const canvas = document.createElement("canvas");
                     canvas.width = videoPlayer.videoWidth;

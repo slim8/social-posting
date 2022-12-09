@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
 
             });
         })
-            .catch(() => console.error('error'))
+            .catch(() => console.warn('error'))
             .finally(() => {
             });
     }
@@ -148,7 +148,6 @@ export class DashboardComponent implements OnInit {
             .set("getStat", true);
         this.accountsService.getPosts(params).subscribe({
             next: (event: any) => {
-                console.log(event)
                 this.posts = event.posts;
                 this.isLoadingPosts = false;
             },

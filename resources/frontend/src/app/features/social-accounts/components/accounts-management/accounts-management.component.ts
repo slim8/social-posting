@@ -83,7 +83,7 @@ export class AccountsManagementComponent implements OnInit {
 
                 });
             })
-            .catch(() => console.error('error'))
+            .catch(() => console.warn('error'))
             .finally(() => {
                 this.isWaiting = false;
             });
@@ -144,11 +144,9 @@ export class AccountsManagementComponent implements OnInit {
     disconnect(id: string) {
         this.accountsService.disconnectAccountById(id).subscribe({
             next: (response: any) => {
-                console.log(response)
                 this.connectedAccounts = response.accounts
             },
             error: err => {
-                console.log(err)
                 this.connectedAccounts = []
             },
             complete: () => {
@@ -167,9 +165,9 @@ export class AccountsManagementComponent implements OnInit {
                     this.connectedAccounts = response.accounts;
                 },
                 error: (err) => {
-                  this.connectedAccounts = [];
-                  this.isWaiting = false;
-                  this.isLoading = false;
+                    this.connectedAccounts = [];
+                    this.isWaiting = false;
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.isWaiting = false;
@@ -190,7 +188,7 @@ export class AccountsManagementComponent implements OnInit {
             nzOkDanger: true,
             nzOnOk: () => this.disconnect(id),
             nzCancelText: 'No',
-            nzOnCancel: () => console.log('Cancel')
+            nzOnCancel: () => console.warn('Cancel')
         });
     }
 }

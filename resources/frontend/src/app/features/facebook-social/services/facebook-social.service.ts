@@ -71,7 +71,7 @@ export class FacebookSocialService {
      * @param error
      */
     private handleError(error: any) {
-        console.error('Error processing action', error);
+        console.warn('Error processing action', error);
     }
 
 

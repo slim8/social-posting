@@ -500,7 +500,6 @@ export class CreatePostComponent implements OnInit {
                     "<strong>Facebook</strong> doesn't support images and videos on the same post."
                 )
                 .onClick.subscribe(() => {
-                    console.log('notification clicked!');
                 });
             this.wasMixedTypes = true;
         } else {
@@ -528,8 +527,6 @@ export class CreatePostComponent implements OnInit {
     }
 
     addToPost(event: any) {
-        // TODO:: list of images selected from album list
-        console.log(event);
     }
 
     mergeHashtags(e: any) {

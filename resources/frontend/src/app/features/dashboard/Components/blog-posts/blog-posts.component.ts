@@ -34,11 +34,10 @@ export class BlogPostsComponent implements OnInit {
 
     this.newsService.getNewsList().subscribe({
       next: (event: any) => {
-          console.log(event);
           this.posts = event.news.map((item : any) => ({...item , img : JSON.parse(item.picture).url}));
         },
       error: err => {
-        
+
       },
       complete: () => {
       }

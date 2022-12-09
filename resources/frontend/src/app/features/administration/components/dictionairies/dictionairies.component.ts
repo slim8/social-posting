@@ -19,7 +19,7 @@ export class DictionairiesComponent implements OnInit {
   error : any = null;
 
   dictionaryToUpdate : any = null;
-  updateMode = false; 
+  updateMode = false;
 
   isVisible = false;
   isOkLoading = false;
@@ -33,11 +33,10 @@ export class DictionairiesComponent implements OnInit {
   getData(){
     this.dictionariesService.getDictionariesList().subscribe({
       next: (event: any) => {
-          console.log(event);
           this.dictionaries = event.dictionary;
         },
       error: err => {
-        
+
       },
       complete: () => {
       }
@@ -49,7 +48,7 @@ export class DictionairiesComponent implements OnInit {
   }
 
   showUpdateModal(data : any): void {
-    this.updateMode = true; 
+    this.updateMode = true;
     this.dictionaryToUpdate = data ;
 
     this.key = data.key;
@@ -134,7 +133,6 @@ export class DictionairiesComponent implements OnInit {
 
   removeFromDictionaries( data : any , e : Event ){
     e.preventDefault();
-    console.log('closed');
 
     this.modal.confirm({
       nzTitle: '<i>Do you Want to remove this Key ?</i>',

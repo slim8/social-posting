@@ -285,7 +285,6 @@ export class CreatePostComponent implements OnInit {
           post.accountId=accountId;
           post.videoTitle="this is video title";
 
-          console.log(JSON.stringify(post));
           formData.append('posts[]', JSON.stringify(post));
         });
 

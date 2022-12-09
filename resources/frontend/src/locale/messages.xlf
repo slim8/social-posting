@@ -3,8 +3,34 @@
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
 
+
+      <trans-unit id="subscribeNewsletter" datatype="html">
+        <source>Subscribe newsletter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/management/components/create-user/create-user.component.html </context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <note priority="1" from="description">Title for the Subscribe newsletter</note>
+        <note priority="1" from="meaning">Subscribe newsletter</note>
+      </trans-unit>
+
+
+      <trans-unit id="editAccount" datatype="html">
+        <source>Edit account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.html</context>
+          <context context-type="linenumber">137</context>
+        </context-group>
+        <note priority="1" from="description">Text edit account</note>
+        <note priority="1" from="meaning">Edit Account</note>
+      </trans-unit>
+
       <trans-unit id="loginSucceed" datatype="html">
         <source>Login succeed !</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/login/login.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
         <note priority="1" from="description">Title shown on login success</note>
         <note priority="1" from="meaning">Login succeed</note>
       </trans-unit>
@@ -1342,14 +1368,23 @@
         <note priority="1" from="description">Text for read more button </note>
         <note priority="1" from="meaning">Read More </note>
       </trans-unit>
-      <trans-unit id="DraftsPostTitle" datatype="html">
-        <source> <x id="INTERPOLATION" equiv-text="{{ post.message }}"/> </source>
+      <trans-unit id="draftsPostTitle" datatype="html">
+        <source> Post Titles </source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/drafts/components/post-item/post-item.component.html</context>
           <context context-type="linenumber">28,30</context>
         </context-group>
         <note priority="1" from="description">Drafts Post Title </note>
         <note priority="1" from="meaning">Drafts Post Title</note>
+      </trans-unit>
+      <trans-unit id="myDraftsPostsContribution" datatype="html">
+        <source>Contribution</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">resources/frontend/src/app/features/drafts/drafts.component.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+        <note priority="1" from="description">Contribution Title for My Posts</note>
+        <note priority="1" from="meaning">My Drafts Posts Contribution</note>
       </trans-unit>
       <trans-unit id="continueEditing" datatype="html">
         <source>Continue editing </source>

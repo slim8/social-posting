@@ -28,8 +28,6 @@ export class NavbarComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        let logoutButton = document.querySelector('.m-logout')
-        logoutButton?.addEventListener('click', this.logout);
     }
 
     getProfileDetails() {
@@ -58,7 +56,8 @@ export class NavbarComponent implements OnInit {
 
     logout() {
         localStorage.removeItem('token');
-        // this.router.navigate(['/auth/login']);
+        localStorage.removeItem('fullName');
+        this.router.navigate(['/auth/login']);
     }
 
 }

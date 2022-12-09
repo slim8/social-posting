@@ -12,8 +12,6 @@ export class PostDetailComponent implements OnInit {
   constructor(private _activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this._activatedRoute.paramMap);
-    
   }
 
 }

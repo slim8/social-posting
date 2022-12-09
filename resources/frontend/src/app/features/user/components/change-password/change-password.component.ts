@@ -23,7 +23,7 @@ export class ChangePasswordComponent implements OnInit {
   showPasswordConfirmation : Boolean = false ;
 
   ngOnInit(): void {
-    
+
   }
 
   showCurrentPasswordAction(){
@@ -35,24 +35,21 @@ export class ChangePasswordComponent implements OnInit {
   };
 
   showPasswordConfirmationAction(){
-    console.log('in');
-    
     this.showPasswordConfirmation = !this.showPasswordConfirmation ;
   };
 
   saveNewPassword(){
     this.error = null ;
-    console.log(this.currentPassword , this.newPassword , this.passwordConfirmation );
     let data = {
       password : this.newPassword,
-      passwordConfirmation : this.passwordConfirmation, 
+      passwordConfirmation : this.passwordConfirmation,
       currentPassword : this.currentPassword ,
     };
     this.profileService.saveNewPassword(data).subscribe({
       next: (event: any) => {
       },
       error: err => {
-        
+
         this.error = err.error;
       },
       complete: () => {
