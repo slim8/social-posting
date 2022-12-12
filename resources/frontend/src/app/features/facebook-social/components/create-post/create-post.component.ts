@@ -4,6 +4,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { FacebookSocialService } from '../../services/facebook-social.service';
 import { ActivatedRoute } from '@angular/router';
+import { PostModel } from 'src/app/models/Post.model';
 
 const getBase64 = (file: File): Promise<string | ArrayBuffer | null> =>
     new Promise((resolve, reject) => {
@@ -262,47 +263,27 @@ export class CreatePostComponent implements OnInit {
     showDialog = false;
     submitForm(param: string) {
         const formData: FormData = new FormData();
-        let post: any = {
-            message: "",
-            hashtags: [],
-            mentions: [],
-            accountId: "",
-            videoTitle: ""
-        }
-        this.tagValue.forEach((accountId: any) => {
-            post.message = this.message;
-            post.hashtags = this.tags;
-            post.mentions = this.mentions;
-            post.accountId = accountId;
-            post.videoTitle = "this is video title";
 
+        this.tagValue.forEach(accountId => {
+            const post = new PostModel(this.message, this.tags, this.mentions, accountId, "this is video title");
             formData.append('posts[]', JSON.stringify(post));
         });
 
-        if (this.tags.length > 0) {
-            this.tags.forEach((tag: any) => {
-                formData.append('tags[]', tag);
-            });
-        }
+        this.tags.forEach(tag => {
+            formData.append('tags[]', tag);
+        });
 
-        if (this.mentions.length > 0) {
-            this.mentions.forEach((mention: any) => {
-                formData.append('mention[]', mention);
-            });
-        }
+        this.mentions.forEach((mention: string) => {
+            formData.append('mention[]', mention);
+        });
 
-        if (this.urlLinks.length > 0) {
-            this.urlLinks.forEach((url: any) => {
-                formData.append('images[]', url.url);
-                // url . url because the Url is an array and contain url Object (to avoid bug of bloc input with ngModel of Array)
-            });
-        }
+        this.urlLinks.forEach(url => {
+            formData.append('images[]', url.url);
+        });
 
-        if (this.selectedFile.length > 0) {
-            this.selectedFile.forEach((file: any) => {
-                formData.append('sources[]', file.originFileObj);
-            });
-        }
+        this.selectedFile.forEach((file: any) => {
+            formData.append('sources[]', file.originFileObj);
+        });
 
         formData.append('status', param);
         formData.append('message', this.message);
@@ -313,14 +294,10 @@ export class CreatePostComponent implements OnInit {
                     this.isLoading = true;
                 },
                 error: (err) => {
-                    if (err.error.errors) {
-                        err.error.errors.forEach((error: any) => {
-                            this.shared.createMessage('error', error);
-                        });
-                    }
-                    else {
-                        this.shared.createMessage('error', err.error.message);
-                    }
+                    const array = (err.error.errors) ? err.error.errors : [err.error.message];
+                    array.forEach((element: string) => {
+                        this.shared.createMessage('error', element);
+                    })
                     this.isLoading = false;
                 },
                 complete: () => {
@@ -330,7 +307,7 @@ export class CreatePostComponent implements OnInit {
 
                     this.isLoading = false;
 
-                    if (param == 'PUBLISH') {
+                    if (param === 'PUBLISH') {
                         this.showDialog = false;
                     } else {
                         this.shared.createMessage('success', 'saved to drafts!');
