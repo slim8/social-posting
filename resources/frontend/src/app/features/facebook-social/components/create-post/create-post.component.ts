@@ -236,9 +236,7 @@ export class CreatePostComponent implements OnInit {
 
     ngOnInit(): void {
         this.getPages();
-        const mentioned = document.querySelector('.mentioned');
 
-        mentioned?.addEventListener('click', this.edit);
         this.postId = this.activatedRoute.snapshot.params['id'];
         if (this.postId) {
             if (this.postdata.post.status === 'PUBLISH') {
