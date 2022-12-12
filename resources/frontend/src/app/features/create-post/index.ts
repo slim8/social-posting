@@ -86,7 +86,12 @@ export const generateVideoThumbnails = async (videoFile: File, numberOfThumbnail
                 }).catch((err) => {
                     reject(err);
                 }).finally(() => resolve(thumbnail));
-            });
+            })
+
+                .catch((err) => {
+                    reject(err);
+                })
+                ;;
             reject("something went wrong");
         });
 };
@@ -109,7 +114,15 @@ const getVideoThumbnail = (file: File | string, videoTimeInSeconds: number): Pro
                 getVideoCover(urlOfFIle, videoTimeInSeconds).then((res) => {
                     resolve(res);
                 })
-            });
+                    .catch((err) => {
+                        reject(err);
+                    })
+                    ;
+            })
+                .catch((err) => {
+                    reject(err);
+                })
+                ;
         } else if (file) {
             getVideoCover(file as string, videoTimeInSeconds).then((res) => {
                 resolve(res);
@@ -271,11 +284,24 @@ export const getVideoDurationFromVideoFile = (videoFile: File | string): Promise
                         generateVideoDurationFromUrl(url).then((res) => {
                             resolve(res);
                         })
-                    });
+                            .catch((err) => {
+                                reject(err);
+                            })
+                            ;
+                    })
+                        .catch((err) => {
+                            reject(err);
+                        })
+                        ;;
                 } else {
                     generateVideoDurationFromUrl(videoFile as string).then((res) => {
                         resolve(res)
                     })
+
+                        .catch((err) => {
+                            reject(err);
+                        })
+                        ;
                 }
             } else {
                 reject("Cannot generate video duration for this video file.");

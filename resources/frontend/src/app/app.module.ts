@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 import { TokenInterceptorService } from './shared/services/token-interceptor.service'
 import { JwtModule } from '@auth0/angular-jwt';
 import { sharedConstants } from './shared/sharedConstants';
-import {APP_BASE_HREF} from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 
 registerLocaleData(en);
 
@@ -53,7 +53,7 @@ registerLocaleData(en);
         multi: true
     },
     {
-      provide: APP_BASE_HREF, useValue: '/'
+        provide: APP_BASE_HREF, useValue: '/'
     }
     ],
     bootstrap: [AppComponent]
@@ -65,7 +65,7 @@ export class AppModule {
 
         if (!req.headers.has('Content-Type')) {
             req = req.clone({
-                headers: req.headers.set('Content-Type', 'application/json')
+                headers: req.headers.set('Content-Type', 'application/json; charset=utf-8')
             });
         }
 

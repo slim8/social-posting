@@ -22,171 +22,171 @@ export class CreatePostComponent implements OnInit {
     //refresh instagram component
     refresh: boolean = false;
 
-    postdata = {
-        "post": {
-            "id": 41,
-            "message": "This is a test post for Oussema",
-            "url": "url",
-            "status": "PUBLISH",
-            "isScheduled": 0,
-            "publishedAt": "2022-06-07 08:10:19",
-            "deleted_at": null,
-            "created_at": "2022-06-07T08:03:19.000000Z",
-            "updated_at": "2022-06-07T08:10:19.000000Z",
-            "video_title": "",
-            "created_by": 2,
-            "post_media": [
+    postdata: any = {
+        post: {
+            id: 41,
+            message: "This is a test post for Oussema",
+            url: "url",
+            status: "PUBLISH",
+            isScheduled: 0,
+            publishedAt: "2022-06-07 08:10:19",
+            deleted_at: null,
+            created_at: "2022-06-07T08:03:19.000000Z",
+            updated_at: "2022-06-07T08:10:19.000000Z",
+            video_title: "",
+            created_by: 2,
+            post_media: [
                 {
-                    "id": 58,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:03:19.000000Z",
-                    "updated_at": "2022-06-07T08:03:19.000000Z"
+                    id: 58,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:03:19.000000Z",
+                    updated_at: "2022-06-07T08:03:19.000000Z"
                 },
                 {
-                    "id": 59,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:03:19.000000Z",
-                    "updated_at": "2022-06-07T08:03:19.000000Z"
+                    id: 59,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:03:19.000000Z",
+                    updated_at: "2022-06-07T08:03:19.000000Z"
                 },
                 {
-                    "id": 60,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:03:35.000000Z",
-                    "updated_at": "2022-06-07T08:03:35.000000Z"
+                    id: 60,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:03:35.000000Z",
+                    updated_at: "2022-06-07T08:03:35.000000Z"
                 },
                 {
-                    "id": 61,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:03:35.000000Z",
-                    "updated_at": "2022-06-07T08:03:35.000000Z"
+                    id: 61,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:03:35.000000Z",
+                    updated_at: "2022-06-07T08:03:35.000000Z"
                 },
                 {
-                    "id": 62,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:03:44.000000Z",
-                    "updated_at": "2022-06-07T08:03:44.000000Z"
+                    id: 62,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:03:44.000000Z",
+                    updated_at: "2022-06-07T08:03:44.000000Z"
                 },
                 {
-                    "id": 63,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:03:44.000000Z",
-                    "updated_at": "2022-06-07T08:03:44.000000Z"
+                    id: 63,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:03:44.000000Z",
+                    updated_at: "2022-06-07T08:03:44.000000Z"
                 },
                 {
-                    "id": 64,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:08:04.000000Z",
-                    "updated_at": "2022-06-07T08:08:04.000000Z"
+                    id: 64,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:08:04.000000Z",
+                    updated_at: "2022-06-07T08:08:04.000000Z"
                 },
                 {
-                    "id": 65,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:08:04.000000Z",
-                    "updated_at": "2022-06-07T08:08:04.000000Z"
+                    id: 65,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:08:04.000000Z",
+                    updated_at: "2022-06-07T08:08:04.000000Z"
                 },
                 {
-                    "id": 66,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:10:07.000000Z",
-                    "updated_at": "2022-06-07T08:10:07.000000Z"
+                    id: 66,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:10:07.000000Z",
+                    updated_at: "2022-06-07T08:10:07.000000Z"
                 },
                 {
-                    "id": 67,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:10:07.000000Z",
-                    "updated_at": "2022-06-07T08:10:07.000000Z"
+                    id: 67,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:10:07.000000Z",
+                    updated_at: "2022-06-07T08:10:07.000000Z"
                 },
                 {
-                    "id": 68,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:10:19.000000Z",
-                    "updated_at": "2022-06-07T08:10:19.000000Z"
+                    id: 68,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:10:19.000000Z",
+                    updated_at: "2022-06-07T08:10:19.000000Z"
                 },
                 {
-                    "id": 69,
-                    "url": "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
-                    "type": "image",
-                    "post_id": 41,
-                    "created_at": "2022-06-07T08:10:19.000000Z",
-                    "updated_at": "2022-06-07T08:10:19.000000Z"
+                    id: 69,
+                    url: "https://thepressfree.com/wp-content/uploads/2021/06/Google_Reuters_F-1-800x445.jpg",
+                    type: "image",
+                    post_id: 41,
+                    created_at: "2022-06-07T08:10:19.000000Z",
+                    updated_at: "2022-06-07T08:10:19.000000Z"
                 }
             ],
-            "accounts": [
+            accounts: [
                 {
-                    "id": 1
+                    id: 1
                 },
                 {
-                    "id": 1
+                    id: 1
                 },
                 {
-                    "id": 4
+                    id: 4
                 },
                 {
-                    "id": 4
+                    id: 4
                 }
             ],
-            "tags": [
+            tags: [
                 {
-                    "name": "tag_two"
+                    name: "tag_two"
                 },
                 {
-                    "name": "tag_three"
+                    name: "tag_three"
                 },
                 {
-                    "name": "tag_two"
+                    name: "tag_two"
                 },
                 {
-                    "name": "tag_three"
+                    name: "tag_three"
                 },
                 {
-                    "name": "tag_two"
+                    name: "tag_two"
                 },
                 {
-                    "name": "tag_three"
+                    name: "tag_three"
                 },
                 {
-                    "name": "tag_two"
+                    name: "tag_two"
                 },
                 {
-                    "name": "tag_three"
+                    name: "tag_three"
                 },
                 {
-                    "name": "tag_two"
+                    name: "tag_two"
                 },
                 {
-                    "name": "tag_three"
+                    name: "tag_three"
                 },
                 {
-                    "name": "tag_two"
+                    name: "tag_two"
                 },
                 {
-                    "name": "tag_three"
+                    name: "tag_three"
                 }
             ]
         },
-        "success": true
+        success: true
     };
     url1 = '';
     urlImages: string[] = [];
@@ -235,11 +235,6 @@ export class CreatePostComponent implements OnInit {
 
     ngOnInit(): void {
         this.getPages();
-        // setTimeout(() => {
-        //     this.urlLinks = [{ url: "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" },
-        //     { url: "https://media.istockphoto.com/photos/mountain-landscape-picture-id517188688?k=20&m=517188688&s=612x612&w=0&h=i38qBm2P-6V4vZVEaMy_TaTEaoCMkYhvLCysE7yJQ5Q=" },
-        //     { url: "https://media.istockphoto.com/photos/mountain-landscape-picture-id517188688?k=20&m=517188688&s=612x612&w=0&h=i38qBm2P-6V4vZVEaMy_TaTEaoCMkYhvLCysE7yJQ5Q=" }]
-        // }, 5000);
         const mentioned = document.querySelector('.mentioned');
 
         mentioned?.addEventListener('click', this.edit);
@@ -262,30 +257,26 @@ export class CreatePostComponent implements OnInit {
         );
     }
 
+
+    isLoading = false;
+    showDialog = false;
     submitForm(param: string) {
-        let loadingScreen = document.getElementsByClassName('m-loading-screen')[0];
-        let btnSubmit = document.getElementById('btn-submit');
-        let successDialog = document.getElementById('successDialog');
-        let spinning = document.getElementsByClassName('m-loading-spin')[0];
         const formData: FormData = new FormData();
         let post: any = {
-          message : "",
-          hashtags : [],
-          mentions : [],
-          accountId : "",
-          videoTitle : ""
+            message: "",
+            hashtags: [],
+            mentions: [],
+            accountId: "",
+            videoTitle: ""
         }
-
-        // let post: any = []
-
         this.tagValue.forEach((accountId: any) => {
-          post.message=this.message;
-          post.hashtags=this.tags;
-          post.mentions=this.mentions;
-          post.accountId=accountId;
-          post.videoTitle="this is video title";
+            post.message = this.message;
+            post.hashtags = this.tags;
+            post.mentions = this.mentions;
+            post.accountId = accountId;
+            post.videoTitle = "this is video title";
 
-          formData.append('posts[]', JSON.stringify(post));
+            formData.append('posts[]', JSON.stringify(post));
         });
 
         if (this.tags.length > 0) {
@@ -318,10 +309,8 @@ export class CreatePostComponent implements OnInit {
 
         if (formData) {
             this.facebookSocialService.postToSocialMedia(formData).subscribe({
-                next: (event) => {
-                    loadingScreen.classList.add('m-loading-screen-active');
-                    spinning.classList.add('show');
-                    btnSubmit?.classList.add('m-btn-submit');
+                next: () => {
+                    this.isLoading = true;
                 },
                 error: (err) => {
                     if (err.error.errors) {
@@ -332,20 +321,17 @@ export class CreatePostComponent implements OnInit {
                     else {
                         this.shared.createMessage('error', err.error.message);
                     }
-                    loadingScreen.classList.remove('m-loading-screen-active');
-                    spinning.classList.remove('show');
-                    btnSubmit?.classList.remove('m-btn-submit');
+                    this.isLoading = false;
                 },
                 complete: () => {
                     this.selectedFile = [];
                     this.message = '';
                     this.tagValue = [];
-                    loadingScreen.classList.remove('m-loading-screen-active');
-                    spinning.classList.remove('show');
-                    btnSubmit?.classList.remove('m-btn-submit');
+
+                    this.isLoading = false;
 
                     if (param == 'PUBLISH') {
-                        successDialog?.classList.remove('is-hidden');
+                        this.showDialog = false;
                     } else {
                         this.shared.createMessage('success', 'saved to drafts!');
                     }
@@ -370,7 +356,6 @@ export class CreatePostComponent implements OnInit {
         let instagramPost = document.getElementById(
             'instagramPost'
         ) as HTMLImageElement;
-        // let facebookPost = document.getElementById('fp') as HTMLImageElement;
         if (event.type == 'success') {
             this.selectedFile = event.fileList;
             this.fileList.forEach((file: any, index) => {
@@ -455,26 +440,25 @@ export class CreatePostComponent implements OnInit {
         successDialog?.classList.add('is-hidden');
     }
 
-    edit() {
-        alert('hello');
-    }
-
-    test() {
-
-    }
-
     prepareform() {
+        this.pushMedias();
+        this.pushTags();
+        this.message = this.postdata.post.message;
+    }
+
+    pushMedias() {
         this.postdata.post.post_media.forEach((el: any) => {
-            let media: any = {
-                url: el.url,
+            const media: any = {
+                url: el.url
             }
             this.fileList.push(media);
         })
+    }
 
+    pushTags() {
         this.postdata.post.tags.forEach((t: any) => {
             this.tags.push(t.name);
         })
-        this.message = this.postdata.post.message;
     }
 
     refreshPreview() {
