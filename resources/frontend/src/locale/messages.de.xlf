@@ -2,6 +2,12 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="loginSucceed" datatype="html">
+        <source>Login succeed !</source>
+        <target> Anmeldung erfolgreich ! </target>
+        <note priority="1" from="description">Title shown on login success</note>
+        <note priority="1" from="meaning">Login succeed</note>
+      </trans-unit>
       <trans-unit id="logo" datatype="html">
         <source>Logo</source>
         <context-group purpose="location">
