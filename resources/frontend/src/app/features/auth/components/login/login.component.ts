@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
         this.service.login(this.credentials).subscribe(
             {
                 next: (response: any) => {
-                    this.createMessage('success', 'login succeed !');
+                    const message = $localize`:@@loginSucceed:Login succeed !`;
+                    this.createMessage('success', message);
+                    localStorage.setItem('fullName', response.fullName);
                     localStorage.setItem('token', response.token);
                     this.router.navigate(['/application/dashboard']);
                 },

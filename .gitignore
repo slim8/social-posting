@@ -27,3 +27,4 @@ deploy.bat
 /.composer
 .htaccess
 .htpasswd
+.dccache
