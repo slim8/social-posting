@@ -4,9 +4,17 @@
     <body>
       <trans-unit id="loginSucceed" datatype="html">
         <source>Login succeed !</source>
-        <target> Anmeldung erfolgreich ! </target>
+        <target> hallo Herr/Frau Mustermann </target>
         <note priority="1" from="description">Title shown on login success</note>
         <note priority="1" from="meaning">Login succeed</note>
+      </trans-unit>
+      <trans-unit id="errorUpdateProfile" datatype="html">
+        <source>A problem occured</source>
+        <target>Fehlerhaft</target>
+      </trans-unit>
+      <trans-unit id="updateProfile" datatype="html">
+        <source>Update was successful!</source>
+        <target>Erfolgreich</target>
       </trans-unit>
       <trans-unit id="logo" datatype="html">
         <source>Logo</source>
@@ -391,7 +399,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
-        <source>Absagen</source>
+        <source>Abbrechen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/accounts/accounts.component.ts</context>
           <context context-type="linenumber">216</context>
@@ -492,7 +500,7 @@
         <note priority="1" from="meaning">lang</note>
       </trans-unit>
       <trans-unit id="cancel" datatype="html">
-        <source>Absagen</source>
+        <source>Abbrechen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/administration/components/dictionairies/dictionairies.component.html</context>
           <context context-type="linenumber">72</context>
@@ -681,6 +689,7 @@
       </trans-unit>
       <trans-unit id="registration" datatype="html">
         <source> REGISTRATION </source>
+        <target> REGISTRIERUNG </target>
         <context-group purpose="location">
           <context context-type="sourcefile">resources/frontend/src/app/features/auth/components/register/register.component.html</context>
           <context context-type="linenumber">4,6</context>

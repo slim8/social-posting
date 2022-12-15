@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from './../../services/profile.service';
 import { Component, OnInit } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
   selector: 'app-edit-profile',
@@ -10,7 +11,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 })
 export class EditProfileComponent implements OnInit {
 
-  constructor(private profileService: ProfileService , private jwtService: JwtHelperService , private router: Router ) { }
+  constructor(private profileService: ProfileService , private jwtService: JwtHelperService , private router: Router , private sharedModule: SharedModule ) { }
 
 
   email = null ;
@@ -35,8 +36,12 @@ export class EditProfileComponent implements OnInit {
           this.autoRefresh = event.autoRefresh ;
       },
       error: err => {
+        const message = $localize`:@@errorUpdateProfile:A problem occured`;
+        this.sharedModule.createMessage('error', message)
       },
       complete: () => {
+        const message = $localize`:@@updateProfile:Update was successful!`;
+        this.sharedModule.createMessage('success', message)
       }
     })
 

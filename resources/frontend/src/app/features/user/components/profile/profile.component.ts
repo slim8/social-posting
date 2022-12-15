@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  
+
   constructor(private profileService: ProfileService , private jwtService: JwtHelperService , private router: Router ) { }
 
   profile:any = null;
@@ -18,8 +18,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
 
     this.profileService.getProfileDetails().subscribe({
-      next: (event: any) => {  
-          this.profile = event ;  
+      next: (event: any) => {
+          this.profile = event ;
       },
       error: err => {
       },

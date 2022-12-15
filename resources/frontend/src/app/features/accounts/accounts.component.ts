@@ -170,7 +170,6 @@ export class AccountsComponent implements OnInit {
                 }
             )
                 .subscribe((response: any) => {
-                    this.sharedModule.createMessage('success', 'Success!');
                     this.getPages();
                 });
 
