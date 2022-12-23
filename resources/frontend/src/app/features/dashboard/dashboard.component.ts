@@ -21,9 +21,15 @@ const openIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xm
 export class DashboardComponent implements OnInit {
 
     accountName: string = "";
+    identifier: string = "";
+    apiKey: string = "";
+    removeHost: string = "";
+    enableV2: string = "";
     isVisible: boolean = true;
+    displayLoginModal: boolean = false;
     isLoadingPages: boolean = true;
     isLoadingPosts: boolean = true;
+    isLoadingButton: boolean = false;
     validateForm!: FormGroup;
     connectedAccounts: any = [];
     posts: any = [];
@@ -75,6 +81,8 @@ export class DashboardComponent implements OnInit {
         closeButton?.addEventListener('click', this.closeAlert);
         this.getPages();
         this.getRecentPosts();
+        this.checkMagentoAuth();
+
         setTimeout(() => {
             this.disableButtons();
         }, 50)
@@ -270,5 +278,20 @@ export class DashboardComponent implements OnInit {
         activeButtons?.forEach((button: any) => {
             button.removeAttribute('disabled');
         })
+    }
+
+    loginWithMagento()
+    {
+
+    }
+
+    checkMagentoAuth()
+    {
+      this.displayLoginModal = true;
+    }
+
+    closeLoginModal()
+    {
+      this.displayLoginModal = false;
     }
 }

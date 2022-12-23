@@ -387,5 +387,26 @@
         </p>
       </div>
     </div>
+
+    <div class="m-magento-auth" *ngIf="displayLoginModal">
+      <div class="m-modal-container">
+        <div class="m-header">
+          <div (click)="closeLoginModal()" class="m-close-icon">
+            <img src="/assets/img/close.png" alt="close" />
+          </div>
+          <h3 i18n="LoginToMediaFactory|Title for login to media factory@@loginToMediaFactory">Login to Media Factory</h3>
+          <p i18n="LoginToMediaFactoryText|Title for login to media factory Text@@loginToMediaFactoryText">You'll be able to access all the media available to your account</p>
+        </div>
+        <div class="m-login-form">
+          <input type="text" class="m-input" placeholder="Identifier" [(ngModel)]="identifier"/>
+          <input type="text" class="m-input" placeholder="API Key" [(ngModel)]="apiKey"/>
+          <input type="text" class="m-input" placeholder="Remove host" [(ngModel)]="removeHost"/>
+          <input type="text" class="m-input" placeholder="Enable Version 2" [(ngModel)]="enableV2"/>
+          <button nz-button [nzLoading]="isLoadingButton" class="m-button is-primary no-transparent" (click)="loginWithMagento()" i18n="Login|Title for Login@@login">Login</button>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
